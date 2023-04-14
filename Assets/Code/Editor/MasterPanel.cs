@@ -1,9 +1,6 @@
-using System;
-using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using System.Linq;
 using Game.Utility;
 
 namespace Game.Editor
@@ -51,8 +48,6 @@ namespace Game.Editor
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
                 LoadSceneGroup(Scenes.Testing);
             }
-
-            GUILayout.Space(15);
         }
 
         void LoadSceneGroup(string[] scenes)
