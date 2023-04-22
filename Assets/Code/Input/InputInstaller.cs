@@ -1,15 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 
-namespace Game
+namespace Game.Input.System
 {
     public class InputInstaller : MonoInstaller<InputInstaller>
     {
         public override void InstallBindings()
         {
+            SignalBusInstaller.Install(Container);
+
+            Container.Bind<InputProvider>().AsSingle().NonLazy();
         }
     }
 }
