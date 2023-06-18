@@ -52,9 +52,6 @@ namespace Game.Editor
 
         void LoadSceneGroup(string[] scenes)
         {
-            for (int i = 0; i < EditorSceneManager.sceneCount; ++i)
-                EditorSceneManager.CloseScene(EditorSceneManager.GetSceneAt(i), true);
-
             for (int i = 0; i < scenes.Length; ++i)
             {
                 string path = scenePath + scenes[i] + ".unity";
