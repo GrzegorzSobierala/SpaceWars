@@ -7,8 +7,6 @@ namespace Game.Player
         [SerializeField] private Rigidbody playerBody;
         [SerializeField] private Transform playerTransform;
         [SerializeField] private float speed;
-        [SerializeField] private float maxCameraDistance = 15;
-
 
         #region MonoBehaviour
 
