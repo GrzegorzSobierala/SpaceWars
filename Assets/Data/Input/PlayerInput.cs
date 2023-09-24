@@ -66,7 +66,7 @@ namespace Game.Input.System
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""LookDirection"",
+                    ""name"": ""CursorPosition"",
                     ""type"": ""Value"",
                     ""id"": ""9296817a-c332-4b5a-a82a-594c707e1707"",
                     ""expectedControlType"": ""Vector2"",
@@ -127,7 +127,7 @@ namespace Game.Input.System
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""LookDirection"",
+                    ""action"": ""CursorPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -142,7 +142,7 @@ namespace Game.Input.System
             m_Gameplay_MoveBack = m_Gameplay.FindAction("MoveBack", throwIfNotFound: true);
             m_Gameplay_MoveLeft = m_Gameplay.FindAction("MoveLeft", throwIfNotFound: true);
             m_Gameplay_MoveRight = m_Gameplay.FindAction("MoveRight", throwIfNotFound: true);
-            m_Gameplay_LookDirection = m_Gameplay.FindAction("LookDirection", throwIfNotFound: true);
+            m_Gameplay_CursorPosition = m_Gameplay.FindAction("CursorPosition", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -208,7 +208,7 @@ namespace Game.Input.System
         private readonly InputAction m_Gameplay_MoveBack;
         private readonly InputAction m_Gameplay_MoveLeft;
         private readonly InputAction m_Gameplay_MoveRight;
-        private readonly InputAction m_Gameplay_LookDirection;
+        private readonly InputAction m_Gameplay_CursorPosition;
         public struct GameplayActions
         {
             private @PlayerControls m_Wrapper;
@@ -217,7 +217,7 @@ namespace Game.Input.System
             public InputAction @MoveBack => m_Wrapper.m_Gameplay_MoveBack;
             public InputAction @MoveLeft => m_Wrapper.m_Gameplay_MoveLeft;
             public InputAction @MoveRight => m_Wrapper.m_Gameplay_MoveRight;
-            public InputAction @LookDirection => m_Wrapper.m_Gameplay_LookDirection;
+            public InputAction @CursorPosition => m_Wrapper.m_Gameplay_CursorPosition;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -239,9 +239,9 @@ namespace Game.Input.System
                 @MoveRight.started += instance.OnMoveRight;
                 @MoveRight.performed += instance.OnMoveRight;
                 @MoveRight.canceled += instance.OnMoveRight;
-                @LookDirection.started += instance.OnLookDirection;
-                @LookDirection.performed += instance.OnLookDirection;
-                @LookDirection.canceled += instance.OnLookDirection;
+                @CursorPosition.started += instance.OnCursorPosition;
+                @CursorPosition.performed += instance.OnCursorPosition;
+                @CursorPosition.canceled += instance.OnCursorPosition;
             }
 
             private void UnregisterCallbacks(IGameplayActions instance)
@@ -258,9 +258,9 @@ namespace Game.Input.System
                 @MoveRight.started -= instance.OnMoveRight;
                 @MoveRight.performed -= instance.OnMoveRight;
                 @MoveRight.canceled -= instance.OnMoveRight;
-                @LookDirection.started -= instance.OnLookDirection;
-                @LookDirection.performed -= instance.OnLookDirection;
-                @LookDirection.canceled -= instance.OnLookDirection;
+                @CursorPosition.started -= instance.OnCursorPosition;
+                @CursorPosition.performed -= instance.OnCursorPosition;
+                @CursorPosition.canceled -= instance.OnCursorPosition;
             }
 
             public void RemoveCallbacks(IGameplayActions instance)
@@ -284,7 +284,7 @@ namespace Game.Input.System
             void OnMoveBack(InputAction.CallbackContext context);
             void OnMoveLeft(InputAction.CallbackContext context);
             void OnMoveRight(InputAction.CallbackContext context);
-            void OnLookDirection(InputAction.CallbackContext context);
+            void OnCursorPosition(InputAction.CallbackContext context);
         }
     }
 }
