@@ -1,4 +1,5 @@
 using Game.Input.System;
+using Game.Player.VirtualCamera;
 using Game.Utility;
 using UnityEngine;
 using Zenject;
@@ -8,6 +9,7 @@ namespace Game.Player
     public class PlayerMovement2D : MonoBehaviour
     {
         [Inject] InputProvider _inputProvider;
+        [Inject] VirtualCameraController _vCameraController;
 
         [SerializeField] private Rigidbody2D _body;
 

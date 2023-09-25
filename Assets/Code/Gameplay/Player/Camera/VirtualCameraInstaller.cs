@@ -9,6 +9,7 @@ namespace Game.Player.VirtualCamera
         public override void InstallBindings()
         {
             Container.Bind<CinemachineVirtualCamera>().FromComponentOn(gameObject).AsSingle();
+            Container.Bind<VirtualCameraController>().FromComponentOn(gameObject).AsSingle();
         }
     }
 }

@@ -8,33 +8,44 @@ namespace Game.Player.VirtualCamera
     {
         [Inject] private Rigidbody2D _body;
         [Inject] private CinemachineVirtualCamera _vCamera;
+        [Inject] private PlayerController _playerController;
 
-        private CinemachineTransposer _transposer;
+        [SerializeField] private float _shakeStrenght = 0.2f;
 
-        //private void Start()
-        //{
-        //    Init();
-        //}
+        private CinemachineFramingTransposer _transposer;
+        private CinemachineImpulseSource _impulseSource;
 
-        //private void Update()
-        //{
-        //    Vector3 velocityOffset = new Vector3(_body.velocity.x, _body.velocity.y, 0);
-        //    velocityOffset += new Vector3(0, 0, _transposer.m_FollowOffset.z);
-        //    _transposer.m_FollowOffset = velocityOffset;
+        private void Start()
+        {
+            Init();
+        }
 
-            
-        //}
+        private void OnEnable()
+        {
+            _playerController.OnCollisionEnter += ShakeCamera;
+        }
 
-        //private void Init()
-        //{
-        //    _transposer = _vCamera.GetCinemachineComponent<CinemachineTransposer>();
+        private void OnDisable()
+        {
+            _playerController.OnCollisionEnter -= ShakeCamera;
+        }
 
-        //    if (_transposer == null)
-        //    {
-        //        Debug.LogError("No transposer found on virtual camera");
-        //    }
-        //}
+        private void Init()
+        {
+            _transposer = _vCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+            _impulseSource = _vCamera.GetComponent<CinemachineImpulseSource>();
 
+            if (_transposer == null)
+            {
+                Debug.LogError("No transposer found on virtual camera");
+            }
+        }
 
+        public void ShakeCamera(Collision2D collision)
+        {
+            Vector2 shakeVector = new Vector2( -collision.relativeVelocity.y ,collision.relativeVelocity.x);
+
+            _impulseSource.GenerateImpulse(shakeVector * _shakeStrenght);
+        }
     }
 }
