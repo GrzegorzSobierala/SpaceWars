@@ -9,8 +9,7 @@ namespace Game.Input.System
         {
             SignalBusInstaller.Install(Container);
 
-            Container.Bind<InputProvider>().FromComponentOn(gameObject).
-                AsSingle().NonLazy();
+            Container.Bind<InputProvider>().FromComponentOn(gameObject).AsSingle().NonLazy();
         }
     }
 }

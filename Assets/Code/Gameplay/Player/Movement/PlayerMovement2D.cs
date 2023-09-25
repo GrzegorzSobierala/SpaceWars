@@ -1,11 +1,9 @@
 using Game.Input.System;
 using Game.Utility;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Game
+namespace Game.Player
 {
     public class PlayerMovement2D : MonoBehaviour
     {
@@ -70,7 +68,7 @@ namespace Game
 
         private void MovePlayer(Vector2 direction, float procentOfMaxSpeed)
         {
-            _body.AddRelativeForce(direction * _moveSpeed * (procentOfMaxSpeed) * Time.fixedDeltaTime);
+            _body.AddRelativeForce(procentOfMaxSpeed * _moveSpeed * Time.fixedDeltaTime * direction);
         }
 
         private void RotateToCursor()
@@ -97,6 +95,5 @@ namespace Game
 
             _body.MoveRotation(targetAngle);
         }
-
     }
 }
