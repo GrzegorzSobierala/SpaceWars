@@ -1,7 +1,4 @@
-using UnityEditor.ShaderGraph;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using Zenject;
 
 namespace Game.Input.System
 {
