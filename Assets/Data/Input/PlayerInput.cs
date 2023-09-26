@@ -73,6 +73,15 @@ namespace Game.Input.System
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Shoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""843481e7-d196-4de1-a673-a49d93695a07"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -130,6 +139,17 @@ namespace Game.Input.System
                     ""action"": ""CursorPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""db7baff3-b6d4-4d16-ac57-41e31c155ee3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -143,6 +163,7 @@ namespace Game.Input.System
             m_Gameplay_MoveLeft = m_Gameplay.FindAction("MoveLeft", throwIfNotFound: true);
             m_Gameplay_MoveRight = m_Gameplay.FindAction("MoveRight", throwIfNotFound: true);
             m_Gameplay_CursorPosition = m_Gameplay.FindAction("CursorPosition", throwIfNotFound: true);
+            m_Gameplay_Shoot = m_Gameplay.FindAction("Shoot", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -209,6 +230,7 @@ namespace Game.Input.System
         private readonly InputAction m_Gameplay_MoveLeft;
         private readonly InputAction m_Gameplay_MoveRight;
         private readonly InputAction m_Gameplay_CursorPosition;
+        private readonly InputAction m_Gameplay_Shoot;
         public struct GameplayActions
         {
             private @PlayerControls m_Wrapper;
@@ -218,6 +240,7 @@ namespace Game.Input.System
             public InputAction @MoveLeft => m_Wrapper.m_Gameplay_MoveLeft;
             public InputAction @MoveRight => m_Wrapper.m_Gameplay_MoveRight;
             public InputAction @CursorPosition => m_Wrapper.m_Gameplay_CursorPosition;
+            public InputAction @Shoot => m_Wrapper.m_Gameplay_Shoot;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -242,6 +265,9 @@ namespace Game.Input.System
                 @CursorPosition.started += instance.OnCursorPosition;
                 @CursorPosition.performed += instance.OnCursorPosition;
                 @CursorPosition.canceled += instance.OnCursorPosition;
+                @Shoot.started += instance.OnShoot;
+                @Shoot.performed += instance.OnShoot;
+                @Shoot.canceled += instance.OnShoot;
             }
 
             private void UnregisterCallbacks(IGameplayActions instance)
@@ -261,6 +287,9 @@ namespace Game.Input.System
                 @CursorPosition.started -= instance.OnCursorPosition;
                 @CursorPosition.performed -= instance.OnCursorPosition;
                 @CursorPosition.canceled -= instance.OnCursorPosition;
+                @Shoot.started -= instance.OnShoot;
+                @Shoot.performed -= instance.OnShoot;
+                @Shoot.canceled -= instance.OnShoot;
             }
 
             public void RemoveCallbacks(IGameplayActions instance)
@@ -285,6 +314,7 @@ namespace Game.Input.System
             void OnMoveLeft(InputAction.CallbackContext context);
             void OnMoveRight(InputAction.CallbackContext context);
             void OnCursorPosition(InputAction.CallbackContext context);
+            void OnShoot(InputAction.CallbackContext context);
         }
     }
 }

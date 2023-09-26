@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using Game.Utility;
+using Game.Utility.Globals;
 
 namespace Game.Editor
 {
