@@ -2,6 +2,7 @@ using UnityEngine;
 using Zenject;
 using Game.Input;
 using Game.Input.System;
+using Game.Player;
 
 namespace Game.Combat
 {
@@ -10,7 +11,7 @@ namespace Game.Combat
         [Inject] Rigidbody2D _body;
         [Inject] InputProvider _input;
 
-        [SerializeField] RocketController _rocketPrefab;
+        [SerializeField] ShootableObjectBase _shootableObjectPrefab;
         [SerializeField] float _force = 10f;
         [SerializeField] float _cooldown = 1f;
 
@@ -33,7 +34,7 @@ namespace Game.Combat
 
             _lastShotTime = Time.time;
 
-            RocketController.InstantiateAndShoot(_rocketPrefab, _body, _force);
+            _shootableObjectPrefab.CreateCopy().Shoot(_body);
         }
     }
 }
