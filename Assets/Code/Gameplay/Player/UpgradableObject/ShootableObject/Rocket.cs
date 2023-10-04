@@ -11,9 +11,7 @@ namespace Game
 
         public override void OnHit()
         {
-            _particleSystem.transform.SetParent(null);
-            _particleSystem.Play();
-            Destroy(gameObject);
+            PlayrParticlesAndDie();
         }
 
         public override void Shoot(Rigidbody2D creatorBody)
@@ -23,6 +21,22 @@ namespace Game
             _body.velocity = creatorBody.velocity;
 
             _body.AddForce(creatorBody.transform.up * _startSpeed, ForceMode2D.Impulse);
+
+            StartCoroutine(DestroyByTime());
+        }
+
+        private IEnumerator DestroyByTime()
+        {
+            yield return new WaitForSeconds(5.0f);
+
+            PlayrParticlesAndDie();
+        }
+
+        private void PlayrParticlesAndDie()
+        {
+            _particleSystem.transform.SetParent(null);
+            _particleSystem.Play();
+            Destroy(gameObject);
         }
     }
 }
