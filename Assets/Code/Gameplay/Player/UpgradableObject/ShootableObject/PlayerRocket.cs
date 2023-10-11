@@ -1,19 +1,12 @@
-using Game.Player;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game
+namespace Game.Player.Modules
 {
-    public class Rocket : ShootableObjectBase
+    public class PlayerRocket : ShootableObjectBase
     {
         [SerializeField] float _startSpeed = 30f;
-
-        public override void OnHit()
-        {
-            PlayrParticlesAndDie();
-        }
-
+       
         public override void Shoot(Rigidbody2D creatorBody)
         {
             _body.position = creatorBody.position;
@@ -23,6 +16,11 @@ namespace Game
             _body.AddForce(creatorBody.transform.up * _startSpeed, ForceMode2D.Impulse);
 
             StartCoroutine(DestroyByTime());
+        }
+
+        public override void OnHit()
+        {
+            PlayrParticlesAndDie();
         }
 
         private IEnumerator DestroyByTime()

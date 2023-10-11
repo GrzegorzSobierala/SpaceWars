@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.Upgrade;
+using Game.Player.Upgrade;
 
-namespace Game.Player
+namespace Game.Player.Modules
 {
     public abstract class UpgradableObjectBase : MonoBehaviour
     {

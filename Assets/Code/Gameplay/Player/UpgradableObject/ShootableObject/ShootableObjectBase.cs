@@ -1,8 +1,8 @@
 using UnityEngine;
-using Game.Upgrade;
 using Game.Combat;
+using Game.Player.Upgrade;
 
-namespace Game.Player
+namespace Game.Player.Modules
 {
     public abstract class ShootableObjectBase : UpgradableObjectBase , IShootable
     {

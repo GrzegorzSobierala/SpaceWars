@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Upgrade
+namespace Game.Player.Upgrade
 {
     abstract public class UpgradeBase : MonoBehaviour
     {
