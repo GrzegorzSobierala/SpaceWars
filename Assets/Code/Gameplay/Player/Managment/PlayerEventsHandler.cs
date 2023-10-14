@@ -7,7 +7,7 @@ using Game.Combat;
 
 namespace Game.Player
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerEventsHandler : MonoBehaviour
     {
         public Action<Collision2D> OnCollisionEnter;
 

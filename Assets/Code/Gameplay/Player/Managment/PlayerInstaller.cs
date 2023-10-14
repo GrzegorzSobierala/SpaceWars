@@ -8,7 +8,7 @@ namespace Game.Player
     {
         public override void InstallBindings()
         {
-            Container.Bind<PlayerController>().FromComponentOn(gameObject).AsSingle();
+            Container.Bind<PlayerEventsHandler>().FromComponentOn(gameObject).AsSingle();
             Container.Bind<Rigidbody2D>().FromComponentOn(gameObject).AsSingle();
         }
     }

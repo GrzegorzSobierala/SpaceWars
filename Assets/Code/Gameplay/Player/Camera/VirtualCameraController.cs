@@ -8,7 +8,7 @@ namespace Game.Player.VirtualCamera
     {
         [Inject] private Rigidbody2D _body;
         [Inject] private CinemachineVirtualCamera _vCamera;
-        [Inject] private PlayerController _playerController;
+        [Inject] private PlayerEventsHandler _playerController;
 
         [SerializeField] private float _shakeStrenght = 0.2f;
 
