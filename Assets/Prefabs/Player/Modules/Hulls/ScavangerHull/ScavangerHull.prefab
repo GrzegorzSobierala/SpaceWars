@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6213641918145854480}
   - component: {fileID: 4202502680159437729}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: CapsuleCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1891416411254231942}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: VIsuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,8 +109,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2628032519048400299}
-  m_Layer: 8
-  m_Name: PlayerTest Ship
+  - component: {fileID: 2928357202849716729}
+  m_Layer: 6
+  m_Name: ScavangerHull
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,8 +133,21 @@ Transform:
   - {fileID: 1891416411254231942}
   - {fileID: 8926292516285152521}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2928357202849716729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4391701158107053677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b4fd3c5d1d156d49b0d7412aecb1dca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gunSpot: {fileID: 8926292516285152521}
 --- !u!1 &4511613093691412670
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,7 +157,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7635384010940911786}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +191,7 @@ GameObject:
   - component: {fileID: 969187328010509093}
   - component: {fileID: 2315216082030223204}
   - component: {fileID: 6645203558202137779}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +274,7 @@ GameObject:
   - component: {fileID: 7502582814258396468}
   - component: {fileID: 7137822012689378773}
   - component: {fileID: 2436314970744470155}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -341,9 +355,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8926292516285152521}
-  - component: {fileID: 4832859655976153465}
-  m_Layer: 8
-  m_Name: Gun
+  m_Layer: 6
+  m_Name: GunSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -357,25 +370,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8865148999949341313}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.55, z: -0.539}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2628032519048400299}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4832859655976153465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8865148999949341313}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4b206773fe49cc4dbc6367e97567916, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _shootableObjectPrefab: {fileID: 4886349643755528459, guid: e67e7ec71861e2445bc948f8ec88cb09, type: 3}
-  _force: 10
-  _cooldown: 0.3
