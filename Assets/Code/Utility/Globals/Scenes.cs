@@ -1,6 +1,4 @@
-using UnityEngine;
-
-namespace Game.Utility
+namespace Game.Utility.Globals
 {
     public static class Scenes
     {
