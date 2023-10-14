@@ -10,7 +10,6 @@ namespace Game.Player.Modules
         [Inject] private InputProvider _input;
 
         [SerializeField] private ShootableObjectBase _shootableObjectPrefab;
-        [SerializeField] private float _force = 10f;
         [SerializeField] private float _cooldown = 1f;
 
         private float _lastShotTime = 0f;
