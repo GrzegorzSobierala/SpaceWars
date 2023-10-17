@@ -276,12 +276,11 @@ GameObject:
   - component: {fileID: 6774444975910031210}
   - component: {fileID: 5281897683697869217}
   - component: {fileID: 5511309649037886916}
-  - component: {fileID: 5773158365189428316}
-  - component: {fileID: 1937781442438468709}
   - component: {fileID: 8745850310523971894}
   - component: {fileID: 4585909295019901379}
+  - component: {fileID: 488120537346839382}
   m_Layer: 6
-  m_Name: PlayerShipController
+  m_Name: PlayerShip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -298,7 +297,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5605732903938503943}
   m_Father: {fileID: 6407811719305028010}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -326,7 +326,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85b27248273ebde49b07c802c3f7265a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5773158365189428316
+--- !u!81 &8745850310523971894
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4276193045170388177}
+  m_Enabled: 1
+--- !u!114 &4585909295019901379
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -335,16 +343,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 4276193045170388177}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 317aebafae17e4e4086c0d6ad00bd391, type: 3}
+  m_Script: {fileID: 11500000, guid: 869c587a13be2b74d86e3079d0294317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _body: {fileID: 1937781442438468709}
-  _moveSpeed: 5000
-  _forwardSpeedMulti: 100
-  _horizontalSpeedMutli: 50
-  _backSpeedMulti: 30
-  _rotationSpeed: 300
---- !u!50 &1937781442438468709
+  _hullPrototypes:
+  - {fileID: 5216852560752833861, guid: 14abb2b06f66a2b4794ec6f0ce338a2c, type: 3}
+  - {fileID: -6030896639475460078, guid: 3cf3dac49f22fe040a1d6466153334cc, type: 3}
+  _gunPrototypes:
+  - {fileID: 2534597724515312179, guid: 2f5589a1c477df04186881b9d5b72d68, type: 3}
+  - {fileID: 8333981470197968717, guid: ef1ee4b0b4acf924f8baa2ca815b779e, type: 3}
+--- !u!50 &488120537346839382
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -371,32 +379,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!81 &8745850310523971894
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4276193045170388177}
-  m_Enabled: 1
---- !u!114 &4585909295019901379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4276193045170388177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 869c587a13be2b74d86e3079d0294317, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hullPrototypes:
-  - {fileID: 2928357202849716729, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
-  - {fileID: 2928357202849716729, guid: 059a247da67dae544b3a488b3baf3508, type: 3}
-  _gunPrototypes:
-  - {fileID: 5204692105984303597, guid: 4381e889016c0a846994c3f781fd066e, type: 3}
-  - {fileID: 5204692105984303597, guid: 0a87d56447092e54bb8432a42328e856, type: 3}
 --- !u!1 &6932844938547107274
 GameObject:
   m_ObjectHideFlags: 0
@@ -450,3 +432,34 @@ MonoBehaviour:
   _installerPrefabs: []
   _autoRun: 1
   _kernel: {fileID: 0}
+--- !u!1 &7764236733845139940
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5605732903938503943}
+  m_Layer: 6
+  m_Name: Managment
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5605732903938503943
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7764236733845139940}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6774444975910031210}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

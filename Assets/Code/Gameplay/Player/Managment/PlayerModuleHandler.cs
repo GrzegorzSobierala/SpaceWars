@@ -16,7 +16,7 @@ namespace Game.Player.Modules
         private PlayerGunBase _currentGunPrototype;
 
         private PlayerHullBase _currentHull;
-        private PlayerGunBase _currentGun;    
+        private PlayerGunBase _currentGun;
 
         private void Awake()
         {

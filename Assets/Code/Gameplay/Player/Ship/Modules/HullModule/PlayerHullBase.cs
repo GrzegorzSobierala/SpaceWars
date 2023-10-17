@@ -13,7 +13,7 @@ namespace Game.Player.Modules
 
         [SerializeField] protected Transform _gunSpot;
 
-        public abstract void OnHit();
+        public virtual void OnHit() { }
 
         public override bool TryAddUpgrade(UpgradeBase upgrade)
         {

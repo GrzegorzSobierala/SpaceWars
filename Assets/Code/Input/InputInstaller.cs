@@ -7,8 +7,6 @@ namespace Game.Input.System
     {
         public override void InstallBindings()
         {
-            SignalBusInstaller.Install(Container);
-
             Container.Bind<InputProvider>().FromComponentOn(gameObject).AsSingle().NonLazy();
         }
     }

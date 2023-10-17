@@ -6,9 +6,8 @@ namespace Game.Player.VirtualCamera
 {
     public class VirtualCameraController : MonoBehaviour
     {
-        [Inject] private Rigidbody2D _body;
+        [Inject] private SignalBus _signalBus;
         [Inject] private CinemachineVirtualCamera _vCamera;
-        [Inject] private PlayerEventsHandler _playerController;
 
         [SerializeField] private float _shakeStrenght = 0.2f;
 
@@ -22,12 +21,12 @@ namespace Game.Player.VirtualCamera
 
         private void OnEnable()
         {
-            _playerController.OnCollisionEnter += ShakeCamera;
+            _signalBus.Subscribe<OnPlayerCollision2DEnterSignal>(ShakeCamera);
         }
 
         private void OnDisable()
         {
-            _playerController.OnCollisionEnter -= ShakeCamera;
+            _signalBus.Unsubscribe<OnPlayerCollision2DEnterSignal>(ShakeCamera);
         }
 
         private void Init()
@@ -41,9 +40,11 @@ namespace Game.Player.VirtualCamera
             }
         }
 
-        public void ShakeCamera(Collision2D collision)
+        public void ShakeCamera(OnPlayerCollision2DEnterSignal signal)
         {
-            Vector2 shakeVector = new Vector2( -collision.relativeVelocity.y ,collision.relativeVelocity.x);
+            Collision2D collision = signal.Collision;
+            Vector2 shakeVector = 
+                new Vector2( -collision.relativeVelocity.y ,collision.relativeVelocity.x);
 
             _impulseSource.GenerateImpulse(shakeVector * _shakeStrenght);
         }

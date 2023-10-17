@@ -9,9 +9,7 @@ namespace Game.Player
     public class PlayerMovement2D : MonoBehaviour
     {
         [Inject] InputProvider _inputProvider;
-        [Inject] VirtualCameraController _vCameraController;
-
-        [SerializeField] private Rigidbody2D _body;
+        [Inject] private Rigidbody2D _body;
 
         [SerializeField, Range(0.0f, 60000.0f)] float _moveSpeed = 10000;
         [SerializeField, Range(0.0f, 200.0f)] float _forwardSpeedMulti = 100;

@@ -7,13 +7,13 @@ using Game.Combat;
 
 namespace Game.Player
 {
-    public class PlayerEventsHandler : MonoBehaviour
+    public class PlayerSignalHandler : MonoBehaviour
     {
-        public Action<Collision2D> OnCollisionEnter;
+        [Inject] private SignalBus _signalBus;
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            OnCollisionEnter?.Invoke(collision);
+            _signalBus.Fire(new OnPlayerCollision2DEnterSignal(collision));
         }
     }
 }
