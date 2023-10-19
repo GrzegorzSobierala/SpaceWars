@@ -1,11 +1,10 @@
-using Zenject;
 using UnityEngine;
 
 namespace Game.Player
 {
-    public class OnPlayerCollision2DEnterSignal
+    public class PlayerCollisionExit2DSignal
     {
-        public OnPlayerCollision2DEnterSignal(Collision2D collision)
+        public PlayerCollisionExit2DSignal(Collision2D collision)
         {
             Collision = collision;
         }

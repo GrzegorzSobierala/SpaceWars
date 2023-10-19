@@ -21,12 +21,12 @@ namespace Game.Player.VirtualCamera
 
         private void OnEnable()
         {
-            _signalBus.Subscribe<OnPlayerCollision2DEnterSignal>(ShakeCamera);
+            _signalBus.Subscribe<PlayerCollisionEnter2DSignal>(ShakeCamera);
         }
 
         private void OnDisable()
         {
-            _signalBus.Unsubscribe<OnPlayerCollision2DEnterSignal>(ShakeCamera);
+            _signalBus.Unsubscribe<PlayerCollisionEnter2DSignal>(ShakeCamera);
         }
 
         private void Init()
@@ -40,7 +40,7 @@ namespace Game.Player.VirtualCamera
             }
         }
 
-        public void ShakeCamera(OnPlayerCollision2DEnterSignal signal)
+        public void ShakeCamera(PlayerCollisionEnter2DSignal signal)
         {
             Collision2D collision = signal.Collision;
             Vector2 shakeVector = 

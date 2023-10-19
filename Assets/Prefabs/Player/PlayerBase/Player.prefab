@@ -316,7 +316,9 @@ GameObject:
   - component: {fileID: 6774444975910031210}
   - component: {fileID: 5281897683697869217}
   - component: {fileID: 4585909295019901379}
+  - component: {fileID: 9167951744479927178}
   - component: {fileID: 488120537346839382}
+  - component: {fileID: 5098125129022628644}
   m_Layer: 6
   m_Name: PlayerShip
   m_TagString: Untagged
@@ -371,6 +373,23 @@ MonoBehaviour:
   _gunPrototypes:
   - {fileID: 2534597724515312179, guid: 2f5589a1c477df04186881b9d5b72d68, type: 3}
   - {fileID: 8333981470197968717, guid: ef1ee4b0b4acf924f8baa2ca815b779e, type: 3}
+--- !u!114 &9167951744479927178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4276193045170388177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 317aebafae17e4e4086c0d6ad00bd391, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 5000
+  _forwardSpeedMulti: 100
+  _horizontalSpeedMutli: 50
+  _backSpeedMulti: 30
+  _rotationSpeed: 300
 --- !u!50 &488120537346839382
 Rigidbody2D:
   serializedVersion: 4
@@ -398,6 +417,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &5098125129022628644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4276193045170388177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85b27248273ebde49b07c802c3f7265a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6932844938547107274
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,7 +491,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5605732903938503943}
-  - component: {fileID: 4985314730076785547}
   m_Layer: 6
   m_Name: Managment
   m_TagString: Untagged
@@ -483,15 +513,3 @@ Transform:
   m_Father: {fileID: 6774444975910031210}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4985314730076785547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7764236733845139940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85b27248273ebde49b07c802c3f7265a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
