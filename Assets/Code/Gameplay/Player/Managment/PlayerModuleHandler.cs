@@ -47,7 +47,7 @@ namespace Game.Player.Modules
         {
             SetNext(_gunPrototypes, ref _currentGunPrototype, false);
 
-            _currentGun = _currentHull.ReplaceGun(_currentGunPrototype);
+            ReplaceGun(_currentGunPrototype);
         }
 
         [ContextMenu("SetPreviusGun")]
@@ -55,7 +55,7 @@ namespace Game.Player.Modules
         {
             SetNext(_gunPrototypes, ref _currentGunPrototype, true);
 
-            _currentGun = _currentHull.ReplaceGun(_currentGunPrototype);
+            ReplaceGun(_currentGunPrototype);
         }
         private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : UpgradableObjectBase
         {
@@ -82,18 +82,28 @@ namespace Game.Player.Modules
             _currentGunPrototype = _gunPrototypes[0];
 
             ReplaceHull(_currentHullPrototype);
-            _currentGun = _currentHull.ReplaceGun(_currentGunPrototype);
+            ReplaceGun(_currentGunPrototype);
         }
 
         private void ReplaceHull(PlayerHullBase hullPrototype)
         {
-            foreach (Transform child in transform)
+            if (_currentHull != null)
             {
-                Destroy(child.gameObject);
+                Destroy(_currentHull.gameObject);
             }
 
             _currentHull = hullPrototype.Instatiate(transform, _container);
-            _currentHull.ReplaceGun(_currentGunPrototype);
+            ReplaceGun(_currentGunPrototype);
+        }
+
+        private void ReplaceGun(PlayerGunBase gunPrototype)
+        {
+            if (_currentGun != null)
+            {
+                Destroy(_currentGun.gameObject);
+            }
+
+            _currentGun = gunPrototype.Instatiate(_currentHull.GunSpot, _container);
         }
 
         private void ReferencesCheck()
