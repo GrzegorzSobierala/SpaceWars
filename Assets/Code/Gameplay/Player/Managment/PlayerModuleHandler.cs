@@ -1,122 +1,39 @@
+using Game.Player.Modules;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Player.Modules
+namespace Game
 {
     public class PlayerModuleHandler : MonoBehaviour
     {
-        [Inject] private DiContainer _container;
-
-        [SerializeField] private List<PlayerHullBase> _hullPrototypes;
-        [SerializeField] private List<PlayerGunBase> _gunPrototypes;
-
-        private PlayerHullBase _currentHullPrototype;
-        private PlayerGunBase _currentGunPrototype;
+        public PlayerHullBase CurrentHull => _currentHull;
+        public PlayerGunBase CurrentGun => _currentGun;
 
         private PlayerHullBase _currentHull;
         private PlayerGunBase _currentGun;
 
-        private void Awake()
+        public void SetGun(PlayerModuleCreator creator, PlayerGunBase gun)
         {
-            ReferencesCheck();
-            Init();
-        }
-
-        #region Changing modules
-
-        [ContextMenu("SetNextHull")]
-        public void SetNextHull()
-        {
-            SetNext(_hullPrototypes, ref _currentHullPrototype, false);
-
-            ReplaceHull(_currentHullPrototype);
-        }
-
-        [ContextMenu("SetPreviusHull")]
-        public void SetPreviusHull()
-        {
-            SetNext(_hullPrototypes, ref _currentHullPrototype, true);
-
-            ReplaceHull(_currentHullPrototype);
-        }
-
-        [ContextMenu("SetNextGun")]
-        public void SetNextGun()
-        {
-            SetNext(_gunPrototypes, ref _currentGunPrototype, false);
-
-            ReplaceGun(_currentGunPrototype);
-        }
-
-        [ContextMenu("SetPreviusGun")]
-        public void SetPreviusGun()
-        {
-            SetNext(_gunPrototypes, ref _currentGunPrototype, true);
-
-            ReplaceGun(_currentGunPrototype);
-        }
-        private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : UpgradableObjectBase
-        {
-            int currentIndex = prototypes.IndexOf(currentModule);
-            int targetIndex = currentIndex + (goBack ? -1 : 1);
-
-            if (targetIndex >= prototypes.Count)
+            if(creator == null)
             {
-                targetIndex = 0;
-            }
-            else if (targetIndex < 0)
-            {
-                targetIndex = prototypes.Count - 1;
+                Debug.LogError("Creator is null");
+                return;
             }
 
-            currentModule = prototypes[targetIndex];
+            _currentGun = gun;
         }
 
-        #endregion
-
-        private void Init()
+        public void SetHull(PlayerModuleCreator creator, PlayerHullBase hull)
         {
-            _currentHullPrototype = _hullPrototypes[0];
-            _currentGunPrototype = _gunPrototypes[0];
-
-            ReplaceHull(_currentHullPrototype);
-            ReplaceGun(_currentGunPrototype);
-        }
-
-        private void ReplaceHull(PlayerHullBase hullPrototype)
-        {
-            if (_currentHull != null)
+            if (creator == null)
             {
-                Destroy(_currentHull.gameObject);
+                Debug.LogError("Creator is null");
+                return;
             }
 
-            _currentHull = hullPrototype.Instatiate(transform, _container);
-            ReplaceGun(_currentGunPrototype);
-        }
-
-        private void ReplaceGun(PlayerGunBase gunPrototype)
-        {
-            if (_currentGun != null)
-            {
-                Destroy(_currentGun.gameObject);
-            }
-
-            _currentGun = gunPrototype.Instatiate(_currentHull.GunSpot, _container);
-        }
-
-        private void ReferencesCheck()
-        {
-            if (_hullPrototypes.Count == 0)
-            {
-                Debug.LogError("List of hull prototypes is empty");
-            }
-
-            if (_gunPrototypes.Count == 0)
-            {
-                Debug.LogError("List of gun prototypes is empty");
-            }
+            _currentHull = hull;
         }
     }
 }

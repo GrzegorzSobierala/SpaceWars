@@ -8,6 +8,8 @@ namespace Game.Player
         public override void InstallBindings()
         {
             Container.Bind<Rigidbody2D>().FromComponentOn(gameObject).AsSingle();
+            Container.Bind<PlayerMovement2D>().FromComponentOn(gameObject).AsSingle();
+            Container.Bind<PlayerModuleHandler>().FromComponentOn(gameObject).AsSingle();
 
             SignalBusInstaller.Install(Container);
             Container.DeclareSignal<PlayerCollisionEnter2DSignal>().OptionalSubscriber();
