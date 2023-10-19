@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game
+namespace Game.Player
 {
     public class PlayerTriggerExit2DSignal
     {
