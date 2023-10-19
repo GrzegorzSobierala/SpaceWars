@@ -1,7 +1,5 @@
 using UnityEngine;
 using Zenject;
-using Cinemachine;
-using Game.Player.Modules;
 
 namespace Game.Player
 {
