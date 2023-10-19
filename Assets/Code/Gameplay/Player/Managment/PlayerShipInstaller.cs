@@ -1,5 +1,6 @@
 using UnityEngine;
 using Zenject;
+using Game.Player.Modules;
 
 namespace Game.Player
 {

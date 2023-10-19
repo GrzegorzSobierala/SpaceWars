@@ -1,10 +1,7 @@
 using Game.Player.Modules;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
-namespace Game
+namespace Game.Player.Modules
 {
     public class PlayerModuleHandler : MonoBehaviour
     {
