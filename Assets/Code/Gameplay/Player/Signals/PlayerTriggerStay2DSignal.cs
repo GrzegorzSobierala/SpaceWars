@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game
 {
-    public class PlayerTriggerStay2DSignal : MonoBehaviour
+    public class PlayerTriggerStay2DSignal
     {
         public PlayerTriggerStay2DSignal(Collider2D collider)
         {

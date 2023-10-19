@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game.Player
 {
-    public class PlayerCollisionStay2DSignal : MonoBehaviour
+    public class PlayerCollisionStay2DSignal
     {
         public PlayerCollisionStay2DSignal(Collision2D collision)
         {
