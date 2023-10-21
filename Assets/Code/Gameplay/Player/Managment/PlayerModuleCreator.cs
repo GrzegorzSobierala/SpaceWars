@@ -2,18 +2,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Player.Modules
+namespace Game.Player.Ship
 {
     public class PlayerModuleCreator : MonoBehaviour
     {
         [Inject] private DiContainer _container;
         [Inject] private PlayerModuleHandler _moduleHandler;
 
-        [SerializeField] private List<PlayerHullBase> _hullPrototypes;
-        [SerializeField] private List<PlayerGunBase> _gunPrototypes;
+        [SerializeField] private List<PlayerHullModuleBase> _hullPrototypes;
+        [SerializeField] private List<PlayerGunModuleBase> _gunPrototypes;
 
-        private PlayerHullBase _currentHullPrototype;
-        private PlayerGunBase _currentGunPrototype;
+        private PlayerHullModuleBase _currentHullPrototype;
+        private PlayerGunModuleBase _currentGunPrototype;
 
         private void Awake()
         {
@@ -54,7 +54,8 @@ namespace Game.Player.Modules
 
             ReplaceGun(_currentGunPrototype);
         }
-        private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : UpgradableObjectBase
+
+        private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : IModule
         {
             int currentIndex = prototypes.IndexOf(currentModule);
             int targetIndex = currentIndex + (goBack ? -1 : 1);
@@ -82,19 +83,19 @@ namespace Game.Player.Modules
             ReplaceGun(_currentGunPrototype);
         }
 
-        private void ReplaceHull(PlayerHullBase hullPrototype)
+        private void ReplaceHull(PlayerHullModuleBase hullPrototype)
         {
             if (_moduleHandler.CurrentHull != null)
             {
                 Destroy(_moduleHandler.CurrentHull.gameObject);
             }
 
-            PlayerHullBase newHull = hullPrototype.Instatiate(transform, _container);
+            PlayerHullModuleBase newHull = hullPrototype.Instatiate(transform, _container);
             _moduleHandler.SetHull(this, newHull);
             ReplaceGun(_currentGunPrototype);
         }
 
-        private void ReplaceGun(PlayerGunBase gunPrototype)
+        private void ReplaceGun(PlayerGunModuleBase gunPrototype)
         {
             if (_moduleHandler.CurrentGun != null)
             {
@@ -102,7 +103,7 @@ namespace Game.Player.Modules
             }
 
             Transform gunSpot = _moduleHandler.CurrentHull.GunSpot;
-            PlayerGunBase newGun = gunPrototype.Instatiate(gunSpot, _container);
+            PlayerGunModuleBase newGun = gunPrototype.Instatiate(gunSpot, _container);
             _moduleHandler.SetGun(this, newGun);
         }
 

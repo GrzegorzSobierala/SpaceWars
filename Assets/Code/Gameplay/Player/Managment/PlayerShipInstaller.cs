@@ -1,8 +1,7 @@
 using UnityEngine;
 using Zenject;
-using Game.Player.Modules;
 
-namespace Game.Player
+namespace Game.Player.Ship
 {
     public class PlayerShipInstaller : MonoInstaller
     {

@@ -3,7 +3,7 @@ using Game.Utility;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Player
+namespace Game.Player.Ship
 {
     public class PlayerMovement2D : MonoBehaviour
     {
