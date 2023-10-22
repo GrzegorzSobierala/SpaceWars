@@ -42,7 +42,6 @@ GameObject:
   - component: {fileID: 2628032519048400299}
   - component: {fileID: 4804315602205177162}
   - component: {fileID: 7718358888081137982}
-  - component: {fileID: 5621665419158848795}
   m_Layer: 6
   m_Name: HullBase
   m_TagString: Untagged
@@ -98,24 +97,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e030f9fe7fbf9b54cb3097c4485f5d05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5621665419158848795
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4391701158107053677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 317aebafae17e4e4086c0d6ad00bd391, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _body: {fileID: 0}
-  _moveSpeed: 5000
-  _forwardSpeedMulti: 100
-  _horizontalSpeedMutli: 50
-  _backSpeedMulti: 30
-  _rotationSpeed: 300
 --- !u!1 &4511613093691412670
 GameObject:
   m_ObjectHideFlags: 0

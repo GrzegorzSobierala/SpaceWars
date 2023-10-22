@@ -7,7 +7,7 @@ namespace Game.Player.Ship
 {
     public class PlayerMovement2D : MonoBehaviour
     {
-        [Inject] InputProvider _inputProvider;
+        [Inject] private InputProvider _inputProvider;
         [Inject] private Rigidbody2D _body;
 
         [SerializeField, Range(0.0f, 60000.0f)] float _moveSpeed = 10000;
