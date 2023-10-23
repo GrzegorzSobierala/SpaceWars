@@ -1,4 +1,3 @@
-using UnityEngine;
 using Zenject;
 
 namespace Game.Input.System
@@ -7,8 +6,6 @@ namespace Game.Input.System
     {
         public override void InstallBindings()
         {
-            SignalBusInstaller.Install(Container);
-
             Container.Bind<InputProvider>().FromComponentOn(gameObject).AsSingle().NonLazy();
         }
     }
