@@ -1,5 +1,6 @@
 using Game.Input.System;
 using Game.Utility;
+using UnityEditor.Rendering;
 using UnityEngine;
 using Zenject;
 
@@ -72,10 +73,11 @@ namespace Game.Player.Ship
 
         private void RotateToCursor()
         {
-            Vector2 cursorPos = _Input.CursorPosition.ReadValue<Vector2>();
-            Vector2 playerPos = TransformUtility.WorldToScreenPointClamped(_body.position);
+            Vector2 mousePos = _Input.CursorPosition.ReadValue<Vector2>();
+            Vector2 intersectionPoint;
+            intersectionPoint = TransformUtility.ScreanToPlayerIntersection(mousePos);
 
-            Vector2 playerCursorDirection = cursorPos - playerPos;
+            Vector2 playerCursorDirection = intersectionPoint - _body.position;
 
             float playerCursorAngle = Mathf.Atan2(playerCursorDirection.y, playerCursorDirection.x);
             playerCursorAngle = (playerCursorAngle - Mathf.PI / 2) * Mathf.Rad2Deg;

@@ -13,5 +13,17 @@ namespace Game.Utility
 
             return screenPosition;
         }
+
+        /// <summary>
+        /// Screan point to 2D player plane intersection point 
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public static Vector2 ScreanToPlayerIntersection(Vector2 position) 
+        {
+            Ray ray = Camera.main.ScreenPointToRay(position);
+            float t = -Camera.main.transform.position.z / ray.direction.z;
+            return ray.origin + t * ray.direction;
+        }
     }
 }
