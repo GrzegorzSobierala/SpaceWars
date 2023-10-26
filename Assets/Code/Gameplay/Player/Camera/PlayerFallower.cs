@@ -15,7 +15,7 @@ namespace Game
 
         private void Update()
         {
-            transform.position = (Vector3)_body.transform.position + _offset;
+            transform.position = _body.transform.position + _offset;
         }
     }
 }

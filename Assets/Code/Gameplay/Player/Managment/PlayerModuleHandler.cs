@@ -5,12 +5,14 @@ namespace Game.Player.Ship
     public class PlayerModuleHandler : MonoBehaviour
     {
         public PlayerHullModuleBase CurrentHull => _currentHull;
-        public PlayerGunBase CurrentGun => _currentGun;
+        public PlayerGunModuleBase CurrentGun => _currentGun;
+        public ViewfinderModuleBase CurrentViewfinder => _currentViewfinder;
 
         private PlayerHullModuleBase _currentHull;
-        private PlayerGunBase _currentGun;
+        private PlayerGunModuleBase _currentGun;
+        private ViewfinderModuleBase _currentViewfinder;
 
-        public void SetGun(PlayerModuleCreator creator, PlayerGunBase gun)
+        public void SetGun(PlayerModuleCreator creator, PlayerGunModuleBase gun)
         {
             if(creator == null)
             {
@@ -31,5 +33,17 @@ namespace Game.Player.Ship
 
             _currentHull = hull;
         }
+
+        public void SetViewfinder(PlayerModuleCreator creator, ViewfinderModuleBase viewfinder)
+        {
+            if (creator == null)
+            {
+                Debug.LogError("Creator is null");
+                return;
+            }
+
+            _currentViewfinder = viewfinder;
+        }
+
     }
 }

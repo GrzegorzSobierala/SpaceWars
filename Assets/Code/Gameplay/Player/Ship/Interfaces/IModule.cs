@@ -4,6 +4,6 @@ namespace Game.Player.Ship
     {
         public bool TryAddUpgrade(IUpgrade upgrade);
 
-        public bool IsUpgradeInstalable(IUpgrade upgrade);
+        public bool IsUpgradeAddable(IUpgrade upgrade);
     }
 }

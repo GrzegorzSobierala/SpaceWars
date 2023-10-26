@@ -36,7 +36,7 @@ namespace Game.Player.Ship
         {
             _lastShotTime = Time.time;
 
-            _shootableObjectPrefab.CreateCopy().Shoot(_body);
+            _shootableObjectPrefab.CreateCopy().Shoot(_body, transform);
         }
 
         public override bool TryAddUpgrade(IUpgrade upgrade)
@@ -44,7 +44,7 @@ namespace Game.Player.Ship
             throw new System.NotImplementedException();
         }
 
-        public override bool IsUpgradeInstalable(IUpgrade upgrade)
+        public override bool IsUpgradeAddable(IUpgrade upgrade)
         {
             throw new System.NotImplementedException();
         }

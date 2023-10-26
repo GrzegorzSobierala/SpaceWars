@@ -7,13 +7,13 @@ namespace Game.Player.Ship
     {
         [SerializeField] float _startSpeed = 30f;
        
-        public override void Shoot(Rigidbody2D creatorBody)
+        public override void Shoot(Rigidbody2D creatorBody, Transform gunTransform)
         {
-            _body.position = creatorBody.position;
-            _body.rotation = creatorBody.rotation;
+            _body.position = gunTransform.position;
+            _body.rotation = gunTransform.rotation.eulerAngles.z;
             _body.velocity = creatorBody.velocity;
 
-            _body.AddForce(creatorBody.transform.up * _startSpeed, ForceMode2D.Impulse);
+            _body.AddForce(gunTransform.up * _startSpeed, ForceMode2D.Impulse);
 
             StartCoroutine(DestroyByTime());
         }

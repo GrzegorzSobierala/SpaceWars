@@ -10,11 +10,13 @@ namespace Game.Player.Ship
         [Inject] private DiContainer _container;
 
         [SerializeField] protected Transform _gunSpot;
+        [SerializeField] protected Transform _viewfinderSpot;
 
         public Transform GunSpot => _gunSpot;
+        public Transform ViewfinderSpot => _viewfinderSpot;
 
         public abstract bool TryAddUpgrade(IUpgrade upgrade);
-        public abstract bool IsUpgradeInstalable(IUpgrade upgrade);
+        public abstract bool IsUpgradeAddable(IUpgrade upgrade);
 
         public PlayerHullModuleBase Instatiate(Transform parent, DiContainer container)
         {

@@ -297,6 +297,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7463934869842094991, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.033
+      objectReference: {fileID: 0}
+    - target: {fileID: 7463934869842094991, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.511
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -324,6 +332,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7635384010940911786, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
   m_PrefabInstance: {fileID: 9014736865558012443}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1914028042722920852 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7463934869842094991, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
+  m_PrefabInstance: {fileID: 9014736865558012443}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4749243193685466230 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4391701158107053677, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
@@ -342,6 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gunSpot: {fileID: 502794206697447186}
+  _viewfinderSpot: {fileID: 1914028042722920852}
 --- !u!4 &7432468113072009629 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1891416411254231942, guid: 8ec42e51662674e4c95103675c4affda, type: 3}

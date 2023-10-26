@@ -2,7 +2,7 @@ namespace Game.Player.Ship
 {
     public class ScavangerHull : PlayerHullModuleBase
     {
-        public override bool IsUpgradeInstalable(IUpgrade upgrade)
+        public override bool IsUpgradeAddable(IUpgrade upgrade)
         {
             throw new System.NotImplementedException();
         }

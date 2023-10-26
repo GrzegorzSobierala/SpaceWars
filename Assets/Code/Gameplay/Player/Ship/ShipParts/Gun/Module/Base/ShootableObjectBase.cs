@@ -33,7 +33,7 @@ namespace Game.Player.Ship
             OnHit();
         }
 
-        public abstract void Shoot(Rigidbody2D creatorBody);
+        public abstract void Shoot(Rigidbody2D creatorBody, Transform gunTransform);
 
         public abstract void OnHit();
 

@@ -82,6 +82,15 @@ namespace Game.Input.System
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""195038b8-ca0e-474f-aea7-de8b44f8ecee"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -150,6 +159,17 @@ namespace Game.Input.System
                     ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f60996cc-deb5-41fd-bd72-eb3d00f3e4d6"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -164,6 +184,7 @@ namespace Game.Input.System
             m_Gameplay_MoveRight = m_Gameplay.FindAction("MoveRight", throwIfNotFound: true);
             m_Gameplay_CursorPosition = m_Gameplay.FindAction("CursorPosition", throwIfNotFound: true);
             m_Gameplay_Shoot = m_Gameplay.FindAction("Shoot", throwIfNotFound: true);
+            m_Gameplay_Aim = m_Gameplay.FindAction("Aim", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -231,6 +252,7 @@ namespace Game.Input.System
         private readonly InputAction m_Gameplay_MoveRight;
         private readonly InputAction m_Gameplay_CursorPosition;
         private readonly InputAction m_Gameplay_Shoot;
+        private readonly InputAction m_Gameplay_Aim;
         public struct GameplayActions
         {
             private @PlayerControls m_Wrapper;
@@ -241,6 +263,7 @@ namespace Game.Input.System
             public InputAction @MoveRight => m_Wrapper.m_Gameplay_MoveRight;
             public InputAction @CursorPosition => m_Wrapper.m_Gameplay_CursorPosition;
             public InputAction @Shoot => m_Wrapper.m_Gameplay_Shoot;
+            public InputAction @Aim => m_Wrapper.m_Gameplay_Aim;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -268,6 +291,9 @@ namespace Game.Input.System
                 @Shoot.started += instance.OnShoot;
                 @Shoot.performed += instance.OnShoot;
                 @Shoot.canceled += instance.OnShoot;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
             }
 
             private void UnregisterCallbacks(IGameplayActions instance)
@@ -290,6 +316,9 @@ namespace Game.Input.System
                 @Shoot.started -= instance.OnShoot;
                 @Shoot.performed -= instance.OnShoot;
                 @Shoot.canceled -= instance.OnShoot;
+                @Aim.started -= instance.OnAim;
+                @Aim.performed -= instance.OnAim;
+                @Aim.canceled -= instance.OnAim;
             }
 
             public void RemoveCallbacks(IGameplayActions instance)
@@ -315,6 +344,7 @@ namespace Game.Input.System
             void OnMoveRight(InputAction.CallbackContext context);
             void OnCursorPosition(InputAction.CallbackContext context);
             void OnShoot(InputAction.CallbackContext context);
+            void OnAim(InputAction.CallbackContext context);
         }
     }
 }

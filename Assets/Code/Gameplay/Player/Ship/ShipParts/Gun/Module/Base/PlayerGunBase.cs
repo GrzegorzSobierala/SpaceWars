@@ -6,7 +6,7 @@ namespace Game.Player.Ship
     public abstract class PlayerGunModuleBase : PlayerGunBase , IModule
     {
         public abstract bool TryAddUpgrade(IUpgrade upgrade);
-        public abstract bool IsUpgradeInstalable(IUpgrade upgrade);
+        public abstract bool IsUpgradeAddable(IUpgrade upgrade);
 
         public PlayerGunModuleBase Instatiate(Transform parent, DiContainer container)
         {
