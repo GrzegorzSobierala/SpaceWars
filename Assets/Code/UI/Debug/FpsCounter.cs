@@ -7,9 +7,8 @@ namespace Game
 {
     public class FpsCounter : MonoBehaviour
     {
-        [SerializeField] TextMeshProUGUI textMesh;
-        [SerializeField] private float interval = 1.0f; // Time interval in seconds to calculate average FPS
-        [SerializeField] private int framesToAverage = 60; // Number of frames to average
+        [SerializeField] TextMeshProUGUI _textMesh;
+        [SerializeField] private float _interval = 1.0f;
 
         private float deltaTime = 0.0f;
         private float fpsAccumulator = 0;
@@ -22,17 +21,15 @@ namespace Game
             fpsAccumulator += 1.0f / Time.deltaTime;
             frameCounter++;
 
-            // Calculate average FPS over the specified time interval
-            if (deltaTime > interval)
+            if (deltaTime > _interval)
             {
                 currentFPS = fpsAccumulator / frameCounter;
 
-                // Reset counters
                 deltaTime = 0.0f;
                 fpsAccumulator = 0;
                 frameCounter = 0;
 
-                textMesh.text = currentFPS.ToString("0.00");
+                _textMesh.text = currentFPS.ToString("0.00");
             }
         }
     }

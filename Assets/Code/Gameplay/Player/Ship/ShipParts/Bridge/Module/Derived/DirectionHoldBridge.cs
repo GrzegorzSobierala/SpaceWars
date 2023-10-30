@@ -2,13 +2,10 @@ using Game.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.U2D;
-using UnityEngine.UIElements;
 
 namespace Game.Player.Ship
 {
-    public class DirectionHoldViewfinder : ViewfinderModuleBase
+    public class DirectionHoldBridge : BridgeModuleBase
     {
         private Quaternion _startAimingGunRot;
 

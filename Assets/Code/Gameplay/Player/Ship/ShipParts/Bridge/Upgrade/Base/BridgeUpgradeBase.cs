@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Player.Ship
 {
-    public abstract class ViewfinderUpgradeBase : ViewfinderBase, IUpgrade
+    public abstract class BridgeUpgradeBase : BridgeBase, IUpgrade
     {
         public abstract IUpgrade Instatiate();
     }

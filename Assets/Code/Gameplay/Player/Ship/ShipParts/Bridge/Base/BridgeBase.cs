@@ -3,7 +3,7 @@ using Zenject;
 
 namespace Game.Player.Ship
 {
-    public abstract class ViewfinderBase : ShipPart
+    public abstract class BridgeBase : ShipPart
     {
         [Inject] protected Rigidbody2D _body;
         [Inject] protected PlayerMovement2D _playerMovement;

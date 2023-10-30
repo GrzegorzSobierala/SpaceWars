@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Game.Player.Ship
 {
-    public abstract class ViewfinderModuleBase : ViewfinderBase, IModule
+    public abstract class BridgeModuleBase : BridgeBase, IModule
     {
         [Inject] private InputProvider _input;
 
@@ -27,10 +27,10 @@ namespace Game.Player.Ship
         public abstract bool IsUpgradeAddable(IUpgrade upgrade);
         public abstract bool TryAddUpgrade(IUpgrade upgrade);
 
-        public ViewfinderModuleBase Instatiate(Transform parent, DiContainer container)
+        public BridgeModuleBase Instatiate(Transform parent, DiContainer container)
         {
             GameObject viewfinder = container.InstantiatePrefab(this, parent);
-            ViewfinderModuleBase newViewfinder = viewfinder.GetComponent<ViewfinderModuleBase>();
+            BridgeModuleBase newViewfinder = viewfinder.GetComponent<BridgeModuleBase>();
 
             newViewfinder.transform.localPosition = transform.localPosition;
             newViewfinder.transform.localRotation = transform.localRotation;

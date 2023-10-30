@@ -11,11 +11,11 @@ namespace Game.Player.Ship
 
         [SerializeField] private List<PlayerHullModuleBase> _hullPrototypes;
         [SerializeField] private List<PlayerGunModuleBase> _gunPrototypes;
-        [SerializeField] private List<ViewfinderModuleBase> _viewfinderPrototypes;
+        [SerializeField] private List<BridgeModuleBase> _viewfinderPrototypes;
 
         private PlayerHullModuleBase _currentHullPrototype;
         private PlayerGunModuleBase _currentGunPrototype;
-        private ViewfinderModuleBase _currentViewfinderPrototype;
+        private BridgeModuleBase _currentViewfinderPrototype;
 
         private void Awake()
         {
@@ -127,7 +127,7 @@ namespace Game.Player.Ship
             _moduleHandler.SetGun(this, newGun);
         }
 
-        private void ReplaceViewfinder(ViewfinderModuleBase viewfinderPrototype)
+        private void ReplaceViewfinder(BridgeModuleBase viewfinderPrototype)
         {
             if(_moduleHandler.CurrentViewfinder != null)
             {
@@ -135,7 +135,7 @@ namespace Game.Player.Ship
             }
 
             Transform viewfinderSpot = _moduleHandler.CurrentHull.ViewfinderSpot;
-            ViewfinderModuleBase newViewfinder = viewfinderPrototype.Instatiate(viewfinderSpot, _container);
+            BridgeModuleBase newViewfinder = viewfinderPrototype.Instatiate(viewfinderSpot, _container);
             _moduleHandler.SetViewfinder(this, newViewfinder);
         }
 
