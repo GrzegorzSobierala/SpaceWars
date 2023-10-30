@@ -8,6 +8,6 @@ namespace Game.Player.Ship
 {
     public abstract class PlayerHullBase : ShipPart, IHittable
     {
-        public abstract void OnHit();
+        public abstract void GetHit(Collision2D collsion);
     }
 }

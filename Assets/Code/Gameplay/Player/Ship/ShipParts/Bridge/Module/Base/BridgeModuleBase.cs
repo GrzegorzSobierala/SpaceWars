@@ -24,9 +24,6 @@ namespace Game.Player.Ship
             _input.PlayerControls.Gameplay.Aim.canceled -= CallOnEndAim;
         }
 
-        public abstract bool IsUpgradeAddable(IUpgrade upgrade);
-        public abstract bool TryAddUpgrade(IUpgrade upgrade);
-
         public BridgeModuleBase Instatiate(Transform parent, DiContainer container)
         {
             GameObject viewfinder = container.InstantiatePrefab(this, parent);
@@ -36,6 +33,16 @@ namespace Game.Player.Ship
             newViewfinder.transform.localRotation = transform.localRotation;
 
             return newViewfinder;
+        }
+
+        public bool TryAddUpgrade(IUpgrade upgrade)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool IsUpgradeAddable(IUpgrade upgrade)
+        {
+            throw new System.NotImplementedException();
         }
 
         private void CallOnStartAim(InputAction.CallbackContext context)

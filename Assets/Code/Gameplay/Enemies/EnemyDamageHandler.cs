@@ -14,7 +14,7 @@ namespace Game
             _particleSystem = GetComponent<ParticleSystem>();
         }
 
-        public void OnHit()
+        public void GetHit(Collision2D collsion)
         {
             _particleSystem.Play();
         }

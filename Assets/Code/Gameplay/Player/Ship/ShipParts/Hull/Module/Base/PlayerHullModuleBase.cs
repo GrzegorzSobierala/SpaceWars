@@ -15,9 +15,6 @@ namespace Game.Player.Ship
         public Transform GunSpot => _gunSpot;
         public Transform ViewfinderSpot => _viewfinderSpot;
 
-        public abstract bool TryAddUpgrade(IUpgrade upgrade);
-        public abstract bool IsUpgradeAddable(IUpgrade upgrade);
-
         public PlayerHullModuleBase Instatiate(Transform parent, DiContainer container)
         {
             GameObject hullGM = container.InstantiatePrefab(this, parent);
@@ -29,7 +26,12 @@ namespace Game.Player.Ship
             return hull;
         }
 
-        public virtual void AddUpgrade(PlayerHullUpgradeBase upgrade)
+        public bool IsUpgradeAddable(IUpgrade upgrade)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool TryAddUpgrade(IUpgrade upgrade)
         {
             throw new System.NotImplementedException();
         }

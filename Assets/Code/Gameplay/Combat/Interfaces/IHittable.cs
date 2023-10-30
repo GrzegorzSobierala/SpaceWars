@@ -1,7 +1,9 @@
+using UnityEngine;
+
 namespace Game.Combat
 {
     public interface IHittable
     {
-        public abstract void OnHit();
+        public abstract void GetHit(Collision2D collsion);
     }
 }

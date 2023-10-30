@@ -9,9 +9,9 @@ namespace Game.Player.Ship
         [Inject] private DiContainer _container;
         [Inject] private PlayerModuleHandler _moduleHandler;
 
-        [SerializeField] private List<PlayerHullModuleBase> _hullPrototypes;
-        [SerializeField] private List<PlayerGunModuleBase> _gunPrototypes;
-        [SerializeField] private List<BridgeModuleBase> _viewfinderPrototypes;
+        [SerializeField] private List<PlayerHullModuleBase> _hullPrefabs;
+        [SerializeField] private List<PlayerGunModuleBase> _gunPrefabs;
+        [SerializeField] private List<BridgeModuleBase> _bridgesPrefabs;
 
         private PlayerHullModuleBase _currentHullPrototype;
         private PlayerGunModuleBase _currentGunPrototype;
@@ -28,7 +28,7 @@ namespace Game.Player.Ship
         [ContextMenu("SetNextHull")]
         public void SetNextHull()
         {
-            SetNext(_hullPrototypes, ref _currentHullPrototype, false);
+            SetNext(_hullPrefabs, ref _currentHullPrototype, false);
 
             ReplaceHull(_currentHullPrototype);
         }
@@ -36,7 +36,7 @@ namespace Game.Player.Ship
         [ContextMenu("SetPreviusHull")]
         public void SetPreviusHull()
         {
-            SetNext(_hullPrototypes, ref _currentHullPrototype, true);
+            SetNext(_hullPrefabs, ref _currentHullPrototype, true);
 
             ReplaceHull(_currentHullPrototype);
         }
@@ -44,7 +44,7 @@ namespace Game.Player.Ship
         [ContextMenu("SetNextGun")]
         public void SetNextGun()
         {
-            SetNext(_gunPrototypes, ref _currentGunPrototype, false);
+            SetNext(_gunPrefabs, ref _currentGunPrototype, false);
 
             ReplaceGun(_currentGunPrototype);
         }
@@ -52,7 +52,7 @@ namespace Game.Player.Ship
         [ContextMenu("SetPreviusGun")]
         public void SetPreviusGun()
         {
-            SetNext(_gunPrototypes, ref _currentGunPrototype, true);
+            SetNext(_gunPrefabs, ref _currentGunPrototype, true);
 
             ReplaceGun(_currentGunPrototype);
         }
@@ -60,7 +60,7 @@ namespace Game.Player.Ship
         [ContextMenu("SetNextViewfinder")]
         public void SetNextViewfinder()
         {
-            SetNext(_viewfinderPrototypes, ref _currentViewfinderPrototype, false);
+            SetNext(_bridgesPrefabs, ref _currentViewfinderPrototype, false);
 
             ReplaceViewfinder(_currentViewfinderPrototype);
         }
@@ -68,7 +68,7 @@ namespace Game.Player.Ship
         [ContextMenu("SetPreviusViewfinder")]
         public void SetPreviusViewfinder()
         {
-            SetNext(_viewfinderPrototypes, ref _currentViewfinderPrototype, true);
+            SetNext(_bridgesPrefabs, ref _currentViewfinderPrototype, true);
 
             ReplaceViewfinder(_currentViewfinderPrototype);
         }
@@ -94,9 +94,9 @@ namespace Game.Player.Ship
 
         private void Init()
         {
-            _currentHullPrototype = _hullPrototypes[0];
-            _currentGunPrototype = _gunPrototypes[0];
-            _currentViewfinderPrototype = _viewfinderPrototypes[0];
+            _currentHullPrototype = _hullPrefabs[0];
+            _currentGunPrototype = _gunPrefabs[0];
+            _currentViewfinderPrototype = _bridgesPrefabs[0];
 
             ReplaceHull(_currentHullPrototype);
             ReplaceGun(_currentGunPrototype);
@@ -141,14 +141,19 @@ namespace Game.Player.Ship
 
         private void ReferencesCheck()
         {
-            if (_hullPrototypes.Count == 0)
+            if (_hullPrefabs.Count == 0)
             {
-                Debug.LogError("List of hull prototypes is empty");
+                Debug.LogError("List of hull prototypes is empty", this);
             }
 
-            if (_gunPrototypes.Count == 0)
+            if (_gunPrefabs.Count == 0)
             {
-                Debug.LogError("List of gun prototypes is empty");
+                Debug.LogError("List of gun prototypes is empty", this);
+            }
+
+            if(_bridgesPrefabs.Count == 0)
+            {
+                Debug.LogError("List of bridges is empty", this);
             }
         }
     }

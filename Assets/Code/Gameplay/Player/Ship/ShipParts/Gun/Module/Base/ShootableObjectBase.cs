@@ -12,6 +12,8 @@ namespace Game.Player.Ship
         {
             ShootableObjectBase instance = Instantiate(this);
 
+            instance.gameObject.SetActive(false);
+
             return instance;
         }
 
@@ -25,7 +27,7 @@ namespace Game.Player.Ship
 
             if (collision.rigidbody.TryGetComponent(out IHittable hittable))
             {
-                hittable.OnHit();
+                hittable.GetHit(collision);
                 OnHit();
                 return;
             }

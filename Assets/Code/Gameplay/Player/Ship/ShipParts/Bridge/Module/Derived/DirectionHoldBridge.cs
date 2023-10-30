@@ -38,17 +38,6 @@ namespace Game.Player.Ship
             }
         }
 
-
-        public override bool IsUpgradeAddable(IUpgrade upgrade)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override bool TryAddUpgrade(IUpgrade upgrade)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override void OnStartAim()
         {
             _startAimingGunRot = Gun.transform.localRotation;
