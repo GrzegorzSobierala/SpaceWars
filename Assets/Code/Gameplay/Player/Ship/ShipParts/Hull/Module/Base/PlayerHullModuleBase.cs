@@ -10,10 +10,10 @@ namespace Game.Player.Ship
         [Inject] private DiContainer _container;
 
         [SerializeField] protected Transform _gunSpot;
-        [SerializeField] protected Transform _viewfinderSpot;
+        [SerializeField] protected Transform _bridgeSpot;
 
         public Transform GunSpot => _gunSpot;
-        public Transform ViewfinderSpot => _viewfinderSpot;
+        public Transform BridgeSpot => _bridgeSpot;
 
         public PlayerHullModuleBase Instatiate(Transform parent, DiContainer container)
         {

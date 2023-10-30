@@ -455,6 +455,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScavangerHull
       objectReference: {fileID: 0}
+    - target: {fileID: 5123236758209830238, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
+      propertyPath: m_Name
+      value: BridgeSpot
+      objectReference: {fileID: 0}
     - target: {fileID: 5800505306753227506, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -527,7 +531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gunSpot: {fileID: 502794206697447186}
-  _viewfinderSpot: {fileID: 1914028042722920852}
+  _bridgeSpot: {fileID: 1914028042722920852}
 --- !u!4 &7432468113072009629 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1891416411254231942, guid: 8ec42e51662674e4c95103675c4affda, type: 3}

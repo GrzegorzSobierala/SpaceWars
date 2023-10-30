@@ -57,20 +57,20 @@ namespace Game.Player.Ship
             ReplaceGun(_currentGunPrototype);
         }
 
-        [ContextMenu("SetNextViewfinder")]
-        public void SetNextViewfinder()
+        [ContextMenu("SetNextBridge")]
+        public void SetNextBridge()
         {
             SetNext(_bridgesPrefabs, ref _currentViewfinderPrototype, false);
 
-            ReplaceViewfinder(_currentViewfinderPrototype);
+            ReplaceBridge(_currentViewfinderPrototype);
         }
 
-        [ContextMenu("SetPreviusViewfinder")]
-        public void SetPreviusViewfinder()
+        [ContextMenu("SetPreviusBridge")]
+        public void SetPreviusBridge()
         {
             SetNext(_bridgesPrefabs, ref _currentViewfinderPrototype, true);
 
-            ReplaceViewfinder(_currentViewfinderPrototype);
+            ReplaceBridge(_currentViewfinderPrototype);
         }
 
         private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : IModule
@@ -100,7 +100,7 @@ namespace Game.Player.Ship
 
             ReplaceHull(_currentHullPrototype);
             ReplaceGun(_currentGunPrototype);
-            ReplaceViewfinder(_currentViewfinderPrototype);
+            ReplaceBridge(_currentViewfinderPrototype);
         }
 
         private void ReplaceHull(PlayerHullModuleBase hullPrototype)
@@ -127,16 +127,16 @@ namespace Game.Player.Ship
             _moduleHandler.SetGun(this, newGun);
         }
 
-        private void ReplaceViewfinder(BridgeModuleBase viewfinderPrototype)
+        private void ReplaceBridge(BridgeModuleBase bridgePrototype)
         {
-            if(_moduleHandler.CurrentViewfinder != null)
+            if(_moduleHandler.CurrentBridge != null)
             {
-                Destroy(_moduleHandler.CurrentViewfinder.gameObject);
+                Destroy(_moduleHandler.CurrentBridge.gameObject);
             }
 
-            Transform viewfinderSpot = _moduleHandler.CurrentHull.ViewfinderSpot;
-            BridgeModuleBase newViewfinder = viewfinderPrototype.Instatiate(viewfinderSpot, _container);
-            _moduleHandler.SetViewfinder(this, newViewfinder);
+            Transform viewfinderSpot = _moduleHandler.CurrentHull.BridgeSpot;
+            BridgeModuleBase newBridge = bridgePrototype.Instatiate(viewfinderSpot, _container);
+            _moduleHandler.SetBridge(this, newBridge);
         }
 
         private void ReferencesCheck()

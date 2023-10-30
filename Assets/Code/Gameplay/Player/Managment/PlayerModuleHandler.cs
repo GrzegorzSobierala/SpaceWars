@@ -6,7 +6,7 @@ namespace Game.Player.Ship
     {
         public PlayerHullModuleBase CurrentHull => _currentHull;
         public PlayerGunModuleBase CurrentGun => _currentGun;
-        public BridgeModuleBase CurrentViewfinder => _currentViewfinder;
+        public BridgeModuleBase CurrentBridge => _currentViewfinder;
 
         private PlayerHullModuleBase _currentHull;
         private PlayerGunModuleBase _currentGun;
@@ -34,7 +34,7 @@ namespace Game.Player.Ship
             _currentHull = hull;
         }
 
-        public void SetViewfinder(PlayerModuleCreator creator, BridgeModuleBase viewfinder)
+        public void SetBridge(PlayerModuleCreator creator, BridgeModuleBase viewfinder)
         {
             if (creator == null)
             {
