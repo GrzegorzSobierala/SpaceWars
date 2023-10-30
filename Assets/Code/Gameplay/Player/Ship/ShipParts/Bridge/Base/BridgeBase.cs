@@ -8,7 +8,7 @@ namespace Game.Player.Ship
         [Inject] protected Rigidbody2D _body;
         [Inject] protected PlayerMovement2D _playerMovement;
 
-        [Inject] private PlayerModuleHandler _playerModuleHandler;
+        [Inject] protected PlayerModuleHandler _playerModuleHandler;
 
 
         protected PlayerGunModuleBase Gun => _playerModuleHandler.CurrentGun;

@@ -9,19 +9,21 @@ namespace Game.Player.Ship
     {
         [Inject] private InputProvider _input;
 
+        public bool IsOffOnToogle = true;
+
         protected PlayerControls.GameplayActions _Input => _input.PlayerControls.Gameplay;
         protected bool IsAiming { get; private set; } = false;
 
         private void OnEnable()
         {
-            _input.PlayerControls.Gameplay.Aim.started += CallOnStartAim;
-            _input.PlayerControls.Gameplay.Aim.canceled += CallOnEndAim;
+            _input.PlayerControls.Gameplay.Aim.started += OnStartedInput;
+            _input.PlayerControls.Gameplay.Aim.canceled += OnEndedInput;
         }
 
         private void OnDisable()
         {
-            _input.PlayerControls.Gameplay.Aim.started -= CallOnStartAim;
-            _input.PlayerControls.Gameplay.Aim.canceled -= CallOnEndAim;
+            _input.PlayerControls.Gameplay.Aim.started -= OnStartedInput;
+            _input.PlayerControls.Gameplay.Aim.canceled -= OnEndedInput;
         }
 
         public BridgeModuleBase Instatiate(Transform parent, DiContainer container)
@@ -45,16 +47,36 @@ namespace Game.Player.Ship
             throw new System.NotImplementedException();
         }
 
-        private void CallOnStartAim(InputAction.CallbackContext context)
+        private void OnStartedInput(InputAction.CallbackContext context)
         {
-            IsAiming = true;
-            OnStartAim();
+            if(IsOffOnToogle)
+            {
+                if(IsAiming)
+                {
+                    IsAiming = false;
+                    OnEndAim();
+                }
+                else
+                {
+                    IsAiming = true;
+                    OnStartAim();
+                }    
+
+            }
+            else
+            {
+                IsAiming = true;
+                OnStartAim();
+            }
         }
 
-        private void CallOnEndAim(InputAction.CallbackContext context)
+        private void OnEndedInput(InputAction.CallbackContext context)
         {
-            IsAiming = false;
-            OnEndAim();
+            if(!IsOffOnToogle)
+            {
+                IsAiming = false;
+                OnEndAim();
+            }
         }
     }
 }

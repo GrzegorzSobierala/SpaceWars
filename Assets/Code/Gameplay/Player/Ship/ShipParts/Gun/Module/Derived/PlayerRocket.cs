@@ -9,6 +9,8 @@ namespace Game.Player.Ship
        
         public override void Shoot(Rigidbody2D creatorBody, Transform gunTransform)
         {
+            gameObject.SetActive(true);
+
             _body.position = gunTransform.position;
             _body.rotation = gunTransform.rotation.eulerAngles.z;
             _body.velocity = creatorBody.velocity;

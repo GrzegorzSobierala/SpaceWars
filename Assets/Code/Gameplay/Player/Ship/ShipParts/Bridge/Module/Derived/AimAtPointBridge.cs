@@ -5,9 +5,16 @@ using UnityEngine;
 
 namespace Game.Player.Ship
 {
-    public class DirectionHoldBridge : BridgeModuleBase
+    public class AimAtPointBridge : BridgeModuleBase
     {
+        [SerializeField] private Transform _aimMarker;
+
         private Quaternion _startAimingGunRot;
+
+        private void Awake()
+        {
+            _aimMarker.gameObject.SetActive(false);
+        }
 
         private void FixedUpdate()
         {
@@ -21,11 +28,7 @@ namespace Game.Player.Ship
 
         private void UpdateMovement()
         {
-            if (!IsAiming)
-            {
-                _playerMovement.RotateToCursor();
-            }
-
+            _playerMovement.RotateToCursor();
             _playerMovement.VerdicalMove();
             _playerMovement.HorizontalMove();
         }
@@ -37,25 +40,35 @@ namespace Game.Player.Ship
 
             AimGun();
         }
-
+        
         public override void OnStartAim()
         {
             _startAimingGunRot = Gun.transform.localRotation;
-            _body.angularVelocity = 0;
+
+            Vector2 mousePos = _Input.CursorPosition.ReadValue<Vector2>();
+            Vector2 aimPoint = Utils.ScreanPositionOn2DIntersection(mousePos);
+
+            _aimMarker.SetParent(_playerModuleHandler.transform.parent);
+            _aimMarker.gameObject.SetActive(true);
+
+            Vector3 targetPosition = new Vector3(aimPoint.x, aimPoint.y, 0);
+            _aimMarker.position = targetPosition;
         }
 
         public override void OnEndAim()
         {
+            _aimMarker.SetParent(transform);
+            _aimMarker.gameObject.SetActive(false);
+            _aimMarker.localPosition = Vector3.zero;
+
             Gun.transform.localRotation = _startAimingGunRot;
         }
 
         private void AimGun()
         {
-            Vector2 mousePos = _Input.CursorPosition.ReadValue<Vector2>();
-            Vector2 aimPoint = Utils.ScreanPositionOn2DIntersection(mousePos);
 
             Vector2 gunPos = (Vector2)Gun.transform.position;
-            float angleDegrees = Utils.AngleDirected(gunPos, aimPoint) - 90f;
+            float angleDegrees = Utils.AngleDirected(gunPos, _aimMarker.position) - 90f;
 
             Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
             Gun.transform.rotation = rotation;
