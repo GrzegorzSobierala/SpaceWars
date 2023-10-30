@@ -68,8 +68,12 @@ namespace Game.Player.Ship
         public void RotateToCursor()
         {
             Vector2 mousePos = _Input.CursorPosition.ReadValue<Vector2>();
-            Vector2 intersectionPoint;
-            intersectionPoint = Utils.ScreanPositionOn2DIntersection(mousePos);
+            RotateToPoint(mousePos);
+        }
+
+        public void RotateToPoint(Vector2 point)
+        {
+            Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection(point);
 
             float playerCursorAngle = Utils.AngleDirected(_body.position, intersectionPoint) - 90f;
 

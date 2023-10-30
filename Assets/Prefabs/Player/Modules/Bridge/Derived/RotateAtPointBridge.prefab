@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b23152b231f36c84d9d629e0892f5158, type: 2}
+  - {fileID: 2100000, guid: 63cc7439dd33f2245a23f2d311ffa3da, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -144,7 +144,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b23152b231f36c84d9d629e0892f5158, type: 2}
+  - {fileID: 2100000, guid: 63cc7439dd33f2245a23f2d311ffa3da, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -228,7 +228,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8796740117404455767, guid: e31ddebe61d7ae541889d5a645d099d5, type: 3}
       propertyPath: m_Name
-      value: DirectionHoldBridge
+      value: RotateAtPointBridge
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -270,7 +270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rotateMarker: {fileID: 570615521393863423}
-  _localMarkerParent: 1
+  _localMarkerParent: 0
 --- !u!114 &6120494466004380452
 MonoBehaviour:
   m_ObjectHideFlags: 0

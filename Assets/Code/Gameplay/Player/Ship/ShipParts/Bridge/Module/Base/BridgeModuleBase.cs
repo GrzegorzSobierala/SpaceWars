@@ -9,7 +9,7 @@ namespace Game.Player.Ship
     {
         [Inject] private InputProvider _input;
 
-        public bool IsOffOnToogle = true;
+        private bool IsOffOnToogle = false;
 
         protected PlayerControls.GameplayActions _Input => _input.PlayerControls.Gameplay;
         protected bool IsAiming { get; private set; } = false;

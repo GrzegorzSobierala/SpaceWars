@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace Game
+namespace Game.Player.VirtualCamera
 {
     public class PlayerFallower : MonoBehaviour
     {

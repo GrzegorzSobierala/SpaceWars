@@ -470,8 +470,9 @@ MonoBehaviour:
   _gunPrefabs:
   - {fileID: 2534597724515312179, guid: 2f5589a1c477df04186881b9d5b72d68, type: 3}
   _bridgesPrefabs:
-  - {fileID: 2039922653773710990, guid: 04bbe4d89b048ce418d1d3f7237c70ec, type: 3}
   - {fileID: 1226014815333710274, guid: 0ea83e421d1d43845990cc13bb3d4d17, type: 3}
+  - {fileID: 2039922653773710990, guid: 04bbe4d89b048ce418d1d3f7237c70ec, type: 3}
+  - {fileID: 1226014815333710274, guid: d34f9ac38e160084aa8a31b06a3d9b6f, type: 3}
 --- !u!114 &9167951744479927178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -550,6 +551,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1427402411709596891}
   - component: {fileID: 3169739278296480393}
+  - component: {fileID: 6294507159216725049}
   m_Layer: 0
   m_Name: PlayerFallower
   m_TagString: Untagged
@@ -582,6 +584,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2c05d83e28b24c47ae7ec4e24add825, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6294507159216725049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4294954849689832289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3220ec011ec4eca4ba1b7e889266f3a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6932844938547107274
@@ -635,6 +649,7 @@ MonoBehaviour:
   _monoInstallers:
   - {fileID: 5281897683697869217}
   - {fileID: 3316663342329239138}
+  - {fileID: 6294507159216725049}
   _installerPrefabs: []
   _autoRun: 1
   _kernel: {fileID: 0}

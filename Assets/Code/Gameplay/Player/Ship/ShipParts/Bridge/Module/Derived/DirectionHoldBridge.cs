@@ -1,13 +1,23 @@
-using Game.Utility;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
+using Game.Player.VirtualCamera;
+using Game.Utility;
 
 namespace Game.Player.Ship
 {
     public class DirectionHoldBridge : BridgeModuleBase
     {
+        [Inject] private PlayerFallower _playerFallower;
+
+        [SerializeField] private Transform _rotateMarker;
+        [SerializeField] private bool _localMarkerParent;
+
         private Quaternion _startAimingGunRot;
+
+        private void Awake()
+        {
+            _rotateMarker.gameObject.SetActive(false);
+        }
 
         private void FixedUpdate()
         {
@@ -21,7 +31,12 @@ namespace Game.Player.Ship
 
         private void UpdateMovement()
         {
-            if (!IsAiming)
+            if (IsAiming)
+            {
+                Vector3 screenMarkerPos = Camera.main.WorldToScreenPoint(_rotateMarker.position);
+                _playerMovement.RotateToPoint(screenMarkerPos);
+            }
+            else
             {
                 _playerMovement.RotateToCursor();
             }
@@ -41,11 +56,33 @@ namespace Game.Player.Ship
         public override void OnStartAim()
         {
             _startAimingGunRot = Gun.transform.localRotation;
-            _body.angularVelocity = 0;
+
+            Vector2 mousePos = _Input.CursorPosition.ReadValue<Vector2>();
+            Vector2 aimPoint = Utils.ScreanPositionOn2DIntersection(mousePos);
+
+            if (_localMarkerParent)
+            {
+                _rotateMarker.SetParent(_playerFallower.transform);
+            }
+            else
+            {
+                _rotateMarker.SetParent(_playerModuleHandler.transform.parent);
+            }
+
+            _rotateMarker.gameObject.SetActive(true);
+
+            Vector3 targetPosition = new Vector3(aimPoint.x, aimPoint.y, 0);
+            _rotateMarker.position = targetPosition;
+
+            _startAimingGunRot = Gun.transform.localRotation;
         }
 
         public override void OnEndAim()
         {
+            _rotateMarker.SetParent(transform);
+            _rotateMarker.gameObject.SetActive(false);
+            _rotateMarker.localPosition = Vector3.zero;
+
             Gun.transform.localRotation = _startAimingGunRot;
         }
 
