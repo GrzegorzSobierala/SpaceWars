@@ -83,89 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &6767096719897886690
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7742423077339370714}
-  - component: {fileID: 1771451887404375172}
-  - component: {fileID: 6522883866535887007}
-  m_Layer: 6
-  m_Name: Cube
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7742423077339370714
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6767096719897886690}
-  m_LocalRotation: {x: -0, y: 0.38268343, z: -0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: -0.37, z: -0.415}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4892756986145038743}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
---- !u!33 &1771451887404375172
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6767096719897886690}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &6522883866535887007
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6767096719897886690}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: ffd481fda64ed124888af45191257d79, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &6901976172886078302
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,6 +206,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DEBUG_ScavangerHull 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5123236758209830238, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
+      propertyPath: m_Name
+      value: BridgeSpot
+      objectReference: {fileID: 0}
+    - target: {fileID: 7463934869842094991, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.685
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -298,9 +223,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1891416411254231942, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8714657179697026418}
-    - targetCorrespondingSourceObject: {fileID: 1891416411254231942, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7742423077339370714}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4391701158107053677, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
       insertIndex: 1
@@ -314,6 +236,11 @@ Transform:
 --- !u!4 &3472113649857847995 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7635384010940911786, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
+  m_PrefabInstance: {fileID: 6474269410891362833}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4488963537658288542 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7463934869842094991, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
   m_PrefabInstance: {fileID: 6474269410891362833}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &4892756986145038743 stripped
@@ -339,3 +266,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gunSpot: {fileID: 2466202906638683928}
+  _bridgeSpot: {fileID: 4488963537658288542}

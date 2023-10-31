@@ -1,17 +1,18 @@
-using Game.Player.Modules;
 using UnityEngine;
 
-namespace Game.Player.Modules
+namespace Game.Player.Ship
 {
     public class PlayerModuleHandler : MonoBehaviour
     {
-        public PlayerHullBase CurrentHull => _currentHull;
-        public PlayerGunBase CurrentGun => _currentGun;
+        public PlayerHullModuleBase CurrentHull => _currentHull;
+        public PlayerGunModuleBase CurrentGun => _currentGun;
+        public BridgeModuleBase CurrentBridge => _currentBridge;
 
-        private PlayerHullBase _currentHull;
-        private PlayerGunBase _currentGun;
+        private PlayerHullModuleBase _currentHull;
+        private PlayerGunModuleBase _currentGun;
+        private BridgeModuleBase _currentBridge;
 
-        public void SetGun(PlayerModuleCreator creator, PlayerGunBase gun)
+        public void SetGun(PlayerModuleCreator creator, PlayerGunModuleBase gun)
         {
             if(creator == null)
             {
@@ -22,7 +23,7 @@ namespace Game.Player.Modules
             _currentGun = gun;
         }
 
-        public void SetHull(PlayerModuleCreator creator, PlayerHullBase hull)
+        public void SetHull(PlayerModuleCreator creator, PlayerHullModuleBase hull)
         {
             if (creator == null)
             {
@@ -32,5 +33,17 @@ namespace Game.Player.Modules
 
             _currentHull = hull;
         }
+
+        public void SetBridge(PlayerModuleCreator creator, BridgeModuleBase viewfinder)
+        {
+            if (creator == null)
+            {
+                Debug.LogError("Creator is null");
+                return;
+            }
+
+            _currentBridge = viewfinder;
+        }
+
     }
 }

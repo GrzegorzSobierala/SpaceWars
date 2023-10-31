@@ -2,18 +2,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Player.Modules
+namespace Game.Player.Ship
 {
     public class PlayerModuleCreator : MonoBehaviour
     {
         [Inject] private DiContainer _container;
         [Inject] private PlayerModuleHandler _moduleHandler;
 
-        [SerializeField] private List<PlayerHullBase> _hullPrototypes;
-        [SerializeField] private List<PlayerGunBase> _gunPrototypes;
+        [SerializeField] private List<PlayerHullModuleBase> _hullPrefabs;
+        [SerializeField] private List<PlayerGunModuleBase> _gunPrefabs;
+        [SerializeField] private List<BridgeModuleBase> _bridgesPrefabs;
 
-        private PlayerHullBase _currentHullPrototype;
-        private PlayerGunBase _currentGunPrototype;
+        private PlayerHullModuleBase _currentHullPrototype;
+        private PlayerGunModuleBase _currentGunPrototype;
+        private BridgeModuleBase _currentBridgePrototype;
 
         private void Awake()
         {
@@ -26,7 +28,7 @@ namespace Game.Player.Modules
         [ContextMenu("SetNextHull")]
         public void SetNextHull()
         {
-            SetNext(_hullPrototypes, ref _currentHullPrototype, false);
+            SetNext(_hullPrefabs, ref _currentHullPrototype, false);
 
             ReplaceHull(_currentHullPrototype);
         }
@@ -34,7 +36,7 @@ namespace Game.Player.Modules
         [ContextMenu("SetPreviusHull")]
         public void SetPreviusHull()
         {
-            SetNext(_hullPrototypes, ref _currentHullPrototype, true);
+            SetNext(_hullPrefabs, ref _currentHullPrototype, true);
 
             ReplaceHull(_currentHullPrototype);
         }
@@ -42,7 +44,7 @@ namespace Game.Player.Modules
         [ContextMenu("SetNextGun")]
         public void SetNextGun()
         {
-            SetNext(_gunPrototypes, ref _currentGunPrototype, false);
+            SetNext(_gunPrefabs, ref _currentGunPrototype, false);
 
             ReplaceGun(_currentGunPrototype);
         }
@@ -50,11 +52,28 @@ namespace Game.Player.Modules
         [ContextMenu("SetPreviusGun")]
         public void SetPreviusGun()
         {
-            SetNext(_gunPrototypes, ref _currentGunPrototype, true);
+            SetNext(_gunPrefabs, ref _currentGunPrototype, true);
 
             ReplaceGun(_currentGunPrototype);
         }
-        private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : UpgradableObjectBase
+
+        [ContextMenu("SetNextBridge")]
+        public void SetNextBridge()
+        {
+            SetNext(_bridgesPrefabs, ref _currentBridgePrototype, false);
+
+            ReplaceBridge(_currentBridgePrototype);
+        }
+
+        [ContextMenu("SetPreviusBridge")]
+        public void SetPreviusBridge()
+        {
+            SetNext(_bridgesPrefabs, ref _currentBridgePrototype, true);
+
+            ReplaceBridge(_currentBridgePrototype);
+        }
+
+        private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : IModule
         {
             int currentIndex = prototypes.IndexOf(currentModule);
             int targetIndex = currentIndex + (goBack ? -1 : 1);
@@ -75,26 +94,29 @@ namespace Game.Player.Modules
 
         private void Init()
         {
-            _currentHullPrototype = _hullPrototypes[0];
-            _currentGunPrototype = _gunPrototypes[0];
+            _currentHullPrototype = _hullPrefabs[0];
+            _currentGunPrototype = _gunPrefabs[0];
+            _currentBridgePrototype = _bridgesPrefabs[0];
 
             ReplaceHull(_currentHullPrototype);
             ReplaceGun(_currentGunPrototype);
+            ReplaceBridge(_currentBridgePrototype);
         }
 
-        private void ReplaceHull(PlayerHullBase hullPrototype)
+        private void ReplaceHull(PlayerHullModuleBase hullPrototype)
         {
             if (_moduleHandler.CurrentHull != null)
             {
                 Destroy(_moduleHandler.CurrentHull.gameObject);
             }
 
-            PlayerHullBase newHull = hullPrototype.Instatiate(transform, _container);
+            PlayerHullModuleBase newHull = hullPrototype.Instatiate(transform, _container);
             _moduleHandler.SetHull(this, newHull);
             ReplaceGun(_currentGunPrototype);
+            ReplaceBridge(_currentBridgePrototype);
         }
 
-        private void ReplaceGun(PlayerGunBase gunPrototype)
+        private void ReplaceGun(PlayerGunModuleBase gunPrototype)
         {
             if (_moduleHandler.CurrentGun != null)
             {
@@ -102,20 +124,37 @@ namespace Game.Player.Modules
             }
 
             Transform gunSpot = _moduleHandler.CurrentHull.GunSpot;
-            PlayerGunBase newGun = gunPrototype.Instatiate(gunSpot, _container);
+            PlayerGunModuleBase newGun = gunPrototype.Instatiate(gunSpot, _container);
             _moduleHandler.SetGun(this, newGun);
+        }
+
+        private void ReplaceBridge(BridgeModuleBase bridgePrototype)
+        {
+            if(_moduleHandler.CurrentBridge != null)
+            {
+                Destroy(_moduleHandler.CurrentBridge.gameObject);
+            }
+
+            Transform bridgeSpot = _moduleHandler.CurrentHull.BridgeSpot;
+            BridgeModuleBase newBridge = bridgePrototype.Instatiate(bridgeSpot, _container);
+            _moduleHandler.SetBridge(this, newBridge);
         }
 
         private void ReferencesCheck()
         {
-            if (_hullPrototypes.Count == 0)
+            if (_hullPrefabs.Count == 0)
             {
-                Debug.LogError("List of hull prototypes is empty");
+                Debug.LogError("List of hull prototypes is empty", this);
             }
 
-            if (_gunPrototypes.Count == 0)
+            if (_gunPrefabs.Count == 0)
             {
-                Debug.LogError("List of gun prototypes is empty");
+                Debug.LogError("List of gun prototypes is empty", this);
+            }
+
+            if(_bridgesPrefabs.Count == 0)
+            {
+                Debug.LogError("List of bridges is empty", this);
             }
         }
     }
