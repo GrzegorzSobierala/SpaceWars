@@ -15,7 +15,7 @@ namespace Game.Player.Ship
 
         private PlayerHullModuleBase _currentHullPrototype;
         private PlayerGunModuleBase _currentGunPrototype;
-        private BridgeModuleBase _currentViewfinderPrototype;
+        private BridgeModuleBase _currentBridgePrototype;
 
         private void Awake()
         {
@@ -60,17 +60,17 @@ namespace Game.Player.Ship
         [ContextMenu("SetNextBridge")]
         public void SetNextBridge()
         {
-            SetNext(_bridgesPrefabs, ref _currentViewfinderPrototype, false);
+            SetNext(_bridgesPrefabs, ref _currentBridgePrototype, false);
 
-            ReplaceBridge(_currentViewfinderPrototype);
+            ReplaceBridge(_currentBridgePrototype);
         }
 
         [ContextMenu("SetPreviusBridge")]
         public void SetPreviusBridge()
         {
-            SetNext(_bridgesPrefabs, ref _currentViewfinderPrototype, true);
+            SetNext(_bridgesPrefabs, ref _currentBridgePrototype, true);
 
-            ReplaceBridge(_currentViewfinderPrototype);
+            ReplaceBridge(_currentBridgePrototype);
         }
 
         private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : IModule
@@ -96,11 +96,11 @@ namespace Game.Player.Ship
         {
             _currentHullPrototype = _hullPrefabs[0];
             _currentGunPrototype = _gunPrefabs[0];
-            _currentViewfinderPrototype = _bridgesPrefabs[0];
+            _currentBridgePrototype = _bridgesPrefabs[0];
 
             ReplaceHull(_currentHullPrototype);
             ReplaceGun(_currentGunPrototype);
-            ReplaceBridge(_currentViewfinderPrototype);
+            ReplaceBridge(_currentBridgePrototype);
         }
 
         private void ReplaceHull(PlayerHullModuleBase hullPrototype)
@@ -113,6 +113,7 @@ namespace Game.Player.Ship
             PlayerHullModuleBase newHull = hullPrototype.Instatiate(transform, _container);
             _moduleHandler.SetHull(this, newHull);
             ReplaceGun(_currentGunPrototype);
+            ReplaceBridge(_currentBridgePrototype);
         }
 
         private void ReplaceGun(PlayerGunModuleBase gunPrototype)
@@ -134,8 +135,8 @@ namespace Game.Player.Ship
                 Destroy(_moduleHandler.CurrentBridge.gameObject);
             }
 
-            Transform viewfinderSpot = _moduleHandler.CurrentHull.BridgeSpot;
-            BridgeModuleBase newBridge = bridgePrototype.Instatiate(viewfinderSpot, _container);
+            Transform bridgeSpot = _moduleHandler.CurrentHull.BridgeSpot;
+            BridgeModuleBase newBridge = bridgePrototype.Instatiate(bridgeSpot, _container);
             _moduleHandler.SetBridge(this, newBridge);
         }
 
