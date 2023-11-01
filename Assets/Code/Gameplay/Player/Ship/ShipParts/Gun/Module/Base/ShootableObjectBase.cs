@@ -15,6 +15,23 @@ namespace Game.Player.Ship
         [SerializeField] protected float _maxDistance = 30f;
         [SerializeField] protected float _maxTimeAlive = 5f;
 
+        protected float _shootTime;
+        protected Vector2 _shootPos;
+
+        protected bool SchouldNukeMySelf
+        {
+            get
+            {
+                if (Vector2.Distance(_shootPos, _body.position) > _maxDistance)
+                    return true;
+
+                if (Time.time > _maxTimeAlive + _shootTime)
+                    return true;
+
+                return false;
+            }
+        }
+
         public virtual ShootableObjectBase CreateCopy()
         {
             ShootableObjectBase instance = Instantiate(this);

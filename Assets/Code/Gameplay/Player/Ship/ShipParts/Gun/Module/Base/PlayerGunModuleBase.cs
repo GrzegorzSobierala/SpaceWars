@@ -12,11 +12,13 @@ namespace Game.Player.Ship
 
         [Inject] private InputProvider _input;
 
-        protected PlayerControls.GameplayActions Input => _input.PlayerControls.Gameplay;
-
         [SerializeField] protected ShootableObjectBase _shootableObjectPrefab;
+        [SerializeField] protected float _cooldown = 1f;
 
         protected ShootableObjectBase _shootableObjectPrototype;
+        protected float _lastShotTime = 0f;
+
+        protected PlayerControls.GameplayActions Input => _input.PlayerControls.Gameplay;
 
         protected void Awake()
         {
