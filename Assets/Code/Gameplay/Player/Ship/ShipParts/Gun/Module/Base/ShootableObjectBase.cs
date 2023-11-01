@@ -5,8 +5,15 @@ namespace Game.Player.Ship
 {
     public abstract class ShootableObjectBase : MonoBehaviour, IShootable
     {
+        [Header("Base Depedencies")]
         [SerializeField] protected Rigidbody2D _body;
         [SerializeField] protected ParticleSystem _particleSystem;
+
+        [Header("Base properties")]
+        [SerializeField] protected float _speed = 30f;
+        [SerializeField] protected float _horizontalMoveInpactMulti = 0.20f;
+        [SerializeField] protected float _maxDistance = 30f;
+        [SerializeField] protected float _maxTimeAlive = 5f;
 
         public virtual ShootableObjectBase CreateCopy()
         {
@@ -39,5 +46,11 @@ namespace Game.Player.Ship
 
         public abstract void OnHit();
 
+        protected void SlowVelocityX(Transform relativeTo, Vector2 velocity, float slowMulti)
+        {
+            Vector2 localVelocity = relativeTo.InverseTransformDirection(velocity);
+            localVelocity.x *= slowMulti;
+            _body.velocity = relativeTo.TransformDirection(localVelocity);
+        }
     }
 }

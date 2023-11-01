@@ -6,16 +6,13 @@ namespace Game.Player.Ship
 {
     public class PlayerRocketLuncher : PlayerGunModuleBase
     {
-        [Inject] private Rigidbody2D _body;
-        [Inject] private InputProvider _input;
-
         [SerializeField] private float _cooldown = 1f;
 
         private float _lastShotTime = 0f;
 
         private void Update()
         {
-            if (_input.PlayerControls.Gameplay.Shoot.ReadValue<float>() == 1.0f)
+            if (Input.Shoot.ReadValue<float>() == 1.0f)
             {
                 TryShoot();
             }
