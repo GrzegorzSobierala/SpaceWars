@@ -16,7 +16,8 @@ namespace Game
 
             SlowVelocityX(gunTransform, creatorBody.velocity, _horizontalMoveInpactMulti);
 
-            _body.AddRelativeForce(Vector2.up * _speed , ForceMode2D.Impulse);
+            float targetForce = _speed * _body.mass;
+            _body.AddRelativeForce(Vector2.up * targetForce, ForceMode2D.Impulse);
 
             _shootTime = Time.time;
             _shootPos = _body.position;

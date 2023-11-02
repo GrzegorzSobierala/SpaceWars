@@ -232,11 +232,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _body: {fileID: 4562933555896563138}
   _particleSystem: {fileID: 3705347350567245477}
-  _speed: 30
+  _speed: 60
   _horizontalMoveInpactMulti: 0.3
   _maxDistance: 25
   _maxTimeAlive: 5
-  _shootSpeedMulti: 0.3
+  _shootSpeedMulti: 0.15
   _timeToLunch: 0.5
 --- !u!50 &4562933555896563138
 Rigidbody2D:
@@ -262,8 +262,8 @@ Rigidbody2D:
     serializedVersion: 2
     m_Bits: 128
   m_Interpolate: 1
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!1 &7308119822317734349
 GameObject:

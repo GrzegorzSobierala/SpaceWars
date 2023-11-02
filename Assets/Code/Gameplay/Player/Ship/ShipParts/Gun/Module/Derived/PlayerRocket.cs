@@ -13,12 +13,14 @@ namespace Game.Player.Ship
         {
             gameObject.SetActive(true);
 
+            transform.position = gunTransform.position;
             _body.position = gunTransform.position;
             _body.rotation = gunTransform.rotation.eulerAngles.z;
 
             SlowVelocityX(gunTransform, creatorBody.velocity, _horizontalMoveInpactMulti);
 
-            _body.AddRelativeForce(Vector2.up * _speed * _shootSpeedMulti, ForceMode2D.Impulse);
+            float targetForce = _speed * _body.mass;
+            _body.AddRelativeForce(Vector2.up * targetForce * _shootSpeedMulti, ForceMode2D.Impulse);
 
             _shootTime = Time.time;
             _shootPos = _body.position;
