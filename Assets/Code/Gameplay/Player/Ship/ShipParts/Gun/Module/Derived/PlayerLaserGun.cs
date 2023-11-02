@@ -1,9 +1,8 @@
-using Game.Player.Ship;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game
+namespace Game.Player.Ship
 {
     public class PlayerLaserGun : PlayerGunModuleBase
     {
