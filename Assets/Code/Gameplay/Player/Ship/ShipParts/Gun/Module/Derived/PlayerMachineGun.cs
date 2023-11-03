@@ -17,6 +17,11 @@ namespace Game.Player.Ship
         public int MaxAmmo => _maxAmmo;
         public int CurrentAmmo => _currentAmmo;
 
+        private void Start()
+        {
+            _currentAmmo = _maxAmmo;
+        }
+
         private void Update()
         {
             TryLoad();

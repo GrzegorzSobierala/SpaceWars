@@ -41,11 +41,6 @@ namespace Game.Player.Ship
             return instance;
         }
 
-        private void OnDestroy()
-        {
-            Debug.Log(Time.time - _shootTime);
-        }
-
         protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.rigidbody == null)
