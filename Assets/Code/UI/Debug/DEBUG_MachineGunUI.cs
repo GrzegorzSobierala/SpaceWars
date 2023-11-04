@@ -4,21 +4,22 @@ using TMPro;
 using UnityEngine;
 using Zenject;
 using Game.Player.Ship;
+using Game.Management;
 
 namespace Game.Player.UI
 {
     public class DEBUG_MachineGunUI : MonoBehaviour
     {
-        [Inject] PlayerModuleHandler _moduleHandler;
+        [Inject] PlayerManager _playerManager;
 
         [SerializeField] private TextMeshProUGUI _textMesh;
 
         private void Update()
         {
-            if (_moduleHandler.CurrentGun is not PlayerMachineGun)
+            if (_playerManager.ModuleHandler.CurrentGun is not PlayerMachineGun)
                 return;
 
-            PlayerMachineGun machineGun = (PlayerMachineGun)_moduleHandler.CurrentGun;
+            PlayerMachineGun machineGun = (PlayerMachineGun)_playerManager.ModuleHandler.CurrentGun;
 
             string text =  $"{machineGun.CurrentAmmo}/{machineGun.MaxAmmo}";
             _textMesh.text = text;
