@@ -8,10 +8,10 @@ namespace Game.Management
 {
     public class PlayerManager : MonoBehaviour
     {
-        [Inject] PlayerModuleHandler _moduleHandler;
+        [Inject] ModuleHandler _moduleHandler;
         [Inject] Rigidbody2D _body;
 
-        public PlayerModuleHandler ModuleHandler => _moduleHandler;
+        public ModuleHandler ModuleHandler => _moduleHandler;
         public Rigidbody2D PlayerBody => _body;
     }
 }

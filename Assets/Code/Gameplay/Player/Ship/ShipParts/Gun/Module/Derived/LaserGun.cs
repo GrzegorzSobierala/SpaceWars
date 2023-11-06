@@ -1,10 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
-using Game.Input.System;
 
 namespace Game.Player.Ship
 {
-    public class PlayerRocketLuncher : PlayerGunModuleBase
+    public class LaserGun : GunModuleBase
     {
         private void Update()
         {

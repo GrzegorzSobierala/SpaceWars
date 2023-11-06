@@ -8,10 +8,10 @@ namespace Game.Player.Ship
         [Inject] protected Rigidbody2D _body;
         [Inject] protected PlayerMovement2D _playerMovement;
 
-        [Inject] protected PlayerModuleHandler _playerModuleHandler;
+        [Inject] protected ModuleHandler _playerModuleHandler;
 
 
-        protected PlayerGunModuleBase Gun => _playerModuleHandler.CurrentGun;
+        protected GunModuleBase Gun => _playerModuleHandler.CurrentGun;
 
         public abstract void OnStartAim();
 

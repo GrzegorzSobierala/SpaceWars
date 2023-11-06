@@ -6,7 +6,7 @@ using Zenject;
 
 namespace Game.Player.Ship
 {
-    public class PlayerMachineGun : PlayerGunModuleBase
+    public class MachineGun : GunModuleBase
     {
         [Header("MaschineGun properies")]
         [SerializeField] private int _maxAmmo = 20;

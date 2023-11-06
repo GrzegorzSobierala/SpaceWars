@@ -2,7 +2,7 @@ using Zenject;
 
 namespace Game.Player.Ship
 {
-    public class PlayerBridgeInstaler : MonoInstaller
+    public class BridgeInstaller : MonoInstaller
     {
         public override void InstallBindings()
         {

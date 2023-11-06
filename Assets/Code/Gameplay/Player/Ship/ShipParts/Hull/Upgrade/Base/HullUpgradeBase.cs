@@ -1,6 +1,6 @@
 namespace Game.Player.Ship
 {
-    public abstract class PlayerGunUpgradeBase : PlayerGunBase, IUpgrade
+    public abstract class HullUpgradeBase : HullBase, IUpgrade
     {
         public abstract IUpgrade Instatiate();
     }

@@ -6,7 +6,7 @@ using Zenject;
 
 namespace Game.Player.Ship
 {
-    public abstract class PlayerGunModuleBase : PlayerGunBase , IModule
+    public abstract class GunModuleBase : GunBase , IModule
     {
         [Inject] protected Rigidbody2D _body;
 
@@ -32,10 +32,10 @@ namespace Game.Player.Ship
             _shootableObjectPrototype.gameObject.name = _shootableObjectPrefab.gameObject.name + "(Prototype)";
         }
 
-        public PlayerGunModuleBase Instatiate(Transform parent, DiContainer container)
+        public GunModuleBase Instatiate(Transform parent, DiContainer container)
         {
             GameObject gunGM = container.InstantiatePrefab(this, parent);
-            PlayerGunModuleBase gun = gunGM.GetComponent<PlayerGunModuleBase>();
+            GunModuleBase gun = gunGM.GetComponent<GunModuleBase>();
 
             gun.transform.localPosition = transform.localPosition;
             gun.transform.localRotation = transform.localRotation;

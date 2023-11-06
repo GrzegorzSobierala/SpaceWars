@@ -1,11 +1,10 @@
-using Game.Player.Ship;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game
+namespace Game.Player.Ship
 {
-    public class PlayerLaser : ShootableObjectBase
+    public class Bullet : ShootableObjectBase
     {
         public override void Shoot(Rigidbody2D creatorBody, Transform gunTransform)
         {

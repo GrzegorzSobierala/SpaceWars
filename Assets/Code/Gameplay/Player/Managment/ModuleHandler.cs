@@ -2,17 +2,17 @@ using UnityEngine;
 
 namespace Game.Player.Ship
 {
-    public class PlayerModuleHandler : MonoBehaviour
+    public class ModuleHandler : MonoBehaviour
     {
-        public PlayerHullModuleBase CurrentHull => _currentHull;
-        public PlayerGunModuleBase CurrentGun => _currentGun;
+        public HullModuleBase CurrentHull => _currentHull;
+        public GunModuleBase CurrentGun => _currentGun;
         public BridgeModuleBase CurrentBridge => _currentBridge;
 
-        private PlayerHullModuleBase _currentHull;
-        private PlayerGunModuleBase _currentGun;
+        private HullModuleBase _currentHull;
+        private GunModuleBase _currentGun;
         private BridgeModuleBase _currentBridge;
 
-        public void SetGun(PlayerModuleCreator creator, PlayerGunModuleBase gun)
+        public void SetGun(ModuleCreator creator, GunModuleBase gun)
         {
             if(creator == null)
             {
@@ -23,7 +23,7 @@ namespace Game.Player.Ship
             _currentGun = gun;
         }
 
-        public void SetHull(PlayerModuleCreator creator, PlayerHullModuleBase hull)
+        public void SetHull(ModuleCreator creator, HullModuleBase hull)
         {
             if (creator == null)
             {
@@ -34,7 +34,7 @@ namespace Game.Player.Ship
             _currentHull = hull;
         }
 
-        public void SetBridge(PlayerModuleCreator creator, BridgeModuleBase viewfinder)
+        public void SetBridge(ModuleCreator creator, BridgeModuleBase viewfinder)
         {
             if (creator == null)
             {

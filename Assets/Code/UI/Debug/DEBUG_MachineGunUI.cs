@@ -16,10 +16,10 @@ namespace Game.Player.UI
 
         private void Update()
         {
-            if (_playerManager.ModuleHandler.CurrentGun is not PlayerMachineGun)
+            if (_playerManager.ModuleHandler.CurrentGun is not MachineGun)
                 return;
 
-            PlayerMachineGun machineGun = (PlayerMachineGun)_playerManager.ModuleHandler.CurrentGun;
+            MachineGun machineGun = (MachineGun)_playerManager.ModuleHandler.CurrentGun;
 
             string text =  $"{machineGun.CurrentAmmo}/{machineGun.MaxAmmo}";
             _textMesh.text = text;

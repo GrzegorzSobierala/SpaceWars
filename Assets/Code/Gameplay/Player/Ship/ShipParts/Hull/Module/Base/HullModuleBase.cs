@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Game.Player.Ship
 {
-    public abstract class PlayerHullModuleBase : PlayerHullBase , IModule
+    public abstract class HullModuleBase : HullBase , IModule
     { 
         [Inject] private DiContainer _container;
 
@@ -15,10 +15,10 @@ namespace Game.Player.Ship
         public Transform GunSpot => _gunSpot;
         public Transform BridgeSpot => _bridgeSpot;
 
-        public PlayerHullModuleBase Instatiate(Transform parent, DiContainer container)
+        public HullModuleBase Instatiate(Transform parent, DiContainer container)
         {
             GameObject hullGM = container.InstantiatePrefab(this, parent);
-            PlayerHullModuleBase hull = hullGM.GetComponent<PlayerHullModuleBase>();
+            HullModuleBase hull = hullGM.GetComponent<HullModuleBase>();
 
             hull.transform.localPosition = transform.localPosition;
             hull.transform.localRotation = transform.localRotation;

@@ -4,17 +4,17 @@ using Zenject;
 
 namespace Game.Player.Ship
 {
-    public class PlayerModuleCreator : MonoBehaviour
+    public class ModuleCreator : MonoBehaviour
     {
         [Inject] private DiContainer _container;
-        [Inject] private PlayerModuleHandler _moduleHandler;
+        [Inject] private ModuleHandler _moduleHandler;
 
-        [SerializeField] private List<PlayerHullModuleBase> _hullPrefabs;
-        [SerializeField] private List<PlayerGunModuleBase> _gunPrefabs;
+        [SerializeField] private List<HullModuleBase> _hullPrefabs;
+        [SerializeField] private List<GunModuleBase> _gunPrefabs;
         [SerializeField] private List<BridgeModuleBase> _bridgesPrefabs;
 
-        private PlayerHullModuleBase _currentHullPrototype;
-        private PlayerGunModuleBase _currentGunPrototype;
+        private HullModuleBase _currentHullPrototype;
+        private GunModuleBase _currentGunPrototype;
         private BridgeModuleBase _currentBridgePrototype;
 
         private void Awake()
@@ -103,20 +103,20 @@ namespace Game.Player.Ship
             ReplaceBridge(_currentBridgePrototype);
         }
 
-        private void ReplaceHull(PlayerHullModuleBase hullPrototype)
+        private void ReplaceHull(HullModuleBase hullPrototype)
         {
             if (_moduleHandler.CurrentHull != null)
             {
                 Destroy(_moduleHandler.CurrentHull.gameObject);
             }
 
-            PlayerHullModuleBase newHull = hullPrototype.Instatiate(transform, _container);
+            HullModuleBase newHull = hullPrototype.Instatiate(transform, _container);
             _moduleHandler.SetHull(this, newHull);
             ReplaceGun(_currentGunPrototype);
             ReplaceBridge(_currentBridgePrototype);
         }
 
-        private void ReplaceGun(PlayerGunModuleBase gunPrototype)
+        private void ReplaceGun(GunModuleBase gunPrototype)
         {
             if (_moduleHandler.CurrentGun != null)
             {
@@ -124,7 +124,7 @@ namespace Game.Player.Ship
             }
 
             Transform gunSpot = _moduleHandler.CurrentHull.GunSpot;
-            PlayerGunModuleBase newGun = gunPrototype.Instatiate(gunSpot, _container);
+            GunModuleBase newGun = gunPrototype.Instatiate(gunSpot, _container);
             _moduleHandler.SetGun(this, newGun);
         }
 
