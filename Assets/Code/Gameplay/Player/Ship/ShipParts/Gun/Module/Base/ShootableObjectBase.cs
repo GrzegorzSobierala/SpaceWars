@@ -12,17 +12,20 @@ namespace Game.Player.Ship
         [Header("Base properties")]
         [SerializeField] protected float _speed = 30f;
         [SerializeField] protected float _horizontalMoveInpactMulti = 0.20f;
-        [SerializeField] protected float _maxDistance = 30f;
         [SerializeField] protected float _maxTimeAlive = 5f;
+        [SerializeField] protected float _maxDistance = 30f;
+        [SerializeField] protected float _speedMaxDistanceAliveMulti = 0.5f;
 
         protected float _shootTime;
+        protected float _shootShipSpeed;
         protected Vector2 _shootPos;
 
         protected bool SchouldNukeMySelf
         {
             get
             {
-                if (Vector2.Distance(_shootPos, _body.position) > _maxDistance)
+                float maxDistance = _maxDistance + (_shootShipSpeed * _speedMaxDistanceAliveMulti);
+                if (Vector2.Distance(_shootPos, _body.position) > maxDistance)
                     return true;
 
                 if (Time.time > _maxTimeAlive + _shootTime)
@@ -68,6 +71,15 @@ namespace Game.Player.Ship
             Vector2 localVelocity = relativeTo.InverseTransformDirection(velocity);
             localVelocity.x *= slowMulti;
             _body.velocity = relativeTo.TransformDirection(localVelocity);
+        }
+
+        protected float GetForwardSpeed(Transform relativeTo, Vector2 velocity)
+        {
+            Vector2 localVelocity = relativeTo.InverseTransformDirection(velocity);
+            localVelocity.x = 0;
+            Vector2 projectileForwardVelocity = new Vector2(0, localVelocity.y);
+            float speed = Vector2.Distance(Vector2.zero, projectileForwardVelocity);
+            return speed * Mathf.Max(0, Mathf.Sign(localVelocity.y));
         }
     }
 }

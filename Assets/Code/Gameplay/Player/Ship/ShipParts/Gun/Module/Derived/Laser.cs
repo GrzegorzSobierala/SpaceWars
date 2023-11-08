@@ -21,6 +21,8 @@ namespace Game
 
             _shootTime = Time.time;
             _shootPos = _body.position;
+            _shootShipSpeed = GetForwardSpeed(gunTransform, creatorBody.velocity);
+;
             StartCoroutine(DestroyByDistance());
         }
 

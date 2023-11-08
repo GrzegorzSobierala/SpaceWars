@@ -24,6 +24,8 @@ namespace Game.Player.Ship
 
             _shootTime = Time.time;
             _shootPos = _body.position;
+            _shootShipSpeed = GetForwardSpeed(gunTransform, creatorBody.velocity);
+
             StartCoroutine(WaitAndLaunch());
             StartCoroutine(DestroyByDistance());
         }
