@@ -5,7 +5,7 @@ using Game.Utility;
 
 namespace Game.Player.Ship
 {
-    public class DirectionHoldBridge : BridgeModuleBase
+    public class RotateToPointBridge : BridgeModuleBase
     {
         [Inject] private PlayerFallower _playerFallower;
 
