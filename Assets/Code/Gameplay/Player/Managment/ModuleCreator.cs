@@ -76,6 +76,13 @@ namespace Game.Player.Ship
         private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : IModule
         {
             int currentIndex = prototypes.IndexOf(currentModule);
+
+            if (currentIndex == -1)
+            {
+                Debug.Log($"Can't find prototype {currentModule.ToString()}, setting index 0");
+                currentIndex = 0;
+            }
+
             int targetIndex = currentIndex + (goBack ? -1 : 1);
 
             if (targetIndex >= prototypes.Count)
@@ -103,7 +110,7 @@ namespace Game.Player.Ship
             ReplaceBridge(_currentBridgePrototype);
         }
 
-        private void ReplaceHull(HullModuleBase hullPrototype)
+        public void ReplaceHull(HullModuleBase hullPrototype)
         {
             if (_moduleHandler.CurrentHull != null)
             {
@@ -116,7 +123,7 @@ namespace Game.Player.Ship
             ReplaceBridge(_currentBridgePrototype);
         }
 
-        private void ReplaceGun(GunModuleBase gunPrototype)
+        public void ReplaceGun(GunModuleBase gunPrototype)
         {
             if (_moduleHandler.CurrentGun != null)
             {
@@ -128,7 +135,7 @@ namespace Game.Player.Ship
             _moduleHandler.SetGun(this, newGun);
         }
 
-        private void ReplaceBridge(BridgeModuleBase bridgePrototype)
+        public void ReplaceBridge(BridgeModuleBase bridgePrototype)
         {
             if(_moduleHandler.CurrentBridge != null)
             {
