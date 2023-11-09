@@ -10,7 +10,7 @@ namespace Game.Player.Ship
         [Inject] private InputProvider _inputProvider;
         [Inject] private Rigidbody2D _body;
 
-        [SerializeField, Range(0.0f, 60000.0f)] float _moveSpeed = 10000;
+        [SerializeField, Range(0.0f, 60.0f)] float _moveSpeed = 10;
         [SerializeField, Range(0.0f, 200.0f)] float _forwardSpeedMulti = 100;
         [SerializeField, Range(0.0f, 200.0f)] float _horizontalSpeedMutli = 50;
         [SerializeField, Range(0.0f, 200.0f)] float _backSpeedMulti = 30;
@@ -61,7 +61,8 @@ namespace Game.Player.Ship
 
         private void MovePlayer(Vector2 direction, float procentOfMaxSpeed)
         {
-            _body.AddRelativeForce(procentOfMaxSpeed * _moveSpeed * Time.fixedDeltaTime * direction);
+            Vector2 targetForce = direction * _moveSpeed * _body.mass;
+            _body.AddRelativeForce(procentOfMaxSpeed * targetForce * Time.fixedDeltaTime);
         }
 
         public void RotateToCursor()

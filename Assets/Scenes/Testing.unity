@@ -283,6 +283,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &1083030019 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6294507159216725049, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+  m_PrefabInstance: {fileID: 4144836859669440294}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3220ec011ec4eca4ba1b7e889266f3a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1279700010 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8574989068772238668, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+  m_PrefabInstance: {fileID: 4144836859669440294}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a9ff43948d1ed0459302bec3576f005, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1323870837 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3316663342329239138, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+  m_PrefabInstance: {fileID: 4144836859669440294}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35848e16878e987418369515069ddaf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1758982259
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,14 +447,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2225126704296226759, guid: 1b35c0dd19cd1c44ea20a7fb11c91571, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -2.2516236
-      objectReference: {fileID: 0}
-    - target: {fileID: 2225126704296226759, guid: 1b35c0dd19cd1c44ea20a7fb11c91571, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -20.273384
-      objectReference: {fileID: 0}
     - target: {fileID: 4954066289736119503, guid: 1b35c0dd19cd1c44ea20a7fb11c91571, type: 3}
       propertyPath: m_Name
       value: CameraManager
@@ -544,6 +569,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5057200642050590471, guid: c4c820b6f457de343a3bbaf0d4757be6, type: 3}
+      propertyPath: _monoInstallers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5057200642050590471, guid: c4c820b6f457de343a3bbaf0d4757be6, type: 3}
+      propertyPath: _monoInstallers.Array.data[0]
+      value: 
+      objectReference: {fileID: 1279700010}
+    - target: {fileID: 5057200642050590471, guid: c4c820b6f457de343a3bbaf0d4757be6, type: 3}
+      propertyPath: _monoInstallers.Array.data[1]
+      value: 
+      objectReference: {fileID: 1323870837}
+    - target: {fileID: 5057200642050590471, guid: c4c820b6f457de343a3bbaf0d4757be6, type: 3}
+      propertyPath: _monoInstallers.Array.data[2]
+      value: 
+      objectReference: {fileID: 1083030019}
     - target: {fileID: 6292327569458055410, guid: c4c820b6f457de343a3bbaf0d4757be6, type: 3}
       propertyPath: m_Name
       value: TestSceneContext
