@@ -9,7 +9,6 @@ namespace Game.Player.Ship
     public abstract class GunModuleBase : GunBase , IModule
     {
         [Inject] protected Rigidbody2D _body;
-
         [Inject] private InputProvider _input;
 
         [SerializeField] protected ShootableObjectBase _shootableObjectPrefab;

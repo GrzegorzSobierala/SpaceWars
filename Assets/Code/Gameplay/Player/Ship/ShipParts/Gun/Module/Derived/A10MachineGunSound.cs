@@ -18,8 +18,8 @@ namespace Game.Player.Ship
 
         protected PlayerControls.GameplayActions Input => _input.PlayerControls.Gameplay;
 
-        bool _isPlaying = false;
-        bool _isEnding = false;
+        private bool _isPlaying = false;
+        private bool _isEnding = false;
 
         private void Update()
         {
