@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8721819583440126457}
   - component: {fileID: 5057200642050590471}
   m_Layer: 0
-  m_Name: TestSceneContext
+  m_Name: RoomTestSceneContext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,4 +62,5 @@ MonoBehaviour:
       m_Calls: []
   _parentNewObjectsUnderSceneContext: 0
   _contractNames: []
-  _parentContractNames: []
+  _parentContractNames:
+  - PlayerShip
