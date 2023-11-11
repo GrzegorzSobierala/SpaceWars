@@ -17,12 +17,17 @@ namespace Game.Player.UI
         private void Update()
         {
             if (_playerManager.ModuleHandler.CurrentGun is not MachineGun)
+            {
+                _textMesh.gameObject.SetActive(false);
                 return;
+            }
 
             MachineGun machineGun = (MachineGun)_playerManager.ModuleHandler.CurrentGun;
 
             string text =  $"{machineGun.CurrentAmmo}/{machineGun.MaxAmmo}";
             _textMesh.text = text;
+
+            _textMesh.gameObject.SetActive(true);
         }
     }
 }

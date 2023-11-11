@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Game
+namespace Game.Room
 {
     public class TestSceneManager : MonoBehaviour
     {

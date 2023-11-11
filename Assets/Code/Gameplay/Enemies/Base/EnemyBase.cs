@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game
+namespace Game.Room.Enemy
 {
-    public class EnemyController : MonoBehaviour
+    public abstract class EnemyBase : MonoBehaviour
     {
-
+       
     }
 }

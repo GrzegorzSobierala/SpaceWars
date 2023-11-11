@@ -4,10 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Game
+namespace Game.Room.Enemy
 {
     public class EnemiesManager : MonoBehaviour
     {
-        [Inject] PlayerManager playerManager;
+        [Inject] private PlayerManager _playerManager;
+        [Inject] private List<EnemyBase> _roomEnemies;
+
+        private void Update()
+        {
+            
+        }
     }
 }
