@@ -10,7 +10,7 @@ namespace Game.Editor
         static string scenePath = "Assets/Scenes/";
         static Vector2 scroll;
 
-        [MenuItem("Window/MasterPanel")]
+        [MenuItem("SpaceWars/MasterPanel")]
         static void Init()
         {
             MasterPanel window = (MasterPanel)GetWindow(typeof(MasterPanel));

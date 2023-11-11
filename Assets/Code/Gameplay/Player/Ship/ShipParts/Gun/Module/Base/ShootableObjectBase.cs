@@ -10,6 +10,7 @@ namespace Game.Player.Ship
         [SerializeField] protected ParticleSystem _particleSystem;
 
         [Header("Base properties")]
+        [SerializeField] protected float _damage = 1f;
         [SerializeField] protected float _speed = 30f;
         [SerializeField] protected float _horizontalMoveInpactMulti = 0.20f;
         [SerializeField] protected float _maxTimeAlive = 5f;
@@ -54,7 +55,12 @@ namespace Game.Player.Ship
 
             if (collision.rigidbody.TryGetComponent(out IHittable hittable))
             {
-                hittable.GetHit(collision);
+                DamageData damage = new DamageData() 
+                {
+                    BaseDamage = _damage,
+                };
+
+                hittable.GetHit(collision, damage);
                 OnHit();
                 return;
             }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game
 {
-    public class EnemyDamageHandler : MonoBehaviour , IHittable
+    public class EnemyDamageHandler : MonoBehaviour
     {
         ParticleSystem _particleSystem;
 

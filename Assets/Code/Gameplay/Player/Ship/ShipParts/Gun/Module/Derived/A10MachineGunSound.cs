@@ -56,10 +56,7 @@ namespace Game.Player.Ship
         private void EndingSound()
         {
             if (_endAudio.isPlaying)
-            {
-                Debug.Log("_endAudio.isPlaying");
                 return;
-            }
 
             if (_isPlaying)
             {
