@@ -22,7 +22,6 @@ namespace Game.Room.Enemy
 
         protected abstract void Defeated();
 
-
         protected virtual void Awake()
         {
             SetStartHP();

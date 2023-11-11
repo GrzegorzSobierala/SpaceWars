@@ -53,7 +53,13 @@ namespace Game.Player.Ship
                 return;
             }
 
-            if (collision.rigidbody.TryGetComponent(out IHittable hittable))
+            IHittable hittable;
+            if (!collision.rigidbody.TryGetComponent(out hittable))
+            {
+                hittable = collision.rigidbody.GetComponentInChildren<IHittable>();
+            }
+
+            if (hittable != null)
             {
                 DamageData damage = new DamageData() 
                 {
