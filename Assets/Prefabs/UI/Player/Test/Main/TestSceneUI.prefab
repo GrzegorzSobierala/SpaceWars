@@ -216,7 +216,7 @@ Transform:
   - {fileID: 3972924568645427756}
   - {fileID: 140345788473086160}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4160770746139530033
 PrefabInstance:
@@ -332,6 +332,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3972924568645427756}
     m_Modifications:
+    - target: {fileID: 1179425816688244740, guid: 3403b6fb4770887498d1df06f1aab6f1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3994200867698573181, guid: 3403b6fb4770887498d1df06f1aab6f1, type: 3}
+      propertyPath: m_text
+      value: "0\u200B"
+      objectReference: {fileID: 0}
     - target: {fileID: 5854303297852625209, guid: 3403b6fb4770887498d1df06f1aab6f1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -419,6 +427,10 @@ PrefabInstance:
     - target: {fileID: 7582015181307302611, guid: 3403b6fb4770887498d1df06f1aab6f1, type: 3}
       propertyPath: m_Name
       value: TestPlayerConfig
+      objectReference: {fileID: 0}
+    - target: {fileID: 7722790244736742614, guid: 3403b6fb4770887498d1df06f1aab6f1, type: 3}
+      propertyPath: m_Text
+      value: 0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -627,6 +639,10 @@ PrefabInstance:
     - target: {fileID: 2758180249999067276, guid: 96098df02107e42458e677590aa98ffc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7365363906967962805, guid: 96098df02107e42458e677590aa98ffc, type: 3}
+      propertyPath: _autoLoadRoom
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8595408824839713988, guid: 96098df02107e42458e677590aa98ffc, type: 3}
       propertyPath: m_Name

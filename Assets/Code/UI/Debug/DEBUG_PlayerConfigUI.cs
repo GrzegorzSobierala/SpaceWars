@@ -2,6 +2,7 @@ using Game.Management;
 using Game.Player.Ship;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -18,6 +19,7 @@ namespace Game
         [SerializeField] private Button _setPreviousGunButton;
         [SerializeField] private Button _setNextBridgeButton;
         [SerializeField] private Button _setPreviousBridgeButton;
+        [SerializeField] private TMP_InputField _inputField;
 
         private ModuleCreator ModuleCreator => _playerManager.ModuleCreator;
 
@@ -39,6 +41,7 @@ namespace Game
             _setPreviousGunButton.onClick.AddListener(ModuleCreator.SetPreviusGun);
             _setNextBridgeButton.onClick.AddListener(ModuleCreator.SetNextBridge);
             _setPreviousBridgeButton.onClick.AddListener(ModuleCreator.SetPreviusBridge);
+            _inputField.onValueChanged.AddListener(SetVelocityRotationMulti);
         }
 
         private void UnsubscribeButtons()
@@ -49,6 +52,13 @@ namespace Game
             _setPreviousGunButton.onClick.RemoveListener(ModuleCreator.SetPreviusGun);
             _setNextBridgeButton.onClick.RemoveListener(ModuleCreator.SetNextBridge);
             _setPreviousBridgeButton.onClick.RemoveListener(ModuleCreator.SetPreviusBridge);
+            _inputField.onValueChanged.RemoveListener(SetVelocityRotationMulti);
+
+        }
+
+        private void SetVelocityRotationMulti(string stringValue)
+        {
+            _playerManager.PlayerMovement.SetVelocityRotMulti(float.Parse(stringValue));
         }
     }
 }

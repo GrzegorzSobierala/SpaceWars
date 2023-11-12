@@ -1,6 +1,7 @@
 using Game.Input.System;
 using Game.Utility;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Zenject;
 
 namespace Game.Player.Ship
@@ -14,7 +15,8 @@ namespace Game.Player.Ship
         [SerializeField, Range(0.0f, 200.0f)] float _forwardSpeedMulti = 100;
         [SerializeField, Range(0.0f, 200.0f)] float _horizontalSpeedMutli = 50;
         [SerializeField, Range(0.0f, 200.0f)] float _backSpeedMulti = 30;
-        [SerializeField] float _rotationSpeed = 50;
+        [SerializeField] private float _rotationSpeed = 50;
+        [SerializeField] private float _velocityRotMulti = 0.5f;
 
         private PlayerControls.GameplayActions _Input => _inputProvider.PlayerControls.Gameplay;
 
@@ -73,14 +75,47 @@ namespace Game.Player.Ship
 
         public void RotateToPoint(Vector2 point)
         {
-            Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection(point);
 
+            Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection(point);
             float playerCursorAngle = Utils.AngleDirected(_body.position, intersectionPoint) - 90f;
 
             float rotSpeed = _rotationSpeed * Time.fixedDeltaTime;
             float targetAngle = Mathf.MoveTowardsAngle(_body.rotation, playerCursorAngle, rotSpeed);
 
+
             _body.MoveRotation(targetAngle);
+
+
+
+            //float velocityAngle = ((_body.rotation - targetAngle) % 360) * _velocityRotMulti;
+
+            //_body.velocity = RotateVector(_body.velocity, velocityAngle);
+
+            // Calculate the relative angle between current rotation and target rotation
+            float relativeAngle = Mathf.DeltaAngle(_body.rotation, targetAngle);
+
+            // Calculate the angular velocity based on the relative angle and _velocityRotMulti
+            float velocityAngle = relativeAngle * _velocityRotMulti;
+
+            // Rotate the current velocity vector
+            _body.velocity = RotateVector(_body.velocity, velocityAngle);
+        }
+
+        private Vector2 RotateVector(Vector2 vector, float angleInDegrees)
+        {
+            float angleInRadians = angleInDegrees * Mathf.Deg2Rad;
+            float sin = Mathf.Sin(angleInRadians);
+            float cos = Mathf.Cos(angleInRadians);
+
+            float x = vector.x * cos - vector.y * sin;
+            float y = vector.x * sin + vector.y * cos;
+
+            return new Vector2(x, y);
+        }
+
+        public void SetVelocityRotMulti(float value)
+        {
+            _velocityRotMulti = value;
         }
     }
 }
