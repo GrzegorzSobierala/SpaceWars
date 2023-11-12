@@ -53,7 +53,6 @@ namespace Game
             _setNextBridgeButton.onClick.RemoveListener(ModuleCreator.SetNextBridge);
             _setPreviousBridgeButton.onClick.RemoveListener(ModuleCreator.SetPreviusBridge);
             _inputField.onValueChanged.RemoveListener(SetVelocityRotationMulti);
-
         }
 
         private void SetVelocityRotationMulti(string stringValue)
