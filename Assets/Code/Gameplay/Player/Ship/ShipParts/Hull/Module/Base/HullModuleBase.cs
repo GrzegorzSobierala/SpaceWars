@@ -7,7 +7,7 @@ namespace Game.Player.Ship
 {
     public abstract class HullModuleBase : HullBase , IModule
     {
-        public Action<HullModuleBase> OnDefeatAction;
+        public static Action<HullModuleBase> OnDefeatAction;
 
         [SerializeField] protected Transform _gunSpot;
         [SerializeField] protected Transform _bridgeSpot;

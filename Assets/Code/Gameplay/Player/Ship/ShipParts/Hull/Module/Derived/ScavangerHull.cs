@@ -12,7 +12,6 @@ namespace Game.Player.Ship
 
         protected override void Defeated()
         {
-            Debug.Log("ded :(");
         }
     }
 }

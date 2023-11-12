@@ -11,7 +11,7 @@ namespace Game.Room.Enemy
         public Action<EnemyBase> OnDefeatAction;
         public Action<EnemyBase> OnDestroyAction;
 
-        [SerializeField] private readonly float _baseHp = 5f;
+        [SerializeField] private float _baseHp = 5f;
 
         protected float _maxHp;
         protected float _currentHp;
