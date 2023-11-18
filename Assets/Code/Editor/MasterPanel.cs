@@ -2,32 +2,56 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using Game.Utility.Globals;
+using Game.Testing;
+using Zenject;
 
 namespace Game.Editor
 {
-    public class MasterPanel : EditorWindow
+    public class MasterPanel : ZenjectEditorWindow
     {
+        [Inject] private TestingSettings settings;
+        [Inject] private TestingSettingsInstaller settingsInstaller;
+
         static string scenePath = "Assets/Scenes/";
         static Vector2 scroll;
 
+        public override void InstallBindings()
+        {
+           TestingSettingsInstaller.InstallFromResource(Container);
+        }
+
         [MenuItem("SpaceWars/MasterPanel")]
-        static void Init()
+        private static void Init()
         {
             MasterPanel window = (MasterPanel)GetWindow(typeof(MasterPanel));
             window.titleContent = new GUIContent("Master Panel");
             window.Show();
         }
 
-        void OnGUI()
+        public override void OnGUI()
         {
+            base.OnGUI();
+
             scroll = GUILayout.BeginScrollView(scroll);
             if (!Application.isPlaying)
-                OnGUI_Editor();
+                OnGuiNotPlayMode();
+
+            OnGuiAlways();
 
             GUILayout.EndScrollView();
         }
 
-        void OnGUI_Editor()
+        private void OnGuiNotPlayMode()
+        {
+            SceneButtons();
+        }
+
+        private void OnGuiAlways()
+        {
+            TestingProperies();
+        }
+
+        private void SceneButtons()
         {
             GUILayout.Label("SCENE MANAGEMENT", EditorStyles.boldLabel);
 
@@ -50,7 +74,17 @@ namespace Game.Editor
             }
         }
 
-        void LoadSceneGroup(string[] scenes)
+        private void TestingProperies()
+        {
+            GUILayout.Space(10);
+            GUILayout.Label("TESTING", EditorStyles.boldLabel);
+
+            settings.AutoLoadRoom = GUILayout.Toggle(settings.AutoLoadRoom, "Auto load room");
+            settingsInstaller.MarkDirty();
+
+        }
+
+        private void LoadSceneGroup(string[] scenes)
         {
             for (int i = 0; i < scenes.Length; ++i)
             {

@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using Game.Testing;
 
 namespace Game.Player.UI
 {
@@ -15,6 +16,7 @@ namespace Game.Player.UI
     {
         [Inject] private TestSceneManager _testSceneManager;
         [Inject] private InputProvider _inputProvider;
+        [Inject] private TestingSettings _testingSettings;
 
         [SerializeField] private Button _onOffButton;
         [SerializeField] private GameObject _panel;
@@ -22,7 +24,6 @@ namespace Game.Player.UI
         [SerializeField] private TextMeshProUGUI _messageText;
         [SerializeField] private TextMeshProUGUI _currentTimerText;
         [SerializeField] private TextMeshProUGUI _timerListText;
-        [SerializeField] private bool _autoLoadRoom = false;
 
         private float _startRoomTime = 0;
         private List<float> _winTimes = new List<float>();
@@ -31,7 +32,7 @@ namespace Game.Player.UI
         {
             _testSceneManager.Load();
 
-            if (_autoLoadRoom)
+            if (_testingSettings.AutoLoadRoom)
             {
                 _inputProvider.PlayerControls.Gameplay.Enable();
             }
