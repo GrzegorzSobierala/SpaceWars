@@ -85,12 +85,6 @@ namespace Game.Player.Ship
 
             _body.MoveRotation(targetAngle);
 
-
-
-            //float velocityAngle = ((_body.rotation - targetAngle) % 360) * _velocityRotMulti;
-
-            //_body.velocity = RotateVector(_body.velocity, velocityAngle);
-
             // Calculate the relative angle between current rotation and target rotation
             float relativeAngle = Mathf.DeltaAngle(_body.rotation, targetAngle);
 

@@ -34,7 +34,7 @@ namespace Game.Player.UI
 
             if (_testingSettings.AutoLoadRoom)
             {
-                _inputProvider.PlayerControls.Gameplay.Enable();
+                _inputProvider.SetGameplayInput();
             }
             else
             {
@@ -95,14 +95,14 @@ namespace Game.Player.UI
         private void OffPanel()
         {
             Time.timeScale = 1;
-            _inputProvider.PlayerControls.Gameplay.Enable();
+            _inputProvider.SetGameplayInput();
             _panel.SetActive(false);
         }
 
         private void OnPanel()
         {
             Time.timeScale = 0;
-            _inputProvider.PlayerControls.Gameplay.Disable();
+            _inputProvider.SetGameplayInput();
             _panel.SetActive(true);
         }
 

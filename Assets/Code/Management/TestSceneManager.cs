@@ -5,38 +5,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using UnityEngine.SceneManagement;
+using UnityEditor;
+using Game.Utility.Globals;
 
 namespace Game.Room
 {
     public class TestSceneManager : MonoBehaviour
     {
-        [Inject] private InputProvider _inputProvider;
         [Inject] private PlayerManager _playerManager;
         [Inject] private ZenjectSceneLoader _sceneLoader;
-        
-        ZenjectSceneLoader sceneLoader;
-
-        //private void Awake()
-        //{
-        //    _inputProvider.PlayerControls.Gameplay.Enable();
-        //}
 
         public void Load()
         {
-            if(!SceneManager.GetSceneByName("RoomTesting").isLoaded)
+            if(!SceneManager.GetSceneByName(Scenes.RoomTesting).isLoaded)
             {
-                _sceneLoader.LoadScene("RoomTesting", LoadSceneMode.Additive);
+                _sceneLoader.LoadScene(Scenes.RoomTesting, LoadSceneMode.Additive);
             }
         }
 
         public void RestartRoom()
         { 
-            if(SceneManager.GetSceneByName("RoomTesting").isLoaded)
+            if(SceneManager.GetSceneByName(Scenes.RoomTesting).isLoaded)
             {
-                SceneManager.UnloadSceneAsync("RoomTesting");
+                SceneManager.UnloadSceneAsync(Scenes.RoomTesting);
             }
 
-            _sceneLoader.LoadScene("RoomTesting", LoadSceneMode.Additive);
+            _sceneLoader.LoadScene(Scenes.RoomTesting, LoadSceneMode.Additive);
             _playerManager.PlayerBody.position = Vector2.zero;
             _playerManager.PlayerBody.rotation = 0;
         }

@@ -59,19 +59,19 @@ namespace Game.Editor
             if (GUILayout.Button("Start up"))
             {
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-                LoadSceneGroup(Scenes.MainManagment);
+                LoadSceneGroup(Scenes.MainManagmentMulti);
             }
 
             if (GUILayout.Button("Main menu"))
             {
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-                LoadSceneGroup(Scenes.MainMenu);
+                LoadSceneGroup(Scenes.MainMenuMulti);
             }
 
             if (GUILayout.Button("Testing"))
             {
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-                LoadSceneGroup(Scenes.Testing);
+                LoadSceneGroup(Scenes.TestingMulti);
             }
         }
 

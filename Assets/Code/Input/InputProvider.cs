@@ -11,5 +11,15 @@ namespace Game.Input.System
         {
             _playerControls = new PlayerControls();
         }
+
+        public void SetGameplayInput()
+        {
+            _playerControls.Gameplay.Enable();
+        }
+
+        public void SetUiInput()
+        {
+            _playerControls.Gameplay.Disable();
+        }
     }
 }
