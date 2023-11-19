@@ -9,6 +9,7 @@ public class TestingInstaller : MonoInstaller
     public override void InstallBindings()
     {
 #if UNITY_EDITOR
+        TestingSettingsInstaller.CheckResources();
         TestingSettingsInstaller.InstallFromResource(Container);
 #else
         testingSettingsInstaller.InstallBindings();

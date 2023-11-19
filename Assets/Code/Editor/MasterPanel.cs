@@ -14,10 +14,11 @@ namespace Game.Editor
 
         static string scenePath = "Assets/Scenes/";
         static Vector2 scroll;
-
+        
         public override void InstallBindings()
         {
-           TestingSettingsInstaller.InstallFromResource(Container);
+            TestingSettingsInstaller.CheckResources();
+            TestingSettingsInstaller.InstallFromResource(Container);
         }
 
         [MenuItem("SpaceWars/MasterPanel")]
