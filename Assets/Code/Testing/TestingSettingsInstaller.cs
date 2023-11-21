@@ -1,6 +1,9 @@
-using UnityEditor;
 using UnityEngine;
 using Zenject;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Game.Testing
 {
@@ -28,6 +31,7 @@ namespace Game.Testing
 
         public static void CheckResources()
         {
+#if UNITY_EDITOR
             TestingSettingsInstaller installer =
                 Resources.Load<TestingSettingsInstaller>("Installers/TestingSettingsInstaller");
 
@@ -43,6 +47,7 @@ namespace Game.Testing
                     + settingsPath + settingsName);
 
             }
+#endif
         }
     }
 }

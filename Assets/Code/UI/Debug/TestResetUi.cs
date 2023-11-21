@@ -30,11 +30,10 @@ namespace Game.Player.UI
 
         private void Start()
         {
-            _testSceneManager.Load();
-
             if (_testingSettings.AutoLoadRoom)
             {
                 _inputProvider.SetGameplayInput();
+                _testSceneManager.Load();
             }
             else
             {

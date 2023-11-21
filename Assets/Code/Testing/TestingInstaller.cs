@@ -12,8 +12,8 @@ public class TestingInstaller : MonoInstaller
         TestingSettingsInstaller.CheckResources();
         TestingSettingsInstaller.InstallFromResource(Container);
 #else
+        Container.Inject(testingSettingsInstaller);
         testingSettingsInstaller.InstallBindings();
 #endif
-
     }
 }

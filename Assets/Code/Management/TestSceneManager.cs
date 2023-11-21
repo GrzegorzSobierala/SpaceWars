@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using UnityEngine.SceneManagement;
-using UnityEditor;
 using Game.Utility.Globals;
 
 namespace Game.Room
@@ -17,7 +16,7 @@ namespace Game.Room
 
         public void Load()
         {
-            if(!SceneManager.GetSceneByName(Scenes.RoomTesting).isLoaded)
+            if (!SceneManager.GetSceneByName(Scenes.RoomTesting).isLoaded)
             {
                 _sceneLoader.LoadScene(Scenes.RoomTesting, LoadSceneMode.Additive);
             }
