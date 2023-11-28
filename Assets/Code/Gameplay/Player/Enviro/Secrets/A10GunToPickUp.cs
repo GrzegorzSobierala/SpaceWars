@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Game.Enviro
+namespace Game.Room
 {
     public class A10GunToPickUp : MonoBehaviour
     {

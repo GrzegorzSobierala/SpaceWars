@@ -1,22 +1,13 @@
 using Game.Combat;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game
+namespace Game.Room.Enemy
 {
-    public class EnemyDamageHandler : MonoBehaviour
+    public class EnemyDamageHandler : DamageHandlerBase
     {
-        ParticleSystem _particleSystem;
-
-        private void Awake()
+        protected override DamageData ModifyDamage(Collision2D collsion, DamageData damage)
         {
-            _particleSystem = GetComponent<ParticleSystem>();
-        }
-
-        public void GetHit(Collision2D collsion)
-        {
-            _particleSystem.Play();
+            return damage;
         }
     }
 }

@@ -47,28 +47,24 @@ namespace Game.Player.Ship
 
         protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.rigidbody == null)
+            if (collision.collider == null)
             {
                 OnHit();
                 return;
             }
 
-            IHittable hittable;
-            if (!collision.rigidbody.TryGetComponent(out hittable))
+            IHittable[] hittables = collision.collider.GetComponents<IHittable>();
+            foreach (IHittable hittable in hittables)
             {
-                hittable = collision.rigidbody.GetComponentInChildren<IHittable>();
-            }
+                if (hittable == null)
+                    continue;
 
-            if (hittable != null)
-            {
-                DamageData damage = new DamageData() 
+                DamageData damage = new DamageData()
                 {
                     BaseDamage = _damage,
                 };
 
                 hittable.GetHit(collision, damage);
-                OnHit();
-                return;
             }
 
             OnHit();

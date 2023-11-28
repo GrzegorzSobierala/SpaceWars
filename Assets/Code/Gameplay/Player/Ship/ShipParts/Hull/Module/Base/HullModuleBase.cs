@@ -1,13 +1,17 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
+using Game.Combat;
 
 namespace Game.Player.Ship
 {
     public abstract class HullModuleBase : HullBase , IModule
     {
         public static Action<HullModuleBase> OnDefeatAction;
+
+        [Inject] protected List<DamageHandlerBase> _damageHandlers;
 
         [SerializeField] protected Transform _gunSpot;
         [SerializeField] protected Transform _bridgeSpot;
@@ -21,6 +25,17 @@ namespace Game.Player.Ship
 
         protected abstract void Defeated();
 
+        private void OnDestroy()
+        {
+            foreach (var handler in _damageHandlers)
+            {
+                if (handler != null)
+                    continue;
+
+                handler.Unsubscribe(GetHit);
+            }
+        }
+
         public HullModuleBase Instatiate(Transform parent, DiContainer container)
         {
             GameObject hullGM = container.InstantiatePrefab(this, parent);
@@ -30,6 +45,11 @@ namespace Game.Player.Ship
             hull.transform.localRotation = transform.localRotation;
 
             hull.SetStartHP();
+
+            foreach (var handler in hull._damageHandlers)
+            {
+                handler.Subscribe(hull.GetHit);
+            }
 
             return hull;
         }
