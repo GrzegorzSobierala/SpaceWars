@@ -1,6 +1,6 @@
 namespace Game.Room.Enemy
 {
-    public class DefaultDamageHandler : EnemyDamageHandler
+    public class DefaultDamageHandler : TestEnemyDamageHandler
     {
     }
 }

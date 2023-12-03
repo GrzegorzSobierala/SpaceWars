@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Game.Player.Ship
 {
-    public class ModuleCreator : MonoBehaviour
+    public class ModuleFactory : MonoBehaviour
     {
         [Inject] private DiContainer _container;
         [Inject] private ModuleHandler _moduleHandler;

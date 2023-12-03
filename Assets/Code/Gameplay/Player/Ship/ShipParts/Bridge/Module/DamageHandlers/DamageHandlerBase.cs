@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Game.Combat
 {
+    [RequireComponent(typeof(Collider2D))]
     public abstract class DamageHandlerBase : MonoBehaviour, IHittable
     {
         private Action<Collision2D, DamageData> OnGetHit;

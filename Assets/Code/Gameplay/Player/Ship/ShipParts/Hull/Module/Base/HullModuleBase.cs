@@ -11,17 +11,17 @@ namespace Game.Player.Ship
     {
         public static Action<HullModuleBase> OnDefeatAction;
 
+        public Transform GunSpot => _gunSpot;
+        public Transform BridgeSpot => _bridgeSpot;
+
         [Inject] protected List<DamageHandlerBase> _damageHandlers;
 
         [SerializeField] protected Transform _gunSpot;
         [SerializeField] protected Transform _bridgeSpot;
-        [SerializeField] private readonly float _baseHp = 1f;
+        [SerializeField] protected float _baseHp = 1f;
 
         protected float _maxHp;
         protected float _currentHp;
-
-        public Transform GunSpot => _gunSpot;
-        public Transform BridgeSpot => _bridgeSpot;
 
         protected abstract void Defeated();
 

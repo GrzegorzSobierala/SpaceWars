@@ -21,7 +21,7 @@ namespace Game
         [SerializeField] private Button _setPreviousBridgeButton;
         [SerializeField] private TMP_InputField _inputField;
 
-        private ModuleCreator ModuleCreator => _playerManager.ModuleCreator;
+        private ModuleFactory ModuleCreator => _playerManager.ModuleCreator;
 
         private void OnEnable()
         {

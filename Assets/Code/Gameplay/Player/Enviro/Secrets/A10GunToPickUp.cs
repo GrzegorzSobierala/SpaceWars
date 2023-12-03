@@ -15,7 +15,7 @@ namespace Game.Room
             if(collision.attachedRigidbody == null) 
                 return;
 
-            if (!collision.attachedRigidbody.TryGetComponent(out ModuleCreator playerModuleCreator))
+            if (!collision.attachedRigidbody.TryGetComponent(out ModuleFactory playerModuleCreator))
                 return;
 
             playerModuleCreator.ReplaceGun(A10GunModulePrefab);

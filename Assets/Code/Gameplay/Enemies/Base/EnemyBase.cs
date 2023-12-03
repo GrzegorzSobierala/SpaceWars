@@ -7,15 +7,12 @@ using Zenject;
 
 namespace Game.Room.Enemy
 {
-    public abstract class EnemyBase : MonoBehaviour , IHittable
+    public abstract class EnemyBase : MonoBehaviour
     {
         //[Inject] EnemyMovementBase _enemyMovement;
         //[Inject] EnemyGunBase _enemyGun;
         //[Inject] EnemyStateMachine _stateMachine;
         [Inject] List<DamageHandlerBase> _damageHandlers;
-
-        public Action<EnemyBase> OnDefeatAction;
-        public Action<EnemyBase> OnDestroyAction;
 
         [SerializeField] private float _baseHp = 5f;
 
@@ -24,7 +21,7 @@ namespace Game.Room.Enemy
         protected EnemyState _state = EnemyState.Combat;
         protected bool _instantDestroyOnDefeat = false;
 
-        public abstract void GetHit(Collision2D collsion, DamageData damage);
+        public abstract void GetDamage(Collision2D collsion, DamageData damage);
 
         protected abstract void Defeated();
 
@@ -32,22 +29,20 @@ namespace Game.Room.Enemy
         {
             SetStartHP();
 
-            foreach (EnemyDamageHandler handler in _damageHandlers)
+            foreach (TestEnemyDamageHandler handler in _damageHandlers)
             {
-                handler.Subscribe(GetHit);
+                handler.Subscribe(GetDamage);
             }
         }
 
         protected virtual void OnDestroy()
         {
-            OnDestroyAction?.Invoke(this);
-
-            foreach (EnemyDamageHandler handler in _damageHandlers)
+            foreach (TestEnemyDamageHandler handler in _damageHandlers)
             {
                 if (handler != null)
                     return;
 
-                handler.Subscribe(GetHit);
+                handler.Unsubscribe(GetDamage);
             }
         }
 
@@ -74,7 +69,6 @@ namespace Game.Room.Enemy
         {
             Defeated();
             _state = EnemyState.Defeat;
-            OnDefeatAction?.Invoke(this);
             if(_instantDestroyOnDefeat)
             {
                 Destroy(gameObject);

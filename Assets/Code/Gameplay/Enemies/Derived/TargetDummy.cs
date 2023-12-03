@@ -71,7 +71,7 @@ namespace Game.Room.Enemy
             _enemyBullet.CreateCopy().Shoot(null, _gunTransform);
         }
 
-        public override void GetHit(Collision2D collsion, DamageData damage)
+        public override void GetDamage(Collision2D collsion, DamageData damage)
         {
             _hitParticle.Play();
             ChangeCurrentHp(-damage.BaseDamage);
