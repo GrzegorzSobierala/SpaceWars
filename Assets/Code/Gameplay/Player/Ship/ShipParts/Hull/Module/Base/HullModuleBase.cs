@@ -25,7 +25,7 @@ namespace Game.Player.Ship
 
         protected abstract void Defeated();
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             foreach (var handler in _damageHandlers)
             {
