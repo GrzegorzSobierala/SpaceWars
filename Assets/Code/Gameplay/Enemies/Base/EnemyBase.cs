@@ -9,16 +9,14 @@ namespace Game.Room.Enemy
 {
     public abstract class EnemyBase : MonoBehaviour
     {
-        //[Inject] EnemyMovementBase _enemyMovement;
-        //[Inject] EnemyGunBase _enemyGun;
-        //[Inject] EnemyStateMachine _stateMachine;
+        [Inject] EnemyStateMachineBase _stateMachine;
         [Inject] List<DamageHandlerBase> _damageHandlers;
 
         [SerializeField] private float _baseHp = 5f;
 
         protected float _maxHp;
         protected float _currentHp;
-        protected EnemyState _state = EnemyState.Combat;
+        protected DEPRECATED_EnemyState _state = DEPRECATED_EnemyState.Combat;
         protected bool _instantDestroyOnDefeat = false;
 
         public abstract void GetDamage(Collision2D collsion, DamageData damage);
@@ -68,7 +66,7 @@ namespace Game.Room.Enemy
         private void GetDefeated()
         {
             Defeated();
-            _state = EnemyState.Defeat;
+            _state = DEPRECATED_EnemyState.Defeat;
             if(_instantDestroyOnDefeat)
             {
                 Destroy(gameObject);

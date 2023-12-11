@@ -4,10 +4,8 @@ using UnityEngine;
 
 namespace Game.Room.Enemy
 {
-    public enum EnemyState
+    public abstract class EnemyDefeatedStateBase : EnemyStateBase
     {
-        Normal = 0,
-        Combat = 1,
-        Defeat = 2,
+
     }
 }
