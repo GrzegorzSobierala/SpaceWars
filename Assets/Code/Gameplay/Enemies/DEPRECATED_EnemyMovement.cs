@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Game
+namespace Game.Room.Enemy
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class EnemyMovement : MonoBehaviour
+    public class DEPRECATED_EnemyMovement : MonoBehaviour
     {
         [Inject] PlayerManager playerManager;
 
