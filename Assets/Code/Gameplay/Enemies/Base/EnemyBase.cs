@@ -9,19 +9,18 @@ namespace Game.Room.Enemy
 {
     public abstract class EnemyBase : MonoBehaviour
     {
-        [Inject] EnemyStateMachineBase _stateMachine;
-        [Inject] List<DamageHandlerBase> _damageHandlers;
+        [Inject] protected EnemyStateMachineBase _stateMachine;
+        [Inject] protected List<DamageHandlerBase> _damageHandlers;
 
         [SerializeField] private float _baseHp = 5f;
 
         protected float _maxHp;
         protected float _currentHp;
-        protected DEPRECATED_EnemyState _state = DEPRECATED_EnemyState.Combat;
         protected bool _instantDestroyOnDefeat = false;
 
         public abstract void GetDamage(Collision2D collsion, DamageData damage);
 
-        protected abstract void Defeated();
+        protected abstract void OnDefeated();
 
         protected virtual void Awake()
         {
@@ -52,7 +51,7 @@ namespace Game.Room.Enemy
 
             if(_currentHp == 0)
             {
-                GetDefeated();
+                Defeated();
                 return;
             }
         }
@@ -63,10 +62,9 @@ namespace Game.Room.Enemy
             _currentHp = _baseHp;
         }
 
-        private void GetDefeated()
+        private void Defeated()
         {
-            Defeated();
-            _state = DEPRECATED_EnemyState.Defeat;
+            OnDefeated();
             if(_instantDestroyOnDefeat)
             {
                 Destroy(gameObject);

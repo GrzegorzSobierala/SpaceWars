@@ -77,7 +77,7 @@ namespace Game.Room.Enemy
             ChangeCurrentHp(-damage.BaseDamage);
         }
 
-        protected override void Defeated()
+        protected override void OnDefeated()
         {
             _defeatParticle.transform.SetParent(null);
             _defeatParticle.Play();
