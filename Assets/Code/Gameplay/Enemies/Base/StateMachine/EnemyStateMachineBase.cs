@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,13 +8,15 @@ namespace Game.Room.Enemy
 {
     public abstract class EnemyStateMachineBase : MonoBehaviour
     {
+        public EnemyStateBase CurrentState => _currentState;
+
         [Inject] protected EnemyGuardStateBase _guardState;
         [Inject] protected EnemyCombatStateBase _combatState;
         [Inject] protected EnemyDefeatedStateBase _defeatedState;
 
         private EnemyStateBase _currentState;
 
-        protected virtual void Start()
+        protected virtual void Awake()
         {
             Init();
         }
@@ -35,13 +38,13 @@ namespace Game.Room.Enemy
 
         private void Init()
         {
-            _guardState.EnterState();
             _currentState = _guardState;
+            _guardState.EnterState();
         }
 
         private void SwitchState(EnemyStateBase state)
         {
-            if (_currentState != state)
+            if (_currentState == state)
             {
                 Debug.Log($"Current state is the same as new : {nameof(state)}");
                 return;

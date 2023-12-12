@@ -1,15 +1,12 @@
 using Game.Combat;
 using Game.Management;
-using Game.Player;
 using Game.Utility;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
 namespace Game.Room.Enemy
 {
-    public class TargetDummy : EnemyBase
+    public class DEPRECATED_TestEnemy : EnemyBase
     {
         [Inject] private PlayerManager _playerManager;
 
@@ -46,7 +43,6 @@ namespace Game.Room.Enemy
 
         private void AimGun()
         {
-
             Vector2 gunPos = (Vector2)_gunTransform.position;
             float angleDegrees = Utils.AngleDirected(gunPos, PlayerPos) - 90f;
 
@@ -75,13 +71,6 @@ namespace Game.Room.Enemy
         {
             _hitParticle.Play();
             ChangeCurrentHp(-damage.BaseDamage);
-        }
-
-        protected override void OnDefeated()
-        {
-            _defeatParticle.transform.SetParent(null);
-            _defeatParticle.Play();
-            _instantDestroyOnDefeat = true;
         }
     }
 }

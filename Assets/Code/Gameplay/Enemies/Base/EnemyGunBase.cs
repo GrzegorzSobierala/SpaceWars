@@ -14,11 +14,13 @@ namespace Game.Room.Enemy
 
         public abstract void StopShooting();
 
-        public abstract void AimAt(Transform target);
+        public abstract void StartAimingAt(Transform target);
 
-        public abstract void AimAt(Vector2 worldPosition);
+        public abstract void StartAimingAt(Vector2 worldPosition);
 
-        public abstract void AimAt(float localRotation);
+        public abstract void StartAimingAt(float localRotation);
+
+        public abstract void StopAiming();
 
         public void SubscribeOnAimTarget(Action onAimTarget)
         {

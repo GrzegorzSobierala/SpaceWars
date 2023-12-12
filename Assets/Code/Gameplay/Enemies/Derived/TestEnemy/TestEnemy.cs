@@ -9,12 +9,7 @@ namespace Game.Room.Enemy
     {
         public override void GetDamage(Collision2D collsion, DamageData damage)
         {
-            throw new System.NotImplementedException();
-        }
-
-        protected override void OnDefeated()
-        {
-            throw new System.NotImplementedException();
+            ChangeCurrentHp(-damage.BaseDamage);
         }
     }
 }

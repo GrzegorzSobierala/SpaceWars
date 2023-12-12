@@ -1,19 +1,28 @@
+using Game.Management;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Room.Enemy
 {
     public class TestEnemyCombatState : EnemyCombatStateBase
     {
+
+        [Inject] private EnemyGunBase _gun;
+        [Inject] private EnemyMovementBase _movement;
+        [Inject] private PlayerManager _playerManager;
+
         protected override void OnEnterState()
         {
-            throw new System.NotImplementedException();
+            _gun.StartAimingAt(_playerManager.PlayerBody.transform);
+            _gun.StartShooting();
         }
 
         protected override void OnExitState()
         {
-            throw new System.NotImplementedException();
+            _gun.StopShooting();
+            _gun.StopAiming();
         }
     }
 }

@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Room.Enemy
 {
     public abstract class EnemyStateBase : MonoBehaviour
     {
+        [Inject] protected EnemyBase _enemy;
+
         public void EnterState()
         {
             enabled = true;

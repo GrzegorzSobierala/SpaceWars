@@ -10060,6 +10060,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501b81e40066af144a6244e9a403ae55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gunTransform: {fileID: 2923649639386474618}
+  _enemyBulletPrototype: {fileID: 5577059757908764798}
+  _cooldown: 2
 --- !u!114 &4002154276112685798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10305,6 +10308,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}
+--- !u!114 &5577059757908764798 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 405864246989137584, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}
+  m_PrefabInstance: {fileID: 5243413915934035662}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a4ce5af71ecc58468db59aae2870404, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8160263770510025502 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4178018321249856976, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}

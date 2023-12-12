@@ -8,13 +8,12 @@ namespace Game.Room.Enemy
     {
         protected override void OnEnterState()
         {
-            throw new System.NotImplementedException();
-            
+            Destroy(_enemy.gameObject);
         }
 
         protected override void OnExitState()
         {
-            throw new System.NotImplementedException();
+            Debug.LogError($"No OnExitState in {typeof(TestEnemyGuardState)}" );
         }
     }
 }

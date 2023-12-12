@@ -16,11 +16,8 @@ namespace Game.Room.Enemy
 
         protected float _maxHp;
         protected float _currentHp;
-        protected bool _instantDestroyOnDefeat = false;
 
         public abstract void GetDamage(Collision2D collsion, DamageData damage);
-
-        protected abstract void OnDefeated();
 
         protected virtual void Awake()
         {
@@ -43,15 +40,21 @@ namespace Game.Room.Enemy
             }
         }
 
-        protected void ChangeCurrentHp(float hpChange)
+        protected virtual void ChangeCurrentHp(float hpChange)
         {
             float newCurrentHp = _currentHp + hpChange;
             
             _currentHp = Mathf.Clamp(newCurrentHp, 0, _maxHp);
 
-            if(_currentHp == 0)
+            if (_currentHp == 0 && _stateMachine.CurrentState is not EnemyDefeatedStateBase)
             {
-                Defeated();
+                _stateMachine.SwitchToDefeatedState();
+                return;
+            }
+
+            if (_currentHp > 0 && _stateMachine.CurrentState is EnemyDefeatedStateBase)
+            {
+                _stateMachine.SwitchToCombatState();
                 return;
             }
         }
@@ -60,15 +63,6 @@ namespace Game.Room.Enemy
         {
             _maxHp = _baseHp;
             _currentHp = _baseHp;
-        }
-
-        private void Defeated()
-        {
-            OnDefeated();
-            if(_instantDestroyOnDefeat)
-            {
-                Destroy(gameObject);
-            }
         }
     }
 }

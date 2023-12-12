@@ -1,19 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Room.Enemy
 {
     public class TestEnemyGuardState : EnemyGuardStateBase
     {
+        [Inject] private EnemyStateMachineBase _stateMachine;
+
         protected override void OnEnterState()
         {
-            throw new System.NotImplementedException();
+            _stateMachine.SwitchToCombatState();
         }
 
         protected override void OnExitState()
         {
-            throw new System.NotImplementedException();
         }
     }
 }
