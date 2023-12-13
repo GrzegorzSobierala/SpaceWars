@@ -19,73 +19,21 @@ namespace Game.Room.Enemy
         [SerializeField] private float _cooldown = 2f;
 
         private float _lastShotTime = 0f;
-        private bool _isShooting = false;
-        private bool _isTransformAiming = false;
-        private bool _isPosAiming = false;
-        private bool _isRotAiming = false;
 
-        private Transform _aimTargetTransform;
-        private Vector2 _aimTargetPos;
-        private float _aimTargetRot;
-
-        private void Update()
+        protected override void OnAimingAt(Transform target)
         {
-            AimGun();
+            Vector2 gunPos = (Vector2)_gunTransform.position;
+            float angleDegrees;
 
-            if (_isShooting)
-            {
-                TryShoot();
-            }
+            angleDegrees = Utils.AngleDirected(gunPos, target.position) - 90f;
+            
+            Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
+            _gunTransform.rotation = rotation;
+
+            OnAimTarget?.Invoke();
         }
 
-        public override void StartAimingAt(Transform target)
-        {
-            _isTransformAiming = true;
-
-            _isPosAiming = false;
-            _isRotAiming = false;
-
-            _aimTargetTransform = target;
-        }
-
-        public override void StartAimingAt(Vector2 worldPosition)
-        {
-            _isPosAiming = true;
-
-            _isTransformAiming = false;
-            _isRotAiming = false;
-
-            _aimTargetPos = worldPosition;
-        }
-
-        public override void StartAimingAt(float localRotation)
-        {
-            _isRotAiming = true;
-
-            _isPosAiming = false;
-            _isTransformAiming = false;
-
-            _aimTargetRot = localRotation;
-        }
-
-        public override void StopAiming()
-        {
-            _isRotAiming = false;
-            _isPosAiming = false;
-            _isTransformAiming = false;
-        }
-
-        public override void StartShooting()
-        {
-            _isShooting = true;
-        }
-
-        public override void StopShooting()
-        {
-            _isShooting = false;
-        }
-
-        private void TryShoot()
+        protected override void OnShooting()
         {
             if (Vector2.Distance(transform.position, PlayerPos) > _enemyBulletPrototype.MaxDistance)
                 return;
@@ -103,34 +51,6 @@ namespace Game.Room.Enemy
             _lastShotTime = Time.time;
 
             _enemyBulletPrototype.CreateCopy(_enemyManager.transform).Shoot(null, _gunTransform);
-        }
-
-        private void AimGun()
-        {
-            Vector2 gunPos = (Vector2)_gunTransform.position;
-            float angleDegrees;
-
-            if (_isTransformAiming)
-            {
-                angleDegrees = Utils.AngleDirected(gunPos, _aimTargetTransform.position) - 90f;
-            }
-            else if(_isPosAiming)
-            {
-                angleDegrees = Utils.AngleDirected(gunPos, _aimTargetPos) - 90f;
-            }
-            else if (_isRotAiming)
-            {
-                angleDegrees = _aimTargetRot;
-            }
-            else
-            {
-                return;
-            }
-
-            Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
-            _gunTransform.rotation = rotation;
-
-            OnAimTarget?.Invoke();
         }
     }
 }

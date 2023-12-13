@@ -8,19 +8,104 @@ namespace Game.Room.Enemy
 {
     public abstract class EnemyGunBase : MonoBehaviour
     {
+        public bool IsNotImplementedDebugOn {  get; set; } =  true;
+
         protected Action OnAimTarget;
 
-        public abstract void StartShooting();
+        private bool _isShooting = false;
+        private bool _isTransformAiming = false;
+        private bool _isPosAiming = false;
+        private bool _isRotAiming = false;
 
-        public abstract void StopShooting();
+        private Transform _aimTargetTransform;
+        private Vector2 _aimTargetPos;
+        private float _aimTargetRot;
 
-        public abstract void StartAimingAt(Transform target);
+        protected virtual void Update()
+        {
+            TryAimGun();
 
-        public abstract void StartAimingAt(Vector2 worldPosition);
+            TryShoot();
+        }
 
-        public abstract void StartAimingAt(float localRotation);
+        public void StartAimingAt(Transform target)
+        {
+            _isTransformAiming = true;
 
-        public abstract void StopAiming();
+            _isPosAiming = false;
+            _isRotAiming = false;
+
+            _aimTargetTransform = target;
+
+            OnStartAimingAt(target);
+        }
+
+        public void StartAimingAt(Vector2 worldPosition)
+        {
+            _isPosAiming = true;
+
+            _isTransformAiming = false;
+            _isRotAiming = false;
+
+            _aimTargetPos = worldPosition;
+
+            OnStartAimingAt(worldPosition);
+        }
+
+        public void StartAimingAt(float localRotation)
+        {
+            _isRotAiming = true;
+
+            _isPosAiming = false;
+            _isTransformAiming = false;
+
+            _aimTargetRot = localRotation;
+
+            OnStartAimingAt(localRotation);
+        }
+
+        public void StopAiming()
+        {
+            _isRotAiming = false;
+            _isPosAiming = false;
+            _isTransformAiming = false;
+
+            OnStopAiming();
+        }
+
+        public void StartShooting()
+        {
+            _isShooting = true;
+
+            OnStartShooting();
+        }
+
+        public void StopShooting()
+        {
+            _isShooting = false;
+
+            OnStopShooting();
+        }
+
+        protected virtual void OnStartShooting() { }
+
+        protected virtual void OnStopShooting() { }
+
+        protected virtual void OnStartAimingAt(Transform target) { }
+
+        protected virtual void OnStartAimingAt(Vector2 worldPosition) { }
+
+        protected virtual void OnStartAimingAt(float localRotation) { }
+
+        protected virtual void OnStopAiming() { }
+
+        protected virtual void OnShooting() { }
+
+        protected virtual void OnAimingAt(Transform target) { }
+
+        protected virtual void OnAimingAt(Vector2 worldPosition) { }
+
+        protected virtual void OnAimingAt(float localRotation) { }
 
         public void SubscribeOnAimTarget(Action onAimTarget)
         {
@@ -30,6 +115,34 @@ namespace Game.Room.Enemy
         public void Unsubscribe(Action onAimTarget)
         {
             OnAimTarget -= onAimTarget;
+        }
+
+        private void TryAimGun()
+        {
+            if (_isTransformAiming)
+            {
+                OnAimingAt(_aimTargetTransform);
+            }
+            else if (_isPosAiming)
+            {
+                OnAimingAt(_aimTargetPos);
+            }
+            else if (_isRotAiming)
+            {
+                OnAimingAt(_aimTargetRot);
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        private void TryShoot()
+        {
+            if (_isShooting)
+            {
+                OnShooting();
+            }
         }
     }
 }
