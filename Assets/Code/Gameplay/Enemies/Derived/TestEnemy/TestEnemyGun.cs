@@ -9,10 +9,10 @@ namespace Game.Room.Enemy
 {
     public class TestEnemyGun : EnemyGunBase
     {
-
         private Vector2 PlayerPos => _playerManager.PlayerBody.position;
 
         [Inject] private PlayerManager _playerManager;
+        [Inject] private EnemyManager _enemyManager;
 
         [SerializeField] private Transform _gunTransform;
         [SerializeField] private EnemyBullet _enemyBulletPrototype;
@@ -102,7 +102,7 @@ namespace Game.Room.Enemy
         {
             _lastShotTime = Time.time;
 
-            _enemyBulletPrototype.CreateCopy().Shoot(null, _gunTransform);
+            _enemyBulletPrototype.CreateCopy(_enemyManager.transform).Shoot(null, _gunTransform);
         }
 
         private void AimGun()

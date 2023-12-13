@@ -28,7 +28,7 @@ namespace Game.Player.Ship
         {
             _lastShotTime = Time.time;
 
-            _shootableObjectPrefab.CreateCopy().Shoot(_body, transform);
+            _shootableObjectPrefab.CreateCopy(_playerManager.transform).Shoot(_body, transform);
         }
     }
 }

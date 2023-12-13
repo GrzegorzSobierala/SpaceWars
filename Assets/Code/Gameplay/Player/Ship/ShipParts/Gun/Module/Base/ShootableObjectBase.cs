@@ -1,10 +1,13 @@
 using UnityEngine;
 using Game.Combat;
+using Zenject;
+using Game.Room.Enemy;
 
 namespace Game.Player.Ship
 {
     public abstract class ShootableObjectBase : MonoBehaviour, IShootable
     {
+
         [Header("Base Depedencies")]
         [SerializeField] protected Rigidbody2D _body;
         [SerializeField] protected ParticleSystem _particleSystem;
@@ -36,9 +39,9 @@ namespace Game.Player.Ship
             }
         }
 
-        public virtual ShootableObjectBase CreateCopy()
+        public virtual ShootableObjectBase CreateCopy(Transform parent = null)
         {
-            ShootableObjectBase instance = Instantiate(this);
+            ShootableObjectBase instance = Instantiate(this, parent);
 
             instance.gameObject.SetActive(false);
 

@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Game.Room.Enemy
 {
-    public class EnemiesManager : MonoBehaviour
+    public class EnemyManager : MonoBehaviour
     {
         public static Action OnRoomClear;
 

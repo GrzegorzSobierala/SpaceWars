@@ -1,4 +1,5 @@
 using Game.Input.System;
+using Game.Management;
 using ModestTree;
 using UnityEngine;
 using UnityEngine.Windows;
@@ -9,6 +10,7 @@ namespace Game.Player.Ship
     public abstract class GunModuleBase : GunBase , IModule
     {
         [Inject] protected Rigidbody2D _body;
+        [Inject] protected PlayerManager _playerManager;
         [Inject] private InputProvider _input;
 
         [SerializeField] protected ShootableObjectBase _shootableObjectPrefab;
@@ -19,15 +21,14 @@ namespace Game.Player.Ship
 
         protected PlayerControls.GameplayActions Input => _input.PlayerControls.Gameplay;
 
-        protected void Awake()
+        protected virtual void Awake()
         {
             if(_shootableObjectPrefab == null)
             {
                 Debug.LogError("_shootableObjectPrefab is null, cant create prototype");
             }
 
-            _shootableObjectPrototype = _shootableObjectPrefab.CreateCopy();
-            _shootableObjectPrototype.transform.SetParent(transform);
+            _shootableObjectPrototype = _shootableObjectPrefab.CreateCopy(transform);
             _shootableObjectPrototype.gameObject.name = _shootableObjectPrefab.gameObject.name + "(Prototype)";
         }
 

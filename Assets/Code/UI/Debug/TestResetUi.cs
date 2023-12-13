@@ -68,7 +68,7 @@ namespace Game.Player.UI
             _onOffButton.onClick.AddListener(OnOffPanel);
             _restartButton.onClick.AddListener(Restart);
             HullModuleBase.OnDefeatAction += OnDeadPlayer;
-            EnemiesManager.OnRoomClear += OnRoomClear;
+            EnemyManager.OnRoomClear += OnRoomClear;
         }
 
         private void Unsubscribe()
@@ -76,7 +76,7 @@ namespace Game.Player.UI
             _onOffButton.onClick.RemoveListener(OnOffPanel);
             _restartButton.onClick.RemoveListener(Restart);
             HullModuleBase.OnDefeatAction -= OnDeadPlayer;
-            EnemiesManager.OnRoomClear -= OnRoomClear;
+            EnemyManager.OnRoomClear -= OnRoomClear;
         }
 
         private void OnOffPanel()
