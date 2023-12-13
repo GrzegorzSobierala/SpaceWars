@@ -8,8 +8,6 @@ namespace Game.Room.Enemy
 {
     public abstract class EnemyGunBase : MonoBehaviour
     {
-        public bool IsNotImplementedDebugOn {  get; set; } =  true;
-
         protected Action OnAimTarget;
 
         private bool _isShooting = false;
