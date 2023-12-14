@@ -1,4 +1,3 @@
-using Game.Combat;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,9 +10,7 @@ namespace Game.Room.Enemy
         protected Action OnAimTarget;
 
         private bool _isShooting = false;
-        private bool _isTransformAiming = false;
-        private bool _isPosAiming = false;
-        private bool _isRotAiming = false;
+        private AimType _currentAimType = AimType.Stop;
 
         private Transform _aimTargetTransform;
         private Vector2 _aimTargetPos;
@@ -28,10 +25,7 @@ namespace Game.Room.Enemy
 
         public void StartAimingAt(Transform target)
         {
-            _isTransformAiming = true;
-
-            _isPosAiming = false;
-            _isRotAiming = false;
+            _currentAimType = AimType.Transform;
 
             _aimTargetTransform = target;
 
@@ -40,10 +34,7 @@ namespace Game.Room.Enemy
 
         public void StartAimingAt(Vector2 worldPosition)
         {
-            _isPosAiming = true;
-
-            _isTransformAiming = false;
-            _isRotAiming = false;
+            _currentAimType = AimType.Position;
 
             _aimTargetPos = worldPosition;
 
@@ -52,10 +43,7 @@ namespace Game.Room.Enemy
 
         public void StartAimingAt(float localRotation)
         {
-            _isRotAiming = true;
-
-            _isPosAiming = false;
-            _isTransformAiming = false;
+            _currentAimType = AimType.Angle;
 
             _aimTargetRot = localRotation;
 
@@ -64,9 +52,7 @@ namespace Game.Room.Enemy
 
         public void StopAiming()
         {
-            _isRotAiming = false;
-            _isPosAiming = false;
-            _isTransformAiming = false;
+            _currentAimType = AimType.Stop;
 
             OnStopAiming();
         }
@@ -117,15 +103,15 @@ namespace Game.Room.Enemy
 
         private void TryAimGun()
         {
-            if (_isTransformAiming)
+            if (_currentAimType == AimType.Transform)
             {
                 OnAimingAt(_aimTargetTransform);
             }
-            else if (_isPosAiming)
+            else if (_currentAimType == AimType.Position)
             {
                 OnAimingAt(_aimTargetPos);
             }
-            else if (_isRotAiming)
+            else if (_currentAimType == AimType.Angle)
             {
                 OnAimingAt(_aimTargetRot);
             }
@@ -141,6 +127,14 @@ namespace Game.Room.Enemy
             {
                 OnShooting();
             }
+        }
+
+        public enum AimType
+        {
+            Stop = 0,
+            Transform = 1,
+            Position = 2,
+            Angle = 3,
         }
     }
 }

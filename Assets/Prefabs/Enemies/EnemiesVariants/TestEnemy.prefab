@@ -10076,7 +10076,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentSpeedModifier: 1
-  _baseSpeed: 0
+  _baseSpeed: 100
+  _moveCooldown: 1
+  _isRandomMove: 1
+  _isHorizontalMove: 1
+  _fallowPlayer: 1
+  _randomMulti: 2
+  _horizontalMulti: 1
+  _fallowMulti: 0.3
 --- !u!1 &7401195081911752166
 GameObject:
   m_ObjectHideFlags: 0
