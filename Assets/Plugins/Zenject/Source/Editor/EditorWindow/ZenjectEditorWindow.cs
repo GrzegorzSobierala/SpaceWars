@@ -107,7 +107,9 @@ namespace Zenject
             }
 
             // We might also consider only calling Repaint when changes occur
-            Repaint();
+
+            //SpaceWars: Removed Repaint() becouse it has huge performecne inpact 
+            //Repaint();
         }
 
         public virtual void OnGUI()

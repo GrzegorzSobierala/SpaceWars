@@ -1,8 +1,5 @@
 using Game.Input.System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Windows;
 using Zenject;
 
 namespace Game.Player.Ship
@@ -56,10 +53,7 @@ namespace Game.Player.Ship
         private void EndingSound()
         {
             if (_endAudio.isPlaying)
-            {
-                Debug.Log("_endAudio.isPlaying");
                 return;
-            }
 
             if (_isPlaying)
             {

@@ -469,9 +469,9 @@ MonoBehaviour:
   - {fileID: 5216852560752833861, guid: 14abb2b06f66a2b4794ec6f0ce338a2c, type: 3}
   - {fileID: -6030896639475460078, guid: 3cf3dac49f22fe040a1d6466153334cc, type: 3}
   _gunPrefabs:
-  - {fileID: 6086497948641695760, guid: 06dc91f845bd0524486ab3149f2e01e1, type: 3}
   - {fileID: -4479698347772009589, guid: af891817af1849642b1ac994dc19114f, type: 3}
   - {fileID: 2534597724515312179, guid: 2f5589a1c477df04186881b9d5b72d68, type: 3}
+  - {fileID: 6086497948641695760, guid: 06dc91f845bd0524486ab3149f2e01e1, type: 3}
   _bridgesPrefabs:
   - {fileID: 2670052336871671550, guid: 476c228dd1fd1614788c8d5e40e61db0, type: 3}
   - {fileID: 1226014815333710274, guid: 0ea83e421d1d43845990cc13bb3d4d17, type: 3}
@@ -494,6 +494,7 @@ MonoBehaviour:
   _horizontalSpeedMutli: 50
   _backSpeedMulti: 30
   _rotationSpeed: 150
+  _velocityRotMulti: 0.3
 --- !u!50 &488120537346839382
 Rigidbody2D:
   serializedVersion: 4
@@ -612,7 +613,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6407811719305028010}
   - component: {fileID: 7866239942263792506}
-  - component: {fileID: 8574989068772238668}
   - component: {fileID: 818851010425245708}
   m_Layer: 0
   m_Name: Player
@@ -659,18 +659,6 @@ MonoBehaviour:
   _installerPrefabs: []
   _autoRun: 1
   _kernel: {fileID: 0}
---- !u!114 &8574989068772238668
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6932844938547107274}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a9ff43948d1ed0459302bec3576f005, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &818851010425245708
 MonoBehaviour:
   m_ObjectHideFlags: 0

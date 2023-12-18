@@ -1,11 +1,12 @@
 using Game.Management;
-using UnityEngine;
+using Game.Room;
 using Zenject;
 
 public class PlayerManagerInstaller : MonoInstaller
 {
     public override void InstallBindings()
     {
-        Container.Bind<PlayerManager>().FromComponentOn(gameObject).AsSingle();
+        Container.Bind<PlayerManager>().FromComponentInHierarchy(false).AsSingle();
+        Container.Bind<TestSceneManager>().FromComponentInHierarchy(false).AsSingle();
     }
 }

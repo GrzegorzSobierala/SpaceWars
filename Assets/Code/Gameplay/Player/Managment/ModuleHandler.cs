@@ -12,7 +12,7 @@ namespace Game.Player.Ship
         private GunModuleBase _currentGun;
         private BridgeModuleBase _currentBridge;
 
-        public void SetGun(ModuleCreator creator, GunModuleBase gun)
+        public void SetGun(ModuleFactory creator, GunModuleBase gun)
         {
             if(creator == null)
             {
@@ -23,7 +23,7 @@ namespace Game.Player.Ship
             _currentGun = gun;
         }
 
-        public void SetHull(ModuleCreator creator, HullModuleBase hull)
+        public void SetHull(ModuleFactory creator, HullModuleBase hull)
         {
             if (creator == null)
             {
@@ -34,7 +34,7 @@ namespace Game.Player.Ship
             _currentHull = hull;
         }
 
-        public void SetBridge(ModuleCreator creator, BridgeModuleBase viewfinder)
+        public void SetBridge(ModuleFactory creator, BridgeModuleBase viewfinder)
         {
             if (creator == null)
             {

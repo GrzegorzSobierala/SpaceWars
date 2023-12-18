@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
-using Zenject;
 
 namespace Game.Player.Ship
 {
@@ -37,7 +33,7 @@ namespace Game.Player.Ship
         {
             _lastShotTime = Time.time;
 
-            _shootableObjectPrefab.CreateCopy().Shoot(_body, transform);
+            _shootableObjectPrefab.CreateCopy(_playerManager.transform).Shoot(_body, transform);
 
             _currentAmmo--;
         }

@@ -242,8 +242,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _body: {fileID: 4562933555896563138}
   _particleSystem: {fileID: 3705347350567245477}
+  _damage: 1
   _speed: 30
-  _horizontalMoveInpactMulti: 0.75
+  _horizontalMoveInpactMulti: 0.5
   _maxTimeAlive: 5
   _maxDistance: 25
   _speedMaxDistanceAliveMulti: 0.25
@@ -259,7 +260,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 2
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1

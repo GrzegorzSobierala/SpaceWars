@@ -1,10 +1,8 @@
 using Game.Player.Ship;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Game.Enviro
+namespace Game.Room
 {
     public class A10GunToPickUp : MonoBehaviour
     {
@@ -15,7 +13,7 @@ namespace Game.Enviro
             if(collision.attachedRigidbody == null) 
                 return;
 
-            if (!collision.attachedRigidbody.TryGetComponent(out ModuleCreator playerModuleCreator))
+            if (!collision.attachedRigidbody.TryGetComponent(out ModuleFactory playerModuleCreator))
                 return;
 
             playerModuleCreator.ReplaceGun(A10GunModulePrefab);

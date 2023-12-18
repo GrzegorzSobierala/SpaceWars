@@ -1,3 +1,4 @@
+using Game.Combat;
 using System.Collections;
 using UnityEngine;
 
@@ -42,7 +43,9 @@ namespace Game.Player.Ship
 
             SlowVelocityX(transform, _body.velocity, 0);
 
-            _body.AddRelativeForce(Vector2.up * _speed, ForceMode2D.Impulse);
+            float targetForce = _speed * _body.mass;
+
+            _body.AddRelativeForce(Vector2.up * targetForce, ForceMode2D.Impulse);
         }
 
         private IEnumerator DestroyByDistance()
