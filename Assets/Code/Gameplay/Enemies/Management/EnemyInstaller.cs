@@ -1,6 +1,4 @@
 using Game.Combat;
-using Game.Player.Ship;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 

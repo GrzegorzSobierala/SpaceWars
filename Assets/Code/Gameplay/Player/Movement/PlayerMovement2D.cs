@@ -1,7 +1,6 @@
 using Game.Input.System;
 using Game.Utility;
 using UnityEngine;
-using UnityEngine.Rendering;
 using Zenject;
 
 namespace Game.Player.Ship

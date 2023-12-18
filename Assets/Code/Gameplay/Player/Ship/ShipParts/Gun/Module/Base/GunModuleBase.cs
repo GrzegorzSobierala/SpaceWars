@@ -1,8 +1,7 @@
 using Game.Input.System;
 using Game.Management;
-using ModestTree;
+using Game.Combat;
 using UnityEngine;
-using UnityEngine.Windows;
 using Zenject;
 
 namespace Game.Player.Ship

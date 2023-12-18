@@ -3,10 +3,24 @@ using Game.Combat;
 using Zenject;
 using Game.Room.Enemy;
 
-namespace Game.Player.Ship
+namespace Game.Combat
 {
     public abstract class ShootableObjectBase : MonoBehaviour, IShootable
     {
+        protected bool SchouldNukeMySelf
+        {
+            get
+            {
+                float maxDistance = _maxDistance + (_shootShipSpeed * _speedMaxDistanceAliveMulti);
+                if (Vector2.Distance(_shootPos, _body.position) > maxDistance)
+                    return true;
+
+                if (Time.time > _maxTimeAlive + _shootTime)
+                    return true;
+
+                return false;
+            }
+        }
 
         [Header("Base Depedencies")]
         [SerializeField] protected Rigidbody2D _body;
@@ -23,30 +37,6 @@ namespace Game.Player.Ship
         protected float _shootTime;
         protected float _shootShipSpeed;
         protected Vector2 _shootPos;
-
-        protected bool SchouldNukeMySelf
-        {
-            get
-            {
-                float maxDistance = _maxDistance + (_shootShipSpeed * _speedMaxDistanceAliveMulti);
-                if (Vector2.Distance(_shootPos, _body.position) > maxDistance)
-                    return true;
-
-                if (Time.time > _maxTimeAlive + _shootTime)
-                    return true;
-
-                return false;
-            }
-        }
-
-        public virtual ShootableObjectBase CreateCopy(Transform parent = null)
-        {
-            ShootableObjectBase instance = Instantiate(this, parent);
-
-            instance.gameObject.SetActive(false);
-
-            return instance;
-        }
 
         protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
@@ -71,6 +61,15 @@ namespace Game.Player.Ship
             }
 
             OnHit();
+        }
+
+        public virtual ShootableObjectBase CreateCopy(Transform parent = null)
+        {
+            ShootableObjectBase instance = Instantiate(this, parent);
+
+            instance.gameObject.SetActive(false);
+
+            return instance;
         }
 
         public abstract void Shoot(Rigidbody2D creatorBody, Transform gunTransform);

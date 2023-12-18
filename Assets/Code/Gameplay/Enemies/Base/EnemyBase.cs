@@ -1,6 +1,4 @@
 using Game.Combat;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -12,13 +10,11 @@ namespace Game.Room.Enemy
         [Inject] protected EnemyStateMachineBase _stateMachine;
         [Inject] protected List<DamageHandlerBase> _damageHandlers;
 
-        [SerializeField] private float _baseHp = 5f;
-
         protected float _maxHp;
         protected float _currentHp;
 
-        public abstract void GetDamage(Collision2D collsion, DamageData damage);
-
+        [SerializeField] private float _baseHp = 5f;
+        
         protected virtual void Awake()
         {
             SetStartHP();
@@ -39,6 +35,8 @@ namespace Game.Room.Enemy
                 handler.Unsubscribe(GetDamage);
             }
         }
+
+        public abstract void GetDamage(Collision2D collsion, DamageData damage);
 
         protected virtual void ChangeCurrentHp(float hpChange)
         {

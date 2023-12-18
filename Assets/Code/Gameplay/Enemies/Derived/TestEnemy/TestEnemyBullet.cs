@@ -1,13 +1,10 @@
 using Game.Combat;
-using Game.Player.Ship;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
 namespace Game.Room.Enemy
 {
-    public class EnemyBullet : ShootableObjectBase
+    public class TestEnemyBullet : ShootableObjectBase
     {
         public float MaxDistance => _maxDistance;
 

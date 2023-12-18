@@ -1,7 +1,5 @@
 using Game.Management;
 using Game.Player.Ship;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +7,7 @@ using Zenject;
 
 namespace Game
 {
-    public class DEBUG_PlayerConfigUI : MonoBehaviour
+    public class TestPlayerConfigUI : MonoBehaviour
     {
         [Inject] private PlayerManager _playerManager;
 

@@ -1,7 +1,5 @@
-using Game.Management;
 using Game.Utility;
-using System.Collections;
-using System.Collections.Generic;
+using Game.Management;
 using UnityEngine;
 using Zenject;
 
@@ -15,7 +13,7 @@ namespace Game.Room.Enemy
         [Inject] private EnemyManager _enemyManager;
 
         [SerializeField] private Transform _gunTransform;
-        [SerializeField] private EnemyBullet _enemyBulletPrototype;
+        [SerializeField] private TestEnemyBullet _enemyBulletPrototype;
         [SerializeField] private float _cooldown = 2f;
 
         private float _lastShotTime = 0f;

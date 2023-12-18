@@ -1,8 +1,5 @@
 using Game.Input.System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Windows;
 using Zenject;
 
 namespace Game.Player.Ship

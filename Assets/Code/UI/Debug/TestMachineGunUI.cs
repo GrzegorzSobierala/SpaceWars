@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -8,7 +6,7 @@ using Game.Management;
 
 namespace Game.Player.UI
 {
-    public class DEBUG_MachineGunUI : MonoBehaviour
+    public class TestMachineGunUI : MonoBehaviour
     {
         [Inject] PlayerManager _playerManager;
 

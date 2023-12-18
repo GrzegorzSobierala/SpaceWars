@@ -1,9 +1,8 @@
-using Game.Player.Ship;
+using Game.Combat;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game
+namespace Game.Player.Ship
 {
     public class Laser : ShootableObjectBase
     {

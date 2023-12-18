@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Room.Enemy
@@ -9,8 +7,8 @@ namespace Game.Room.Enemy
     {
         protected Action OnAimTarget;
 
-        private bool _isShooting = false;
         private AimType _currentAimType = AimType.Stop;
+        private bool _isShooting = false;
 
         private Transform _aimTargetTransform;
         private Vector2 _aimTargetPos;
@@ -71,6 +69,16 @@ namespace Game.Room.Enemy
             OnStopShooting();
         }
 
+        public void SubscribeOnAimTarget(Action onAimTarget)
+        {
+            OnAimTarget += onAimTarget;
+        }
+
+        public void Unsubscribe(Action onAimTarget)
+        {
+            OnAimTarget -= onAimTarget;
+        }
+
         protected virtual void OnStartShooting() { }
 
         protected virtual void OnStopShooting() { }
@@ -90,17 +98,7 @@ namespace Game.Room.Enemy
         protected virtual void OnAimingAt(Vector2 worldPosition) { }
 
         protected virtual void OnAimingAt(float localRotation) { }
-
-        public void SubscribeOnAimTarget(Action onAimTarget)
-        {
-            OnAimTarget += onAimTarget;
-        }
-
-        public void Unsubscribe(Action onAimTarget)
-        {
-            OnAimTarget -= onAimTarget;
-        }
-
+        
         private void TryAimGun()
         {
             if (_currentAimType == AimType.Transform)
@@ -129,7 +127,7 @@ namespace Game.Room.Enemy
             }
         }
 
-        public enum AimType
+        private enum AimType
         {
             Stop = 0,
             Transform = 1,

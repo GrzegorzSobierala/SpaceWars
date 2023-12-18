@@ -1,16 +1,10 @@
-using Game.Management;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
 namespace Game.Room.Enemy
 {
     public class TestEnemyMovement : EnemyMovementBase
     {
         public override bool UseFixedUpdate => true;
-
-        [Inject] private PlayerManager _playerManager;
 
         [SerializeField] private float _moveCooldown = 5f;
         [SerializeField] private bool _isRandomMove = false;
