@@ -65,7 +65,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.25, y: 0.5}
+  m_Size: {x: 2.5, y: 5}
   m_Direction: 0
 --- !u!1 &2226872723978808125
 GameObject:
@@ -94,7 +94,7 @@ Transform:
   m_GameObject: {fileID: 2226872723978808125}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3907446705585901697}
@@ -233,10 +233,10 @@ MonoBehaviour:
   _body: {fileID: 4562933555896563138}
   _particleSystem: {fileID: 3705347350567245477}
   _damage: 2
-  _speed: 60
+  _speed: 600
   _horizontalMoveInpactMulti: 0.3
   _maxTimeAlive: 5
-  _maxDistance: 25
+  _maxDistance: 250
   _speedMaxDistanceAliveMulti: 0.1
   _shootSpeedMulti: 0.15
   _timeToLunch: 0.5
@@ -252,7 +252,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 10
+  m_Mass: 100
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -540,7 +540,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 25
+      scalar: 250
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -658,8 +658,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.2
-      minScalar: 0.4
+      scalar: 2
+      minScalar: 4
       maxCurve:
         serializedVersion: 2
         m_Curve:
