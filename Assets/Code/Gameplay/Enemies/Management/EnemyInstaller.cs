@@ -17,9 +17,9 @@ namespace Game.Room.Enemy
 
             Container.Bind<Rigidbody2D>().FromInstance(GetComponent<Rigidbody2D>()).AsSingle();
             Container.Bind<EnemyMovementBase>().FromInstance(GetComponent<EnemyMovementBase>()).AsSingle();
-            Container.Bind<EnemyGunBase>().FromInstance(GetComponent<EnemyGunBase>()).AsSingle();
             Container.Bind<EnemyBase>().FromInstance(GetComponent<EnemyBase>()).AsSingle();
 
+            Container.Bind<EnemyGunBase>().FromComponentInHierarchy().AsSingle();
         }
     }
 }

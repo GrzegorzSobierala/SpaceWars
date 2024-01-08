@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 495337927924677106}
   - component: {fileID: 7402905534063812031}
   m_Layer: 8
-  m_Name: Circle
+  m_Name: BoxCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +88,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 20, y: 20}
   m_EdgeRadius: 0
 --- !u!1 &343965712902932123
 GameObject:
@@ -117,8 +117,8 @@ Transform:
   m_GameObject: {fileID: 343965712902932123}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 20, y: 20, z: 20}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3519518212148441828}
   m_RootOrder: -1
@@ -414,7 +414,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 30
+      scalar: 300
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -532,7 +532,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.35
+      scalar: 3.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -5251,7 +5251,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 20
+      scalar: 200
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -5369,7 +5369,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.2
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -9911,6 +9911,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2923649639386474618}
+  - component: {fileID: 8946446836882461969}
   m_Layer: 8
   m_Name: Gun
   m_TagString: Untagged
@@ -9926,7 +9927,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6556454797043384357}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.85}
+  m_LocalPosition: {x: 0, y: 0, z: -8.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9934,6 +9935,21 @@ Transform:
   m_Father: {fileID: 8739598414879171550}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8946446836882461969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6556454797043384357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 501b81e40066af144a6244e9a403ae55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gunTransform: {fileID: 2923649639386474618}
+  _enemyBulletPrototype: {fileID: 5577059757908764798}
+  _cooldown: 2
 --- !u!1 &6953136812582892108
 GameObject:
   m_ObjectHideFlags: 0
@@ -9947,7 +9963,6 @@ GameObject:
   - component: {fileID: 2147990221696451579}
   - component: {fileID: 5098940128701385669}
   - component: {fileID: 8183209369120757493}
-  - component: {fileID: 8444811803558666193}
   - component: {fileID: 4002154276112685798}
   m_Layer: 8
   m_Name: TestEnemy
@@ -10020,7 +10035,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 300
+  m_Mass: 50000
   m_LinearDrag: 2
   m_AngularDrag: 0.5
   m_GravityScale: 1
@@ -10048,21 +10063,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _baseHp: 2
---- !u!114 &8444811803558666193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6953136812582892108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 501b81e40066af144a6244e9a403ae55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gunTransform: {fileID: 2923649639386474618}
-  _enemyBulletPrototype: {fileID: 5577059757908764798}
-  _cooldown: 2
 --- !u!114 &4002154276112685798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10076,7 +10076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentSpeedModifier: 1
-  _baseSpeed: 100
+  _baseSpeed: 1000
   _moveCooldown: 1
   _isRandomMove: 1
   _isHorizontalMove: 1
@@ -10193,8 +10193,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7511227865153729720}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9, z: 0}
-  m_LocalScale: {x: 0.5, y: 1, z: 0.5}
+  m_LocalPosition: {x: 0, y: 9, z: 0}
+  m_LocalScale: {x: 5, y: 10, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2923649639386474618}

@@ -10,7 +10,7 @@ namespace Game.Player.Ship
         [Inject] private InputProvider _inputProvider;
         [Inject] private Rigidbody2D _body;
 
-        [SerializeField, Range(0.0f, 60.0f)] float _moveSpeed = 10;
+        [SerializeField, Range(0.0f, 600.0f)] float _moveSpeed = 100;
         [SerializeField, Range(0.0f, 200.0f)] float _forwardSpeedMulti = 100;
         [SerializeField, Range(0.0f, 200.0f)] float _horizontalSpeedMutli = 50;
         [SerializeField, Range(0.0f, 200.0f)] float _backSpeedMulti = 30;

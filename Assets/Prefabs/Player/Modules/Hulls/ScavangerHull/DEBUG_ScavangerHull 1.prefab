@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 5100917315280469178}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 20, y: 15, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4892756986145038743}
@@ -149,7 +149,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.01712966}
-  m_Size: {x: 1.9427834, y: 4.0283895}
+  m_Size: {x: 20, y: 30}
   m_Direction: 0
 --- !u!114 &5758256669725718315
 MonoBehaviour:
@@ -225,7 +225,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7463934869842094991, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.685
+      value: -5.1375
+      objectReference: {fileID: 0}
+    - target: {fileID: 7463934869842094991, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 8926292516285152521, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 8926292516285152521, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5.087
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -280,3 +292,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gunSpot: {fileID: 2466202906638683928}
   _bridgeSpot: {fileID: 4488963537658288542}
+  _baseHp: 1
