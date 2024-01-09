@@ -20,6 +20,7 @@ namespace Game.Room.Enemy
         private float _nextFallowPlayerMoveTime = 0;
         private bool _wasLastHorizontalLeft = false;
 
+
         protected override void OnGoingTo(Transform fallowTarget)
         {
             base.OnGoingTo(fallowTarget);

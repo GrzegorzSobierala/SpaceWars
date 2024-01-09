@@ -12,7 +12,7 @@ namespace Game.Player.Ship
         [Inject] protected PlayerManager _playerManager;
         [Inject] private InputProvider _input;
 
-        [SerializeField] protected ShootableObjectBase _shootableObjectPrefab;
+        [SerializeField] private ShootableObjectBase _shootableObjectPrefab;
         [SerializeField] protected float _cooldown = 1f;
 
         protected ShootableObjectBase _shootableObjectPrototype;

@@ -33,7 +33,7 @@ namespace Game.Player.Ship
         {
             _lastShotTime = Time.time;
 
-            _shootableObjectPrefab.CreateCopy(_playerManager.transform).Shoot(_body, transform);
+            _shootableObjectPrototype.CreateCopy(_playerManager.transform).Shoot(_body, transform);
 
             _currentAmmo--;
         }
