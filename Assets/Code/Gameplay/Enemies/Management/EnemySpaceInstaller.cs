@@ -6,7 +6,7 @@ namespace Game.Room.Enemy
     {
         public override void InstallBindings()
         {
-            Container.Bind<EnemyBase>().FromComponentsInHierarchy().AsSingle();
+            Container.Bind<EnemyBase>().FromComponentsInHierarchy(null, false).AsSingle();
             Container.Bind<EnemyManager>().FromInstance(GetComponent<EnemyManager>()).AsSingle();
         }
     }

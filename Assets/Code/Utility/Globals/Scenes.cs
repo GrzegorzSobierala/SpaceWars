@@ -11,7 +11,7 @@ namespace Game.Utility.Globals
 
         #region MultiScenes
         public static readonly string[] MainMenuMulti = { MainMenu };
-        public static readonly string[] TestingMulti = { PlayerTesting, RoomTesting };
+        public static readonly string[] TestingMulti = { PlayerTesting ,RoomTesting };
         public static readonly string[] MainManagmentMulti = { MainManagment };
         #endregion
     }
