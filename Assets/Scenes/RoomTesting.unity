@@ -175,84 +175,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1086648986931058070, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: m_Name
-      value: TestEnemyAsTurret
-      objectReference: {fileID: 0}
-    - target: {fileID: 1086648986931058070, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1595195780288807940, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -593
-      objectReference: {fileID: 0}
-    - target: {fileID: 1595195780288807940, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -332
-      objectReference: {fileID: 0}
-    - target: {fileID: 2232261461461627183, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: _baseHp
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3001965125660486687, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: m_Mass
-      value: 500000
-      objectReference: {fileID: 0}
-    - target: {fileID: 6404275300819041596, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: _baseSpeed
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6404275300819041596, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: _fallowMulti
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6404275300819041596, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: _randomMulti
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6404275300819041596, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: _fallowPlayer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6404275300819041596, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: _isRandomMove
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6404275300819041596, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: _moveCooldown
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6404275300819041596, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: _horizontalMulti
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6404275300819041596, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: _isHorizontalMove
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6404275300819041596, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: CurrentSpeedModifier
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7027019038903360809, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -539.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7027019038903360809, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -336.3
-      objectReference: {fileID: 0}
     - target: {fileID: 8503593784363833260, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
       propertyPath: m_Name
       value: EnemiesSpace
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 5950392655060026253, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-    - {fileID: 6061858305631599128, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-    - {fileID: 7401337915006957303, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-    - {fileID: 1415389271218973195, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
@@ -549,21 +477,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3219504855667192428, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
-      propertyPath: m_UsedByComposite
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 4144713248879244963, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 23800000, guid: 8d2d920052ecca847adfe0db2b692e01, type: 2}
     - target: {fileID: 4698385095336037033, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
       propertyPath: m_Name
       value: EnviroSpace
-      objectReference: {fileID: 0}
-    - target: {fileID: 7342050167119419526, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
-      propertyPath: m_ColliderPaths.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7342050167119419526, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
-      propertyPath: m_CompositePaths.m_Paths.Array.size
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
