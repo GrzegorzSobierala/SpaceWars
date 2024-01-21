@@ -34,7 +34,7 @@ Transform:
   - {fileID: 2785789881035579130}
   - {fileID: 8203393756530729216}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2052800350180075989
 MonoBehaviour:
@@ -131,6 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8203393756530729216}
+  - component: {fileID: 4209370180309497822}
   m_Layer: 0
   m_Name: CompositeColldiers
   m_TagString: Untagged
@@ -153,6 +154,20 @@ Transform:
   m_Father: {fileID: 9024581312856705035}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4209370180309497822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7220660398095392624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3812663a339de53419fb0b69bf0467a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inThisGameObject: 0
+  inChildrens: 1
 --- !u!1 &8404849811578388956
 GameObject:
   m_ObjectHideFlags: 0
