@@ -27,7 +27,7 @@ namespace Game.Player.Ship
                 Debug.LogError("_shootableObjectPrefab is null, cant create prototype");
             }
 
-            _shootableObjectPrototype = _shootableObjectPrefab.CreateCopy(transform);
+            _shootableObjectPrototype = _shootableObjectPrefab.CreateCopy(_body.gameObject, transform);
             _shootableObjectPrototype.gameObject.name = _shootableObjectPrefab.gameObject.name + "(Prototype)";
         }
 

@@ -11,6 +11,7 @@ namespace Game.Room.Enemy
 
         [Inject] private PlayerManager _playerManager;
         [Inject] private EnemyManager _enemyManager;
+        [Inject] private Rigidbody2D _body;
 
         [SerializeField] private Transform _gunTransform;
         [SerializeField] private TestEnemyBullet _enemyBulletPrototype;
@@ -48,7 +49,9 @@ namespace Game.Room.Enemy
         {
             _lastShotTime = Time.time;
 
-            _enemyBulletPrototype.CreateCopy(_enemyManager.transform).Shoot(null, _gunTransform);
+            GameObject damageDealer = _body.gameObject;
+            Transform parent = _enemyManager.transform;
+            _enemyBulletPrototype.CreateCopy(damageDealer, parent).Shoot(null, _gunTransform);
         }
     }
 }

@@ -33,7 +33,9 @@ namespace Game.Player.Ship
         {
             _lastShotTime = Time.time;
 
-            _shootableObjectPrototype.CreateCopy(_playerManager.transform).Shoot(_body, transform);
+            GameObject damageDealer = _body.gameObject;
+            Transform parent = _playerManager.transform;
+            _shootableObjectPrototype.CreateCopy(damageDealer, parent).Shoot(_body, transform);
 
             _currentAmmo--;
         }

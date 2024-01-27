@@ -11,11 +11,12 @@ namespace Game.Room.Enemy
 
         protected override void OnEnterState()
         {
-            _stateMachine.SwitchToCombatState();
+            base.OnEnterState();
         }
 
         protected override void OnExitState()
         {
+            base.OnExitState();
         }
     }
 }

@@ -5,17 +5,15 @@ namespace Game.Room.Enemy
 {
     public abstract class EnemyStateBase : MonoBehaviour
     {
-        [Inject] protected EnemyBase _enemy;
-
         public void EnterState()
         {
-            enabled = true;
+            gameObject.SetActive(true);
             OnEnterState();
         }
 
         public void ExitState()
         {
-            enabled = false;
+            gameObject.SetActive(false);
             OnExitState();
         }
 
