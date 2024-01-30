@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5136479524146100154}
   - component: {fileID: 2970404874505729602}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: NavMeshObstacleSphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,7 +29,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3698344586610730822}
+  m_Father: {fileID: 7427892654997524630}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &2970404874505729602
@@ -58,7 +58,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1390581559316742116}
   - component: {fileID: 1731577953855099024}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CirclePolygonCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77,7 +77,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5665632828667500803}
+  m_Father: {fileID: 1938336502047256275}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1731577953855099024
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 4268896350255901629}
   - component: {fileID: 5883008492539123420}
   - component: {fileID: 7141224176669091415}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -155,7 +155,7 @@ Transform:
   m_LocalScale: {x: 50, y: 5, z: 7.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4228779211553531726}
+  m_Father: {fileID: 7992096605895643294}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5883008492539123420
@@ -259,6 +259,14 @@ PrefabInstance:
     - target: {fileID: 1629456693823223369, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2292744948932214466, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2411541035093932403, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3107648636054580959, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
       propertyPath: m_ColliderPaths.Array.size
@@ -472,13 +480,21 @@ PrefabInstance:
       propertyPath: m_ColliderPaths.Array.data[0].m_ColliderPaths.Array.data[0].Array.data[11].Y
       value: -100000000
       objectReference: {fileID: 0}
+    - target: {fileID: 4038996218879516163, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 4220081984581531736, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
       propertyPath: m_Mass
       value: 40000
       objectReference: {fileID: 0}
     - target: {fileID: 4444896352746680950, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
       propertyPath: m_Name
-      value: SmallDynamicScrap Variant
+      value: SmallDynamicScrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 4444896352746680950, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -494,18 +510,18 @@ PrefabInstance:
       addedObject: {fileID: 5136479524146100154}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
---- !u!4 &3698344586610730822 stripped
+--- !u!4 &1938336502047256275 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7464892806411333441, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
+  m_PrefabInstance: {fileID: 9042940750915371410}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7427892654997524630 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1903852419849867524, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
   m_PrefabInstance: {fileID: 9042940750915371410}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &4228779211553531726 stripped
+--- !u!4 &7992096605895643294 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1411697301767115020, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
-  m_PrefabInstance: {fileID: 9042940750915371410}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &5665632828667500803 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7464892806411333441, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
   m_PrefabInstance: {fileID: 9042940750915371410}
   m_PrefabAsset: {fileID: 0}

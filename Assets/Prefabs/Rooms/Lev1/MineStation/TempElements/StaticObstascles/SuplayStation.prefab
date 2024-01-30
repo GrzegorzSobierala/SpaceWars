@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7072705069440130453}
   - component: {fileID: 596823417935445720}
   - component: {fileID: 8719895685521930322}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PoligonCircleCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: 4236691681016610910}
   - component: {fileID: 3787516001561169775}
   - component: {fileID: 813734324596424933}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SphereMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -522,6 +522,18 @@ PrefabInstance:
     - target: {fileID: 5270222665593954891, guid: 5b6f2dc73c89f9a4dba101001d21421e, type: 3}
       propertyPath: m_Name
       value: SuplayStation
+      objectReference: {fileID: 0}
+    - target: {fileID: 5270222665593954891, guid: 5b6f2dc73c89f9a4dba101001d21421e, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7220660398095392624, guid: 5b6f2dc73c89f9a4dba101001d21421e, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8404849811578388956, guid: 5b6f2dc73c89f9a4dba101001d21421e, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 9024581312856705035, guid: 5b6f2dc73c89f9a4dba101001d21421e, type: 3}
       propertyPath: m_RootOrder

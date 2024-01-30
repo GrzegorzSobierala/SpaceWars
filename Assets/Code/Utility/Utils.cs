@@ -46,5 +46,17 @@ namespace Game.Utility
         {
             return AngleDirected(endVectorPos - startVectorPos);
         }
+
+        public static Vector2 RotateVector(Vector2 vector, float angleInDegrees)
+        {
+            float angleInRadians = angleInDegrees * Mathf.Deg2Rad;
+            float sin = Mathf.Sin(angleInRadians);
+            float cos = Mathf.Cos(angleInRadians);
+
+            float x = vector.x * cos - vector.y * sin;
+            float y = vector.x * sin + vector.y * cos;
+
+            return new Vector2(x, y);
+        }
     }
 }

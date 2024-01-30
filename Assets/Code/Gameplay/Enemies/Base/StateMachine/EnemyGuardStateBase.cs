@@ -10,7 +10,7 @@ namespace Game.Room.Enemy
     {
         [Inject] protected List<DamageHandlerBase> _damageHandlers;
         [Inject] protected PlayerManager _playerManager;
-        [Inject] private EnemyStateMachineBase _stateMachine;
+        [Inject] protected EnemyStateMachineBase _stateMachine;
 
         public virtual void OnDestroy()
         {

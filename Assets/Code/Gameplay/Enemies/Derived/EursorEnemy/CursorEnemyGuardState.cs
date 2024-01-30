@@ -7,8 +7,6 @@ namespace Game.Room.Enemy
 {
     public class CursorEnemyGuardState : EnemyGuardStateBase
     {
-        [Inject] private EnemyStateMachineBase _stateMachine;
-
         protected override void OnEnterState()
         {
             base.OnEnterState();
