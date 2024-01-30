@@ -9,6 +9,7 @@ namespace Game.Room.Enemy
         public override void InstallBindings()
         {
             Container.Bind<DamageHandlerBase>().FromComponentsInHierarchy().AsSingle();
+            Container.Bind<EnemyFieldOfView>().FromComponentsInHierarchy().AsSingle();
 
             Container.Bind<EnemyCombatStateBase>().FromComponentInChildren().AsSingle();
             Container.Bind<EnemyDefeatedStateBase>().FromComponentInChildren().AsSingle();

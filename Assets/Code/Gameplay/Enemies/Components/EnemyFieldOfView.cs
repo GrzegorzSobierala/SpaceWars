@@ -1,69 +1,96 @@
 using CodeMonkey.Utils;
 using Game.Utility;
+using Game.Utility.Globals;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game
+namespace Game.Room.Enemy
 {
-    [ExecuteInEditMode]
+    [RequireComponent(typeof(MeshFilter))]
     public class EnemyFieldOfView : MonoBehaviour
     {
-        [SerializeField] private MeshFilter _meshFilter;
-        [SerializeField] private Vector3 _offset = Vector3.zero;
+        public Action<GameObject> OnTargetFound;
+
         [SerializeField] private float _fov = 90;
         [SerializeField] private int _rayCount = 2;
         [SerializeField] private float _viewDistance = 500f;
-        [SerializeField] private LayerMask _layerMask;
-        [SerializeField] private float _startAngle;
+
         private float AngleIncrease => _fov / _rayCount;
 
+        private MeshFilter _meshFilter;
         private Mesh _mesh;
 
-        private void Start()
+        private LayerMask _allLayerMask;
+        private LayerMask _targetLayerMask;
+
+
+        private void Awake()
         {
-            _mesh = new Mesh();
-            _meshFilter.mesh = _mesh;
+            Initialize();
         }
 
         private void Update()
         {
-            float currentAngle = -_fov / 2;
+            UpdateView();
+        }
+
+        private void Initialize()
+        {
+            _mesh = new Mesh();
+            _meshFilter = GetComponent<MeshFilter>();
+            _meshFilter.mesh = _mesh;
+            _targetLayerMask = LayerMask.GetMask(Layers.Player);
+            _allLayerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle);
+        }
+    
+
+        private void UpdateView()
+        {
+            float currentAngle = (_fov / 2) + 90;
             float worldAngleAdd = transform.rotation.eulerAngles.z;
 
             Vector3[] verticies = new Vector3[_rayCount + 1 + 1];
             Vector2[] uv = new Vector2[verticies.Length];
             int[] triangles = new int[_rayCount * 3];
-            verticies[0] = _offset;
+            verticies[0] = Vector3.zero;
 
             int vertexIndex = 1;
             int triangleIndex = 0;
+
+            ContactFilter2D contactFilter = new ContactFilter2D
+            {
+                useTriggers = false,
+                layerMask = _allLayerMask,
+                useLayerMask = true
+            };
+
             for (int i = 0; i <= _rayCount; i++)
             {
                 Vector3 vertex;
                 Vector3 rayDirection = UtilsClass.GetVectorFromAngle(currentAngle + worldAngleAdd);
-                Vector3 origin = transform.position + _offset;
+                Vector3 origin = transform.position;
 
                 RaycastHit2D[] raycastHits = new RaycastHit2D[1];
 
-                ContactFilter2D contactFilter = new ContactFilter2D
-                {
-                    useTriggers = false,
-                    layerMask = _layerMask,
-                    useLayerMask = true
-                };
-
-                int count = Physics2D.Raycast(origin, rayDirection, contactFilter, raycastHits, _viewDistance);
+                int count = Physics2D.Raycast(origin, rayDirection, contactFilter,
+                    raycastHits, _viewDistance);
 
                 if (count == 0)
                 {
                     Vector3 direction = UtilsClass.GetVectorFromAngle(currentAngle);
-                    vertex = _offset + direction * _viewDistance;
+                    vertex = direction * _viewDistance;
                 }
                 else
                 {
-                    vertex = raycastHits[0].point - (Vector2)transform.position ;
+                    vertex = raycastHits[0].point - (Vector2)transform.position;
                     vertex = Utils.RotateVector(vertex, -worldAngleAdd);
+
+                    if ((_targetLayerMask & (1 << raycastHits[0].collider.gameObject.layer)) != 0)
+                    {
+                        OnTargetFound?.Invoke(raycastHits[0].collider.gameObject);
+                    }
                 }
 
                 verticies[vertexIndex] = vertex;
@@ -76,7 +103,7 @@ namespace Game
 
                     triangleIndex += 3;
                 }
-                
+
                 vertexIndex++;
                 currentAngle -= AngleIncrease;
             }
@@ -84,11 +111,6 @@ namespace Game
             _mesh.vertices = verticies;
             _mesh.uv = uv;
             _mesh.triangles = triangles;
-        }
-
-        private void Set()
-        {
-            _startAngle = UtilsClass.GetAngleFromVectorFloat(transform.forward) - _fov / 2;
         }
     }
 }
