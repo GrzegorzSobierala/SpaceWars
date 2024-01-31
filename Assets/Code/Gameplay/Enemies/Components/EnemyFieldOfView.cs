@@ -1,10 +1,10 @@
 using CodeMonkey.Utils;
+using Game.Management;
 using Game.Utility;
 using Game.Utility.Globals;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Room.Enemy
 {
@@ -13,11 +13,15 @@ namespace Game.Room.Enemy
     {
         public Action<GameObject> OnTargetFound;
 
+        [Inject] private PlayerManager _playerManager;
+        [Inject] private Rigidbody2D _body;
+
         [SerializeField] private float _fov = 90;
         [SerializeField] private int _rayCount = 2;
         [SerializeField] private float _viewDistance = 500f;
 
         private float AngleIncrease => _fov / _rayCount;
+        private const float PlayerCameraMaxViewDistance = 500f;
 
         private MeshFilter _meshFilter;
         private Mesh _mesh;
@@ -33,6 +37,9 @@ namespace Game.Room.Enemy
 
         private void Update()
         {
+            if (!IsPlayerInRange())
+                return;   
+            
             UpdateView();
         }
 
@@ -127,6 +134,15 @@ namespace Game.Room.Enemy
                 _mesh.uv = uv;
                 _mesh.triangles = triangles;
             }
+        }
+
+        private bool IsPlayerInRange()
+        {
+            Vector2 playerPos = _playerManager.PlayerBody.position;
+            Vector2 enemyPos = _body.position;
+            float maxDistanceToPlayer = PlayerCameraMaxViewDistance + _viewDistance;
+
+            return Vector2.Distance(playerPos, enemyPos) < maxDistanceToPlayer;
         }
     }
 }
