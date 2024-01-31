@@ -36,6 +36,11 @@ namespace Game.Room.Enemy
             UpdateView();
         }
 
+        public void DrawViewGizmos()
+        {
+            UpdateView(true);
+        }
+
         private void Initialize()
         {
             _mesh = new Mesh();
@@ -44,9 +49,8 @@ namespace Game.Room.Enemy
             _targetLayerMask = LayerMask.GetMask(Layers.Player);
             _allLayerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle);
         }
-    
 
-        private void UpdateView()
+        private void UpdateView(bool debugMode = false)
         {
             float currentAngle = (_fov / 2) + 90;
             float worldAngleAdd = transform.rotation.eulerAngles.z;
@@ -81,6 +85,13 @@ namespace Game.Room.Enemy
                 {
                     Vector3 direction = UtilsClass.GetVectorFromAngle(currentAngle);
                     vertex = direction * _viewDistance;
+
+                    if (debugMode)
+                    {
+                        Vector3 debugDir = Utils.RotateVector(direction, worldAngleAdd);
+                        Vector3 endLine = debugDir * _viewDistance + transform.position;
+                        Debug.DrawLine(transform.position, endLine);
+                    }
                 }
                 else
                 {
@@ -95,6 +106,8 @@ namespace Game.Room.Enemy
 
                 verticies[vertexIndex] = vertex;
 
+                
+
                 if (i > 0)
                 {
                     triangles[triangleIndex] = 0;
@@ -108,9 +121,12 @@ namespace Game.Room.Enemy
                 currentAngle -= AngleIncrease;
             }
 
-            _mesh.vertices = verticies;
-            _mesh.uv = uv;
-            _mesh.triangles = triangles;
+            if(!debugMode)
+            {
+                _mesh.vertices = verticies;
+                _mesh.uv = uv;
+                _mesh.triangles = triangles;
+            }
         }
     }
 }
