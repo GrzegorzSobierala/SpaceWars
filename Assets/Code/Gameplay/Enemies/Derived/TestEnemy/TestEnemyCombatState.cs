@@ -11,6 +11,8 @@ namespace Game.Room.Enemy
 
         protected override void OnEnterState()
         {
+            base.OnEnterState();
+
             _gun.StartAimingAt(_playerManager.PlayerBody.transform);
             _gun.StartShooting();
             _movement.StartGoingTo(_playerManager.PlayerBody.transform);
@@ -18,6 +20,8 @@ namespace Game.Room.Enemy
 
         protected override void OnExitState()
         {
+            base.OnExitState();
+
             _gun.StopShooting();
             _gun.StopAiming();
             _movement.StopMoving();

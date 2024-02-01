@@ -8,6 +8,7 @@ namespace Game.Room.Enemy
         {
             Container.Bind<EnemyBase>().FromComponentsInHierarchy(null, false).AsSingle();
             Container.Bind<EnemyManager>().FromInstance(GetComponent<EnemyManager>()).AsSingle();
+            Container.Bind<EnemyRoomAlarm>().FromInstance(GetComponent<EnemyRoomAlarm>()).AsSingle();
         }
     }
 }

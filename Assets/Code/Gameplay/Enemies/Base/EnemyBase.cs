@@ -7,6 +7,8 @@ namespace Game.Room.Enemy
 {
     public abstract class EnemyBase : MonoBehaviour
     {
+        public EnemyStateMachineBase StateMachine => _stateMachine;
+
         [Inject] protected EnemyStateMachineBase _stateMachine;
         [Inject] protected List<DamageHandlerBase> _damageHandlers;
 
