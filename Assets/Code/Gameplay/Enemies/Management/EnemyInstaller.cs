@@ -21,6 +21,7 @@ namespace Game.Room.Enemy
             Container.Bind<EnemyBase>().FromInstance(GetComponent<EnemyBase>()).AsSingle();
 
             Container.Bind<EnemyGunBase>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<AlarmActivatorTimer>().FromComponentInHierarchy().AsSingle();
         }
     }
 }

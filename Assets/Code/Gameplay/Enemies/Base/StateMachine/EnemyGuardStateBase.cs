@@ -11,6 +11,7 @@ namespace Game.Room.Enemy
         [Inject] protected List<DamageHandlerBase> _damageHandlers;
         [Inject] protected PlayerManager _playerManager;
         [Inject] protected EnemyStateMachineBase _stateMachine;
+        [Inject] protected AlarmActivatorTimer _alarmActivatorTimer;
 
         public virtual void OnDestroy()
         {
@@ -22,6 +23,7 @@ namespace Game.Room.Enemy
 
         protected override void OnEnterState()
         {
+            _alarmActivatorTimer.Activate();
             foreach (var handler in _damageHandlers)
             {
                 handler.Subscribe(TrySwitchToCombatState);

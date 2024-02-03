@@ -8,10 +8,8 @@ namespace Game.Room.Enemy
     public abstract class EnemyCombatStateBase : EnemyStateBase
     {
         [Inject] private EnemyRoomAlarm _alarm;
-
-        [SerializeField] private TextMeshPro _textMesh;
-        [SerializeField] private float _activatingTime = 8;
-
+        [Inject] private AlarmActivatorTimer _alarmActivatorTimer;
+        
         private Coroutine _activationCoroutine;
         private float _activateTime = 0;
 
@@ -29,13 +27,13 @@ namespace Game.Room.Enemy
         {
             if (_alarm.IsActivated)
             {
-                _textMesh.gameObject.SetActive(false);
+                _alarmActivatorTimer.Deactivate();
                 return;
             }
 
-            _textMesh.gameObject.SetActive(true);
+            _alarmActivatorTimer.Activate();
 
-            _activateTime = Time.time + _activatingTime;
+            _activateTime = Time.time + _alarmActivatorTimer.ActivationTime;
             DiplayTimeLeft();
             _activationCoroutine = StartCoroutine(TryStartAlarm());
         }
@@ -45,7 +43,7 @@ namespace Game.Room.Enemy
             yield return new WaitUntil(IsTimeForAlarmPassed);
 
             _alarm.ActivateAlarm();
-            _textMesh.gameObject.SetActive(false);
+            _alarmActivatorTimer.Deactivate();
             _activationCoroutine = null;
         }
 
@@ -63,7 +61,7 @@ namespace Game.Room.Enemy
 
         private void StopTurningOnAlarm()
         {
-            _textMesh.gameObject.SetActive(false);
+            _alarmActivatorTimer.Deactivate();
 
             if (_activationCoroutine == null)
                 return;
@@ -74,7 +72,7 @@ namespace Game.Room.Enemy
 
         private void DiplayTimeLeft()
         {
-            _textMesh.text = (_activateTime - Time.time ).ToString("0");
+            _alarmActivatorTimer.UpadteTimeLeft(_activateTime - Time.time);
         }
     }
 }

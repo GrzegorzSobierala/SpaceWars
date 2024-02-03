@@ -13,9 +13,9 @@ namespace Game.Room.Enemy
 
         private EnemyStateBase _currentState;
 
-        protected virtual void Awake()
+        private void Start()
         {
-            Init();
+            SetUpStates();
         }
 
         public void SwitchToGuardState()
@@ -33,8 +33,12 @@ namespace Game.Room.Enemy
             SwitchState(_defeatedState);
         }
 
-        private void Init()
+        private void SetUpStates()
         {
+            _guardState.gameObject.SetActive(false);
+            _combatState.gameObject.SetActive(false);
+            _defeatedState.gameObject.SetActive(false);
+
             _currentState = _guardState;
             _guardState.EnterState();
         }
