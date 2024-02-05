@@ -3,7 +3,7 @@ using Game.Combat;
 
 namespace Game.Player.Ship
 {
-    public class HullInstaler : MonoInstaller<HullInstaler>
+    public class HullInstaller : MonoInstaller<HullInstaller>
     {
         public override void InstallBindings()
         {

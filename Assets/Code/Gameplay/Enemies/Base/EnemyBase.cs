@@ -21,7 +21,7 @@ namespace Game.Room.Enemy
         {
             SetStartHP();
 
-            foreach (TestEnemyDamageHandler handler in _damageHandlers)
+            foreach (EnemyDamageHandler handler in _damageHandlers)
             {
                 handler.Subscribe(GetDamage);
             }
@@ -29,7 +29,7 @@ namespace Game.Room.Enemy
 
         protected virtual void OnDestroy()
         {
-            foreach (TestEnemyDamageHandler handler in _damageHandlers)
+            foreach (EnemyDamageHandler handler in _damageHandlers)
             {
                 if (handler != null)
                     return;

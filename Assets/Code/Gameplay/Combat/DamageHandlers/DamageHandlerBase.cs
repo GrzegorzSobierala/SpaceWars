@@ -6,7 +6,16 @@ namespace Game.Combat
     [RequireComponent(typeof(Collider2D))]
     public abstract class DamageHandlerBase : MonoBehaviour, IHittable
     {
+        public Collider2D Collider => _collider;
+
         private Action<Collision2D, DamageData> OnGetHit;
+
+        private Collider2D _collider;
+
+        private void Awake()
+        {
+            _collider = GetComponent<Collider2D>();
+        }
 
         public void GetHit(Collision2D collsion, DamageData damage)
         {

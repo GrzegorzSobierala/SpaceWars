@@ -3,6 +3,7 @@ using Game.Management;
 using Game.Utility;
 using Game.Utility.Globals;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -15,6 +16,7 @@ namespace Game.Room.Enemy
 
         [Inject] private PlayerManager _playerManager;
         [Inject] private Rigidbody2D _body;
+        [Inject] private List<EnemyDamageHandler> _damageHandles;
 
         [SerializeField] private float _fov = 90;
         [SerializeField] private int _rayCount = 2;
@@ -28,7 +30,7 @@ namespace Game.Room.Enemy
 
         private LayerMask _allLayerMask;
         private LayerMask _targetLayerMask;
-
+        private LayerMask _enemyLayerMask;
 
         private void Awake()
         {
@@ -54,7 +56,8 @@ namespace Game.Room.Enemy
             _meshFilter = GetComponent<MeshFilter>();
             _meshFilter.mesh = _mesh;
             _targetLayerMask = LayerMask.GetMask(Layers.Player);
-            _allLayerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle);
+            _allLayerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle, Layers.Enemy);
+            _enemyLayerMask = LayerMask.GetMask(Layers.Enemy);
         }
 
         private void UpdateView(bool debugMode = false)
@@ -70,11 +73,19 @@ namespace Game.Room.Enemy
             int vertexIndex = 1;
             int triangleIndex = 0;
 
+            if (!debugMode)
+            {
+                foreach (var handler in _damageHandles)
+                {
+                    handler.Collider.enabled = false;
+                }
+            }
+
             ContactFilter2D contactFilter = new ContactFilter2D
             {
                 useTriggers = false,
                 layerMask = _allLayerMask,
-                useLayerMask = true
+                useLayerMask = true,
             };
 
             for (int i = 0; i <= _rayCount; i++)
@@ -105,15 +116,13 @@ namespace Game.Room.Enemy
                     vertex = raycastHits[0].point - (Vector2)transform.position;
                     vertex = Utils.RotateVector(vertex, -worldAngleAdd);
 
-                    if ((_targetLayerMask & (1 << raycastHits[0].collider.gameObject.layer)) != 0)
+                    if (IsTargetFound(raycastHits[0]))
                     {
                         OnTargetFound?.Invoke(raycastHits[0].collider.gameObject);
                     }
                 }
 
                 verticies[vertexIndex] = vertex;
-
-                
 
                 if (i > 0)
                 {
@@ -133,6 +142,34 @@ namespace Game.Room.Enemy
                 _mesh.vertices = verticies;
                 _mesh.uv = uv;
                 _mesh.triangles = triangles;
+
+                foreach (var handler in _damageHandles)
+                {
+                    handler.Collider.enabled = true;
+                }
+            }
+        }
+
+        private bool IsTargetFound(RaycastHit2D hit)
+        {
+            if ((_targetLayerMask & (1 << hit.collider.gameObject.layer)) != 0)
+            {
+                return true;
+            }
+
+            if ((_enemyLayerMask & (1 << hit.collider.gameObject.layer)) == 0)
+            {
+                return false;
+            }
+
+            if (hit.collider.TryGetComponent(out EnemyDamageHandler damageHandler))
+            {
+                return !damageHandler.IsEnemyInGuardState;
+            }
+            else
+            {
+                Debug.LogError($"Collider on {Layers.Enemy} layer hasn't EnemyDamageHandler", hit.collider.gameObject);
+                return false;
             }
         }
 
