@@ -8,7 +8,7 @@ namespace Game.Room.Enemy
 {
     public abstract class EnemyGuardStateBase : EnemyStateBase
     {
-        [Inject] protected List<DamageHandlerBase> _damageHandlers;
+        [Inject] protected List<EnemyDamageHandler> _damageHandlers;
         [Inject] protected PlayerManager _playerManager;
         [Inject] protected EnemyStateMachineBase _stateMachine;
         [Inject] protected AlarmActivatorTimer _alarmActivatorTimer;

@@ -32,6 +32,8 @@ namespace Game.Room.Enemy
         private LayerMask _targetLayerMask;
         private LayerMask _enemyLayerMask;
 
+        private float randomVertexZ;
+
         private void Awake()
         {
             Initialize();
@@ -58,6 +60,7 @@ namespace Game.Room.Enemy
             _targetLayerMask = LayerMask.GetMask(Layers.Player);
             _allLayerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle, Layers.Enemy);
             _enemyLayerMask = LayerMask.GetMask(Layers.Enemy);
+            randomVertexZ = UnityEngine.Random.Range(0.0f, 0.1f);
         }
 
         private void UpdateView(bool debugMode = false)
@@ -122,7 +125,7 @@ namespace Game.Room.Enemy
                     }
                 }
 
-                verticies[vertexIndex] = vertex;
+                verticies[vertexIndex] = vertex + new Vector3(0, 0, randomVertexZ);
 
                 if (i > 0)
                 {

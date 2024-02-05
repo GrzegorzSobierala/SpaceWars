@@ -10,7 +10,7 @@ namespace Game.Room.Enemy
         public EnemyStateMachineBase StateMachine => _stateMachine;
 
         [Inject] protected EnemyStateMachineBase _stateMachine;
-        [Inject] protected List<DamageHandlerBase> _damageHandlers;
+        [Inject] protected List<EnemyDamageHandler> _damageHandlers;
 
         protected float _maxHp;
         protected float _currentHp;
