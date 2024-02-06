@@ -21,6 +21,8 @@ namespace Game.Room.Enemy
             TryShoot();
         }
 
+        public abstract void Unload();
+
         public void StartAimingAt(Transform target)
         {
             _currentAimType = AimType.Transform;

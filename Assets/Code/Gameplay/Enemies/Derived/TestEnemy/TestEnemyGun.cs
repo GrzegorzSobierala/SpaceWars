@@ -19,6 +19,11 @@ namespace Game.Room.Enemy
 
         private float _lastShotTime = 0f;
 
+        public override void Unload()
+        {
+            _lastShotTime = Time.time;
+        }
+
         protected override void OnAimingAt(Transform target)
         {
             Vector2 gunPos = (Vector2)_gunTransform.position;
