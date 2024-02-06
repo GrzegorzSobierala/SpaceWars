@@ -1,6 +1,7 @@
 using Game.Combat;
 using UnityEngine;
 using Zenject;
+using Game.Utility;
 
 namespace Game.Room.Enemy
 {
@@ -8,17 +9,17 @@ namespace Game.Room.Enemy
     {
         public override void InstallBindings()
         {
-            Container.Bind<EnemyDamageHandler>().FromComponentsInHierarchy().AsSingle();
-            Container.Bind<EnemyFieldOfView>().FromComponentsInHierarchy().AsSingle();
+            Utils.BindComponentsInChildrens<EnemyDamageHandler>(Container);
+            Utils.BindComponentsInChildrens<EnemyFieldOfView>(Container);
 
             Container.Bind<EnemyCombatStateBase>().FromComponentInChildren().AsSingle();
             Container.Bind<EnemyDefeatedStateBase>().FromComponentInChildren().AsSingle();
             Container.Bind<EnemyGuardStateBase>().FromComponentInChildren().AsSingle();
             Container.Bind<EnemyStateMachineBase>().FromComponentInChildren().AsSingle();
 
-            Container.Bind<Rigidbody2D>().FromInstance(GetComponent<Rigidbody2D>()).AsSingle();
-            Container.Bind<EnemyMovementBase>().FromInstance(GetComponent<EnemyMovementBase>()).AsSingle();
-            Container.Bind<EnemyBase>().FromInstance(GetComponent<EnemyBase>()).AsSingle();
+            Utils.BindGetComponent<Rigidbody2D>(Container);
+            Utils.BindGetComponent<EnemyMovementBase>(Container);
+            Utils.BindGetComponent<EnemyBase>(Container);
 
             Container.Bind<EnemyGunBase>().FromComponentInHierarchy().AsSingle();
             Container.Bind<AlarmActivatorTimer>().FromComponentInHierarchy().AsSingle();

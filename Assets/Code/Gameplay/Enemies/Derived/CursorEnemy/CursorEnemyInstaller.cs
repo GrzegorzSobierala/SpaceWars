@@ -1,10 +1,5 @@
-using Game.Room.Enemy;
-using NavMeshPlus.Extensions;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Game.Utility;
 using UnityEngine.AI;
-using UnityEngine.Assertions.Must;
 
 namespace Game.Room.Enemy
 {
@@ -14,7 +9,7 @@ namespace Game.Room.Enemy
         {
             base.InstallBindings();
 
-            Container.Bind<NavMeshAgent>().FromInstance(GetComponent<NavMeshAgent>()).AsSingle();
+            Utils.BindGetComponent<NavMeshAgent>(Container);
         }
     }
 }

@@ -1,6 +1,4 @@
-using Game.Combat;
 using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 using Zenject;
 
@@ -8,8 +6,14 @@ namespace Game.Room.Enemy
 {
     public class CursorEnemyGuardState : EnemyGuardStateBase
     {
-        [Inject] List<EnemyFieldOfView> views;
-        [Inject] EnemyStateMachineBase stateMachine;
+        [Inject] private List<EnemyFieldOfView> _views;
+
+        [SerializeField] private List<Transform> _guardPoints;
+
+        protected virtual void Awake()
+        { 
+            Initialize();
+        }
 
         protected override void OnEnterState()
         {
@@ -23,9 +27,17 @@ namespace Game.Room.Enemy
             Unubscribe();
         }
 
+        private void Initialize()
+        {
+            if (_guardPoints.Count < 2)
+            {
+                //Debug.LogError("There need to be at least 2 guard points");
+            }
+        }
+
         private void Subscribe()
         {
-            foreach (var view in views)
+            foreach (var view in _views)
             {
                 view.OnTargetFound += OnPlayerFind;
             }
@@ -33,7 +45,7 @@ namespace Game.Room.Enemy
 
         private void Unubscribe()
         {
-            foreach (var view in views)
+            foreach (var view in _views)
             {
                 view.OnTargetFound -= OnPlayerFind;
             }

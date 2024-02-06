@@ -1,3 +1,4 @@
+using Game.Utility;
 using Zenject;
 
 namespace Game.Player.Ship
@@ -6,7 +7,7 @@ namespace Game.Player.Ship
     {
         public override void InstallBindings()
         {
-            Container.Bind<BridgeModuleBase>().FromInstance(GetComponent<BridgeModuleBase>()).AsSingle();
+            Utils.BindGetComponent<BridgeModuleBase>(Container);
         }
     }
 }

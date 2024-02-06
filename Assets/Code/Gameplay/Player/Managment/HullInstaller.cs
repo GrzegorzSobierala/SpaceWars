@@ -1,5 +1,6 @@
 using Zenject;
 using Game.Combat;
+using Game.Utility;
 
 namespace Game.Player.Ship
 {
@@ -7,8 +8,8 @@ namespace Game.Player.Ship
     {
         public override void InstallBindings()
         {
-            Container.Bind<HullModuleBase>().FromInstance(GetComponent<HullModuleBase>()).AsSingle();
-            Container.Bind<DamageHandlerBase>().FromComponentsInHierarchy().AsSingle();
+            Utils.BindGetComponent<HullModuleBase>(Container);
+            Utils.BindComponentsInChildrens<DamageHandlerBase>(Container);
         }
     }
 }
