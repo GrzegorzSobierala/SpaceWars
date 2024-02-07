@@ -17,6 +17,7 @@ namespace Game.Room.Enemy
         [Inject] private PlayerManager _playerManager;
         [Inject] private Rigidbody2D _body;
         [Inject] private List<EnemyDamageHandler> _damageHandles;
+        [Inject] private List<EnemyBase> _roomEnemies;
 
         [SerializeField] private float _fov = 90;
         [SerializeField] private int _rayCount = 2;
@@ -41,7 +42,7 @@ namespace Game.Room.Enemy
 
         private void Update()
         {
-            if (!IsPlayerInRange())
+            if (!IsPlayerInRange() && !IsNonGuardEnemyInRange())
                 return;   
             
             UpdateView();
@@ -183,6 +184,25 @@ namespace Game.Room.Enemy
             float maxDistanceToPlayer = PlayerCameraMaxViewDistance + _viewDistance;
 
             return Vector2.Distance(playerPos, enemyPos) < maxDistanceToPlayer;
+        }
+
+        private bool IsNonGuardEnemyInRange()
+        {
+            foreach (var enemy in _roomEnemies)
+            {
+                if (enemy == null)
+                    continue;
+
+                if (enemy.StateMachine.CurrentState is EnemyGuardStateBase)
+                    continue;
+
+                if (Vector2.Distance(enemy.transform.position, transform.position) > _viewDistance + 100)
+                    continue;
+
+                return true;
+            }
+
+            return false;
         }
     }
 }
