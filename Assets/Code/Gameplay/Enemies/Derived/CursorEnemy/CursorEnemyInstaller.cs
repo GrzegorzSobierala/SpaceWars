@@ -10,6 +10,8 @@ namespace Game.Room.Enemy
             base.InstallBindings();
 
             Utils.BindGetComponent<NavMeshAgent>(Container);
+
+            Container.Bind<PatrolController>().FromComponentInHierarchy().AsSingle(); 
         }
     }
 }

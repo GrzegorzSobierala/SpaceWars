@@ -11,6 +11,7 @@ namespace Game.Room.Enemy
         public float CurrentSpeedModifier = 1;
 
         protected Action OnAchivedTarget;
+        protected Action OnChangedTarget;
 
         protected float BaseSpeed => _baseSpeed;
         protected float BaseSpeedForece => _baseSpeedForece;
@@ -50,6 +51,7 @@ namespace Game.Room.Enemy
         {
             _currentMovementType = MovementType.GoingToPosition;
             _currentTargetPosition = targetPosition;
+            OnChangedTarget?.Invoke();
 
             OnStartGoingTo(targetPosition);
         }
@@ -58,6 +60,7 @@ namespace Game.Room.Enemy
         {
             _currentMovementType = MovementType.GoingToTransform;
             _currentTargetTransform = fallowTarget;
+            OnChangedTarget?.Invoke();
 
             OnStartGoingTo(fallowTarget);
         }
@@ -66,6 +69,7 @@ namespace Game.Room.Enemy
         {
             _currentMovementType = MovementType.RotatingTowardsPosition;
             _currentTargetPosition = targetPosition;
+            OnChangedTarget?.Invoke();
 
             OnStartRotatingTowards(targetPosition);
         }
@@ -74,6 +78,7 @@ namespace Game.Room.Enemy
         {
             _currentMovementType = MovementType.RotatingTowardsTransform;
             _currentTargetTransform = towardsTarget;
+            OnChangedTarget?.Invoke();
 
             OnStartRotatingTowards(towardsTarget);
         }
@@ -81,8 +86,29 @@ namespace Game.Room.Enemy
         public void StopMoving()
         {
             _currentMovementType = MovementType.Stop;
+            OnChangedTarget?.Invoke();
 
             OnStopMoving();
+        }
+
+        public void SubscribeOnAchivedTarget(Action action)
+        {
+            OnAchivedTarget += action;
+        }
+
+        public void UnsubscribeOnAchivedTarget(Action action)
+        {
+            OnAchivedTarget -= action;
+        }
+
+        public void SubscribeOnChangedTarget(Action action)
+        {
+            OnChangedTarget += action;
+        }
+
+        public void UnsubscribeOnChangedTarget(Action action)
+        {
+            OnChangedTarget -= action;
         }
 
         protected virtual void OnStartGoingTo(Vector2 targetPosition) {}

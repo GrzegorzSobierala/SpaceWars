@@ -20,12 +20,7 @@ namespace Game.Room.Enemy
         private float _nextStop = 0;
         private float _stopTime = 0;
         private float _currentStopTime = 0;
-
-        private void Start()
-        {
-            _agent.isStopped = true;
-        }
-
+        
         protected override void OnGoingTo(Transform fallowTarget)
         {
             base.OnGoingTo(fallowTarget);
@@ -59,6 +54,29 @@ namespace Game.Room.Enemy
             if(Time.frameCount % 25 == 0)
             {
                 _agent.SetDestination(fallowTarget.transform.position);
+            }
+        }
+
+        protected override void OnStartGoingTo(Vector2 targetPosition)
+        {
+            base.OnStartGoingTo(targetPosition);
+
+            _agent.isStopped = false;
+            _agent.SetDestination(targetPosition);
+        }
+
+        protected override void OnGoingTo(Vector2 targetPosition)
+        {
+            base.OnGoingTo(targetPosition);
+
+            if (Time.frameCount % 25 == 0)
+            {
+                _agent.SetDestination(targetPosition);
+            }
+
+            if (Vector2.Distance(_body.position, targetPosition) < 50)
+            {
+                OnAchivedTarget?.Invoke();
             }
         }
 

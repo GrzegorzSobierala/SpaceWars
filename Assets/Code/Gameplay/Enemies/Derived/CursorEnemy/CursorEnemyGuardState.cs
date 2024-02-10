@@ -7,32 +7,19 @@ namespace Game.Room.Enemy
     public class CursorEnemyGuardState : EnemyGuardStateBase
     {
         [Inject] private List<EnemyFieldOfView> _views;
-
-        [SerializeField] private List<Transform> _guardPoints;
-
-        protected virtual void Awake()
-        { 
-            Initialize();
-        }
+        [Inject] private PatrolController _patrolController;
 
         protected override void OnEnterState()
         {
             base.OnEnterState();
             Subscribe();
+            _patrolController.StartPatroling();
         }
 
         protected override void OnExitState()
         {
             base.OnExitState();
             Unubscribe();
-        }
-
-        private void Initialize()
-        {
-            if (_guardPoints.Count < 2)
-            {
-                //Debug.LogError("There need to be at least 2 guard points");
-            }
         }
 
         private void Subscribe()
