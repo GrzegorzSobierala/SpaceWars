@@ -10052,6 +10052,7 @@ GameObject:
   - component: {fileID: 2159849205792520315}
   - component: {fileID: 9196227978536751886}
   - component: {fileID: 1307523644458332179}
+  - component: {fileID: 8455298809760118125}
   m_Layer: 8
   m_Name: CursorEnemy
   m_TagString: Untagged
@@ -10120,9 +10121,9 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6953136812582892108}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 50000
   m_LinearDrag: 2
@@ -10199,6 +10200,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e39f6090724e4a4a8aadeb042afa2bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8455298809760118125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6953136812582892108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7fcb923d184e744a75a993e311884e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7401195081911752166
