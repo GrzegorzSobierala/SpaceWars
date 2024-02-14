@@ -10,6 +10,7 @@ namespace Game.Room.Enemy
         [Inject] private EnemyMovementBase _enemyMovement;
         [Inject] private Rigidbody2D _body;
 
+        [SerializeField] private bool isGoingInCircles = false;
         [SerializeField] private List<Transform> _guardPoints;
 
         private Transform _currentGuardPoint;
@@ -95,12 +96,28 @@ namespace Game.Room.Enemy
 
         private void GoToNextGuardPoint()
         {
+            int nextIndex;
+
+            if(isGoingInCircles)
+            {
+                nextIndex = GetNextIndexGoingInCircles();
+            }
+            else
+            {
+                nextIndex = GetNextIndexGoingInBumerang();
+            }
+
+            GoToGuardPoint(_guardPoints[nextIndex]);
+        }
+
+        private int GetNextIndexGoingInBumerang()
+        {
             int currentIndex = _guardPoints.IndexOf(_currentGuardPoint);
             int nextIndex;
 
             if (_isGoingUpList)
             {
-                if(currentIndex + 1 > _guardPoints.Count - 1)
+                if (currentIndex + 1 > _guardPoints.Count - 1)
                 {
                     _isGoingUpList = false;
                     nextIndex = currentIndex - 1;
@@ -123,7 +140,25 @@ namespace Game.Room.Enemy
                 }
             }
 
-            GoToGuardPoint(_guardPoints[nextIndex]);
+            return nextIndex;
         }
+
+        private int GetNextIndexGoingInCircles()
+        {
+            int currentIndex = _guardPoints.IndexOf(_currentGuardPoint);
+            int nextIndex;
+
+            if(currentIndex + 1 == _guardPoints.Count)
+            {
+                nextIndex = 0;
+            }
+            else
+            {
+                nextIndex = currentIndex + 1;
+            }
+
+            return nextIndex;
+        }
+
     }
 }
