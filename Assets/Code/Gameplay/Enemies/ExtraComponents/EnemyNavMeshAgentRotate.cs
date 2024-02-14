@@ -5,12 +5,12 @@ using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
 
-namespace Game
+namespace Game.Room.Enemy
 {
     public class EnemyNavMeshAgentRotate : MonoBehaviour
     {
-        [Inject] NavMeshAgent _agent;
-        [Inject] Rigidbody2D _body;
+        [Inject] private NavMeshAgent _agent;
+        [Inject] private Rigidbody2D _body;
 
         private void FixedUpdate()
         {

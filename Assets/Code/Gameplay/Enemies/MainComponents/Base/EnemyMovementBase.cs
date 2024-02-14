@@ -8,27 +8,32 @@ namespace Game.Room.Enemy
     {
         public abstract bool UseFixedUpdate { get; }
 
-        public float CurrentSpeedModifier = 1;
+        public float CurrentSpeed => _baseSpeed * _speedModifier;
+        public float CurrentAngularSpeed => _baseAngularSpeed * _angularSpeedModifier;
 
         protected Action OnAchivedTarget;
         protected Action OnChangedTarget;
 
         protected float BaseSpeed => _baseSpeed;
-        protected float BaseSpeedForece => _baseSpeedForece;
+        protected float BaseSpeedForce => _baseSpeedForce;
+        protected float BaseAngularSpeed => _baseAngularSpeed;
+        protected float CurrentSpeedModifier => _speedModifier;
 
         [Inject] protected Rigidbody2D _body;
 
         [SerializeField] private float _baseSpeed;
+        [SerializeField] private float _baseAngularSpeed;
 
-        private float _baseSpeedForece;
+        private float _baseSpeedForce;
         private MovementType _currentMovementType = MovementType.Stop;
         private Transform _currentTargetTransform;
         private Vector2 _currentTargetPosition;
-
+        private float _speedModifier = 1;
+        private float _angularSpeedModifier = 1;
 
         protected virtual void Awake()
         {
-            _baseSpeedForece = _baseSpeed * _body.mass;
+            _baseSpeedForce = _baseSpeed * _body.mass;
         }
 
         protected virtual void FixedUpdate()
@@ -109,6 +114,16 @@ namespace Game.Room.Enemy
         public void UnsubscribeOnChangedTarget(Action action)
         {
             OnChangedTarget -= action;
+        }
+
+        public virtual void SetSpeedModifier(float modifier)
+        {
+            _speedModifier = modifier;
+        }
+
+        public virtual void SetAngularSpeedModifier(float modifier)
+        {
+            _angularSpeedModifier = modifier;
         }
 
         protected virtual void OnStartGoingTo(Vector2 targetPosition) {}

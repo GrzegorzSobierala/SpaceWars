@@ -54,7 +54,7 @@ namespace Game.Room.Enemy
             float randomX = Random.Range(-1.0f, 1.0f);
             float randomY = Random.Range(-1.0f, 1.0f);
 
-            float force = BaseSpeed * _randomMulti * _body.mass * Random.Range(1.0f, 2.0f);
+            float force = CurrentSpeed * _randomMulti * _body.mass * Random.Range(1.0f, 2.0f);
 
             Vector2 forceVector = new Vector2(randomX, randomY) * force;
 
@@ -79,7 +79,7 @@ namespace Game.Room.Enemy
                 _body.velocity = Vector2.zero;
             }
 
-            float force = BaseSpeed * _horizontalMulti * _body.mass * Random.Range(1.0f, 2.0f);
+            float force = CurrentSpeed * _horizontalMulti * _body.mass * Random.Range(1.0f, 2.0f);
 
             force *= _wasLastHorizontalLeft ? 1.0f : -1.0f;
 
@@ -102,7 +102,7 @@ namespace Game.Room.Enemy
 
         private void FallowPalyerMove(Transform fallowTarget)
         {
-            float force = BaseSpeed * _fallowMulti * _body.mass * Random.Range(1.0f, 2.0f);
+            float force = CurrentSpeed * _fallowMulti * _body.mass * Random.Range(1.0f, 2.0f);
 
             Vector2 forceVector = (Vector2)fallowTarget.position - _body.position;
             forceVector = forceVector.normalized * force;

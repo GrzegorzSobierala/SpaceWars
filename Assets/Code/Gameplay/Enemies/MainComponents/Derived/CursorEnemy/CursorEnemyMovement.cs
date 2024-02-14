@@ -20,7 +20,13 @@ namespace Game.Room.Enemy
         private float _nextStop = 0;
         private float _stopTime = 0;
         private float _currentStopTime = 0;
-        
+
+        private void Start()
+        {
+            _agent.speed = CurrentSpeed;
+            _agent.angularSpeed = CurrentAngularSpeed;
+        }
+
         protected override void OnGoingTo(Transform fallowTarget)
         {
             base.OnGoingTo(fallowTarget);
@@ -78,6 +84,20 @@ namespace Game.Room.Enemy
             {
                 OnAchivedTarget?.Invoke();
             }
+        }
+
+        public override void SetSpeedModifier(float modifier)
+        {
+            base.SetSpeedModifier(modifier);
+
+            _agent.speed = CurrentSpeed;
+        }
+
+        public override void SetAngularSpeedModifier(float modifier)
+        {
+            base.SetAngularSpeedModifier(modifier);
+
+            _agent.speed = CurrentSpeed;
         }
 
         private float CalculatePathLength(NavMeshPath path, Transform target)

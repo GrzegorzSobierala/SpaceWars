@@ -8,11 +8,14 @@ namespace Game.Room.Enemy
     {
         [Inject] private List<EnemyFieldOfView> _views;
         [Inject] private PatrolController _patrolController;
+        [Inject] private EnemyMovementBase _movement;
 
         protected override void OnEnterState()
         {
             base.OnEnterState();
             Subscribe();
+            _movement.SetSpeedModifier(0.5f);
+            _movement.SetAngularSpeedModifier(0.5f);
             _patrolController.StartPatroling();
         }
 

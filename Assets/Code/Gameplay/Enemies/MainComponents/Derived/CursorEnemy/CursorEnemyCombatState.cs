@@ -15,6 +15,8 @@ namespace Game.Room.Enemy
 
             _gun.StartAimingAt(_playerManager.PlayerBody.transform);
             _gun.StartShooting();
+            _movement.SetSpeedModifier(1.0f);
+            _movement.SetAngularSpeedModifier(1.0f);
             _movement.StartGoingTo(_playerManager.PlayerBody.transform);
         }
 
