@@ -1,3 +1,4 @@
+using Game.Player.UI;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -8,7 +9,8 @@ namespace Game.Room.Enemy
     {
         public bool IsActivated => _isActivated;
 
-        [Inject] List<EnemyBase> _enemies;
+        [Inject] private List<EnemyBase> _enemies;
+        [Inject] private TestAlarmUI _alarmUi;
 
         private bool _isActivated = false;
 
@@ -32,6 +34,8 @@ namespace Game.Room.Enemy
 
                 enemy.StateMachine.SwitchToCombatState();
             }
+
+            _alarmUi.Activate();
         }
     }
 }
