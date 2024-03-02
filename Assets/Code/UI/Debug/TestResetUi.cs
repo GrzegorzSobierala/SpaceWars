@@ -17,6 +17,7 @@ namespace Game.Player.UI
         [Inject] private TestSceneManager _testSceneManager;
         [Inject] private InputProvider _inputProvider;
         [Inject] private TestingSettings _testingSettings;
+        [Inject] private TestAlarmUI _alarmUI;
 
         [SerializeField] private Button _onOffButton;
         [SerializeField] private GameObject _panel;
@@ -110,6 +111,7 @@ namespace Game.Player.UI
             _startRoomTime = Time.time;
             _testSceneManager.RestartRoom();
             OffPanel();
+            _alarmUI.Deactivate();
             _onOffButton.gameObject.SetActive(true);
             _messageText.text = "hello man";
         }

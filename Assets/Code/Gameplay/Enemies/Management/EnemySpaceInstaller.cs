@@ -1,3 +1,4 @@
+using Game.Utility;
 using Zenject;
 
 namespace Game.Room.Enemy
@@ -6,8 +7,9 @@ namespace Game.Room.Enemy
     {
         public override void InstallBindings()
         {
-            Container.Bind<EnemyBase>().FromComponentsInHierarchy().AsSingle();
-            Container.Bind<EnemyManager>().FromInstance(GetComponent<EnemyManager>()).AsSingle();
+            Utils.BindComponentsInChildrens<EnemyBase>(Container, false);
+            Utils.BindGetComponent<EnemyManager>(Container);
+            Utils.BindGetComponent<EnemyRoomAlarm>(Container);
         }
     }
 }

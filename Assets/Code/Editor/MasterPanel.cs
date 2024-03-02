@@ -4,6 +4,7 @@ using UnityEngine;
 using Game.Utility.Globals;
 using Game.Testing;
 using Zenject;
+using UnityEngine.SceneManagement;
 
 namespace Game.Editor
 {
@@ -72,6 +73,9 @@ namespace Game.Editor
             {
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
                 LoadSceneGroup(Scenes.TestingMulti);
+
+                Scene scene = SceneManager.GetSceneByName(Scenes.PlayerTesting);
+                SceneManager.SetActiveScene(scene);
             }
         }
 

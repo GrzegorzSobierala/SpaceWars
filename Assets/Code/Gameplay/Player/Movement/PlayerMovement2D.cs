@@ -79,31 +79,23 @@ namespace Game.Player.Ship
             float playerCursorAngle = Utils.AngleDirected(_body.position, intersectionPoint) - 90f;
 
             float rotSpeed = _rotationSpeed * Time.fixedDeltaTime;
-            float targetAngle = Mathf.MoveTowardsAngle(_body.rotation, playerCursorAngle, rotSpeed);
+            float newAngle = Mathf.MoveTowardsAngle(_body.rotation, playerCursorAngle, rotSpeed);
 
+            _body.MoveRotation(newAngle);
 
-            _body.MoveRotation(targetAngle);
+            TransferVelocity(newAngle);
+        }
 
+        private void TransferVelocity(float angle)
+        {
             // Calculate the relative angle between current rotation and target rotation
-            float relativeAngle = Mathf.DeltaAngle(_body.rotation, targetAngle);
+            float relativeAngle = Mathf.DeltaAngle(_body.rotation, angle);
 
             // Calculate the angular velocity based on the relative angle and _velocityRotMulti
             float velocityAngle = relativeAngle * _velocityRotMulti;
 
             // Rotate the current velocity vector
-            _body.velocity = RotateVector(_body.velocity, velocityAngle);
-        }
-
-        private Vector2 RotateVector(Vector2 vector, float angleInDegrees)
-        {
-            float angleInRadians = angleInDegrees * Mathf.Deg2Rad;
-            float sin = Mathf.Sin(angleInRadians);
-            float cos = Mathf.Cos(angleInRadians);
-
-            float x = vector.x * cos - vector.y * sin;
-            float y = vector.x * sin + vector.y * cos;
-
-            return new Vector2(x, y);
+            _body.velocity = Utils.RotateVector(_body.velocity, velocityAngle);
         }
 
         public void SetVelocityRotMulti(float value)

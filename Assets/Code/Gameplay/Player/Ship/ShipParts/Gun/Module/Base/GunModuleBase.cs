@@ -12,7 +12,7 @@ namespace Game.Player.Ship
         [Inject] protected PlayerManager _playerManager;
         [Inject] private InputProvider _input;
 
-        [SerializeField] protected ShootableObjectBase _shootableObjectPrefab;
+        [SerializeField] private ShootableObjectBase _shootableObjectPrefab;
         [SerializeField] protected float _cooldown = 1f;
 
         protected ShootableObjectBase _shootableObjectPrototype;
@@ -27,7 +27,7 @@ namespace Game.Player.Ship
                 Debug.LogError("_shootableObjectPrefab is null, cant create prototype");
             }
 
-            _shootableObjectPrototype = _shootableObjectPrefab.CreateCopy(transform);
+            _shootableObjectPrototype = _shootableObjectPrefab.CreateCopy(_body.gameObject, transform);
             _shootableObjectPrototype.gameObject.name = _shootableObjectPrefab.gameObject.name + "(Prototype)";
         }
 

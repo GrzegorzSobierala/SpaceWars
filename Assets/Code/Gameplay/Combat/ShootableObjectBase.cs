@@ -38,6 +38,8 @@ namespace Game.Combat
         protected float _shootShipSpeed;
         protected Vector2 _shootPos;
 
+        private GameObject _damageDealer;
+
         protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.collider == null)
@@ -52,10 +54,7 @@ namespace Game.Combat
                 if (hittable == null)
                     continue;
 
-                DamageData damage = new DamageData()
-                {
-                    BaseDamage = _damage,
-                };
+                DamageData damage = new DamageData(_damageDealer, _damage);
 
                 hittable.GetHit(collision, damage);
             }
@@ -63,11 +62,12 @@ namespace Game.Combat
             OnHit();
         }
 
-        public virtual ShootableObjectBase CreateCopy(Transform parent = null)
+        public virtual ShootableObjectBase CreateCopy(GameObject damageDealer, Transform parent = null)
         {
             ShootableObjectBase instance = Instantiate(this, parent);
 
             instance.gameObject.SetActive(false);
+            instance._damageDealer = damageDealer;
 
             return instance;
         }

@@ -1,4 +1,8 @@
+using Game.Room.Enemy;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Utility
 {
@@ -45,6 +49,49 @@ namespace Game.Utility
         public static float AngleDirected(Vector2 startVectorPos , Vector2 endVectorPos)
         {
             return AngleDirected(endVectorPos - startVectorPos);
+        }
+
+        public static Vector2 RotateVector(Vector2 vector, float angleInDegrees)
+        {
+            float angleInRadians = angleInDegrees * Mathf.Deg2Rad;
+            float sin = Mathf.Sin(angleInRadians);
+            float cos = Mathf.Cos(angleInRadians);
+
+            float x = vector.x * cos - vector.y * sin;
+            float y = vector.x * sin + vector.y * cos;
+
+            return new Vector2(x, y);
+        }
+
+        public static void BindGetComponent<T>(DiContainer container) 
+            where T : Component
+        {
+            GameObject gameObject = container.DefaultParent.gameObject;
+
+            if (!gameObject.TryGetComponent(out T component))
+            {
+                string message = $"There is no {typeof(T)} on a GameObject: {gameObject.name}";
+                Debug.LogError(message, gameObject);
+                throw new System.NullReferenceException(message);
+            }
+
+            container.Bind<T>().FromInstance(component).AsSingle();
+        }
+
+        public static void BindComponentsInChildrens<T>(DiContainer container, bool includeInactive = true)
+            where T : Component
+        {
+            GameObject gameObject = container.DefaultParent.gameObject;
+
+            List<T> enemyFieldOfViews = gameObject.GetComponentsInChildren<T>(includeInactive).ToList();
+
+            if (enemyFieldOfViews.Count == 0)
+            {
+                string message = $"There is no {typeof(T)} on a GameObject: {gameObject}";
+                Debug.LogError(message, gameObject);
+            }
+
+            container.Bind<List<T>>().FromInstance(enemyFieldOfViews).AsSingle();
         }
     }
 }

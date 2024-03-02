@@ -13,6 +13,7 @@ namespace Game.Player.Ship
 
         public Transform GunSpot => _gunSpot;
         public Transform BridgeSpot => _bridgeSpot;
+        public float CurrentHp => _currentHp; 
 
         [Inject] protected List<DamageHandlerBase> _damageHandlers;
 
