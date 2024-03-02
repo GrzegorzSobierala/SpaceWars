@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using Game.Combat;
+using Game.Management;
 
 namespace Game.Player.Ship
 {
     public abstract class HullModuleBase : HullBase , IModule
     {
-        public static Action<HullModuleBase> OnDefeatAction;
-
         public Transform GunSpot => _gunSpot;
         public Transform BridgeSpot => _bridgeSpot;
         public float CurrentHp => _currentHp; 
 
         [Inject] protected List<DamageHandlerBase> _damageHandlers;
+        [Inject] protected PlayerManager _playerManager;
 
         [SerializeField] protected Transform _gunSpot;
         [SerializeField] protected Transform _bridgeSpot;
@@ -90,7 +90,7 @@ namespace Game.Player.Ship
         private void GetDefeated()
         {
             Defeated();
-            OnDefeatAction?.Invoke(this);
+            _playerManager.OnPlayerDied?.Invoke();
         }
     }
 }

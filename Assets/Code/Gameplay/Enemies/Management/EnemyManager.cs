@@ -8,10 +8,9 @@ namespace Game.Room.Enemy
 {
     public class EnemyManager : MonoBehaviour
     {
-        public static Action OnRoomClear;
-
         [Inject] private PlayerManager _playerManager;
         [Inject] private List<EnemyBase> _roomEnemies;
+        [Inject] private TestSceneManager _testSceneManager;
 
         private bool _roomClear = false;
 
@@ -37,7 +36,7 @@ namespace Game.Room.Enemy
 
             if(allEnemiesDed)
             {
-                OnRoomClear?.Invoke();
+                _testSceneManager.OnRoomMainObjectiveCompleted.Invoke();
                 _roomClear = true;
             }
         }
