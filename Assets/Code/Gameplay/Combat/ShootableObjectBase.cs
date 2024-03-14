@@ -68,6 +68,8 @@ namespace Game.Combat
 
             instance.gameObject.SetActive(false);
             instance._damageDealer = damageDealer;
+            instance.transform.position = damageDealer.transform.position;
+            instance.transform.rotation = damageDealer.transform.rotation;
 
             return instance;
         }
