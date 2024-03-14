@@ -10080,7 +10080,7 @@ Transform:
   - {fileID: 8160263770510025502}
   - {fileID: 228500813593825360}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6160428084483414833
 MonoBehaviour:
@@ -10164,8 +10164,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d2ea047b3abbd04b99e15aaebff1421, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentSpeedModifier: 1
   _baseSpeed: 1000
+  _baseAngularSpeed: 0
   _moveCooldown: 1
   _isRandomMove: 1
   _isHorizontalMove: 1
@@ -10410,7 +10410,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6904206026529616327, guid: 5322917044a751c4db7ac248c4e8d050, type: 3}
       propertyPath: _rayCount
-      value: 50
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 6904206026529616327, guid: 5322917044a751c4db7ac248c4e8d050, type: 3}
+      propertyPath: _viewDistance
+      value: 300
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
