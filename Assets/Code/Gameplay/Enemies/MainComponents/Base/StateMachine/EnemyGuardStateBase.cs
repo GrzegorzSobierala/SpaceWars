@@ -33,7 +33,7 @@ namespace Game.Room.Enemy
 
         protected override void OnExitState()
         {
-            _enemyGun.Unload();
+            _enemyGun.Prepare();
 
             foreach (var handler in _damageHandlers)
             {

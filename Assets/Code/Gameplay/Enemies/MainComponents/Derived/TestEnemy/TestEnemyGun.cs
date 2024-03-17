@@ -15,11 +15,11 @@ namespace Game.Room.Enemy
 
         [SerializeField] private Transform _gunTransform;
         [SerializeField] private TestEnemyBullet _enemyBulletPrototype;
-        [SerializeField] private float _cooldown = 2f;
+        [SerializeField] private float _shotInterval = 2f;
 
         private float _lastShotTime = 0f;
 
-        public override void Unload()
+        public override void Prepare()
         {
             _lastShotTime = Time.time;
         }
@@ -42,7 +42,7 @@ namespace Game.Room.Enemy
             if (Vector2.Distance(transform.position, PlayerPos) > _enemyBulletPrototype.MaxDistance)
                 return;
 
-            if (Time.time - _lastShotTime < _cooldown)
+            if (Time.time - _lastShotTime < _shotInterval)
             {
                 return;
             }
