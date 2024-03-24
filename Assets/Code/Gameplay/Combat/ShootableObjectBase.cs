@@ -7,6 +7,8 @@ namespace Game.Combat
 {
     public abstract class ShootableObjectBase : MonoBehaviour, IShootable
     {
+        public float MaxDistance => _maxDistance;
+
         protected bool SchouldNukeMySelf
         {
             get
