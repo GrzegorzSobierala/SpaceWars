@@ -1,6 +1,4 @@
-using NavMeshPlus.Extensions;
-using System.Collections;
-using System.Collections.Generic;
+using Game.Utility;
 using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
@@ -61,6 +59,15 @@ namespace Game.Room.Enemy
             {
                 _agent.SetDestination(fallowTarget.transform.position);
             }
+
+            if (_agent.isStopped)
+            {
+                RotateByVelocity();
+            }
+            else
+            {
+                RotateToPosition(fallowTarget.position);
+            }
         }
 
         protected override void OnStartGoingTo(Vector2 targetPosition)
@@ -83,6 +90,15 @@ namespace Game.Room.Enemy
             if (Vector2.Distance(_body.position, targetPosition) < 50)
             {
                 OnAchivedTarget?.Invoke();
+            }
+
+            if(_agent.isStopped)
+            {
+                RotateByVelocity();
+            }
+            else
+            {
+                RotateToPosition(targetPosition);
             }
         }
 
@@ -118,6 +134,27 @@ namespace Game.Room.Enemy
             }
 
             return length;
+        }
+
+        private void RotateByVelocity()
+        {
+            float targetAngle = Utils.AngleDirected(_agent.velocity);
+            RotateToAngle(targetAngle);
+        }
+
+        private void RotateToPosition(Vector2 position)
+        {
+            float targetAngle = Utils.AngleDirected(_body.position, position);
+            RotateToAngle(targetAngle);
+        }
+
+        private void RotateToAngle(float angle)
+        {
+            angle -= 90;
+            float rotSpeed = _agent.angularSpeed * Time.fixedDeltaTime;
+            float newAngle = Mathf.MoveTowardsAngle(_body.rotation, angle, rotSpeed);
+
+            _body.MoveRotation(newAngle);
         }
     }
 }

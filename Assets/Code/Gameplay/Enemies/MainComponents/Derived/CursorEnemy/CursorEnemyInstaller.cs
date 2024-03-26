@@ -10,8 +10,10 @@ namespace Game.Room.Enemy
             base.InstallBindings();
 
             Utils.BindGetComponent<NavMeshAgent>(Container);
+            Utils.BindGetComponent<EnemyNavMeshAgentRotate>(Container);
 
-            Container.Bind<PatrolController>().FromComponentInHierarchy().AsSingle(); 
+            Container.Bind<PatrolController>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<CursorEnemyGun>().FromComponentInHierarchy().AsSingle();
         }
     }
 }

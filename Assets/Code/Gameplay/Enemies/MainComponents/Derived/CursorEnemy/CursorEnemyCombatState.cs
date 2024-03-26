@@ -6,7 +6,7 @@ namespace Game.Room.Enemy
 {
     public class CursorEnemyCombatState : EnemyCombatStateBase
     {
-        [Inject] private EnemyGunBase _gun;
+        [Inject] private CursorEnemyGun _gun;
         [Inject] private EnemyMovementBase _movement;
         [Inject] private PlayerManager _playerManager;
 
@@ -20,12 +20,8 @@ namespace Game.Room.Enemy
 
             FallowPlayer();
 
-            if(_gun is CursorEnemyGun)
-            {
-                CursorEnemyGun cursorEnemyGun = (CursorEnemyGun)_gun;
-                cursorEnemyGun.SubscribeOnStartReload(RunFromPlayer);
-                cursorEnemyGun.SubscribeOnStopReload(FallowPlayer);
-            }
+            _gun.SubscribeOnStartReload(RunFromPlayer);
+            _gun.SubscribeOnStopReload(FallowPlayer);
         }
 
         protected override void OnExitState()
@@ -36,12 +32,8 @@ namespace Game.Room.Enemy
             _gun.StopAiming();
             _movement.StopMoving();
 
-            if (_gun is CursorEnemyGun)
-            {
-                CursorEnemyGun cursorEnemyGun = (CursorEnemyGun)_gun;
-                cursorEnemyGun.UnsubscribeOnStartReload(RunFromPlayer);
-                cursorEnemyGun.UnsubscribeOnStopReload(FallowPlayer);
-            }
+            _gun.UnsubscribeOnStartReload(RunFromPlayer);
+            _gun.UnsubscribeOnStopReload(FallowPlayer);
         }
 
         private void FallowPlayer()
