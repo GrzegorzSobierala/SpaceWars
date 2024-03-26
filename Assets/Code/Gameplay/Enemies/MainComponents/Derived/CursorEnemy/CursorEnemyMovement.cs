@@ -1,6 +1,7 @@
 using Game.Utility;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 using Zenject;
 
 namespace Game.Room.Enemy
@@ -12,12 +13,10 @@ namespace Game.Room.Enemy
         [Inject] private NavMeshAgent _agent;
 
         [SerializeField] private float _spotRange = 750;
+        [SerializeField] private float _angularSpeed = 300;
 
         private bool _isFallowing = false;
 
-        private float _nextStop = 0;
-        private float _stopTime = 0;
-        private float _currentStopTime = 0;
 
         private void Start()
         {
@@ -42,32 +41,12 @@ namespace Game.Room.Enemy
                 }
             }
 
-            if(_nextStop > Time.time)
-            {
-                _nextStop = Random.Range(10f, 30f) + Time.time;
-                _stopTime = Random.Range(1f, 9f);
-                _currentStopTime = Time.time;
-                _agent.isStopped = true;
-            }
-
-            if(_agent.isStopped && _currentStopTime + _stopTime > Time.time)
-            {
-                _agent.isStopped = false;
-            }
-
             if(Time.frameCount % 25 == 0)
             {
-                _agent.SetDestination(fallowTarget.transform.position);
+                _agent.SetDestination(fallowTarget.position);
             }
 
-            if (_agent.isStopped)
-            {
-                RotateByVelocity();
-            }
-            else
-            {
-                RotateToPosition(fallowTarget.position);
-            }
+            UpdateRotation(fallowTarget.position);
         }
 
         protected override void OnStartGoingTo(Vector2 targetPosition)
@@ -92,14 +71,7 @@ namespace Game.Room.Enemy
                 OnAchivedTarget?.Invoke();
             }
 
-            if(_agent.isStopped)
-            {
-                RotateByVelocity();
-            }
-            else
-            {
-                RotateToPosition(targetPosition);
-            }
+            UpdateRotation(targetPosition);
         }
 
         public override void SetSpeedModifier(float modifier)
@@ -136,22 +108,25 @@ namespace Game.Room.Enemy
             return length;
         }
 
-        private void RotateByVelocity()
+        private void UpdateRotation(Vector2 targetPosition)
         {
             float targetAngle = Utils.AngleDirected(_agent.velocity);
-            RotateToAngle(targetAngle);
-        }
+            if (_agent.remainingDistance > _agent.stoppingDistance)
+            {
+                targetAngle = Utils.AngleDirected(_agent.velocity);
+            }
+            else
+            {
+                targetAngle = Utils.AngleDirected(_body.position, targetPosition);
+            }
 
-        private void RotateToPosition(Vector2 position)
-        {
-            float targetAngle = Utils.AngleDirected(_body.position, position);
             RotateToAngle(targetAngle);
         }
 
         private void RotateToAngle(float angle)
         {
             angle -= 90;
-            float rotSpeed = _agent.angularSpeed * Time.fixedDeltaTime;
+            float rotSpeed = _angularSpeed * Time.deltaTime;
             float newAngle = Mathf.MoveTowardsAngle(_body.rotation, angle, rotSpeed);
 
             _body.MoveRotation(newAngle);

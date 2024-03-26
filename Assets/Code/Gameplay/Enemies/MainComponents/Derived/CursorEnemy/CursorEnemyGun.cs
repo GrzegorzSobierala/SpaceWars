@@ -82,7 +82,6 @@ namespace Game
             {
                 _isAimed = false;
             }
-            Debug.Log(_isAimed);
 
             newAngle = Mathf.Clamp(angleToTarget, -_gunTravers / 2, _gunTravers / 2);
 
