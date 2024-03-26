@@ -1,7 +1,6 @@
 using Game.Utility;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 using Zenject;
 
 namespace Game.Room.Enemy
@@ -13,10 +12,10 @@ namespace Game.Room.Enemy
         [Inject] private NavMeshAgent _agent;
 
         [SerializeField] private float _spotRange = 750;
-        [SerializeField] private float _angularSpeed = 300;
+        [SerializeField] private float _agentTargetUpdateInterval = 0.1f;
 
         private bool _isFallowing = false;
-
+        private float _nextAgentTargetUpdateTime = 0;
 
         private void Start()
         {
@@ -41,10 +40,7 @@ namespace Game.Room.Enemy
                 }
             }
 
-            if(Time.frameCount % 25 == 0)
-            {
-                _agent.SetDestination(fallowTarget.position);
-            }
+            TrySetAgentDestination(fallowTarget.position);
 
             UpdateRotation(fallowTarget.position);
         }
@@ -61,12 +57,9 @@ namespace Game.Room.Enemy
         {
             base.OnGoingTo(targetPosition);
 
-            if (Time.frameCount % 25 == 0)
-            {
-                _agent.SetDestination(targetPosition);
-            }
+            TrySetAgentDestination(targetPosition);
 
-            if (Vector2.Distance(_body.position, targetPosition) < 50)
+            if (_agent.remainingDistance < _agent.stoppingDistance)
             {
                 OnAchivedTarget?.Invoke();
             }
@@ -77,13 +70,6 @@ namespace Game.Room.Enemy
         public override void SetSpeedModifier(float modifier)
         {
             base.SetSpeedModifier(modifier);
-
-            _agent.speed = CurrentSpeed;
-        }
-
-        public override void SetAngularSpeedModifier(float modifier)
-        {
-            base.SetAngularSpeedModifier(modifier);
 
             _agent.speed = CurrentSpeed;
         }
@@ -113,7 +99,7 @@ namespace Game.Room.Enemy
             float targetAngle = Utils.AngleDirected(_agent.velocity);
             if (_agent.remainingDistance > _agent.stoppingDistance)
             {
-                targetAngle = Utils.AngleDirected(_agent.velocity);
+                targetAngle = Utils.AngleDirected(_agent.desiredVelocity);
             }
             else
             {
@@ -121,15 +107,26 @@ namespace Game.Room.Enemy
             }
 
             RotateToAngle(targetAngle);
-        }
+        }   
 
         private void RotateToAngle(float angle)
         {
             angle -= 90;
-            float rotSpeed = _angularSpeed * Time.deltaTime;
+            float rotSpeed = CurrentAngularSpeed * DeltaTime;
             float newAngle = Mathf.MoveTowardsAngle(_body.rotation, angle, rotSpeed);
 
-            _body.MoveRotation(newAngle);
+            Vector3 newRot = transform.localRotation.eulerAngles;
+            newRot.z = newAngle;
+            transform.localRotation = Quaternion.Euler(newRot);
+        }
+
+        private void TrySetAgentDestination(Vector2 targetPos)
+        {
+            if (Time.time >= _nextAgentTargetUpdateTime)
+            {
+                _agent.SetDestination(targetPos);
+                _nextAgentTargetUpdateTime = Time.time + _agentTargetUpdateInterval;
+            }
         }
     }
 }

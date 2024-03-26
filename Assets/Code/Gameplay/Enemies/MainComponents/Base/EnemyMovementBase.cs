@@ -10,6 +10,7 @@ namespace Game.Room.Enemy
 
         public float CurrentSpeed => _baseSpeed * _speedModifier;
         public float CurrentAngularSpeed => _baseAngularSpeed * _angularSpeedModifier;
+        public float DeltaTime => UseFixedUpdate ? Time.fixedDeltaTime : Time.deltaTime;
 
         protected Action OnAchivedTarget;
         protected Action OnChangedTarget;
