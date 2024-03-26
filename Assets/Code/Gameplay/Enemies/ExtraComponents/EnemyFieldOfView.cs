@@ -40,7 +40,7 @@ namespace Game.Room.Enemy
             Initialize();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (!IsPlayerInRange() && !IsNonGuardEnemyInRange())
                 return;   
