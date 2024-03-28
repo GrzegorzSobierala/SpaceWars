@@ -10171,7 +10171,7 @@ MonoBehaviour:
   _baseSpeed: 150
   _baseAngularSpeed: 75
   _spotRange: 750
-  _agentTargetUpdateInterval: 0.1
+  _agentTargetUpdateInterval: 0.2
 --- !u!195 &9196227978536751886
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -10380,6 +10380,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32f68a29c84d15c4990b3f7717f2e76d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _minRunRange: 300
+  _maxRunRange: 1000
+  _runAngle: 40
 --- !u!1 &8051062959303241080
 GameObject:
   m_ObjectHideFlags: 0
