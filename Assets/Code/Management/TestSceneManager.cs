@@ -1,11 +1,9 @@
-using Game.Input.System;
 using Game.Management;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using UnityEngine.SceneManagement;
 using Game.Utility.Globals;
+using System;
 
 namespace Game.Room
 {
@@ -13,6 +11,8 @@ namespace Game.Room
     {
         [Inject] private PlayerManager _playerManager;
         [Inject] private ZenjectSceneLoader _sceneLoader;
+
+        public Action OnRoomMainObjectiveCompleted;
 
         public void Load()
         {

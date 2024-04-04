@@ -21,7 +21,7 @@ namespace Game.Room.Enemy
             TryShoot();
         }
 
-        public abstract void Unload();
+        public abstract void Prepare();
 
         public void StartAimingAt(Transform target)
         {

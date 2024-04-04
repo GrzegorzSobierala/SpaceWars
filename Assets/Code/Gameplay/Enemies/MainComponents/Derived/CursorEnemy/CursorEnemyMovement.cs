@@ -1,6 +1,4 @@
-using NavMeshPlus.Extensions;
-using System.Collections;
-using System.Collections.Generic;
+using Game.Utility;
 using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
@@ -14,12 +12,10 @@ namespace Game.Room.Enemy
         [Inject] private NavMeshAgent _agent;
 
         [SerializeField] private float _spotRange = 750;
+        [SerializeField] private float _agentTargetUpdateInterval = 0.1f;
 
         private bool _isFallowing = false;
-
-        private float _nextStop = 0;
-        private float _stopTime = 0;
-        private float _currentStopTime = 0;
+        private float _nextAgentTargetUpdateTime = 0;
 
         private void Start()
         {
@@ -44,23 +40,9 @@ namespace Game.Room.Enemy
                 }
             }
 
-            if(_nextStop > Time.time)
-            {
-                _nextStop = Random.Range(10f, 30f) + Time.time;
-                _stopTime = Random.Range(1f, 9f);
-                _currentStopTime = Time.time;
-                _agent.isStopped = true;
-            }
+            TrySetAgentDestination(fallowTarget.position);
 
-            if(_agent.isStopped && _currentStopTime + _stopTime > Time.time)
-            {
-                _agent.isStopped = false;
-            }
-
-            if(Time.frameCount % 25 == 0)
-            {
-                _agent.SetDestination(fallowTarget.transform.position);
-            }
+            UpdateRotation(fallowTarget.position);
         }
 
         protected override void OnStartGoingTo(Vector2 targetPosition)
@@ -75,27 +57,19 @@ namespace Game.Room.Enemy
         {
             base.OnGoingTo(targetPosition);
 
-            if (Time.frameCount % 25 == 0)
-            {
-                _agent.SetDestination(targetPosition);
-            }
+            TrySetAgentDestination(targetPosition);
 
-            if (Vector2.Distance(_body.position, targetPosition) < 50)
+            if (_agent.remainingDistance < _agent.stoppingDistance)
             {
                 OnAchivedTarget?.Invoke();
             }
+
+            UpdateRotation(targetPosition);
         }
 
         public override void SetSpeedModifier(float modifier)
         {
             base.SetSpeedModifier(modifier);
-
-            _agent.speed = CurrentSpeed;
-        }
-
-        public override void SetAngularSpeedModifier(float modifier)
-        {
-            base.SetAngularSpeedModifier(modifier);
 
             _agent.speed = CurrentSpeed;
         }
@@ -118,6 +92,41 @@ namespace Game.Room.Enemy
             }
 
             return length;
+        }
+
+        private void UpdateRotation(Vector2 targetPosition)
+        {
+            float targetAngle = Utils.AngleDirected(_agent.velocity);
+            if (_agent.remainingDistance > _agent.stoppingDistance)
+            {
+                targetAngle = Utils.AngleDirected(_agent.desiredVelocity);
+            }
+            else
+            {
+                targetAngle = Utils.AngleDirected(_body.position, targetPosition);
+            }
+
+            RotateToAngle(targetAngle);
+        }   
+
+        private void RotateToAngle(float angle)
+        {
+            angle -= 90;
+            float rotSpeed = CurrentAngularSpeed * DeltaTime;
+            float newAngle = Mathf.MoveTowardsAngle(_body.rotation, angle, rotSpeed);
+
+            Vector3 newRot = transform.localRotation.eulerAngles;
+            newRot.z = newAngle;
+            transform.localRotation = Quaternion.Euler(newRot);
+        }
+
+        private void TrySetAgentDestination(Vector2 targetPos)
+        {
+            if (Time.time >= _nextAgentTargetUpdateTime)
+            {
+                _agent.SetDestination(targetPos);
+                _nextAgentTargetUpdateTime = Time.time + _agentTargetUpdateInterval;
+            }
         }
     }
 }

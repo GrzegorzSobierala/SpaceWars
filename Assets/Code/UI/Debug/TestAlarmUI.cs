@@ -8,7 +8,8 @@ namespace Game.Player.UI
     {
         [SerializeField] private TextMeshProUGUI _textMesh;
         [SerializeField] private AudioSource _audioSource;
-        [SerializeField] private float colorChangeDuration = 1f; // Adjust the duration as needed
+        [SerializeField] private float _colorChangeDuration = 1f;
+        [SerializeField] private int _maxRepeats = 5;
         private Coroutine colorChangeCoroutine;
 
         public void Activate()
@@ -37,15 +38,19 @@ namespace Game.Player.UI
         {
             Color startColor = _textMesh.color;
             float elapsedTime = 0f;
+            float animTime = _colorChangeDuration * _maxRepeats + _colorChangeDuration / 2;
+            float animeEndTime = Time.time + animTime;
 
-            while (true)
+            while (animeEndTime > Time.time)
             {
-                float t = Mathf.PingPong(elapsedTime / colorChangeDuration, 1f);
+                float t = Mathf.PingPong(elapsedTime / _colorChangeDuration * 2, 1f);
                 _textMesh.color = Color.Lerp(startColor, targetColor, t);
 
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
+
+            _textMesh.color = targetColor;
         }
     }
 }

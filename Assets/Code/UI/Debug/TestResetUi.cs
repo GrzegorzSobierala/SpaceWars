@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using Game.Testing;
+using Game.Management;
 
 namespace Game.Player.UI
 {
@@ -18,6 +19,7 @@ namespace Game.Player.UI
         [Inject] private InputProvider _inputProvider;
         [Inject] private TestingSettings _testingSettings;
         [Inject] private TestAlarmUI _alarmUI;
+        [Inject] private PlayerManager _playerManager;
 
         [SerializeField] private Button _onOffButton;
         [SerializeField] private GameObject _panel;
@@ -68,16 +70,16 @@ namespace Game.Player.UI
         {
             _onOffButton.onClick.AddListener(OnOffPanel);
             _restartButton.onClick.AddListener(Restart);
-            HullModuleBase.OnDefeatAction += OnDeadPlayer;
-            EnemyManager.OnRoomClear += OnRoomClear;
+            _playerManager.OnPlayerDied += OnDeadPlayer;
+            _testSceneManager.OnRoomMainObjectiveCompleted += OnRoomClear;
         }
 
         private void Unsubscribe()
         {
             _onOffButton.onClick.RemoveListener(OnOffPanel);
             _restartButton.onClick.RemoveListener(Restart);
-            HullModuleBase.OnDefeatAction -= OnDeadPlayer;
-            EnemyManager.OnRoomClear -= OnRoomClear;
+            _playerManager.OnPlayerDied -= OnDeadPlayer;
+            _testSceneManager.OnRoomMainObjectiveCompleted -= OnRoomClear;
         }
 
         private void OnOffPanel()
@@ -114,14 +116,14 @@ namespace Game.Player.UI
             _alarmUI.Deactivate();
             _onOffButton.gameObject.SetActive(true);
             _messageText.text = "hello man";
+            _playerManager.ModuleHandler.CurrentHull.SetStartHP();
         }
 
-        private void OnDeadPlayer(HullModuleBase hullModule)
+        private void OnDeadPlayer()
         {
             OnPanel();
             _onOffButton.gameObject.SetActive(false);
             _messageText.text = "u ded :((";
-            hullModule.SetStartHP();
         }
 
         private void OnRoomClear()
