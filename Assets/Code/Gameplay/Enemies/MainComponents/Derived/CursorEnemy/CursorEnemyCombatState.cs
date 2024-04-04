@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Game.Utility;
 using System;
+using Unity.Mathematics;
 
 namespace Game.Room.Enemy
 {
@@ -14,23 +15,28 @@ namespace Game.Room.Enemy
         [Inject] private PlayerManager _playerManager;
         [Inject] private NavMeshAgent _agent;
 
-        [SerializeField] private float _minRunRange = 300;
         [SerializeField] private float _maxRunRange = 1000;
-
         [SerializeField] private float _runAngle = 45;
+        [SerializeField] private float _stopOnRunDistanceToRayHit = 100;
+        [SerializeField] private float _runSpeedMulti = 1.5f;
+        [SerializeField] private float _fallowSpeedMulti = 1;
+
+        private Action _unSubAction;
 
         protected override void OnEnterState()
         {
             base.OnEnterState();
 
             _gun.StartShooting();
-            _movement.SetSpeedModifier(1.0f);
             _movement.SetAngularSpeedModifier(1.0f);
 
             FallowPlayer();
 
             _gun.SubscribeOnStartReload(RunFromPlayer);
             _gun.SubscribeOnStopReload(FallowPlayer);
+
+            _unSubAction = () => _movement.UnsubscribeOnAchivedTarget(FallowPlayer);
+            _movement.SubscribeOnChangedTarget(_unSubAction);
         }
 
         protected override void OnExitState()
@@ -43,12 +49,15 @@ namespace Game.Room.Enemy
 
             _gun.UnsubscribeOnStartReload(RunFromPlayer);
             _gun.UnsubscribeOnStopReload(FallowPlayer);
+
+            _movement.UnsubscribeOnChangedTarget(_unSubAction);
         }
 
         private void FallowPlayer()
         {
             _gun.StartAimingAt(_playerManager.PlayerBody.transform);
             _movement.StartGoingTo(_playerManager.PlayerBody.transform);
+            _movement.SetSpeedModifier(_runSpeedMulti);
         }
 
         private void RunFromPlayer()
@@ -73,22 +82,24 @@ namespace Game.Room.Enemy
 
 
             float agentSize = _agent.radius * 2;
-            if (agentSize > hit.distance)
+            float stopDistMulti = math.remap(agentSize, _maxRunRange, 0, 1, hit.distance);
+            float targetOffset = _stopOnRunDistanceToRayHit * stopDistMulti + agentSize;
+            if (targetOffset > hit.distance)
             {
                 _movement.StartGoingTo(transform.position);
             }
             else
             {
                 Vector2 rayVector = (Vector2)hit.position - (Vector2)transform.position;
-                Vector2 targetPos = (Vector2)hit.position - (rayVector.normalized * agentSize);
+                Vector2 targetPos = (Vector2)hit.position - (rayVector.normalized * targetOffset);
 
                 Debug.DrawLine(transform.position, targetPos, Color.red);
                 _movement.StartGoingTo(targetPos);
             }
 
             _movement.SubscribeOnAchivedTarget(FallowPlayer);
-            Action unSubAction = () => _movement.UnsubscribeOnAchivedTarget(FallowPlayer);
-            _movement.SubscribeOnChangedTarget(unSubAction);
+
+            _movement.SetSpeedModifier(_runSpeedMulti);
         }
     }
 }
