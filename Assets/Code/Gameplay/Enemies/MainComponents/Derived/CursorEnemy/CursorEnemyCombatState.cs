@@ -19,7 +19,6 @@ namespace Game.Room.Enemy
         [SerializeField] private float _runAngle = 45;
         [SerializeField] private float _stopOnRunDistanceToRayHit = 100;
         [SerializeField] private float _runSpeedMulti = 1.5f;
-        [SerializeField] private float _fallowSpeedMulti = 1;
 
         private Action _unSubAction;
 
