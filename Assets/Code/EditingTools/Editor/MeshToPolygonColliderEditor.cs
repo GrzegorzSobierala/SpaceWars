@@ -1,40 +1,97 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using System;
-using UnityEditor.SceneManagement;
 using System.Linq;
 
 public static class SetPolygonCollider3D
 {
-    [MenuItem("Tools/Update Polygon Colliders %t", false, -1)]
+    [MenuItem("SpaceWars/Update Polygon Collider %t", false, -1)]
     static void UpdatePolygonColliders()
     {
         Transform transform = Selection.activeTransform;
+
         if (transform == null)
         {
             Debug.LogWarning("No valid GameObject selected!");
             return;
         }
 
-        EditorSceneManager.MarkSceneDirty(transform.gameObject.scene);
-
-        MeshFilter[] meshFilters = transform.GetComponentsInChildren<MeshFilter>();
-
-        foreach (MeshFilter meshFilter in meshFilters)
+        if (Selection.gameObjects.Length == 0)
         {
-            PolygonCollider2D polygonCollider2D;
-            if (!meshFilter.TryGetComponent(out polygonCollider2D))
-            {
-                meshFilter.gameObject.AddComponent<PolygonCollider2D>();
-            }
-            
-            UpdatePolygonCollider2D(meshFilter);
+            Debug.LogError("There is no GameObject selected. Returning...");
+            return;
         }
+
+        if(Selection.gameObjects.Length > 2)
+        {
+            Debug.LogError("There are more than 2 GameObjects selected. Returning...");
+            return;
+        }
+
+        MeshFilter selectedMeshFilter = null;
+        PolygonCollider2D selectedCollider = null;
+        foreach (var selectedObject in Selection.gameObjects)
+        {
+            MeshFilter meshFilter = selectedObject.GetComponent<MeshFilter>();
+            PolygonCollider2D collider = selectedObject.GetComponent<PolygonCollider2D>();
+
+            if(meshFilter != null)
+            {
+                if(selectedMeshFilter != null)
+                {
+                    Debug.LogError("There are more than one GameObjects with MeshFilter. Retruning...");
+                    return;
+                }
+                selectedMeshFilter = meshFilter;
+            }
+
+            if(collider != null)
+            {
+                if(selectedCollider != null)
+                {
+                    Debug.LogError("There are more than one GameObjects with PolygonCollider2D. Retruning...");
+                    return;
+                }
+                selectedCollider = collider;
+            }
+        }
+
+        if(selectedMeshFilter == null)
+        {
+            Debug.LogError("There isn't any selected MeshFilter. Returning...");
+            return;
+        }
+
+        if(selectedCollider == null)
+        {
+            if (Selection.gameObjects.Length == 1)
+            {
+                selectedCollider = Selection.gameObjects[0].AddComponent<PolygonCollider2D>();
+            }
+            else
+            {
+                foreach (var selectedObject in Selection.gameObjects)
+                {
+                    if (selectedObject == selectedMeshFilter.gameObject)
+                        continue;
+
+                    selectedCollider = selectedObject.AddComponent<PolygonCollider2D>();
+                }
+            }
+        }
+
+        if (selectedCollider == null)
+        {
+            Debug.LogError("There isn't any selected MeshFilter. Returning...");
+            return;
+        }
+
+        UpdatePolygonCollider2D(selectedMeshFilter,selectedCollider);
+
+        Selection.SetActiveObjectWithContext(selectedCollider, null);
     }
 
-    static void UpdatePolygonCollider2D(MeshFilter meshFilter)
+    static void UpdatePolygonCollider2D(MeshFilter meshFilter, PolygonCollider2D collider)
     {
         if (meshFilter.sharedMesh == null)
         {
@@ -42,17 +99,16 @@ public static class SetPolygonCollider3D
             return;
         }
 
-        PolygonCollider2D polygonCollider2D = meshFilter.GetComponent<PolygonCollider2D>();
-        polygonCollider2D.pathCount = 1;
+        collider.pathCount = 1;
 
         List<Vector3> vertices = new List<Vector3>();
         meshFilter.sharedMesh.GetVertices(vertices);
 
-
-        int[] targetTriangles = EdgeHelpersBase.RotateAndScaleTriangles(meshFilter,
+        vertices = EdgeHelpers.RotateAndScaleVertices(meshFilter,
             meshFilter.transform.localRotation.eulerAngles, meshFilter.transform.localScale);
 
-        var boundaryPath = EdgeHelpersBase.GetEdges(targetTriangles).FindBoundary().SortEdges();
+        var boundaryPath = EdgeHelpersBase.GetEdges(meshFilter.sharedMesh.triangles)
+            .FindBoundary().SortEdges();
 
         Vector3[] yourVectors = new Vector3[boundaryPath.Count];
         for (int i = 0; i < boundaryPath.Count; i++)
@@ -69,11 +125,11 @@ public static class SetPolygonCollider3D
         Vector2[] newPoints = newColliderVertices.Distinct().ToArray();
 
         // Set the new points for the PolygonCollider2D
-        EditorUtility.SetDirty(polygonCollider2D);
-        polygonCollider2D.SetPath(0, newPoints);
+        EditorUtility.SetDirty(collider);
+        collider.SetPath(0, newPoints);
 
         // Make the collider convex
-        polygonCollider2D.points = MakeConvex(polygonCollider2D.points);
+        collider.points = MakeConvex(collider.points);
         Debug.Log(meshFilter.gameObject.name + " PolygonCollider2D updated and made convex.");
     }
 
@@ -205,9 +261,8 @@ public static class EdgeHelpersBase
         return result;
     }
 
-
-    public static int[] RotateAndScaleTriangles(MeshFilter meshFilter, Vector3 rotationAngles, 
-        Vector3 scaleFactors)
+    public static List<Vector3> RotateAndScaleVertices(MeshFilter meshFilter
+        , Vector3 rotationAngles, Vector3 scaleFactors)
     {
         Mesh mesh = meshFilter.sharedMesh;
         if (mesh == null)
@@ -216,37 +271,20 @@ public static class EdgeHelpersBase
             return null;
         }
 
-        // Clone the original triangles
-        int[] originalTriangles = mesh.triangles;
-        int[] rotatedTriangles = new int[originalTriangles.Length];
-        originalTriangles.CopyTo(rotatedTriangles, 0);
+        // Clone the original vertices
+        Vector3[] originalVertices = mesh.vertices;
+        List<Vector3> rotatedVertices = new List<Vector3>(originalVertices.Length);
 
         // Apply rotation and scale
         Quaternion rotation = Quaternion.Euler(rotationAngles);
-        for (int i = 0; i < rotatedTriangles.Length; i++)
+        for (int i = 0; i < originalVertices.Length; i++)
         {
-            // Rotate vertex positions
-            Vector3 vertexPosition = mesh.vertices[rotatedTriangles[i]];
-            vertexPosition = rotation * vertexPosition;
-            vertexPosition = Vector3.Scale(vertexPosition, scaleFactors);
-
-            // Find the closest vertex to the rotated position
-            float minDistance = float.MaxValue;
-            int closestVertexIndex = -1;
-            for (int j = 0; j < mesh.vertices.Length; j++)
-            {
-                float distance = Vector3.Distance(vertexPosition, mesh.vertices[j]);
-                if (distance < minDistance)
-                {
-                    minDistance = distance;
-                    closestVertexIndex = j;
-                }
-            }
-
-            // Update the index to the closest vertex
-            rotatedTriangles[i] = closestVertexIndex;
+            // Rotate and scale each vertex
+            Vector3 rotatedVertex = rotation * originalVertices[i];
+            rotatedVertex = Vector3.Scale(rotatedVertex, scaleFactors);
+            rotatedVertices.Add(rotatedVertex);
         }
 
-        return rotatedTriangles;
+        return rotatedVertices;
     }
 }
