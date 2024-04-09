@@ -107,7 +107,7 @@ public static class SetPolygonCollider3D
         vertices = EdgeHelpers.RotateAndScaleVertices(meshFilter,
             meshFilter.transform.localRotation.eulerAngles, meshFilter.transform.localScale);
 
-        var boundaryPath = EdgeHelpersBase.GetEdges(meshFilter.sharedMesh.triangles)
+        var boundaryPath = EdgeHelpers.GetEdges(meshFilter.sharedMesh.triangles)
             .FindBoundary().SortEdges();
 
         Vector3[] yourVectors = new Vector3[boundaryPath.Count];
@@ -188,7 +188,7 @@ public static class SetPolygonCollider3D
     }
 }
 
-public static class EdgeHelpersBase
+public static class EdgeHelpers
 {
     public struct Edge
     {
