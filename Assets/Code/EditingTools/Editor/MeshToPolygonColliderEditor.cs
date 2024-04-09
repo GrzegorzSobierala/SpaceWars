@@ -5,7 +5,7 @@ using System.Linq;
 
 public static class SetPolygonCollider3D
 {
-    [MenuItem("SpaceWars/Update Polygon Collider %t", false, -1)]
+    [MenuItem("SpaceWars/Update Polygon Collider #t", false, -1)]
     static void UpdatePolygonColliders()
     {
         Transform transform = Selection.activeTransform;
@@ -89,6 +89,7 @@ public static class SetPolygonCollider3D
         UpdatePolygonCollider2D(selectedMeshFilter,selectedCollider);
 
         Selection.SetActiveObjectWithContext(selectedCollider, null);
+        EditorUtility.SetDirty(selectedCollider);
     }
 
     static void UpdatePolygonCollider2D(MeshFilter meshFilter, PolygonCollider2D collider)
