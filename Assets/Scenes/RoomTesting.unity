@@ -517,7 +517,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 4
+  m_Intensity: 2.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -574,14 +574,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 706981875}
-  m_LocalRotation: {x: -0.27676883, y: 0.30749375, z: 0.40451804, w: 0.8156051}
+  m_LocalRotation: {x: -0.28097275, y: 0.30877122, z: 0.40467846, w: 0.81360304}
   m_LocalPosition: {x: -1.066712, y: -4.1506424, z: 5.188664}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: -44.446, y: 22.889, z: 43.304}
+  m_LocalEulerAnglesHint: {x: -45, y: 22.889, z: 43.304}
 --- !u!43 &768964710
 Mesh:
   m_ObjectHideFlags: 0
@@ -3672,7 +3672,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2064200651003286570, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2075446352845190732, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.data[0].Array.data[0].x
