@@ -5,20 +5,41 @@ namespace Game
 {
     public class RandomRotator
     {
-        [MenuItem("SpaceWars/Random Rotate #r", false, -1)]
-        private static void RandomRotate()
+        [MenuItem("SpaceWars/Random Rotate All #r", false, -1)]
+        private static void RandomRotateAll()
         {
             foreach (var gameObject in Selection.gameObjects)
             {
-                RandomRotateObject(gameObject);
+                RandomRotateObject(gameObject, false);
             }
         }
 
-        private static void RandomRotateObject(GameObject gameObject)
+        [MenuItem("SpaceWars/Random Rotate Z #e", false, -1)]
+        private static void RandomRotateZ()
         {
-            float x = Random.Range(0f, 180f);
-            float y = Random.Range(0f, 180f);
+            foreach (var gameObject in Selection.gameObjects)
+            {
+                RandomRotateObject(gameObject, true);
+            }
+        }
+
+        private static void RandomRotateObject(GameObject gameObject, bool onlyZ)
+        {
+            float x;
+            float y;
             float z = Random.Range(0f, 180f);
+
+            if (onlyZ)
+            {
+                x = gameObject.transform.rotation.eulerAngles.x;
+                y = gameObject.transform.rotation.eulerAngles.y;
+            }
+            else
+            {
+                x = Random.Range(0f, 180f);
+                y = Random.Range(0f, 180f);
+            }
+            
 
             gameObject.transform.rotation = Quaternion.Euler(x, y, z);
             EditorUtility.SetDirty(gameObject);
