@@ -92,6 +92,50 @@ public static class SetPolygonCollider3D
         EditorUtility.SetDirty(selectedCollider);
     }
 
+    [MenuItem("SpaceWars/ScaleCollider #s", false, -1)]
+    static void ScaleCollider()
+    {
+        GameObject gameObject = Selection.activeGameObject;
+        if (gameObject == null)
+        {
+            Debug.LogError("There is no selected gameobject. Returning...");
+            return;
+        }
+
+        PolygonCollider2D collider = gameObject.GetComponent<PolygonCollider2D>();
+        if (collider == null)
+        {
+            Debug.LogError("There is no PolygonCollider2D on selected gameobject. Returning...");
+            return;
+        }
+
+        Vector2[] originalPoints;
+
+        if (collider.points.Length > 0)
+        {
+            originalPoints = collider.points.Clone() as Vector2[];
+        }
+        else
+        {
+            Debug.LogError("PolygonCollider2D has no points or is missing. Returning...");
+            return;
+        }
+
+        Vector2[] scaledPoints = new Vector2[originalPoints.Length];
+
+        float scaleX = gameObject.transform.localScale.x;
+        float scaleY = gameObject.transform.localScale.y;
+
+        for (int i = 0; i < originalPoints.Length; i++)
+        {
+            scaledPoints[i] = new Vector2(originalPoints[i].x * scaleX, originalPoints[i].y * scaleY);
+        }
+
+        collider.points = scaledPoints;
+        gameObject.transform.localScale = Vector3.one;
+        EditorUtility.SetDirty(gameObject);
+    }
+
     static void UpdatePolygonCollider2D(MeshFilter meshFilter, PolygonCollider2D collider)
     {
         if (meshFilter.sharedMesh == null)
@@ -288,4 +332,6 @@ public static class EdgeHelpers
 
         return rotatedVertices;
     }
+
+    
 }
