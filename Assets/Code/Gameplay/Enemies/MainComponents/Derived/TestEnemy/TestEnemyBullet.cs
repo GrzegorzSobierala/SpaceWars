@@ -6,8 +6,6 @@ namespace Game.Room.Enemy
 {
     public class TestEnemyBullet : ShootableObjectBase
     {
-        public float MaxDistance => _maxDistance;
-
         public override void Shoot(Rigidbody2D creatorBody, Transform gunTransform)
         {
             gameObject.SetActive(true);

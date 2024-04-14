@@ -16,7 +16,10 @@ namespace Game
         [Inject] private EnemyManager _enemyManager;
         [Inject] private Rigidbody2D _body;
 
-        [SerializeField] private Transform _gunTransform;
+        [SerializeField] private Transform _leftGunTransform;
+        [SerializeField] private Transform _leftGunShootPoint;
+        [SerializeField] private Transform _rightGunTransform;
+        [SerializeField] private Transform _rightGunShootPoint;
         [SerializeField] private ShootableObjectBase _bulletPrototype;
         [SerializeField] private float _shotInterval = 0.5f;
         [SerializeField] private int _magCapasity = 5;
@@ -32,7 +35,7 @@ namespace Game
         private float _endReloadTime = 0f;
         private int _currenaMagAmmo = 0;
         private bool _isAimed = false;
-
+        private bool _isAimingLeft = false;
 
         private void Awake()
         {
@@ -66,12 +69,8 @@ namespace Game
 
         protected override void OnAimingAt(Transform target)
         {
-            Vector2 gunPos = (Vector2)_gunTransform.position;
-
             Vector2 vectorToTarget = target.position - transform.position;
             float angleToTarget = Vector2.SignedAngle(_body.transform.up, vectorToTarget);
-
-            float newAngle;
 
             if (angleToTarget >= -_gunTravers / 2 && angleToTarget <= _gunTravers / 2)
             {
@@ -83,9 +82,13 @@ namespace Game
                 _isAimed = false;
             }
 
-            newAngle = Mathf.Clamp(angleToTarget, -_gunTravers / 2, _gunTravers / 2);
+            float newLeftAngle = Mathf.Clamp(angleToTarget, 0, _gunTravers / 2);
+            float newRightAngle = Mathf.Clamp(angleToTarget, -_gunTravers / 2, 0);
 
-            _gunTransform.localRotation = Quaternion.Euler(0, 0, newAngle);
+            _leftGunTransform.localRotation = Quaternion.Euler(0, 0, newLeftAngle);
+            _rightGunTransform.localRotation = Quaternion.Euler(0, 0, newRightAngle);
+
+            _isAimingLeft = newLeftAngle != 0;
         }
 
         protected override void OnStopAiming()
@@ -115,7 +118,10 @@ namespace Game
 
             GameObject damageDealer = _body.gameObject;
             Transform parent = _playerManager.transform;
-            _bulletPrototype.CreateCopy(damageDealer, parent).Shoot(_body, transform);
+
+            Transform shootTransform = _isAimingLeft ? _leftGunShootPoint : _rightGunShootPoint;
+
+            _bulletPrototype.CreateCopy(damageDealer, parent).Shoot(_body, shootTransform);
 
             _currenaMagAmmo--;
 
