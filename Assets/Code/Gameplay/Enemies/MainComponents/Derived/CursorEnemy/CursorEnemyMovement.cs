@@ -59,7 +59,8 @@ namespace Game.Room.Enemy
 
             TrySetAgentDestination(targetPosition);
 
-            if (_agent.remainingDistance < _agent.stoppingDistance)
+            
+            if (_agent.hasPath && _agent.remainingDistance < _agent.stoppingDistance)
             {
                 OnAchivedTarget?.Invoke();
             }
