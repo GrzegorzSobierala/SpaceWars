@@ -10037,7 +10037,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gunTransform: {fileID: 2923649639386474618}
   _enemyBulletPrototype: {fileID: 5577059757908764798}
-  _cooldown: 1
+  _shotInterval: 2
 --- !u!1 &6953136812582892108
 GameObject:
   m_ObjectHideFlags: 0
@@ -10048,7 +10048,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8739598414879171550}
   - component: {fileID: 6160428084483414833}
-  - component: {fileID: 2147990221696451579}
+  - component: {fileID: 4144972207505586580}
   - component: {fileID: 5098940128701385669}
   - component: {fileID: 8183209369120757493}
   - component: {fileID: 4002154276112685798}
@@ -10080,7 +10080,7 @@ Transform:
   - {fileID: 8160263770510025502}
   - {fileID: 228500813593825360}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6160428084483414833
 MonoBehaviour:
@@ -10096,11 +10096,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
   _monoInstallers:
-  - {fileID: 2147990221696451579}
+  - {fileID: 4144972207505586580}
   _installerPrefabs: []
   _autoRun: 1
   _kernel: {fileID: 0}
---- !u!114 &2147990221696451579
+--- !u!114 &4144972207505586580
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10109,7 +10109,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6953136812582892108}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72042e754d80cb745b62b71d85e338bc, type: 3}
+  m_Script: {fileID: 11500000, guid: 9adc0f394dd14fc449f63592059b9e94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!50 &5098940128701385669

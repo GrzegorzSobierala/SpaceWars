@@ -12,6 +12,7 @@ namespace Game.Room.Enemy
             Utils.BindGetComponent<NavMeshAgent>(Container);
 
             Container.Bind<PatrolController>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<EnemyGunBase>().FromComponentInHierarchy().AsSingle();
             Container.Bind<CursorEnemyGun>().FromComponentInHierarchy().AsSingle();
         }
     }

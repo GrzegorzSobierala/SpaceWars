@@ -21,7 +21,6 @@ namespace Game.Room.Enemy
             Utils.BindGetComponent<EnemyMovementBase>(Container);
             Utils.BindGetComponent<EnemyBase>(Container);
 
-            Container.Bind<EnemyGunBase>().FromComponentInHierarchy().AsSingle();
             Container.Bind<AlarmActivatorTimer>().FromComponentInHierarchy().AsSingle();
         }
     }
