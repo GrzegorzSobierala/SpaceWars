@@ -59,7 +59,7 @@ namespace Game.Room.Enemy
             _meshFilter = GetComponent<MeshFilter>();
             _meshFilter.mesh = _mesh;
             _targetLayerMask = LayerMask.GetMask(Layers.Player);
-            _allLayerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle, Layers.Enemy);
+            _allLayerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle);
             _enemyLayerMask = LayerMask.GetMask(Layers.Enemy);
             randomVertexZ = UnityEngine.Random.Range(0.0f, 0.1f);
         }
