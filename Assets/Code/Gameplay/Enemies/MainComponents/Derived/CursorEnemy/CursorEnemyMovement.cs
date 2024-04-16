@@ -75,26 +75,6 @@ namespace Game.Room.Enemy
             _agent.speed = CurrentSpeed;
         }
 
-        private float CalculatePathLength(NavMeshPath path, Transform target)
-        {
-            Vector3[] pathCorners = new Vector3[path.corners.Length + 2];
-
-            // Get the corners of the path
-            pathCorners[0] = transform.position;
-            pathCorners[pathCorners.Length - 1] = target.position;
-            path.GetCornersNonAlloc(pathCorners);
-
-            float length = 0f;
-
-            // Sum the distances between consecutive corners
-            for (int i = 0; i < pathCorners.Length - 1; i++)
-            {
-                length += Vector3.Distance(pathCorners[i], pathCorners[i + 1]);
-            }
-
-            return length;
-        }
-
         private void UpdateRotation(Vector2 targetPosition)
         {
             float targetAngle = Utils.AngleDirected(_agent.velocity);
