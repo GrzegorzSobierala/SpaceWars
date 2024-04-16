@@ -12,7 +12,6 @@ namespace Game.Room.Enemy
         [Inject] protected PlayerManager _playerManager;
         [Inject] protected EnemyStateMachineBase _stateMachine;
         [Inject] protected AlarmActivatorTimer _alarmActivatorTimer;
-        [Inject] protected EnemyGunBase _enemyGun;
 
         public virtual void OnDestroy()
         {
@@ -33,8 +32,6 @@ namespace Game.Room.Enemy
 
         protected override void OnExitState()
         {
-            _enemyGun.Prepare();
-
             foreach (var handler in _damageHandlers)
             {
                 handler.Unsubscribe(TrySwitchToCombatState);

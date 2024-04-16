@@ -12,7 +12,6 @@ namespace Game
             Container.Bind<EnemyGunBase>().FromComponentInHierarchy().AsSingle();
 
             base.InstallBindings();
-
         }
     }
 }
