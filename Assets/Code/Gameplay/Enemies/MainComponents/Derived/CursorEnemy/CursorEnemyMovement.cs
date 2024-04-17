@@ -78,7 +78,7 @@ namespace Game.Room.Enemy
         private void UpdateRotation(Vector2 targetPosition)
         {
             float targetAngle = Utils.AngleDirected(_agent.velocity);
-            if (_agent.remainingDistance > _agent.stoppingDistance)
+            if (_agent.hasPath && _agent.remainingDistance > _agent.stoppingDistance)
             {
                 targetAngle = Utils.AngleDirected(_agent.desiredVelocity);
             }

@@ -13,7 +13,7 @@ namespace Game.Room.Enemy
 
         private EnemyStateBase _currentState;
 
-        private void Start()
+        protected virtual void Start()
         {
             SetUpStates();
         }

@@ -14,6 +14,7 @@ namespace Game.Room.Enemy
         {
             base.OnEnterState();
             Subscribe();
+            _movement.StartGoingTo(new Vector2(12, 1569));
         }
 
         protected override void OnExitState()

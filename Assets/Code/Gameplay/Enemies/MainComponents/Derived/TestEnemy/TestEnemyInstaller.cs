@@ -1,9 +1,4 @@
-using Game.Room.Enemy;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Game
+namespace Game.Room.Enemy
 {
     public class TestEnemyInstaller : EnemyInstaller
     {
