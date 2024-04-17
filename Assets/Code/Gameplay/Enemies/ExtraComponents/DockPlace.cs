@@ -1,7 +1,7 @@
 using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
+using Game.Utility;
 
 namespace Game.Room.Enemy
 {
@@ -80,8 +80,12 @@ namespace Game.Room.Enemy
             {
                 float currentTime = Time.time - (endTime - _dockingTime);
                 float t = math.remap(0, _dockingTime, 0, 1, currentTime);
-                Vector2 targetPos = Vector2.Lerp(startPos, endPos, t);
-                float targetRot = Mathf.LerpAngle(startRot, endRot, t);
+                float posT = LerpX.GetSmooth(ref t, LerpX.SmoothType.Smootherstep);
+                float rotT = Mathf.Clamp(t * 2, 0, 1);
+                rotT = LerpX.GetSmooth(ref rotT, LerpX.SmoothType.Smoothstep);
+
+                Vector2 targetPos = Vector2.Lerp(startPos, endPos, posT);
+                float targetRot = Mathf.LerpAngle(startRot, endRot, rotT);
 
                 _occupand.Body.MovePosition(targetPos);
                 _occupand.Body.MoveRotation(targetRot);
