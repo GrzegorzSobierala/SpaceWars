@@ -78,7 +78,7 @@ namespace Game.Room.Enemy
             Vector2 endPos, float endRot, float endTime)
         {
             float angleToRot = Mathf.DeltaAngle(startRot, endRot);
-            float rotMulti = Mathf.Abs(angleToRot) / 180;
+            float rotMulti = Mathf.Clamp(Mathf.Abs(angleToRot) / 180, float.Epsilon, float.MaxValue);
 
             while (endTime > Time.time)
             {

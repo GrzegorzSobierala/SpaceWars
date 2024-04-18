@@ -43,7 +43,6 @@ namespace Game.Room.Enemy
 
         public void OnStartUnDocking()
         {
-
         }
 
         public void OnEndUnDocking()
