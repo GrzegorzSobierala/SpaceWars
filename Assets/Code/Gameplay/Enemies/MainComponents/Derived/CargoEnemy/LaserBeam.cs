@@ -123,10 +123,11 @@ namespace Game.Room.Enemy
                 if (hittable == null)
                     continue;
 
-                DamageData damage = new DamageData(_EnemyBase.gameObject, _damage);
+                Vector2 hitPoint = raycastHit.point;
+                DamageData damage = new DamageData(_EnemyBase.gameObject, _damage, hitPoint);
 
                 _lastDamageDealtTime = Time.time;
-                hittable.GetHit(raycastHit.point, damage);
+                hittable.GetHit(damage);
             }
         }
 

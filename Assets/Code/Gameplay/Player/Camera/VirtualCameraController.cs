@@ -46,6 +46,11 @@ namespace Game.Player.VirtualCamera
             Vector2 shakeVector = 
                 new Vector2( -collision.relativeVelocity.y ,collision.relativeVelocity.x);
 
+            ShakeCamera(shakeVector);
+        }
+
+        public void ShakeCamera(Vector2 shakeVector)
+        {
             _impulseSource.GenerateImpulse(shakeVector * _shakeStrenght);
         }
     }

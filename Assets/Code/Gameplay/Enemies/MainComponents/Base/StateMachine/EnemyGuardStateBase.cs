@@ -38,7 +38,7 @@ namespace Game.Room.Enemy
             }
         }
 
-        private void TrySwitchToCombatState(Collision2D _ , DamageData damage)
+        private void TrySwitchToCombatState(DamageData damage)
         {
             if (_playerManager.PlayerBody.gameObject != damage.DamageDealer)
                 return;

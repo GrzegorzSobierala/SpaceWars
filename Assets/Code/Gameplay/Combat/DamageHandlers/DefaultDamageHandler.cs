@@ -5,7 +5,7 @@ namespace Game.Room.Enemy
 {
     public class DefaultDamageHandler : DamageHandlerBase
     {
-        protected override DamageData ModifyDamage(Collision2D collsion, DamageData damage)
+        protected override DamageData ModifyDamage(DamageData damage)
         {
             return damage;
         }
