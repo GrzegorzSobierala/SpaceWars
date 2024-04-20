@@ -333,6 +333,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _baseHp: 25
+  _shipMeshRenderer: {fileID: 3468256321605477082}
+  _emisiveColor: {r: 1, g: 0, b: 0, a: 1}
+  _emisiveIntesvity: 50
 --- !u!114 &7964856278564864377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10974,6 +10977,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 375f81cb8d5b16c44bb3797f0881631b, type: 3}
   m_PrefabInstance: {fileID: 2873346170844790366}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &3468256321605477082 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 375f81cb8d5b16c44bb3797f0881631b, type: 3}
+  m_PrefabInstance: {fileID: 2873346170844790366}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7978581047003722351
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10982,6 +10990,66 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6114305214545224824}
     m_Modifications:
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: _realodMarker
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: OnEndReload.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: OnStartReload.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: OnEndReload.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: OnEndReload.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4821283415997815180}
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: OnStartReload.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: OnStartReload.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4821283415997815180}
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: OnEndReload.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: OnEndReload.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeToReloaded
+      objectReference: {fileID: 0}
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: OnStartReload.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: OnStartReload.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeToReloading
+      objectReference: {fileID: 0}
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: OnEndReload.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Game.Room.Enemy.CargoEnemy, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: OnStartReload.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Game.Room.Enemy.CargoEnemy, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: OnEndReload.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2636480698709426620, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: OnStartReload.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3850276502429746786, guid: c1719f67534edab48943a3874bad9046, type: 3}
       propertyPath: m_Name
       value: BigLaserGun
@@ -11031,7 +11099,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2399713181012816645, guid: c1719f67534edab48943a3874bad9046, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1719f67534edab48943a3874bad9046, type: 3}

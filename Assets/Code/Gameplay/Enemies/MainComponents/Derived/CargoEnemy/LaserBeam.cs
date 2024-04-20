@@ -3,6 +3,7 @@ using Game.Utility.Globals;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Zenject;
 
 namespace Game.Room.Enemy
@@ -21,7 +22,11 @@ namespace Game.Room.Enemy
         [SerializeField] private float _damage = 1;
         [SerializeField] private float _dealDamageInterval = 0.3f;
         [Space]
+        public UnityEvent OnStartReload;
+        public UnityEvent OnEndReload;
+        [Space]
         [SerializeField] private LayerMask _blockAimLayerMask;
+        [SerializeField] private GameObject _realodMarker;
 
         private LineRenderer _lineRenderer;
         private bool _isFiring = false;
@@ -30,6 +35,7 @@ namespace Game.Room.Enemy
         private float _startShootingTime = -100;
         private float _startReloadingTime = -100;
         private float _lastDamageDealtTime = -100;
+        private bool _isReloading = false;
 
         private void Awake()
         {
@@ -63,35 +69,33 @@ namespace Game.Room.Enemy
             _startReloadingTime = Time.time;
         }
 
-        
-
         private void TryFire()
         {
             if (_startReloadingTime + _reloadTime > Time.time)
             {
                 OnReloading();
-                return;
             }
-            else if(_startChargingTime + _chargingTime > Time.time)
+            if (_startChargingTime + _chargingTime > Time.time)
             {
                 OnCharging();
-                return;
             }
-            else if(_startShootingTime + _shootTime > Time.time)
+            else if (_startShootingTime + _shootTime > Time.time)
             {
                 OnFiring();
-                return;
             }
             else
             {
                 OnIdle();
-                return;
             }
+
+            SetReloadMarker(_startReloadingTime + _reloadTime > Time.time);
         }
 
         private void OnReloading()
         {
             StopFire();
+
+            SetReloadMarker(true);
         }
 
         private void OnCharging()
@@ -173,6 +177,23 @@ namespace Game.Room.Enemy
                 layerMask = _blockAimLayerMask,
                 useLayerMask = true,
             };
+        }
+
+        private void SetReloadMarker(bool active)
+        {
+            if (_isReloading == active)
+                return;
+
+            _isReloading = active;
+
+            if(active)
+            {
+                OnStartReload?.Invoke();
+            }
+            else
+            {
+                OnEndReload?.Invoke();
+            }
         }
     }
 }
