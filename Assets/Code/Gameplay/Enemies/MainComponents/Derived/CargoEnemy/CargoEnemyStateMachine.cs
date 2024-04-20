@@ -27,7 +27,7 @@ namespace Game.Room.Enemy
             base.Start();
 
             _targetDock = _mainDock;
-            GoToTargetStation();
+            //GoToTargetStation();
         }
 
         public void OnStartDocking()

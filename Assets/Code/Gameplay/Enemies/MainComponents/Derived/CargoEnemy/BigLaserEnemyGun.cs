@@ -2,23 +2,27 @@ using Game.Management;
 using Game.Utility;
 using Game.Utility.Globals;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Zenject;
 
 namespace Game.Room.Enemy
 {
     public class BigLaserEnemyGun : EnemyGunBase
     {
-        [SerializeField] private float _chargingTime = 0.3f;
+        [Inject] private EnemyBase _enemy;
+
         [SerializeField] private float _rotationSpeed = 50;
         [SerializeField] private float _shootAimAngleToPlayer = 4;
         [SerializeField] private float _aimRange = 500f;
         [SerializeField] private float _aimFallowTime = 2f;
         [Space]
-        [SerializeField] private Transform _gunRotate;
+        [SerializeField] private LaserBeam _laserBeam;
+        [SerializeField] private Transform _handleTrans;
+        [SerializeField] private Transform _gunTrans;
         [SerializeField] private Transform _shootPlace;
         [SerializeField] private LayerMask _blockAimLayerMask;
 
-        private float _lastTargetAimableTime;
+        private float _lastTargetAimableTime = -100;
         private ContactFilter2D _contactFilter;
 
         private void Awake()
@@ -35,8 +39,8 @@ namespace Game.Room.Enemy
         {
             base.OnAimingAt(target);
 
-            Vector2 gunPos = _gunRotate.position;
-            Vector2 gunToTargetDir = target.position - _gunRotate.position;
+            Vector2 gunPos = _handleTrans.position;
+            Vector2 gunToTargetDir = target.position - _handleTrans.position;
             float distanceToTarget = Vector2.Distance(target.position, gunPos);
             bool isInRange = distanceToTarget > _shootAimAngleToPlayer;
 
@@ -48,21 +52,33 @@ namespace Game.Room.Enemy
                 isVisable = IsTargetVisable(raycastHits);
             }
 
-            
+            if(isVisable)
+            {
+                _lastTargetAimableTime = Time.time;
+            }
 
-            AimAt(target.position, true);
+            if(_lastTargetAimableTime + _aimFallowTime < Time.time)
+            {
+                Vector2 lookForwardPoint = _enemy.transform.up + _enemy.transform.position;
+                AimAt(lookForwardPoint, false);
+            }
+            else
+            {
+                AimAt(target.position, true);
+            }
 
+            RotateGunTransform(target.position);
         }
 
         private void AimAt(Vector2 target, bool invokeOnAimTarget)
         {
-            float gunPlayerAngle = Utils.AngleDirected(_gunRotate.position, target) - 90f;
+            float gunPlayerAngle = Utils.AngleDirected(_handleTrans.position, target) - 90f;
 
             float rotSpeed = _rotationSpeed * Time.deltaTime;
-            float newAngle = Mathf.MoveTowardsAngle(_gunRotate.eulerAngles.z, gunPlayerAngle, rotSpeed);
+            float newAngle = Mathf.MoveTowardsAngle(_handleTrans.eulerAngles.z, gunPlayerAngle, rotSpeed);
 
-            Vector3 newRot = new Vector3(_gunRotate.eulerAngles.x, _gunRotate.eulerAngles.y, newAngle);
-            _gunRotate.eulerAngles = newRot;
+            Vector3 newRot = new Vector3(_handleTrans.eulerAngles.x, _handleTrans.eulerAngles.y, newAngle);
+            _handleTrans.eulerAngles = newRot;
 
             float angleToTarget = newAngle - gunPlayerAngle;
 
@@ -70,7 +86,18 @@ namespace Game.Room.Enemy
                 angleToTarget > -_shootAimAngleToPlayer / 2)
             {
                 OnAimTarget?.Invoke();
+
+                Vector3[] positions = new Vector3[2];
+                positions[0] = target;
+                positions[1] = _shootPlace.position;
             }
+        }
+
+        private void RotateGunTransform(Vector2 target)
+        {
+            float distance = Vector2.Distance(_handleTrans.position, target);
+            Vector2 lookAtPos = _handleTrans.up * distance + _handleTrans.position;
+            _gunTrans.LookAt(lookAtPos, -_handleTrans.forward);
         }
 
         private bool IsTargetVisable(RaycastHit2D[] raycastHits)

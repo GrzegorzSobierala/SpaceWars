@@ -10982,6 +10982,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6114305214545224824}
     m_Modifications:
+    - target: {fileID: 1563570316417622492, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: _gunTrans
+      value: 
+      objectReference: {fileID: 4970235435606482138}
+    - target: {fileID: 1563570316417622492, guid: c1719f67534edab48943a3874bad9046, type: 3}
+      propertyPath: _handleTrans
+      value: 
+      objectReference: {fileID: 2834865625879306961}
     - target: {fileID: 3850276502429746786, guid: c1719f67534edab48943a3874bad9046, type: 3}
       propertyPath: m_Name
       value: BigLaserGun
@@ -11035,6 +11043,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1719f67534edab48943a3874bad9046, type: 3}
+--- !u!4 &2834865625879306961 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5327453196498653374, guid: c1719f67534edab48943a3874bad9046, type: 3}
+  m_PrefabInstance: {fileID: 7978581047003722351}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4970235435606482138 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3044521287745547957, guid: c1719f67534edab48943a3874bad9046, type: 3}
+  m_PrefabInstance: {fileID: 7978581047003722351}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6147192653658304937 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4320827906816443334, guid: c1719f67534edab48943a3874bad9046, type: 3}

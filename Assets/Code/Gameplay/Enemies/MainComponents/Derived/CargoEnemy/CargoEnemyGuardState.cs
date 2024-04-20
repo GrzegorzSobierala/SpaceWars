@@ -9,12 +9,17 @@ namespace Game.Room.Enemy
     {
         [Inject] private List<EnemyFieldOfView> _views;
         [Inject] private EnemyMovementBase _movement;
+        [Inject] private List<EnemyGunBase> _guns;
 
         protected override void OnEnterState()
         {
             base.OnEnterState();
-            Subscribe();
-            _movement.StartGoingTo(new Vector2(12, 1569));
+            //Subscribe();
+
+            foreach (var gun in _guns) 
+            {
+                gun.StartAimingAt(_playerManager.PlayerBody.transform);
+            }
         }
 
         protected override void OnExitState()
