@@ -26,7 +26,6 @@ namespace Game.Room.Enemy
         public UnityEvent OnEndReload;
         [Space]
         [SerializeField] private LayerMask _blockAimLayerMask;
-        [SerializeField] private GameObject _realodMarker;
 
         private LineRenderer _lineRenderer;
         private bool _isFiring = false;
