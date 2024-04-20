@@ -540,6 +540,7 @@ Transform:
   - {fileID: 8999089545329531248}
   - {fileID: 2104082446747148479}
   - {fileID: 2509186832523519463}
+  - {fileID: 7951630673365020503}
   m_Father: {fileID: 4113733816113914260}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1855,6 +1856,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FuelFacilityUnity
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4615a333eeba79342bc54d0fe16b6b22, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2269,7 +2274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8264760697759632113, guid: e94131420a949f847a8a3d04b27fc2c2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.97
+      value: 6.7
       objectReference: {fileID: 0}
     - target: {fileID: 8264760697759632113, guid: e94131420a949f847a8a3d04b27fc2c2, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2710,6 +2715,96 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3012723384403166921, guid: bd8ccc326317db5419415dd71c9c62b3, type: 3}
   m_PrefabInstance: {fileID: 7411394838523132212}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7625549141052541116
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6780592166741621392}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 16.658823
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.092959404
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -10.539335
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 179234dd3fad6934ca0aa1c293319ba9, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 46edc10951d5e654689d2d49e48bb0c6, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: 93dcce8dde037c9489260ef5229c5921, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_Materials.Array.data[3]
+      value: 
+      objectReference: {fileID: 2100000, guid: 295134b58a7c9d84e93f48f80fd5b1d2, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_Materials.Array.data[4]
+      value: 
+      objectReference: {fileID: 2100000, guid: a48eeae9f2b24a44e86a7edd02fb58eb, type: 2}
+    - target: {fileID: 919132149155446097, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_Name
+      value: FuelFacilityUnityAutoSmooth
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+--- !u!4 &7951630673365020503 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 19e53fd7d32bbd6498db7f6456cef7bc, type: 3}
+  m_PrefabInstance: {fileID: 7625549141052541116}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7679589630849381147
 PrefabInstance:
