@@ -19,7 +19,6 @@ namespace Game.Room.Enemy
         [SerializeField] private LaserBeam _laserBeam;
         [SerializeField] private Transform _handleTrans;
         [SerializeField] private Transform _gunTrans;
-        [SerializeField] private Transform _shootPlace;
         [SerializeField] private LayerMask _blockAimLayerMask;
 
         private float _lastTargetAimableTime = -100;
@@ -68,6 +67,7 @@ namespace Game.Room.Enemy
             }
 
             RotateGunTransform(target.position);
+            
         }
 
         private void AimAt(Vector2 target, bool invokeOnAimTarget)
@@ -89,7 +89,9 @@ namespace Game.Room.Enemy
 
                 Vector3[] positions = new Vector3[2];
                 positions[0] = target;
-                positions[1] = _shootPlace.position;
+                positions[1] = _laserBeam.transform.position;
+
+                _laserBeam.StartFire();
             }
         }
 
@@ -110,7 +112,6 @@ namespace Game.Room.Enemy
             int layer = LayerMask.NameToLayer(Layers.Player);
             if (raycastHits[0].rigidbody.gameObject.layer == layer)
             {
-                Debug.Log($"sus");
                 return true;
             }
 
