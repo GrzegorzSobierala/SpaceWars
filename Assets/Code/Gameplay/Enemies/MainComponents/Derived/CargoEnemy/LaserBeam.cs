@@ -1,19 +1,25 @@
+using Game.Combat;
 using Game.Utility.Globals;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Room.Enemy
 {
     [RequireComponent(typeof(LineRenderer))]
     public class LaserBeam : MonoBehaviour
     {
+        [Inject] EnemyBase _EnemyBase;
+
         [SerializeField] private float _chargingTime = 0.3f;
         [SerializeField] private float _shootTime = 5f;
         [SerializeField] private float _reloadTime = 5f;
         [SerializeField] private float _range = 300f;
         [SerializeField] private float _chargingWidth = 0.3f;
         [SerializeField] private float _fireWidth = 2f;
+        [SerializeField] private float _damage = 1;
+        [SerializeField] private float _dealDamageInterval = 0.3f;
         [Space]
         [SerializeField] private LayerMask _blockAimLayerMask;
 
@@ -23,6 +29,7 @@ namespace Game.Room.Enemy
         private float _startChargingTime = -100;
         private float _startShootingTime = -100;
         private float _startReloadingTime = -100;
+        private float _lastDamageDealtTime = -100;
 
         private void Awake()
         {
@@ -56,31 +63,80 @@ namespace Game.Room.Enemy
             _startReloadingTime = Time.time;
         }
 
+        
+
         private void TryFire()
         {
             if (_startReloadingTime + _reloadTime > Time.time)
             {
-                StopFire();
-                Debug.Log("reload");
+                OnReloading();
+                return;
             }
             else if(_startChargingTime + _chargingTime > Time.time)
             {
-                _lineRenderer.startWidth = _chargingWidth;
-                _lineRenderer.endWidth = _chargingWidth;
-                Debug.Log("charge");
+                OnCharging();
+                return;
             }
             else if(_startShootingTime + _shootTime > Time.time)
             {
-                _lineRenderer.startWidth = _fireWidth;
-                _lineRenderer.endWidth = _fireWidth;
-                Debug.Log("fire");
+                OnFiring();
+                return;
             }
             else
             {
-                StopFire();
-                Debug.Log("nothing");
+                OnIdle();
+                return;
+            }
+        }
+
+        private void OnReloading()
+        {
+            StopFire();
+        }
+
+        private void OnCharging()
+        {
+            _lineRenderer.startWidth = _chargingWidth;
+            _lineRenderer.endWidth = _chargingWidth;
+
+            SetBeamPosition();
+        }
+
+        private void OnFiring()
+        {
+            _lineRenderer.startWidth = _fireWidth;
+            _lineRenderer.endWidth = _fireWidth;
+
+            RaycastHit2D raycastHit = SetBeamPosition();
+
+            if (_lastDamageDealtTime + _dealDamageInterval > Time.time)
+                return;
+
+            if (raycastHit.collider == null)
+            {
+                return;
             }
 
+            IHittable[] hittables = raycastHit.collider.GetComponents<IHittable>();
+            foreach (IHittable hittable in hittables)
+            {
+                if (hittable == null)
+                    continue;
+
+                DamageData damage = new DamageData(_EnemyBase.gameObject, _damage);
+
+                _lastDamageDealtTime = Time.time;
+                hittable.GetHit(raycastHit.point, damage);
+            }
+        }
+
+        private void OnIdle()
+        {
+            StopFire();
+        }
+
+        private RaycastHit2D SetBeamPosition()
+        {
             Vector3 pos = transform.position;
             Vector2 dir = transform.forward;
 
@@ -102,8 +158,9 @@ namespace Game.Room.Enemy
             positions[1] = targetPos;
 
             _lineRenderer.SetPositions(positions);
-        }
 
+            return raycastHits[0];
+        }
 
         private void Initialize()
         {
