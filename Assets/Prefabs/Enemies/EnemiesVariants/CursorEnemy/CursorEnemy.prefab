@@ -9931,9 +9931,9 @@ MonoBehaviour:
   _rightGunTransform: {fileID: 3113656267949211620}
   _rightGunShootPoint: {fileID: 6853514698264144243}
   _bulletPrototype: {fileID: 5577059757908764798}
-  _shotInterval: 0.75
-  _magCapasity: 4
-  _reloadTime: 8
+  _shotInterval: 0.25
+  _magCapasity: 3
+  _reloadTime: 7
   _gunTravers: 45
   _shootAtMaxDistanceMutli: 0.7
 --- !u!1 &6953136812582892108
@@ -10787,7 +10787,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 405864246989137584, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}
       propertyPath: _speed
-      value: 300
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 405864246989137584, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}
       propertyPath: _maxDistance
