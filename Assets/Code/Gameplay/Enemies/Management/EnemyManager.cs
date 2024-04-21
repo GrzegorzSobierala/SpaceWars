@@ -14,6 +14,11 @@ namespace Game.Room.Enemy
 
         private bool _roomClear = false;
 
+        private void Awake()
+        {
+            _testSceneManager.SetListOfRoomEnemies(_roomEnemies);
+        }
+
         private void Update()
         {
             UpdateRoomClearCheck();
