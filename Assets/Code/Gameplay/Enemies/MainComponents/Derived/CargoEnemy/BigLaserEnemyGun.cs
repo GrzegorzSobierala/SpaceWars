@@ -23,6 +23,7 @@ namespace Game.Room.Enemy
 
         private float _lastTargetAimableTime = -100;
         private ContactFilter2D _contactFilter;
+        private bool isAimedAtPlayer = false;
 
         private void Awake()
         {
@@ -91,8 +92,20 @@ namespace Game.Room.Enemy
                 positions[0] = target;
                 positions[1] = _laserBeam.transform.position;
 
-                _laserBeam.StartFire();
+                isAimedAtPlayer = true;
             }
+            else
+            {
+                isAimedAtPlayer = false;
+            }
+        }
+
+        protected override void OnShooting()
+        {
+            if (!isAimedAtPlayer)
+                return;
+
+            _laserBeam.StartFire();
         }
 
         private void RotateGunTransform(Vector2 target)

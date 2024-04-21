@@ -8,18 +8,11 @@ namespace Game.Room.Enemy
     public class CargoEnemyGuardState : EnemyGuardStateBase
     {
         [Inject] private List<EnemyFieldOfView> _views;
-        [Inject] private EnemyMovementBase _movement;
-        [Inject] private List<EnemyGunBase> _guns;
 
         protected override void OnEnterState()
         {
             base.OnEnterState();
-            //Subscribe();
-
-            foreach (var gun in _guns) 
-            {
-                gun.StartAimingAt(_playerManager.PlayerBody.transform);
-            }
+            Subscribe();
         }
 
         protected override void OnExitState()
