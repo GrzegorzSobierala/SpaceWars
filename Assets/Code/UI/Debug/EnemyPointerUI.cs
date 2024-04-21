@@ -56,6 +56,9 @@ namespace Game.Player.UI
             // Find visible enemies
             foreach (EnemyBase enemy in enemyPositions)
             {
+                if (!enemy)
+                    continue;
+
                 Vector3 screenPoint = Camera.main.WorldToViewportPoint(enemy.transform.position);
                 bool isVisible = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 &&
                     screenPoint.y > 0 && screenPoint.y < 1;
