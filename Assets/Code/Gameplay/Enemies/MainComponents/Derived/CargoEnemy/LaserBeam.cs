@@ -26,6 +26,9 @@ namespace Game.Room.Enemy
         public UnityEvent OnEndReload;
         [Space]
         [SerializeField] private LayerMask _blockAimLayerMask;
+        [SerializeField] private GameObject _shootParticles;
+        [SerializeField] private GameObject _hitParticles;
+
 
         private LineRenderer _lineRenderer;
         private bool _isFiring = false;
@@ -87,6 +90,7 @@ namespace Game.Room.Enemy
                 OnIdle();
             }
 
+            
             SetReloadMarker(_startReloadingTime + _reloadTime > Time.time);
         }
 
@@ -95,6 +99,8 @@ namespace Game.Room.Enemy
             StopFire();
 
             SetReloadMarker(true);
+            _hitParticles.SetActive(false);
+            _shootParticles.SetActive(false);
         }
 
         private void OnCharging()
@@ -103,6 +109,8 @@ namespace Game.Room.Enemy
             _lineRenderer.endWidth = _chargingWidth;
 
             SetBeamPosition();
+            _hitParticles.SetActive(false);
+            _shootParticles.SetActive(false);
         }
 
         private void OnFiring()
@@ -117,7 +125,14 @@ namespace Game.Room.Enemy
 
             if (raycastHit.collider == null)
             {
+                _hitParticles.SetActive(false);
                 return;
+            }
+            else
+            {
+                _hitParticles.transform.position = raycastHit.point;
+                _hitParticles.transform.LookAt(transform.position);
+                _hitParticles.SetActive(true);
             }
 
             IHittable[] hittables = raycastHit.collider.GetComponents<IHittable>();
@@ -131,12 +146,17 @@ namespace Game.Room.Enemy
 
                 _lastDamageDealtTime = Time.time;
                 hittable.GetHit(damage);
+
+                
             }
+            _shootParticles.SetActive(true);
         }
 
         private void OnIdle()
         {
             StopFire();
+            _hitParticles.SetActive(false);
+            _shootParticles.SetActive(false);
         }
 
         private RaycastHit2D SetBeamPosition()
