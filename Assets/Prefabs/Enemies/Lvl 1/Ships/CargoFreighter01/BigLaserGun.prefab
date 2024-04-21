@@ -151,20 +151,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213aea29dc6e2ea4ba6f9aeecca74176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _chargingTime: 2.5
+  _chargingTime: 1
   _shootTime: 5
-  _reloadTime: 5
-  _range: 300
+  _reloadTime: 4
+  _range: 500
   _chargingWidth: 0.1
   _fireWidth: 2
   _damage: 1
   _dealDamageInterval: 0.3
   OnStartReload:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: Game.Room.Enemy.CargoEnemy, Assembly-CSharp
+        m_MethodName: ChangeToReloading
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnEndReload:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: Game.Room.Enemy.CargoEnemy, Assembly-CSharp
+        m_MethodName: ChangeToReloaded
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _blockAimLayerMask:
     serializedVersion: 2
     m_Bits: 3136
@@ -5307,10 +5331,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96918c401ce7c2649bcf49f38919a832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rotationSpeed: 25
+  _rotationSpeed: 35
   _shootAimAngleToPlayer: 4
   _aimRange: 300
-  _aimFallowTime: 2
+  _aimFallowTime: 3
   _laserBeam: {fileID: 2636480698709426620}
   _handleTrans: {fileID: 8755597686823171154}
   _gunTrans: {fileID: 3894085265269208927}

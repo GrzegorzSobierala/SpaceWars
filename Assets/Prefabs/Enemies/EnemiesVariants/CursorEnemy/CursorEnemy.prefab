@@ -9931,9 +9931,9 @@ MonoBehaviour:
   _rightGunTransform: {fileID: 3113656267949211620}
   _rightGunShootPoint: {fileID: 6853514698264144243}
   _bulletPrototype: {fileID: 5577059757908764798}
-  _shotInterval: 0.5
-  _magCapasity: 5
-  _reloadTime: 7
+  _shotInterval: 0.75
+  _magCapasity: 4
+  _reloadTime: 8
   _gunTravers: 45
   _shootAtMaxDistanceMutli: 0.7
 --- !u!1 &6953136812582892108
@@ -9980,7 +9980,7 @@ Transform:
   - {fileID: 5183289134532489531}
   - {fileID: 3635324446769545177}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6160428084483414833
 MonoBehaviour:
@@ -10064,9 +10064,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd15dbd11c4f8dc438499ccd64fc0373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseSpeed: 150
-  _baseAngularSpeed: 75
-  _spotRange: 750
+  _baseSpeed: 130
+  _baseAngularSpeed: 70
+  _spotRange: 500
   _agentTargetUpdateInterval: 0.2
 --- !u!195 &9196227978536751886
 NavMeshAgent:
@@ -10787,11 +10787,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 405864246989137584, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}
       propertyPath: _speed
-      value: 350
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 405864246989137584, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}
       propertyPath: _maxDistance
-      value: 400
+      value: 450
       objectReference: {fileID: 0}
     - target: {fileID: 405864246989137584, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}
       propertyPath: _particleSystem
