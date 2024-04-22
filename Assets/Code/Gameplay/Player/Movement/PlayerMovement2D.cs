@@ -1,5 +1,6 @@
 using Game.Input.System;
 using Game.Utility;
+using System;
 using UnityEngine;
 using Zenject;
 
@@ -22,6 +23,9 @@ namespace Game.Player.Ship
         private Option _lastVerdical = Option.Defult;
         private Option _lastHorizontal = Option.Defult;
 
+        public Action<int> OnVerdicalMove;
+        public Action<int> OnHorizontalMove;
+
         public void VerdicalMove()
         {
             bool moveForward = _Input.MoveForward.ReadValue<float>() == 1.0f;
@@ -32,13 +36,17 @@ namespace Game.Player.Ship
             if (newestSide == Option.Option1)
             {
                 MovePlayer(Vector2.up, _forwardSpeedMulti);
+                OnVerdicalMove?.Invoke(1);
                 return;
             }
             else if (newestSide == Option.Option2)
             {
                 MovePlayer(Vector2.down, _backSpeedMulti);
+                OnVerdicalMove?.Invoke(-1);
                 return;
             }
+
+            OnVerdicalMove?.Invoke(0);
         }
 
         public void HorizontalMove()
@@ -51,13 +59,16 @@ namespace Game.Player.Ship
             if (newestSide == Option.Option1)
             {
                 MovePlayer(Vector2.right, _horizontalSpeedMutli);
+                OnHorizontalMove?.Invoke(1);
                 return;
             }
             else if (newestSide == Option.Option2)
             {
                 MovePlayer(Vector2.left, _horizontalSpeedMutli);
+                OnHorizontalMove?.Invoke(-1);
                 return;
             }
+            OnHorizontalMove?.Invoke(0);
         }
 
         private void MovePlayer(Vector2 direction, float procentOfMaxSpeed)
