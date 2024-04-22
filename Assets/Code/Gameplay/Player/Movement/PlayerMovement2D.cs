@@ -51,8 +51,8 @@ namespace Game.Player.Ship
 
         private void FixedUpdate()
         {
-            bool moveForward = _Input.RotateLeft.ReadValue<float>() == 1.0f;
-            bool moveBack = _Input.RotateRight.ReadValue<float>() == 1.0f;
+            bool moveForward = _Input.MoveLeft.ReadValue<float>() == 1.0f;
+            bool moveBack = _Input.MoveRight.ReadValue<float>() == 1.0f;
 
             Option newestSide = LogicUtility.GetNewestOption(moveForward, moveBack,
                 ref _lastVerdical);
@@ -67,6 +67,8 @@ namespace Game.Player.Ship
                 RotateLeft(-1);
                 return;
             }
+
+
         }
 
         private void RotateLeft(float value)
@@ -105,8 +107,8 @@ namespace Game.Player.Ship
 
         public void HorizontalMove()
         {
-            bool moveRight = _Input.MoveRight.ReadValue<float>() == 1.0f;
-            bool moveLeft = _Input.MoveLeft.ReadValue<float>() == 1.0f;
+            bool moveRight = _Input.RotateRight.ReadValue<float>() == 1.0f;
+            bool moveLeft = _Input.RotateLeft.ReadValue<float>() == 1.0f;
 
             Option newestSide = LogicUtility.GetNewestOption(moveRight, moveLeft, ref _lastHorizontal);
 
