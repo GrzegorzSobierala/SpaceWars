@@ -9980,7 +9980,7 @@ Transform:
   - {fileID: 5183289134532489531}
   - {fileID: 3635324446769545177}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6160428084483414833
 MonoBehaviour:
@@ -10066,7 +10066,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _baseSpeed: 130
   _baseAngularSpeed: 85
-  _spotRange: 500
   _agentTargetUpdateInterval: 0.2
 --- !u!195 &9196227978536751886
 NavMeshAgent:
@@ -10230,6 +10229,7 @@ MonoBehaviour:
   _runAngle: 40
   _stopOnRunDistanceToRayHit: 100
   _runSpeedMulti: 1.5
+  _spotPlayerRange: 500
 --- !u!1 &8051062959303241080
 GameObject:
   m_ObjectHideFlags: 0

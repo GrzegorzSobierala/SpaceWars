@@ -11,10 +11,8 @@ namespace Game.Room.Enemy
 
         [Inject] private NavMeshAgent _agent;
 
-        [SerializeField] private float _spotRange = 750;
         [SerializeField] private float _agentTargetUpdateInterval = 0.1f;
 
-        private bool _isFallowing = false;
         private float _nextAgentTargetUpdateTime = 0;
 
         private void Start()
@@ -26,19 +24,6 @@ namespace Game.Room.Enemy
         protected override void OnGoingTo(Transform fallowTarget)
         {
             base.OnGoingTo(fallowTarget);
-
-            if(!_isFallowing)
-            {
-                if (Vector2.Distance(transform.position, fallowTarget.position) < _spotRange)
-                {
-                    _agent.isStopped = false;
-                    _isFallowing = true;
-                }
-                else
-                {
-                    return;
-                }
-            }
 
             TrySetAgentDestination(fallowTarget.position);
 

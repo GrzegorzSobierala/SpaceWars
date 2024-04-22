@@ -382,7 +382,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _baseSpeed: 70
   _baseAngularSpeed: 20
-  _spotRange: 1500
   _agentTargetUpdateInterval: 0.1
 --- !u!195 &633672136587508781
 NavMeshAgent:
@@ -393,7 +392,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 934856488585992641}
   m_Enabled: 1
   m_AgentTypeID: 1479372276
-  m_Radius: 52
+  m_Radius: 100
   m_Speed: 100
   m_Acceleration: 100
   avoidancePriority: 10
@@ -403,7 +402,7 @@ NavMeshAgent:
   m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 30
-  m_BaseOffset: 1
+  m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 3
 --- !u!114 &223531885114056726
