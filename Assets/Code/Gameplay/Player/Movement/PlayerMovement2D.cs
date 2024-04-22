@@ -144,6 +144,9 @@ namespace Game.Player.Ship
 
         public void RotateToPoint(Vector2 point)
         {
+            if (_movementQE)
+                return;
+
             Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection(point);
             float playerCursorAngle = Utils.AngleDirected(_body.position, intersectionPoint) - 90f;
 
