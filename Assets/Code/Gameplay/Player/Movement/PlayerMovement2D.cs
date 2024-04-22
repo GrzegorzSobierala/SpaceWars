@@ -2,6 +2,7 @@ using Game.Input.System;
 using Game.Utility;
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Zenject;
 
 namespace Game.Player.Ship
@@ -17,6 +18,7 @@ namespace Game.Player.Ship
         [SerializeField, Range(0.0f, 200.0f)] float _backSpeedMulti = 30;
         [SerializeField] private float _rotationSpeed = 50;
         [SerializeField] private float _velocityRotMulti = 0.5f;
+        [SerializeField] private float _boostCooldown = 2f;
 
         private PlayerControls.GameplayActions _Input => _inputProvider.PlayerControls.Gameplay;
 
@@ -26,12 +28,31 @@ namespace Game.Player.Ship
         public Action<int> OnVerdicalMove;
         public Action<int> OnHorizontalMove;
 
+        private float lastBoostTime = -100;
+
+        public void Start()
+        {
+            _Input.MoveForwardBoost.performed += MoveForwardBoost;
+            _Input.MoveBackBoost.performed += MoveBackBoost;
+            _Input.MoveLeftBoost.performed += MoveLeftBoost;
+            _Input.MoveRightBoost.performed += MoveRightBoost;    
+        }
+
+        private void OnDestroy()
+        {
+            _Input.MoveForwardBoost.performed -= MoveForwardBoost;
+            _Input.MoveBackBoost.performed -= MoveBackBoost;
+            _Input.MoveLeftBoost.performed -= MoveLeftBoost;
+            _Input.MoveRightBoost.performed -= MoveRightBoost;
+        }
+
         public void VerdicalMove()
         {
             bool moveForward = _Input.MoveForward.ReadValue<float>() == 1.0f;
             bool moveBack = _Input.MoveBack.ReadValue<float>() == 1.0f;
 
-            Option newestSide = LogicUtility.GetNewestOption(moveForward, moveBack, ref _lastVerdical);
+            Option newestSide = LogicUtility.GetNewestOption(moveForward, moveBack, 
+                ref _lastVerdical);
 
             if (newestSide == Option.Option1)
             {
@@ -111,6 +132,33 @@ namespace Game.Player.Ship
         public void SetVelocityRotMulti(float value)
         {
             _velocityRotMulti = value;
+        }
+
+        private void MoveForwardBoost(InputAction.CallbackContext _)
+        {
+            TryMovePlayerBoost(Vector2.up, _forwardSpeedMulti);
+        }
+        private void MoveBackBoost(InputAction.CallbackContext _)
+        {
+            TryMovePlayerBoost(Vector2.down, _forwardSpeedMulti);
+        }
+        private void MoveLeftBoost(InputAction.CallbackContext _)
+        {
+            TryMovePlayerBoost(Vector2.left, _forwardSpeedMulti);
+        }
+        private void MoveRightBoost(InputAction.CallbackContext _)
+        {
+            TryMovePlayerBoost(Vector2.right, _forwardSpeedMulti);
+        }
+
+        private void TryMovePlayerBoost(Vector2 direction, float procentOfMaxSpeed)
+        {
+            if (lastBoostTime + _boostCooldown > Time.time)
+                return;
+
+            lastBoostTime = Time.time;
+            Vector2 targetForce = direction * _moveSpeed * _body.mass * 0.75f;
+            _body.AddRelativeForce(procentOfMaxSpeed * targetForce);
         }
     }
 }

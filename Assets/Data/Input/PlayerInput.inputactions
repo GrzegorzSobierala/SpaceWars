@@ -42,6 +42,42 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "MoveForwardBoost",
+                    "type": "Button",
+                    "id": "c9353716-207e-439d-821c-610128e271ed",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "MultiTap",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MoveBackBoost",
+                    "type": "Button",
+                    "id": "563c882c-8e36-4ede-b15c-1de60e1c74f9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "MultiTap",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MoveLeftBoost",
+                    "type": "Button",
+                    "id": "e4043882-57b6-4ec4-b749-41ee1f94f3ad",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "MultiTap",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MoveRightBoost",
+                    "type": "Button",
+                    "id": "3ce3ff68-2dc8-4b6f-b070-04441c95bd3b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "MultiTap",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "CursorPosition",
                     "type": "Value",
                     "id": "9296817a-c332-4b5a-a82a-594c707e1707",
@@ -144,6 +180,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ff72f0ff-e26c-4d3c-b3a7-39c9a240ead1",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveRightBoost",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d8e5a5e3-c5e0-4682-b3a8-8cda464d27eb",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveLeftBoost",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3632a482-adb8-4dcc-8397-0538b502d143",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveBackBoost",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "93b70a0d-1ba5-4d80-af21-c1da79f954b1",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveForwardBoost",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
