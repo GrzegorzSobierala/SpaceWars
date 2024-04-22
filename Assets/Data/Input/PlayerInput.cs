@@ -66,6 +66,24 @@ namespace Game.Input.System
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""RotateLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""290b7d89-477b-43f7-b06f-948fe48314f7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""87a674bb-eb9c-4dff-83e5-34c2ba4078f7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""MoveForwardBoost"",
                     ""type"": ""Button"",
                     ""id"": ""c9353716-207e-439d-821c-610128e271ed"",
@@ -250,6 +268,28 @@ namespace Game.Input.System
                     ""action"": ""MoveForwardBoost"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9b369658-bf9f-4854-9b66-ae4e0044dc11"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c605fca9-7e81-463f-b419-f8d698269e74"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -262,6 +302,8 @@ namespace Game.Input.System
             m_Gameplay_MoveBack = m_Gameplay.FindAction("MoveBack", throwIfNotFound: true);
             m_Gameplay_MoveLeft = m_Gameplay.FindAction("MoveLeft", throwIfNotFound: true);
             m_Gameplay_MoveRight = m_Gameplay.FindAction("MoveRight", throwIfNotFound: true);
+            m_Gameplay_RotateLeft = m_Gameplay.FindAction("RotateLeft", throwIfNotFound: true);
+            m_Gameplay_RotateRight = m_Gameplay.FindAction("RotateRight", throwIfNotFound: true);
             m_Gameplay_MoveForwardBoost = m_Gameplay.FindAction("MoveForwardBoost", throwIfNotFound: true);
             m_Gameplay_MoveBackBoost = m_Gameplay.FindAction("MoveBackBoost", throwIfNotFound: true);
             m_Gameplay_MoveLeftBoost = m_Gameplay.FindAction("MoveLeftBoost", throwIfNotFound: true);
@@ -334,6 +376,8 @@ namespace Game.Input.System
         private readonly InputAction m_Gameplay_MoveBack;
         private readonly InputAction m_Gameplay_MoveLeft;
         private readonly InputAction m_Gameplay_MoveRight;
+        private readonly InputAction m_Gameplay_RotateLeft;
+        private readonly InputAction m_Gameplay_RotateRight;
         private readonly InputAction m_Gameplay_MoveForwardBoost;
         private readonly InputAction m_Gameplay_MoveBackBoost;
         private readonly InputAction m_Gameplay_MoveLeftBoost;
@@ -349,6 +393,8 @@ namespace Game.Input.System
             public InputAction @MoveBack => m_Wrapper.m_Gameplay_MoveBack;
             public InputAction @MoveLeft => m_Wrapper.m_Gameplay_MoveLeft;
             public InputAction @MoveRight => m_Wrapper.m_Gameplay_MoveRight;
+            public InputAction @RotateLeft => m_Wrapper.m_Gameplay_RotateLeft;
+            public InputAction @RotateRight => m_Wrapper.m_Gameplay_RotateRight;
             public InputAction @MoveForwardBoost => m_Wrapper.m_Gameplay_MoveForwardBoost;
             public InputAction @MoveBackBoost => m_Wrapper.m_Gameplay_MoveBackBoost;
             public InputAction @MoveLeftBoost => m_Wrapper.m_Gameplay_MoveLeftBoost;
@@ -377,6 +423,12 @@ namespace Game.Input.System
                 @MoveRight.started += instance.OnMoveRight;
                 @MoveRight.performed += instance.OnMoveRight;
                 @MoveRight.canceled += instance.OnMoveRight;
+                @RotateLeft.started += instance.OnRotateLeft;
+                @RotateLeft.performed += instance.OnRotateLeft;
+                @RotateLeft.canceled += instance.OnRotateLeft;
+                @RotateRight.started += instance.OnRotateRight;
+                @RotateRight.performed += instance.OnRotateRight;
+                @RotateRight.canceled += instance.OnRotateRight;
                 @MoveForwardBoost.started += instance.OnMoveForwardBoost;
                 @MoveForwardBoost.performed += instance.OnMoveForwardBoost;
                 @MoveForwardBoost.canceled += instance.OnMoveForwardBoost;
@@ -414,6 +466,12 @@ namespace Game.Input.System
                 @MoveRight.started -= instance.OnMoveRight;
                 @MoveRight.performed -= instance.OnMoveRight;
                 @MoveRight.canceled -= instance.OnMoveRight;
+                @RotateLeft.started -= instance.OnRotateLeft;
+                @RotateLeft.performed -= instance.OnRotateLeft;
+                @RotateLeft.canceled -= instance.OnRotateLeft;
+                @RotateRight.started -= instance.OnRotateRight;
+                @RotateRight.performed -= instance.OnRotateRight;
+                @RotateRight.canceled -= instance.OnRotateRight;
                 @MoveForwardBoost.started -= instance.OnMoveForwardBoost;
                 @MoveForwardBoost.performed -= instance.OnMoveForwardBoost;
                 @MoveForwardBoost.canceled -= instance.OnMoveForwardBoost;
@@ -458,6 +516,8 @@ namespace Game.Input.System
             void OnMoveBack(InputAction.CallbackContext context);
             void OnMoveLeft(InputAction.CallbackContext context);
             void OnMoveRight(InputAction.CallbackContext context);
+            void OnRotateLeft(InputAction.CallbackContext context);
+            void OnRotateRight(InputAction.CallbackContext context);
             void OnMoveForwardBoost(InputAction.CallbackContext context);
             void OnMoveBackBoost(InputAction.CallbackContext context);
             void OnMoveLeftBoost(InputAction.CallbackContext context);

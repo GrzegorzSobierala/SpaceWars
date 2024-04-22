@@ -19,6 +19,7 @@ namespace Game.Player.Ship
         [SerializeField] private float _rotationSpeed = 50;
         [SerializeField] private float _velocityRotMulti = 0.5f;
         [SerializeField] private float _boostCooldown = 2f;
+        [SerializeField] private bool _movementQE = true;
 
         private PlayerControls.GameplayActions _Input => _inputProvider.PlayerControls.Gameplay;
 
@@ -29,6 +30,8 @@ namespace Game.Player.Ship
         public Action<int> OnHorizontalMove;
 
         private float lastBoostTime = -100;
+
+        public bool MovementQE => _movementQE;
 
         public void Start()
         {
@@ -44,6 +47,36 @@ namespace Game.Player.Ship
             _Input.MoveBackBoost.performed -= MoveBackBoost;
             _Input.MoveLeftBoost.performed -= MoveLeftBoost;
             _Input.MoveRightBoost.performed -= MoveRightBoost;
+        }
+
+        private void FixedUpdate()
+        {
+            bool moveForward = _Input.RotateLeft.ReadValue<float>() == 1.0f;
+            bool moveBack = _Input.RotateRight.ReadValue<float>() == 1.0f;
+
+            Option newestSide = LogicUtility.GetNewestOption(moveForward, moveBack,
+                ref _lastVerdical);
+
+            if (newestSide == Option.Option1)
+            {
+                RotateLeft(1);
+                return;
+            }
+            else if (newestSide == Option.Option2)
+            {
+                RotateLeft(-1);
+                return;
+            }
+        }
+
+        private void RotateLeft(float value)
+        {
+            float rotSpeed = (value * _rotationSpeed * Time.fixedDeltaTime) + _body.rotation;
+            //float newAngle = Mathf.MoveTowardsAngle(_body.rotation, rotSpeed, rotSpeed);
+
+            _body.MoveRotation(rotSpeed);
+
+            TransferVelocity(rotSpeed);
         }
 
         public void VerdicalMove()
@@ -100,6 +133,9 @@ namespace Game.Player.Ship
 
         public void RotateToCursor()
         {
+            if (_movementQE)
+                return;
+
             Vector2 mousePos = _Input.CursorPosition.ReadValue<Vector2>();
             RotateToPoint(mousePos);
         }
