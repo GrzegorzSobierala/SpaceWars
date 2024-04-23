@@ -19,7 +19,8 @@ namespace Game.Player.Ship
         [SerializeField] private float _rotationSpeed = 50;
         [SerializeField] private float _velocityRotMulti = 0.5f;
         [SerializeField] private float _boostCooldown = 2f;
-        [SerializeField] private bool _movementQE = true;
+        [SerializeField] private bool _movementQE = false;
+        [SerializeField] private bool _reverseRotationInput = false;
 
         private PlayerControls.GameplayActions _Input => _inputProvider.PlayerControls.Gameplay;
 
@@ -30,8 +31,6 @@ namespace Game.Player.Ship
         public Action<int> OnHorizontalMove;
 
         private float lastBoostTime = -100;
-
-        public bool MovementQE => _movementQE;
 
         public void Start()
         {
@@ -49,29 +48,54 @@ namespace Game.Player.Ship
             _Input.MoveRightBoost.performed -= MoveRightBoost;
         }
 
+        private void Update()
+        {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                _movementQE = !_movementQE;
+            }
+
+            if (UnityEngine.Input.GetKeyDown(KeyCode.LeftAlt))
+            {
+                _reverseRotationInput = !_reverseRotationInput;
+            }
+        }
+
         private void FixedUpdate()
         {
-            bool moveForward = _Input.MoveLeft.ReadValue<float>() == 1.0f;
-            bool moveBack = _Input.MoveRight.ReadValue<float>() == 1.0f;
+            bool rotateLeft;
+            bool rotateRight;
 
-            Option newestSide = LogicUtility.GetNewestOption(moveForward, moveBack,
+            if (_reverseRotationInput)
+            {
+                rotateLeft = _Input.MoveLeft.ReadValue<float>() == 1.0f;
+                rotateRight = _Input.MoveRight.ReadValue<float>() == 1.0f;
+            }
+            else
+            {
+                rotateLeft = _Input.RotateLeft.ReadValue<float>() == 1.0f;
+                rotateRight = _Input.RotateRight.ReadValue<float>() == 1.0f;
+            }
+
+
+            Option newestSide = LogicUtility.GetNewestOption(rotateLeft, rotateRight,
                 ref _lastVerdical);
 
             if (newestSide == Option.Option1)
             {
-                RotateLeft(1);
+                RotateByKey(1);
                 return;
             }
             else if (newestSide == Option.Option2)
             {
-                RotateLeft(-1);
+                RotateByKey(-1);
                 return;
             }
 
 
         }
 
-        private void RotateLeft(float value)
+        private void RotateByKey(float value)
         {
             float rotSpeed = (value * _rotationSpeed * Time.fixedDeltaTime) + _body.rotation;
             //float newAngle = Mathf.MoveTowardsAngle(_body.rotation, rotSpeed, rotSpeed);
@@ -107,8 +131,20 @@ namespace Game.Player.Ship
 
         public void HorizontalMove()
         {
-            bool moveRight = _Input.RotateRight.ReadValue<float>() == 1.0f;
-            bool moveLeft = _Input.RotateLeft.ReadValue<float>() == 1.0f;
+            bool moveRight;
+            bool moveLeft;
+            if (_reverseRotationInput)
+            {
+                moveRight = _Input.RotateRight.ReadValue<float>() == 1.0f;
+                moveLeft = _Input.RotateLeft.ReadValue<float>() == 1.0f;
+            }
+            else
+            {
+                moveRight = _Input.MoveRight.ReadValue<float>() == 1.0f;
+                moveLeft = _Input.MoveLeft.ReadValue<float>() == 1.0f;
+            }
+
+           
 
             Option newestSide = LogicUtility.GetNewestOption(moveRight, moveLeft, ref _lastHorizontal);
 
