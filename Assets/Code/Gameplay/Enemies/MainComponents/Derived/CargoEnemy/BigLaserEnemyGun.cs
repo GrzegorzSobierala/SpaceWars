@@ -1,8 +1,6 @@
-using Game.Management;
 using Game.Utility;
 using Game.Utility.Globals;
 using UnityEngine;
-using UnityEngine.Rendering;
 using Zenject;
 
 namespace Game.Room.Enemy

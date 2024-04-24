@@ -18,10 +18,7 @@ namespace Game.Room.Enemy
 
         private void Awake()
         {
-            if (_dockingPoint == null)
-            {
-                _dockingPoint = transform;
-            }
+            Initialize();
         }
 
         public void StartDocking(IDocking dockingObject)
@@ -41,6 +38,14 @@ namespace Game.Room.Enemy
 
             StartMovingOperation(UnDocking());
             _occupand.OnStartUnDocking();
+        }
+
+        private void Initialize()
+        {
+            if (_dockingPoint == null)
+            {
+                _dockingPoint = transform;
+            }
         }
 
         private IEnumerator Docking()

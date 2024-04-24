@@ -32,18 +32,12 @@ namespace Game.Player.Ship
 
         public void Start()
         {
-            _Input.MoveForwardBoost.performed += MoveForwardBoost;
-            _Input.MoveBackBoost.performed += MoveBackBoost;
-            _Input.MoveLeftBoost.performed += MoveLeftBoost;
-            _Input.MoveRightBoost.performed += MoveRightBoost;    
+            Subscribe();
         }
 
         private void OnDestroy()
         {
-            _Input.MoveForwardBoost.performed -= MoveForwardBoost;
-            _Input.MoveBackBoost.performed -= MoveBackBoost;
-            _Input.MoveLeftBoost.performed -= MoveLeftBoost;
-            _Input.MoveRightBoost.performed -= MoveRightBoost;
+            Unsubscribe();
         }
 
         public void VerdicalMove()
@@ -159,6 +153,22 @@ namespace Game.Player.Ship
             lastBoostTime = Time.time;
             Vector2 targetForce = direction * _moveSpeed * _body.mass * 0.75f;
             _body.AddRelativeForce(procentOfMaxSpeed * targetForce);
+        }
+
+        private void Subscribe()
+        {
+            _Input.MoveForwardBoost.performed += MoveForwardBoost;
+            _Input.MoveBackBoost.performed += MoveBackBoost;
+            _Input.MoveLeftBoost.performed += MoveLeftBoost;
+            _Input.MoveRightBoost.performed += MoveRightBoost;
+        }
+
+        private void Unsubscribe()
+        {
+            _Input.MoveForwardBoost.performed -= MoveForwardBoost;
+            _Input.MoveBackBoost.performed -= MoveBackBoost;
+            _Input.MoveLeftBoost.performed -= MoveLeftBoost;
+            _Input.MoveRightBoost.performed -= MoveRightBoost;
         }
     }
 }

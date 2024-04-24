@@ -1,15 +1,13 @@
 using Game.Management;
-using Game.Player;
 using System.Collections.Generic;
-using UnityEngine;
 using Zenject;
 
 namespace Game.Room.Enemy
 {
     public class CargoEnemyCombatState : EnemyCombatStateBase
     {
-        [Inject] private List<EnemyGunBase> _guns;
         [Inject] protected PlayerManager _playerManager;
+        [Inject] private List<EnemyGunBase> _guns;
 
         protected override void OnEnterState()
         {

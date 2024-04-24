@@ -16,16 +16,14 @@ namespace Game.Player.Ship
 
         private void Start()
         {
-            _playerMovement.OnHorizontalMove += ChangeHorizontalParticles;
-            _playerMovement.OnVerdicalMove += ChangeVerdicalParticles;
+            Subscribe();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
 
-            _playerMovement.OnHorizontalMove -= ChangeHorizontalParticles;
-            _playerMovement.OnVerdicalMove -= ChangeVerdicalParticles;
+            Unsubscribe();
         }
     
 
@@ -82,6 +80,18 @@ namespace Game.Player.Ship
             {
                 Debug.LogError("Wrong value");
             }
+        }
+
+        private void Subscribe()
+        {
+            _playerMovement.OnHorizontalMove += ChangeHorizontalParticles;
+            _playerMovement.OnVerdicalMove += ChangeVerdicalParticles;
+        }
+
+        private void Unsubscribe()
+        {
+            _playerMovement.OnHorizontalMove -= ChangeHorizontalParticles;
+            _playerMovement.OnVerdicalMove -= ChangeVerdicalParticles;
         }
     }
 }

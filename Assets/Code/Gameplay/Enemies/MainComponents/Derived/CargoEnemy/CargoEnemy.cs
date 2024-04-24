@@ -5,10 +5,10 @@ namespace Game.Room.Enemy
 {
     public class CargoEnemy : EnemyBase
     {
-        [Space]
-        [SerializeField] private MeshRenderer _shipMeshRenderer;
         [SerializeField] Color _emisiveColor;
         [SerializeField] float _emisiveIntesvity = 20f;
+        [Space]
+        [SerializeField] private MeshRenderer _shipMeshRenderer;
 
         private Material _emisiveMaterial;
         private Color _baseColor;
