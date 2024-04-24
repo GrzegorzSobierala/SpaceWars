@@ -10,7 +10,7 @@ namespace Game.Room.Enemy
 
         [Inject] private EnemyStateMachineBase _stateMachine;
 
-        protected override DamageData ModifyDamage(Collision2D collsion, DamageData damage)
+        protected override DamageData ModifyDamage(DamageData damage)
         {
             return damage;
         }

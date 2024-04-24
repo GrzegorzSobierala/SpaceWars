@@ -8,5 +8,6 @@ namespace Game.Utility.Globals
         public const string EnemyCombat = "EnemyCombat";
         public const string Obstacle = "Obstacle";
         public const string SmallObstacle = "SmallObstacle";
+        public const string ObstacleShootAbove = "ObstacleShootAbove";
     }
 }

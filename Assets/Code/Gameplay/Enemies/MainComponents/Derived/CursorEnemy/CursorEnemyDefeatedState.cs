@@ -14,7 +14,6 @@ namespace Game.Room.Enemy
 
         protected override void OnExitState()
         {
-            Debug.LogError($"No OnExitState in {typeof(CursorEnemyDefeatedState)}");
         }
     }
 }

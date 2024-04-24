@@ -9,6 +9,7 @@ namespace Game.Room.Enemy
         [Inject] private List<EnemyFieldOfView> _views;
         [Inject] private PatrolController _patrolController;
         [Inject] private EnemyMovementBase _movement;
+        [Inject] private EnemyGunBase _enemyGun;
 
         protected override void OnEnterState()
         {
@@ -23,6 +24,7 @@ namespace Game.Room.Enemy
         {
             base.OnExitState();
             Unubscribe();
+            _enemyGun.Prepare();
         }
 
         private void Subscribe()

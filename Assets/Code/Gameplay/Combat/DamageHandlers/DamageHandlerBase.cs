@@ -8,7 +8,7 @@ namespace Game.Combat
     {
         public Collider2D Collider => _collider;
 
-        private Action<Collision2D, DamageData> OnGetHit;
+        private Action<DamageData> OnGetHit;
 
         private Collider2D _collider;
 
@@ -17,20 +17,20 @@ namespace Game.Combat
             _collider = GetComponent<Collider2D>();
         }
 
-        public void GetHit(Collision2D collsion, DamageData damage)
+        public void GetHit(DamageData damage)
         {
-            damage = ModifyDamage(collsion, damage);
-            OnGetHit?.Invoke(collsion, damage);
+            damage = ModifyDamage(damage);
+            OnGetHit?.Invoke(damage);
         }
 
-        protected abstract DamageData ModifyDamage(Collision2D collsion, DamageData damage);
+        protected abstract DamageData ModifyDamage(DamageData damage);
 
-        public void Subscribe(Action<Collision2D, DamageData> onGetHit)
+        public void Subscribe(Action<DamageData> onGetHit)
         {
             OnGetHit += onGetHit;
         }
 
-        public void Unsubscribe(Action<Collision2D, DamageData> onGetHit)
+        public void Unsubscribe(Action<DamageData> onGetHit)
         {
             OnGetHit -= onGetHit;
         }

@@ -5,6 +5,7 @@ using UnityEngine.AI;
 using Game.Utility;
 using System;
 using Unity.Mathematics;
+using System.Collections;
 
 namespace Game.Room.Enemy
 {
@@ -19,8 +20,24 @@ namespace Game.Room.Enemy
         [SerializeField] private float _runAngle = 45;
         [SerializeField] private float _stopOnRunDistanceToRayHit = 100;
         [SerializeField] private float _runSpeedMulti = 1.5f;
+        [SerializeField] private float _spotPlayerRange = 750;
 
         private Action _unSubAction;
+
+        private IEnumerator TryFallowPlayer()
+        {
+            while (true)
+            {
+                Vector2 playerPos = _playerManager.PlayerBody.position;
+                if (Vector2.Distance(transform.position, playerPos) < _spotPlayerRange)
+                {
+                    FallowPlayer();
+                    break;
+                }
+
+                yield return null;
+            }
+        }
 
         protected override void OnEnterState()
         {
@@ -29,13 +46,7 @@ namespace Game.Room.Enemy
             _gun.StartShooting();
             _movement.SetAngularSpeedModifier(1.0f);
 
-            FallowPlayer();
-
-            _gun.SubscribeOnStartReload(RunFromPlayer);
-            _gun.SubscribeOnStopReload(FallowPlayer);
-
-            _unSubAction = () => _movement.UnsubscribeOnAchivedTarget(FallowPlayer);
-            _movement.SubscribeOnChangedTarget(_unSubAction);
+            StartCoroutine(TryFallowPlayer());
         }
 
         protected override void OnExitState()
@@ -57,6 +68,12 @@ namespace Game.Room.Enemy
             _gun.StartAimingAt(_playerManager.PlayerBody.transform);
             _movement.StartGoingTo(_playerManager.PlayerBody.transform);
             _movement.SetSpeedModifier(_runSpeedMulti);
+
+            _gun.SubscribeOnStartReload(RunFromPlayer);
+            _gun.SubscribeOnStopReload(FallowPlayer);
+
+            _unSubAction = () => _movement.UnsubscribeOnAchivedTarget(FallowPlayer);
+            _movement.SubscribeOnChangedTarget(_unSubAction);
         }
 
         private void RunFromPlayer()

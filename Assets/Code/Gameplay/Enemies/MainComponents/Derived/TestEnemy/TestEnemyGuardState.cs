@@ -7,6 +7,7 @@ namespace Game.Room.Enemy
     public class TestEnemyGuardState : EnemyGuardStateBase
     {
         [Inject] private List<EnemyFieldOfView> _views;
+        [Inject] private EnemyGunBase _enemyGun;
 
         protected override void OnEnterState()
         {
@@ -18,6 +19,7 @@ namespace Game.Room.Enemy
         {
             base.OnExitState();
             Unubscribe();
+            _enemyGun.Prepare();
         }
 
         private void Subscribe()

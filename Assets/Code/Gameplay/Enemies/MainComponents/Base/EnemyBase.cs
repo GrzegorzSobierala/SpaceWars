@@ -38,7 +38,7 @@ namespace Game.Room.Enemy
             }
         }
 
-        public abstract void GetDamage(Collision2D collsion, DamageData damage);
+        public abstract void GetDamage(DamageData damage);
 
         protected virtual void ChangeCurrentHp(float hpChange)
         {

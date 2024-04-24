@@ -56,9 +56,11 @@ namespace Game.Combat
                 if (hittable == null)
                     continue;
 
-                DamageData damage = new DamageData(_damageDealer, _damage);
+                Vector2 hitPoint = collision.contacts[0].point;
 
-                hittable.GetHit(collision, damage);
+                DamageData damage = new DamageData(_damageDealer, _damage, hitPoint);
+
+                hittable.GetHit(damage);
             }
 
             OnHit();

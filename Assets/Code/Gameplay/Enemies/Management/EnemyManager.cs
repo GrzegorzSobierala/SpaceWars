@@ -1,5 +1,4 @@
 using Game.Management;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -13,6 +12,11 @@ namespace Game.Room.Enemy
         [Inject] private TestSceneManager _testSceneManager;
 
         private bool _roomClear = false;
+
+        private void Awake()
+        {
+            _testSceneManager.SetListOfRoomEnemies(_roomEnemies);
+        }
 
         private void Update()
         {

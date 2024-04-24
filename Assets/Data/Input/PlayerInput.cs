@@ -66,6 +66,42 @@ namespace Game.Input.System
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""MoveForwardBoost"",
+                    ""type"": ""Button"",
+                    ""id"": ""c9353716-207e-439d-821c-610128e271ed"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MoveBackBoost"",
+                    ""type"": ""Button"",
+                    ""id"": ""563c882c-8e36-4ede-b15c-1de60e1c74f9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MoveLeftBoost"",
+                    ""type"": ""Button"",
+                    ""id"": ""e4043882-57b6-4ec4-b749-41ee1f94f3ad"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MoveRightBoost"",
+                    ""type"": ""Button"",
+                    ""id"": ""3ce3ff68-2dc8-4b6f-b070-04441c95bd3b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap"",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""CursorPosition"",
                     ""type"": ""Value"",
                     ""id"": ""9296817a-c332-4b5a-a82a-594c707e1707"",
@@ -170,6 +206,50 @@ namespace Game.Input.System
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ff72f0ff-e26c-4d3c-b3a7-39c9a240ead1"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveRightBoost"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d8e5a5e3-c5e0-4682-b3a8-8cda464d27eb"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveLeftBoost"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3632a482-adb8-4dcc-8397-0538b502d143"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveBackBoost"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93b70a0d-1ba5-4d80-af21-c1da79f954b1"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveForwardBoost"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -182,6 +262,10 @@ namespace Game.Input.System
             m_Gameplay_MoveBack = m_Gameplay.FindAction("MoveBack", throwIfNotFound: true);
             m_Gameplay_MoveLeft = m_Gameplay.FindAction("MoveLeft", throwIfNotFound: true);
             m_Gameplay_MoveRight = m_Gameplay.FindAction("MoveRight", throwIfNotFound: true);
+            m_Gameplay_MoveForwardBoost = m_Gameplay.FindAction("MoveForwardBoost", throwIfNotFound: true);
+            m_Gameplay_MoveBackBoost = m_Gameplay.FindAction("MoveBackBoost", throwIfNotFound: true);
+            m_Gameplay_MoveLeftBoost = m_Gameplay.FindAction("MoveLeftBoost", throwIfNotFound: true);
+            m_Gameplay_MoveRightBoost = m_Gameplay.FindAction("MoveRightBoost", throwIfNotFound: true);
             m_Gameplay_CursorPosition = m_Gameplay.FindAction("CursorPosition", throwIfNotFound: true);
             m_Gameplay_Shoot = m_Gameplay.FindAction("Shoot", throwIfNotFound: true);
             m_Gameplay_Aim = m_Gameplay.FindAction("Aim", throwIfNotFound: true);
@@ -250,6 +334,10 @@ namespace Game.Input.System
         private readonly InputAction m_Gameplay_MoveBack;
         private readonly InputAction m_Gameplay_MoveLeft;
         private readonly InputAction m_Gameplay_MoveRight;
+        private readonly InputAction m_Gameplay_MoveForwardBoost;
+        private readonly InputAction m_Gameplay_MoveBackBoost;
+        private readonly InputAction m_Gameplay_MoveLeftBoost;
+        private readonly InputAction m_Gameplay_MoveRightBoost;
         private readonly InputAction m_Gameplay_CursorPosition;
         private readonly InputAction m_Gameplay_Shoot;
         private readonly InputAction m_Gameplay_Aim;
@@ -261,6 +349,10 @@ namespace Game.Input.System
             public InputAction @MoveBack => m_Wrapper.m_Gameplay_MoveBack;
             public InputAction @MoveLeft => m_Wrapper.m_Gameplay_MoveLeft;
             public InputAction @MoveRight => m_Wrapper.m_Gameplay_MoveRight;
+            public InputAction @MoveForwardBoost => m_Wrapper.m_Gameplay_MoveForwardBoost;
+            public InputAction @MoveBackBoost => m_Wrapper.m_Gameplay_MoveBackBoost;
+            public InputAction @MoveLeftBoost => m_Wrapper.m_Gameplay_MoveLeftBoost;
+            public InputAction @MoveRightBoost => m_Wrapper.m_Gameplay_MoveRightBoost;
             public InputAction @CursorPosition => m_Wrapper.m_Gameplay_CursorPosition;
             public InputAction @Shoot => m_Wrapper.m_Gameplay_Shoot;
             public InputAction @Aim => m_Wrapper.m_Gameplay_Aim;
@@ -285,6 +377,18 @@ namespace Game.Input.System
                 @MoveRight.started += instance.OnMoveRight;
                 @MoveRight.performed += instance.OnMoveRight;
                 @MoveRight.canceled += instance.OnMoveRight;
+                @MoveForwardBoost.started += instance.OnMoveForwardBoost;
+                @MoveForwardBoost.performed += instance.OnMoveForwardBoost;
+                @MoveForwardBoost.canceled += instance.OnMoveForwardBoost;
+                @MoveBackBoost.started += instance.OnMoveBackBoost;
+                @MoveBackBoost.performed += instance.OnMoveBackBoost;
+                @MoveBackBoost.canceled += instance.OnMoveBackBoost;
+                @MoveLeftBoost.started += instance.OnMoveLeftBoost;
+                @MoveLeftBoost.performed += instance.OnMoveLeftBoost;
+                @MoveLeftBoost.canceled += instance.OnMoveLeftBoost;
+                @MoveRightBoost.started += instance.OnMoveRightBoost;
+                @MoveRightBoost.performed += instance.OnMoveRightBoost;
+                @MoveRightBoost.canceled += instance.OnMoveRightBoost;
                 @CursorPosition.started += instance.OnCursorPosition;
                 @CursorPosition.performed += instance.OnCursorPosition;
                 @CursorPosition.canceled += instance.OnCursorPosition;
@@ -310,6 +414,18 @@ namespace Game.Input.System
                 @MoveRight.started -= instance.OnMoveRight;
                 @MoveRight.performed -= instance.OnMoveRight;
                 @MoveRight.canceled -= instance.OnMoveRight;
+                @MoveForwardBoost.started -= instance.OnMoveForwardBoost;
+                @MoveForwardBoost.performed -= instance.OnMoveForwardBoost;
+                @MoveForwardBoost.canceled -= instance.OnMoveForwardBoost;
+                @MoveBackBoost.started -= instance.OnMoveBackBoost;
+                @MoveBackBoost.performed -= instance.OnMoveBackBoost;
+                @MoveBackBoost.canceled -= instance.OnMoveBackBoost;
+                @MoveLeftBoost.started -= instance.OnMoveLeftBoost;
+                @MoveLeftBoost.performed -= instance.OnMoveLeftBoost;
+                @MoveLeftBoost.canceled -= instance.OnMoveLeftBoost;
+                @MoveRightBoost.started -= instance.OnMoveRightBoost;
+                @MoveRightBoost.performed -= instance.OnMoveRightBoost;
+                @MoveRightBoost.canceled -= instance.OnMoveRightBoost;
                 @CursorPosition.started -= instance.OnCursorPosition;
                 @CursorPosition.performed -= instance.OnCursorPosition;
                 @CursorPosition.canceled -= instance.OnCursorPosition;
@@ -342,6 +458,10 @@ namespace Game.Input.System
             void OnMoveBack(InputAction.CallbackContext context);
             void OnMoveLeft(InputAction.CallbackContext context);
             void OnMoveRight(InputAction.CallbackContext context);
+            void OnMoveForwardBoost(InputAction.CallbackContext context);
+            void OnMoveBackBoost(InputAction.CallbackContext context);
+            void OnMoveLeftBoost(InputAction.CallbackContext context);
+            void OnMoveRightBoost(InputAction.CallbackContext context);
             void OnCursorPosition(InputAction.CallbackContext context);
             void OnShoot(InputAction.CallbackContext context);
             void OnAim(InputAction.CallbackContext context);

@@ -7,10 +7,18 @@ namespace Game.Player.UI
     public class TestAlarmUI : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _textMesh;
-        [SerializeField] private AudioSource _audioSource;
+        [SerializeField] private AudioSource _alarmAudioSource;
+        [SerializeField] private AudioSource _sneakyMusicAudioSource;
+        [SerializeField] private AudioSource _combatMusicAudioSource;
         [SerializeField] private float _colorChangeDuration = 1f;
         [SerializeField] private int _maxRepeats = 5;
         private Coroutine colorChangeCoroutine;
+
+        private void Start()
+        {
+            _sneakyMusicAudioSource.Play();
+            _combatMusicAudioSource.Stop();
+        }
 
         public void Activate()
         {
@@ -20,7 +28,9 @@ namespace Game.Player.UI
             }
 
             colorChangeCoroutine = StartCoroutine(ChangeColorYoyo(Color.red));
-            _audioSource.Play();
+            _alarmAudioSource.Play();
+            _sneakyMusicAudioSource.Stop();
+            _combatMusicAudioSource.Play();
         }
 
         public void Deactivate()
@@ -32,6 +42,8 @@ namespace Game.Player.UI
 
             _textMesh.color = Color.white;
             colorChangeCoroutine = null;
+            _sneakyMusicAudioSource.Play();
+            _combatMusicAudioSource.Stop();
         }
 
         private IEnumerator ChangeColorYoyo(Color targetColor)

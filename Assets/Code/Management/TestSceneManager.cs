@@ -4,6 +4,8 @@ using Zenject;
 using UnityEngine.SceneManagement;
 using Game.Utility.Globals;
 using System;
+using Game.Room.Enemy;
+using System.Collections.Generic;
 
 namespace Game.Room
 {
@@ -12,7 +14,11 @@ namespace Game.Room
         [Inject] private PlayerManager _playerManager;
         [Inject] private ZenjectSceneLoader _sceneLoader;
 
+        private List<EnemyBase> _roomEnemies;
+
         public Action OnRoomMainObjectiveCompleted;
+
+        public List<EnemyBase> RoomEnemies => _roomEnemies;
 
         public void Load()
         {
@@ -40,5 +46,10 @@ namespace Game.Room
         //    container.BindInstance(_playerManager);
         //}
         //    );
+
+        public void SetListOfRoomEnemies(List<EnemyBase> enemies)
+        {
+            _roomEnemies = enemies;
+        }
     }
 }

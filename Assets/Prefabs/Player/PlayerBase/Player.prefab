@@ -473,9 +473,9 @@ MonoBehaviour:
   - {fileID: 2534597724515312179, guid: 2f5589a1c477df04186881b9d5b72d68, type: 3}
   - {fileID: 6086497948641695760, guid: 06dc91f845bd0524486ab3149f2e01e1, type: 3}
   _bridgesPrefabs:
-  - {fileID: 2670052336871671550, guid: 476c228dd1fd1614788c8d5e40e61db0, type: 3}
   - {fileID: 1226014815333710274, guid: 0ea83e421d1d43845990cc13bb3d4d17, type: 3}
   - {fileID: 2039922653773710990, guid: 04bbe4d89b048ce418d1d3f7237c70ec, type: 3}
+  - {fileID: 2670052336871671550, guid: 476c228dd1fd1614788c8d5e40e61db0, type: 3}
   - {fileID: 1226014815333710274, guid: d34f9ac38e160084aa8a31b06a3d9b6f, type: 3}
 --- !u!114 &9167951744479927178
 MonoBehaviour:
@@ -495,6 +495,7 @@ MonoBehaviour:
   _backSpeedMulti: 30
   _rotationSpeed: 150
   _velocityRotMulti: 0.3
+  _boostCooldown: 2
 --- !u!50 &488120537346839382
 Rigidbody2D:
   serializedVersion: 4
