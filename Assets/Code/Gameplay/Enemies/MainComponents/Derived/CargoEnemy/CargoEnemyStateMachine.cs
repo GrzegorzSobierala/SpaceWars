@@ -10,11 +10,13 @@ namespace Game.Room.Enemy
         [Inject] private NavMeshAgent _agent;
         [Inject] private Rigidbody2D _body;
         [Inject] private EnemyMovementBase _movement;
-
-        [SerializeField] private DockPlace _mainDock;
-        [SerializeField] private DockPlace _suplayDock;
+        
         [SerializeField] private float _distanceBeforeDock = 50;
         [SerializeField] private float _inDockTime = 12;
+        [Space]
+        [SerializeField] private DockPlace _mainDock;
+        [SerializeField] private DockPlace _suplayDock;
+        [SerializeField] private GameObject _engineParticles;
 
         private DockPlace _targetDock ;
 
@@ -34,7 +36,8 @@ namespace Game.Room.Enemy
         public void OnStartDocking()
         {
             _agent.enabled = false;
-            _movement.StopMoving();
+            _movement.StopMoving(); 
+            _engineParticles.SetActive(false);
         }
 
         public void OnEndDocking()
@@ -52,6 +55,7 @@ namespace Game.Room.Enemy
 
             _targetDock = _targetDock == _mainDock ? _suplayDock : _mainDock;
             GoToTargetStation();
+            _engineParticles.SetActive(true);
         }
 
         private void GoToTargetStation()

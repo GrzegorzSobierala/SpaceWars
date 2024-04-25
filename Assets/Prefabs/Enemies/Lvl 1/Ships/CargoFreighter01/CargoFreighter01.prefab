@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &419035554829174224
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1118028276941448935}
+  m_Layer: 0
+  m_Name: EngineParticles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1118028276941448935
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419035554829174224}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6114305214545224824}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &423700268659253344
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,6 +323,7 @@ Transform:
   - {fileID: 6147192653658304937}
   - {fileID: 8934125076398756448}
   - {fileID: 1648544550142439340}
+  - {fileID: 1118028276941448935}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -365,9 +397,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _baseHp: 25
-  _shipMeshRenderer: {fileID: 3468256321605477082}
   _emisiveColor: {r: 1, g: 0, b: 0, a: 1}
   _emisiveIntesvity: 50
+  _shipMeshRenderer: {fileID: 3468256321605477082}
 --- !u!114 &7964856278564864377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11067,10 +11099,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 370289e748dae8b46aad228a0ac20c4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mainDock: {fileID: 0}
-  _suplayDock: {fileID: 0}
   _distanceBeforeDock: 150
   _inDockTime: 12
+  _mainDock: {fileID: 0}
+  _suplayDock: {fileID: 0}
+  _engineParticles: {fileID: 419035554829174224}
 --- !u!1001 &2873346170844790366
 PrefabInstance:
   m_ObjectHideFlags: 0
