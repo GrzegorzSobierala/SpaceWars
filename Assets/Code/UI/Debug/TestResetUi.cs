@@ -1,15 +1,12 @@
-using Game.Input.System;
-using Game.Player.Ship;
-using Game.Room;
-using Game.Room.Enemy;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using Zenject;
+using Game.Input.System;
 using Game.Testing;
 using Game.Management;
+using Game.Room;
 
 namespace Game.Player.UI
 {
@@ -24,6 +21,7 @@ namespace Game.Player.UI
         [SerializeField] private Button _onOffButton;
         [SerializeField] private GameObject _panel;
         [SerializeField] private Button _restartButton;
+        [SerializeField] private Button _exitButton;
         [SerializeField] private TextMeshProUGUI _messageText;
         [SerializeField] private TextMeshProUGUI _currentTimerText;
         [SerializeField] private TextMeshProUGUI _timerListText;
@@ -66,10 +64,20 @@ namespace Game.Player.UI
             _currentTimerText.text = currentRoomTime.ToString("0.0");
         }
 
+        private void ExitGame()
+        {
+            Application.Quit();
+
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#endif
+        }
+
         private void Subscribe()
         {
             _onOffButton.onClick.AddListener(OnOffPanel);
             _restartButton.onClick.AddListener(Restart);
+            _exitButton.onClick.AddListener(ExitGame);
             _playerManager.OnPlayerDied += OnDeadPlayer;
             _testSceneManager.OnRoomMainObjectiveCompleted += OnRoomClear;
         }
@@ -78,6 +86,7 @@ namespace Game.Player.UI
         {
             _onOffButton.onClick.RemoveListener(OnOffPanel);
             _restartButton.onClick.RemoveListener(Restart);
+            _exitButton.onClick.RemoveListener(ExitGame);
             _playerManager.OnPlayerDied -= OnDeadPlayer;
             _testSceneManager.OnRoomMainObjectiveCompleted -= OnRoomClear;
         }
