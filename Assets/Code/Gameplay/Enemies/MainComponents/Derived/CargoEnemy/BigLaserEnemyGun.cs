@@ -30,7 +30,7 @@ namespace Game.Room.Enemy
 
         public override void Prepare()
         {
-            throw new System.NotImplementedException();
+            _laserBeam.StopFire();
         }
 
         protected override void OnAimingAt(Transform target)

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
@@ -10,6 +11,7 @@ namespace Game.Room.Enemy
         [Inject] private NavMeshAgent _agent;
         [Inject] private Rigidbody2D _body;
         [Inject] private EnemyMovementBase _movement;
+        [Inject] private List<EnemyGunBase> _guns;
         
         [SerializeField] private float _distanceBeforeDock = 50;
         [SerializeField] private float _inDockTime = 12;
@@ -38,6 +40,10 @@ namespace Game.Room.Enemy
             _agent.enabled = false;
             _movement.StopMoving(); 
             _engineParticles.SetActive(false);
+            foreach (var gun in _guns)
+            {
+                gun.Prepare();
+            }
         }
 
         public void OnEndDocking()
