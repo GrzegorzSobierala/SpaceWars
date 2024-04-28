@@ -87,6 +87,12 @@ namespace Game.Room.Enemy
 
         private void GoToGuardPoint(Transform guardPoint)
         {
+            if (!guardPoint)
+            {
+                StopPatroling();
+                return;
+            }
+
             _currentGuardPoint = guardPoint;
 
             _blockStop = true;

@@ -11,12 +11,14 @@ namespace Game.Room.Enemy
         [Inject] private EnemyMovementBase _movement;
         [Inject] private EnemyGunBase _enemyGun;
 
+        [SerializeField] private float _movementSpeedMulti = 0.5f;
+
         protected override void OnEnterState()
         {
             base.OnEnterState();
             Subscribe();
-            _movement.SetSpeedModifier(0.5f);
-            _movement.SetAngularSpeedModifier(0.5f);
+            _movement.SetSpeedModifier(_movementSpeedMulti);
+            _movement.SetAngularSpeedModifier(_movementSpeedMulti);
             _patrolController.StartPatroling();
         }
 

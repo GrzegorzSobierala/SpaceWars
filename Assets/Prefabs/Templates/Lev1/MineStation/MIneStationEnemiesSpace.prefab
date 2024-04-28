@@ -1593,7 +1593,7 @@ Transform:
   - {fileID: 5628513453077435716}
   - {fileID: 8411999301526569984}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7395204832836016730
 MonoBehaviour:
@@ -3818,13 +3818,29 @@ PrefabInstance:
       propertyPath: _guardPoints.Array.data[4]
       value: 
       objectReference: {fileID: 7051865689831528575}
+    - target: {fileID: 2105268798346313753, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
+      propertyPath: _movementSpeedMulti
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 2159849205792520315, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
       propertyPath: _spotRange
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 2683982022246648591, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
+      propertyPath: _rayCount
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 2683982022246648591, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
+      propertyPath: _viewDistance
+      value: 190
+      objectReference: {fileID: 0}
     - target: {fileID: 6953136812582892108, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
       propertyPath: m_Name
       value: CursorEnemy (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7492924567676110878, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
+      propertyPath: _spotPlayerRange
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 8739598414879171550, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
       propertyPath: m_RootOrder
@@ -4182,13 +4198,29 @@ PrefabInstance:
       propertyPath: _guardPoints.Array.data[4]
       value: 
       objectReference: {fileID: 8362895581238417908}
+    - target: {fileID: 2105268798346313753, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
+      propertyPath: _movementSpeedMulti
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 2159849205792520315, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
       propertyPath: _spotRange
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 2683982022246648591, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
+      propertyPath: _rayCount
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 2683982022246648591, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
+      propertyPath: _viewDistance
+      value: 190
+      objectReference: {fileID: 0}
     - target: {fileID: 6953136812582892108, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
       propertyPath: m_Name
       value: CursorEnemy (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7492924567676110878, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
+      propertyPath: _spotPlayerRange
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 8739598414879171550, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
       propertyPath: m_RootOrder
@@ -4452,13 +4484,29 @@ PrefabInstance:
       propertyPath: _guardPoints.Array.data[4]
       value: 
       objectReference: {fileID: 8362895581238417908}
+    - target: {fileID: 2105268798346313753, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
+      propertyPath: _movementSpeedMulti
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 2159849205792520315, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
       propertyPath: _spotRange
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 2683982022246648591, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
+      propertyPath: _rayCount
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 2683982022246648591, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
+      propertyPath: _viewDistance
+      value: 190
+      objectReference: {fileID: 0}
     - target: {fileID: 6953136812582892108, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
       propertyPath: m_Name
       value: CursorEnemy (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7492924567676110878, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
+      propertyPath: _spotPlayerRange
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 8739598414879171550, guid: 27a5ab16bcc784e418a233a73f5ad123, type: 3}
       propertyPath: m_RootOrder
