@@ -78,7 +78,7 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 11.2, z: -17.5}
+  - {x: 0, y: 4.99, z: -17.5}
   - {x: 0, y: 0, z: -17.5}
   m_Parameters:
     serializedVersion: 3
@@ -100,8 +100,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.8867924, g: 0.34718758, b: 0.34718758, a: 1}
-      key1: {r: 0.7924528, g: 0.4988831, b: 0.21306513, a: 1}
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -131,7 +131,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 1
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
@@ -156,7 +156,7 @@ MonoBehaviour:
   _reloadTime: 4
   _range: 500
   _chargingWidth: 0.1
-  _fireWidth: 2
+  _fireWidth: 30
   _damage: 1
   _dealDamageInterval: 0.3
   OnStartReload:
@@ -19992,7 +19992,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1543637144792186373
 Transform:
   m_ObjectHideFlags: 0
@@ -24853,7 +24853,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5161922576844366088
 Transform:
   m_ObjectHideFlags: 0
