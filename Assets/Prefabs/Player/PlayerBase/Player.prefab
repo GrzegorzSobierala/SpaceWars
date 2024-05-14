@@ -496,6 +496,7 @@ MonoBehaviour:
   _rotationSpeed: 150
   _velocityRotMulti: 0.3
   _boostCooldown: 2
+  _boostSpeed: 10000
 --- !u!50 &488120537346839382
 Rigidbody2D:
   serializedVersion: 4
@@ -638,7 +639,7 @@ Transform:
   - {fileID: 5715009007233723425}
   - {fileID: 1427402411709596891}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7866239942263792506
 MonoBehaviour:

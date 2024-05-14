@@ -25,7 +25,9 @@ namespace Game.Utility
                 lastUsedOption = Option.Option2;
                 return Option.Option2;
             }
-            return Option.Defult;
+
+            lastUsedOption = Option.Default;
+            return Option.Default;
         }
     }
 }
