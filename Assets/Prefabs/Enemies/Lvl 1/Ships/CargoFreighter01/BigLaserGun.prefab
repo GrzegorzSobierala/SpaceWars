@@ -44,9 +44,9 @@ LineRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 297118081590889866}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 0
   m_LightProbeUsage: 0
@@ -56,8 +56,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f2d30bec852051c4d9434fb0b8dc162f, type: 2}
-  - {fileID: 2100000, guid: 576f43f749d6b46428d03e01431f18f4, type: 2}
+  - {fileID: 2100000, guid: b0ca2fdda85a26f43bf84eb6bc41caaf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -79,7 +78,7 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 3.89, z: -17.5}
+  - {x: 0, y: 4.99, z: -17.5}
   - {x: 0, y: 0, z: -17.5}
   m_Parameters:
     serializedVersion: 3
@@ -126,13 +125,13 @@ LineRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: -1
+      m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 1
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
@@ -157,7 +156,7 @@ MonoBehaviour:
   _reloadTime: 4
   _range: 500
   _chargingWidth: 0.1
-  _fireWidth: 2
+  _fireWidth: 30
   _damage: 1
   _dealDamageInterval: 0.3
   OnStartReload:
@@ -19993,7 +19992,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1543637144792186373
 Transform:
   m_ObjectHideFlags: 0
@@ -24854,7 +24853,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5161922576844366088
 Transform:
   m_ObjectHideFlags: 0
