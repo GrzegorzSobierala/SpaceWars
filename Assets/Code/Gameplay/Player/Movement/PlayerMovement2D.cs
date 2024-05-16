@@ -230,6 +230,9 @@ namespace Game.Player.Ship
 
         private void TryMovePlayerBoost(Vector2 direction, float procentOfMaxSpeed)
         {
+            return;
+
+
             if (lastBoostTime + _boostCooldown > Time.time)
                 return;
 
