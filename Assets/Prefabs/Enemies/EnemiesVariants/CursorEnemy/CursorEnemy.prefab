@@ -11117,6 +11117,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8160263770510025502}
     m_Modifications:
+    - target: {fileID: 717595944694807, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328856498564822132, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1853735842009395195, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2941871355219229587, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257610345000253427, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257610345000253427, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257610345000253427, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257610345000253427, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257610345000253427, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703779986438848103, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4704834728181318651, guid: 69599ca395114814b99e253987c91508, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -11161,9 +11201,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5315715411732072704, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226904931661943578, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7191996213093811659, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8818889005682590996, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9080852128660053075, guid: 69599ca395114814b99e253987c91508, type: 3}
       propertyPath: m_Name
       value: BasicExplosionParticleSmaller
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080852128660053075, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
