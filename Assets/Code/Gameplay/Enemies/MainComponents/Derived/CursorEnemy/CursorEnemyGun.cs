@@ -125,7 +125,7 @@ namespace Game
 
             _currenaMagAmmo--;
 
-            OnShot?.Invoke();
+            OnShoot?.Invoke();
 
             if (_currenaMagAmmo == 0)
             {

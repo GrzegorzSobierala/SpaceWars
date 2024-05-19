@@ -58,7 +58,7 @@ namespace Game.Room.Enemy
             Transform parent = _enemyManager.transform;
             _enemyBulletPrototype.CreateCopy(damageDealer, parent).Shoot(null, _gunTransform);
 
-            OnShot?.Invoke();
+            OnShoot?.Invoke();
         }
     }
 }

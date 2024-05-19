@@ -29,7 +29,7 @@ namespace Game.Player.Ship
             }
         }
 
-        public override void Shoot()
+        protected override void OnShoot()
         {
             _lastShotTime = Time.time;
 

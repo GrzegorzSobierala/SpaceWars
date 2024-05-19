@@ -105,7 +105,7 @@ namespace Game.Room.Enemy
 
             if(_laserBeam.TryStartFire())
             {
-                OnShot?.Invoke();
+                OnShoot?.Invoke();
             }
         }
 

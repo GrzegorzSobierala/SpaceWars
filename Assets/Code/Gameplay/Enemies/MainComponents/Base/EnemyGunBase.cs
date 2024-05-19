@@ -6,7 +6,7 @@ namespace Game.Room.Enemy
 {
     public abstract class EnemyGunBase : MonoBehaviour
     {
-        [SerializeField] protected UnityEvent OnShot;
+        [SerializeField] protected UnityEvent OnShoot;
 
         protected Action OnAimTarget;
 
