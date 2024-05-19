@@ -103,7 +103,10 @@ namespace Game.Room.Enemy
             if (!isAimedAtPlayer)
                 return;
 
-            _laserBeam.StartFire();
+            if(_laserBeam.TryStartFire())
+            {
+                OnShot?.Invoke();
+            }
         }
 
         private void RotateGunTransform(Vector2 target)

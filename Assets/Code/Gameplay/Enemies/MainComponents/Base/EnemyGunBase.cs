@@ -1,10 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Game.Room.Enemy
 {
     public abstract class EnemyGunBase : MonoBehaviour
     {
+        [SerializeField] protected UnityEvent OnShot;
+
         protected Action OnAimTarget;
 
         private AimType _currentAimType = AimType.Stop;
