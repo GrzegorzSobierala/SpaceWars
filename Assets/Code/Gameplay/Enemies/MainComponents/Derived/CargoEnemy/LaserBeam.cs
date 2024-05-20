@@ -46,16 +46,18 @@ namespace Game.Room.Enemy
             TryFire();
         }
 
-        public void StartFire()
+        public bool TryStartFire()
         {
             if (_isFiring || _startReloadingTime + _reloadTime > Time.time)
-                return;
+                return false;
 
             _isFiring = true;
             _lineRenderer.enabled = true;
 
             _startChargingTime = Time.time;
             _startShootingTime = Time.time + _chargingTime;
+
+            return true;
         }
 
         public void StopFire()

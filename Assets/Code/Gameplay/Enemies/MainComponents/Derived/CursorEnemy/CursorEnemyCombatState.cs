@@ -22,8 +22,6 @@ namespace Game.Room.Enemy
         [SerializeField] private float _runSpeedMulti = 1.5f;
         [SerializeField] private float _spotPlayerRange = 750;
 
-        private Action _unSubAction;
-
         private IEnumerator TryFallowPlayer()
         {
             while (true)
@@ -59,25 +57,28 @@ namespace Game.Room.Enemy
 
             _gun.UnsubscribeOnStartReload(RunFromPlayer);
             _gun.UnsubscribeOnStopReload(FallowPlayer);
-
-            _movement.UnsubscribeOnChangedTarget(_unSubAction);
         }
 
         private void FallowPlayer()
         {
+            _movement.UnsubscribeOnAchivedTarget(FallowPlayer);
+            _gun.UnsubscribeOnStopReload(FallowPlayer);
+
             _gun.StartAimingAt(_playerManager.PlayerBody.transform);
             _movement.StartGoingTo(_playerManager.PlayerBody.transform);
             _movement.SetSpeedModifier(_runSpeedMulti);
 
+            _gun.UnsubscribeOnStartReload(RunFromPlayer);
             _gun.SubscribeOnStartReload(RunFromPlayer);
-            _gun.SubscribeOnStopReload(FallowPlayer);
-
-            _unSubAction = () => _movement.UnsubscribeOnAchivedTarget(FallowPlayer);
-            _movement.SubscribeOnChangedTarget(_unSubAction);
         }
 
         private void RunFromPlayer()
         {
+            _gun.UnsubscribeOnStartReload(RunFromPlayer);
+
+            _gun.UnsubscribeOnStopReload(FallowPlayer);
+            _gun.SubscribeOnStopReload(FallowPlayer);
+
             _gun.StopAiming();
             StartMovingAwayFromPlayer();
         }
@@ -113,6 +114,7 @@ namespace Game.Room.Enemy
                 _movement.StartGoingTo(targetPos);
             }
 
+            _movement.UnsubscribeOnAchivedTarget(FallowPlayer);
             _movement.SubscribeOnAchivedTarget(FallowPlayer);
 
             _movement.SetSpeedModifier(_runSpeedMulti);
