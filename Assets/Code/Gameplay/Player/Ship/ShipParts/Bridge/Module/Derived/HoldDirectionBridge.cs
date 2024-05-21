@@ -33,6 +33,7 @@ namespace Game.Player.Ship
 
             _playerMovement.VerdicalMove();
             _playerMovement.HorizontalMove();
+            _playerMovement.TryBoost();
         }
 
         private void UpdateGunAim()

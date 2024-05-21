@@ -45,11 +45,7 @@ namespace Game.Utility
             return angle * Mathf.Rad2Deg;
         }
 
-        /// <summary>
-        /// Get angle from vector(1,0), return value from left is negative, value on the right is positive
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <returns></returns>
+        
         public static float AngleDirected(Vector2 startVectorPos , Vector2 endVectorPos)
         {
             return AngleDirected(endVectorPos - startVectorPos);
@@ -66,6 +62,18 @@ namespace Game.Utility
 
             return new Vector2(x, y);
         }
+
+        /// <summary>
+        /// Calculate the dot product from an angle in degrees
+        /// </summary>
+        public static float AngleToDotProduct(float angleDegrees)
+        {
+            float angleRad = Mathf.Deg2Rad * angleDegrees;
+            float dotProduct = Mathf.Cos(angleRad);
+
+            return dotProduct;
+        }
+
 
         public static void BindGetComponent<T>(DiContainer container) 
             where T : Component

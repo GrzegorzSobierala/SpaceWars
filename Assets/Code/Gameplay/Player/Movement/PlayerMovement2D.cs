@@ -2,7 +2,6 @@ using Game.Input.System;
 using Game.Utility;
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Zenject;
 
 namespace Game.Player.Ship
@@ -12,38 +11,29 @@ namespace Game.Player.Ship
         [Inject] private InputProvider _inputProvider;
         [Inject] private Rigidbody2D _body;
 
-        [SerializeField, Range(0.0f, 600.0f)] float _moveSpeed = 100;
-        [SerializeField, Range(0.0f, 200.0f)] float _forwardSpeedMulti = 100;
-        [SerializeField, Range(0.0f, 200.0f)] float _horizontalSpeedMutli = 50;
-        [SerializeField, Range(0.0f, 200.0f)] float _backSpeedMulti = 30;
+        [SerializeField, Range(0.0f, 600.0f)] private float _moveSpeed = 100;
+        [SerializeField, Range(0.0f, 200.0f)] private float _forwardSpeedMulti = 100;
+        [SerializeField, Range(0.0f, 200.0f)] private float _horizontalSpeedMutli = 50;
+        [SerializeField, Range(0.0f, 200.0f)] private float _backSpeedMulti = 30;
         [SerializeField] private float _rotationSpeed = 50;
         [SerializeField] private float _velocityRotMulti = 0.5f;
         [SerializeField] private float _boostCooldown = 2f;
+        [SerializeField] private float _boostSpeed = 100;
 
-        private PlayerControls.GameplayActions _Input => _inputProvider.PlayerControls.Gameplay;
+        private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
 
-        private Option _lastVerdical = Option.Defult;
-        private Option _lastHorizontal = Option.Defult;
+        private Option _lastVerdical = Option.Default;
+        private Option _lastHorizontal = Option.Default;
 
         public Action<int> OnVerdicalMove;
         public Action<int> OnHorizontalMove;
 
         private float lastBoostTime = -100;
 
-        public void Start()
-        {
-            Subscribe();
-        }
-
-        private void OnDestroy()
-        {
-            Unsubscribe();
-        }
-
         public void VerdicalMove()
         {
-            bool moveForward = _Input.MoveForward.ReadValue<float>() == 1.0f;
-            bool moveBack = _Input.MoveBack.ReadValue<float>() == 1.0f;
+            bool moveForward = Input.MoveForward.ReadValue<float>() == 1.0f;
+            bool moveBack = Input.MoveBack.ReadValue<float>() == 1.0f;
 
             Option newestSide = LogicUtility.GetNewestOption(moveForward, moveBack, 
                 ref _lastVerdical);
@@ -66,10 +56,11 @@ namespace Game.Player.Ship
 
         public void HorizontalMove()
         {
-            bool moveRight = _Input.MoveRight.ReadValue<float>() == 1.0f;
-            bool moveLeft = _Input.MoveLeft.ReadValue<float>() == 1.0f;
+            bool moveRight = Input.MoveRight.ReadValue<float>() == 1.0f;
+            bool moveLeft = Input.MoveLeft.ReadValue<float>() == 1.0f;
 
-            Option newestSide = LogicUtility.GetNewestOption(moveRight, moveLeft, ref _lastHorizontal);
+            Option newestSide = LogicUtility.GetNewestOption(moveRight, moveLeft, 
+                ref _lastHorizontal);
 
             if (newestSide == Option.Option1)
             {
@@ -86,6 +77,42 @@ namespace Game.Player.Ship
             OnHorizontalMove?.Invoke(0);
         }
 
+        public void TryBoost()
+        {
+            if (Input.Boost.ReadValue<float>() != 1.0f)
+                return;
+
+            Vector2 boostVector = Vector2.zero;
+
+            if(_lastVerdical == Option.Option1)
+            {
+                boostVector += Vector2.up;
+            }
+            else if (_lastVerdical == Option.Option2)
+            {
+                boostVector += Vector2.down;
+            }
+
+            if(_lastHorizontal == Option.Option1)
+            {
+                boostVector += Vector2.right;
+            }
+            else if (_lastHorizontal == Option.Option2)
+            {
+                boostVector += Vector2.left;
+            }
+
+            if (boostVector == Vector2.zero)
+                return;
+
+            if (lastBoostTime + _boostCooldown > Time.time)
+                return;
+
+            lastBoostTime = Time.time;
+
+            TryMovePlayerBoost(boostVector.normalized);
+        }
+
         private void MovePlayer(Vector2 direction, float procentOfMaxSpeed)
         {
             Vector2 targetForce = direction * _moveSpeed * _body.mass;
@@ -94,7 +121,7 @@ namespace Game.Player.Ship
 
         public void RotateToCursor()
         {
-            Vector2 mousePos = _Input.CursorPosition.ReadValue<Vector2>();
+            Vector2 mousePos = Input.CursorPosition.ReadValue<Vector2>();
             RotateToPoint(mousePos);
         }
 
@@ -128,47 +155,19 @@ namespace Game.Player.Ship
             _velocityRotMulti = value;
         }
 
-        private void MoveForwardBoost(InputAction.CallbackContext _)
+        private void TryMovePlayerBoost(Vector2 direction)
         {
-            TryMovePlayerBoost(Vector2.up, _forwardSpeedMulti);
-        }
-        private void MoveBackBoost(InputAction.CallbackContext _)
-        {
-            TryMovePlayerBoost(Vector2.down, _forwardSpeedMulti);
-        }
-        private void MoveLeftBoost(InputAction.CallbackContext _)
-        {
-            TryMovePlayerBoost(Vector2.left, _forwardSpeedMulti);
-        }
-        private void MoveRightBoost(InputAction.CallbackContext _)
-        {
-            TryMovePlayerBoost(Vector2.right, _forwardSpeedMulti);
-        }
+            Vector2 targetForce = direction * _boostSpeed * _body.mass;
+            Vector2 targetForceRel = _body.GetRelativeVector(targetForce);
 
-        private void TryMovePlayerBoost(Vector2 direction, float procentOfMaxSpeed)
-        {
-            if (lastBoostTime + _boostCooldown > Time.time)
-                return;
+            float dotProduct = Vector2.Dot(_body.velocity.normalized, targetForceRel.normalized);
 
-            lastBoostTime = Time.time;
-            Vector2 targetForce = direction * _moveSpeed * _body.mass * 0.75f;
-            _body.AddRelativeForce(procentOfMaxSpeed * targetForce);
-        }
+            if (dotProduct <= Utils.AngleToDotProduct(67.5f))
+            {
+                _body.velocity = Vector2.zero;
+            }
 
-        private void Subscribe()
-        {
-            _Input.MoveForwardBoost.performed += MoveForwardBoost;
-            _Input.MoveBackBoost.performed += MoveBackBoost;
-            _Input.MoveLeftBoost.performed += MoveLeftBoost;
-            _Input.MoveRightBoost.performed += MoveRightBoost;
-        }
-
-        private void Unsubscribe()
-        {
-            _Input.MoveForwardBoost.performed -= MoveForwardBoost;
-            _Input.MoveBackBoost.performed -= MoveBackBoost;
-            _Input.MoveLeftBoost.performed -= MoveLeftBoost;
-            _Input.MoveRightBoost.performed -= MoveRightBoost;
+            _body.AddRelativeForce(targetForce);
         }
     }
 }

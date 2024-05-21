@@ -4,6 +4,6 @@ namespace Game.Utility
     {
         Option1,
         Option2,
-        Defult
+        Default
     }
 }
