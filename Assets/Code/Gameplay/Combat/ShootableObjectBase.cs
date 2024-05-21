@@ -2,11 +2,14 @@ using UnityEngine;
 using Game.Combat;
 using Zenject;
 using Game.Room.Enemy;
+using UnityEngine.Events;
 
 namespace Game.Combat
 {
     public abstract class ShootableObjectBase : MonoBehaviour, IShootable
     {
+        [SerializeField] protected UnityEvent OnHitEvent;
+        [SerializeField] protected UnityEvent OnDamageHitEvent;
         public float MaxDistance => _maxDistance;
 
         protected bool SchouldNukeMySelf
@@ -63,6 +66,12 @@ namespace Game.Combat
                 hittable.GetHit(damage);
             }
 
+            if(hittables.Length > 0)
+            {
+                OnDamageHitEvent?.Invoke();
+            }
+
+            OnHitEvent?.Invoke();
             OnHit();
         }
 

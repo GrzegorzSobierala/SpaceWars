@@ -2,6 +2,7 @@ using Game.Utility;
 using Game.Management;
 using UnityEngine;
 using Zenject;
+using UnityEngine.Events;
 
 namespace Game.Room.Enemy
 {
@@ -16,8 +17,12 @@ namespace Game.Room.Enemy
         [SerializeField] private Transform _gunTransform;
         [SerializeField] private TestEnemyBullet _enemyBulletPrototype;
         [SerializeField] private float _shotInterval = 2f;
+        [SerializeField] private float _beforeShootEventTime = 0.5f;
+
+        [SerializeField] private UnityEvent OnBeforeShoot;
 
         private float _lastShotTime = 0f;
+        private bool _wasOnBeforeShootCalled = false;
 
         public override void Prepare()
         {
@@ -42,7 +47,14 @@ namespace Game.Room.Enemy
             if (Vector2.Distance(transform.position, PlayerPos) > _enemyBulletPrototype.MaxDistance)
                 return;
 
-            if (Time.time - _lastShotTime < _shotInterval)
+            float nextShootTime = _lastShotTime + _shotInterval;
+            if (!_wasOnBeforeShootCalled && Time.time > nextShootTime - _beforeShootEventTime)
+            {
+                OnBeforeShoot?.Invoke();
+                _wasOnBeforeShootCalled = true;
+            }
+
+            if (Time.time < nextShootTime)
             {
                 return;
             }

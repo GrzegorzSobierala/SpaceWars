@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Zenject;
 
 namespace Game
@@ -26,6 +27,9 @@ namespace Game
         [SerializeField] private float _reloadTime = 7f;
         [SerializeField] private float _gunTravers = 45f;
         [SerializeField] private float _shootAtMaxDistanceMutli = 0.7f;
+        [SerializeField] private float _beforeReloadEventTime = 0.5f;
+
+        [SerializeField] private UnityEvent OnBeforeReloaded;
 
         private Action OnStartReload;
         private Action OnStopReload;
@@ -36,6 +40,7 @@ namespace Game
         private int _currenaMagAmmo = 0;
         private bool _isAimed = false;
         private bool _isAimingLeft = false;
+        private bool _wasOnBeforeReloadedCalled = false;
 
         private void Awake()
         {
@@ -150,6 +155,12 @@ namespace Game
 
         private bool TryReload()
         {
+            if(!_wasOnBeforeReloadedCalled && Time.time > _endReloadTime - _beforeReloadEventTime)
+            {
+                OnBeforeReloaded?.Invoke();
+                _wasOnBeforeReloadedCalled = true;
+            }
+
             if (Time.time < _endReloadTime)
                 return false;
 
@@ -161,6 +172,7 @@ namespace Game
         {
             _currenaMagAmmo = _magCapasity;
             OnStopReload?.Invoke();
+            _wasOnBeforeReloadedCalled = true;
         }
 
         private void StartReloading()
