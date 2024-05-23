@@ -126653,6 +126653,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4391701158107053677, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
       insertIndex: 1
       addedObject: {fileID: 5216852560752833861}
+    - targetCorrespondingSourceObject: {fileID: 4391701158107053677, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1440538916923296643}
   m_SourcePrefab: {fileID: 100100000, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
 --- !u!4 &502794206697447186 stripped
 Transform:
@@ -126694,6 +126697,30 @@ MonoBehaviour:
   _backParticles: {fileID: 399193940439569526}
   _rightParticles: {fileID: 3755843086062423474}
   _lefttParticles: {fileID: 2819422617628980901}
+--- !u!114 &1440538916923296643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4749243193685466230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1604d901a4a5704ca54f33923c98c60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boostForward:
+    m_PersistentCalls:
+      m_Calls: []
+  boostBack:
+    m_PersistentCalls:
+      m_Calls: []
+  boostRight:
+    m_PersistentCalls:
+      m_Calls: []
+  boostLeft:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &6440819046265532336 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2628032519048400299, guid: 8ec42e51662674e4c95103675c4affda, type: 3}

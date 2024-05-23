@@ -27,6 +27,7 @@ namespace Game.Player.Ship
 
         public Action<int> OnVerdicalMove;
         public Action<int> OnHorizontalMove;
+        public Action<Vector2> OnBoost;
 
         private float lastBoostTime = -100;
 
@@ -168,6 +169,7 @@ namespace Game.Player.Ship
             }
 
             _body.AddRelativeForce(targetForce);
+            OnBoost?.Invoke(direction);
         }
     }
 }
