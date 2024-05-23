@@ -31,6 +31,11 @@ namespace Game.Player.Ship
 
         private float lastBoostTime = -100;
 
+        private void FixedUpdate()
+        {
+            UpdateMovement();
+        }
+
         public void VerdicalMove()
         {
             bool moveForward = Input.MoveForward.ReadValue<float>() == 1.0f;
@@ -112,6 +117,14 @@ namespace Game.Player.Ship
             lastBoostTime = Time.time;
 
             TryMovePlayerBoost(boostVector.normalized);
+        }
+
+        private void UpdateMovement()
+        {
+            RotateToCursor();
+            VerdicalMove();
+            HorizontalMove();
+            TryBoost();
         }
 
         private void MovePlayer(Vector2 direction, float procentOfMaxSpeed)
