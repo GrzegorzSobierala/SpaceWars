@@ -23,8 +23,6 @@ namespace Game.Player.Ship
         [SerializeField] private bool _movementQE = false;
         [SerializeField] private bool _reverseRotationInput = false;
 
-        private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
-
         private Option _lastVerdical = Option.Default;
         private Option _lastHorizontal = Option.Default;
 
@@ -33,17 +31,8 @@ namespace Game.Player.Ship
         public Action<Vector2> OnBoost;
 
         private float lastBoostTime = -100;
-        private bool isCursorRotation = true;
 
-        private void Start()
-        {
-            Subscribe();
-        }
-
-        private void OnDestroy()
-        {
-            Unsubscribe();
-        }
+        private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
 
         private void FixedUpdate()
         {
@@ -204,28 +193,18 @@ namespace Game.Player.Ship
 
         private void UpdateMovement()
         {
-            if(isCursorRotation)
+            if(Input.RotateLeft.ReadValue<float>() == 1.0f || Input.RotateRight.ReadValue<float>() == 1.0f)
             {
-                RotateToCursor();
+                KeyRotate();
             }
             else
             {
-                KeyRotate();
+                RotateToCursor();
             }
 
             VerdicalMove();
             HorizontalMove();
             TryBoost();
-        }
-
-        private void SwapSteering(InputAction.CallbackContext _)
-        {
-            isCursorRotation = !isCursorRotation;
-        }
-
-        private void SetKeySteering(InputAction.CallbackContext _)
-        {
-            isCursorRotation = false;
         }
 
         private void MovePlayer(Vector2 direction, float procentOfMaxSpeed)
@@ -255,20 +234,6 @@ namespace Game.Player.Ship
 
             _body.AddRelativeForce(targetForce);
             OnBoost?.Invoke(direction);
-        }
-
-        private void Subscribe()
-        {
-            Input.SwapSteering.performed += SwapSteering;
-            Input.RotateLeft.performed += SetKeySteering;
-            Input.RotateRight.performed += SetKeySteering;
-        }
-
-        private void Unsubscribe()
-        {
-            Input.SwapSteering.performed -= SwapSteering;
-            Input.RotateLeft.performed -= SetKeySteering;
-            Input.RotateRight.performed -= SetKeySteering;
         }
     }
 }
