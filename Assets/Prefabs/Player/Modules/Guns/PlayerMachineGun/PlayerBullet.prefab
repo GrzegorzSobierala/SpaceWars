@@ -406,6 +406,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2020315981286200756, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2020315981286200756, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: lengthInSec
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2020315981286200756, guid: 69599ca395114814b99e253987c91508, type: 3}
       propertyPath: TrailModule.enabled
       value: 1
       objectReference: {fileID: 0}
@@ -444,6 +452,14 @@ PrefabInstance:
     - target: {fileID: 2020315981286200756, guid: 69599ca395114814b99e253987c91508, type: 3}
       propertyPath: EmissionModule.rateOverDistance.scalar
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2156704277678030454, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2156704277678030454, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: lengthInSec
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2156704277678030454, guid: 69599ca395114814b99e253987c91508, type: 3}
       propertyPath: TrailModule.enabled
@@ -508,6 +524,10 @@ PrefabInstance:
     - target: {fileID: 3193895695407491361, guid: 69599ca395114814b99e253987c91508, type: 3}
       propertyPath: m_LocalPosition.z
       value: -1.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257610345000253427, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: lengthInSec
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3257610345000253427, guid: 69599ca395114814b99e253987c91508, type: 3}
       propertyPath: ShapeModule.type
@@ -616,6 +636,10 @@ PrefabInstance:
     - target: {fileID: 4704834728181318651, guid: 69599ca395114814b99e253987c91508, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5070946801189628328, guid: 69599ca395114814b99e253987c91508, type: 3}
+      propertyPath: stopAction
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5315715411732072704, guid: 69599ca395114814b99e253987c91508, type: 3}
       propertyPath: m_IsActive
