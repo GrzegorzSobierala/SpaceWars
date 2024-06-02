@@ -9,6 +9,10 @@ namespace Game.Player.Ship
 {
     public class PlayerMovement2D : MonoBehaviour
     {
+        public Action<int> OnVerdicalMove;
+        public Action<int> OnHorizontalMove;
+        public Action<Vector2> OnBoost;
+
         [Inject] private InputProvider _inputProvider;
         [Inject] private Rigidbody2D _body;
 
@@ -25,11 +29,7 @@ namespace Game.Player.Ship
 
         private Option _lastVerdical = Option.Default;
         private Option _lastHorizontal = Option.Default;
-
-        public Action<int> OnVerdicalMove;
-        public Action<int> OnHorizontalMove;
-        public Action<Vector2> OnBoost;
-
+        
         private float lastBoostTime = -100;
 
         private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
