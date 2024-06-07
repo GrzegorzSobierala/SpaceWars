@@ -24272,7 +24272,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2373830929204096118}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.7603579, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1.4, y: 1.4, z: 1.4}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -44045,6 +44045,10 @@ MonoBehaviour:
   _reloadTime: 7
   _gunTravers: 45
   _shootAtMaxDistanceMutli: 0.7
+  _beforeReloadEventTime: 0.5
+  OnBeforeReloaded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6953136812582892108
 GameObject:
   m_ObjectHideFlags: 0
@@ -44062,7 +44066,7 @@ GameObject:
   - component: {fileID: 9196227978536751886}
   - component: {fileID: 1307523644458332179}
   m_Layer: 8
-  m_Name: CursorEnemy
+  m_Name: PreCursor01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54285,8 +54289,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8051062959303241080}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.6, z: 0}
-  m_LocalScale: {x: 1.4, y: 1.4, z: 1.4}
+  m_LocalPosition: {x: 0, y: -3.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 993681842302281870}
@@ -54348,25 +54352,25 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 4.7766237, y: 2.3065636}
-      - {x: 2.1614587, y: 10.361704}
-      - {x: -0.003155008, y: 13.080315}
-      - {x: -2.1464877, y: 10.39666}
-      - {x: -4.766598, y: 2.3171923}
-      - {x: -5.678496, y: 0.35985926}
-      - {x: -5.670848, y: -1.4242197}
-      - {x: -4.811051, y: -3.6994781}
-      - {x: -3.62923, y: -4.187195}
-      - {x: -2.066708, y: -8.04423}
-      - {x: -1.121239, y: -8.584635}
-      - {x: -0.63938993, y: -9.041078}
-      - {x: 0.73419416, y: -9.038724}
-      - {x: 1.1168712, y: -8.589959}
-      - {x: 2.0675373, y: -8.045387}
-      - {x: 3.633977, y: -4.1814146}
-      - {x: 4.809355, y: -3.694918}
-      - {x: 5.676537, y: -1.4200302}
-      - {x: 5.681258, y: 0.36052215}
+    - - {x: 6.687273, y: 3.229189}
+      - {x: 3.0260422, y: 14.506385}
+      - {x: -0.004417011, y: 18.31244}
+      - {x: -3.0050828, y: 14.555324}
+      - {x: -6.6732373, y: 3.244069}
+      - {x: -7.949894, y: 0.50380296}
+      - {x: -7.939187, y: -1.9939076}
+      - {x: -6.7354712, y: -5.1792693}
+      - {x: -5.080922, y: -5.8620725}
+      - {x: -2.8933914, y: -11.261923}
+      - {x: -1.5697345, y: -12.018489}
+      - {x: -0.8951459, y: -12.657509}
+      - {x: 1.0278718, y: -12.654213}
+      - {x: 1.5636197, y: -12.025943}
+      - {x: 2.8945522, y: -11.263542}
+      - {x: 5.087568, y: -5.8539805}
+      - {x: 6.7330966, y: -5.172885}
+      - {x: 7.9471517, y: -1.9880424}
+      - {x: 7.9537616, y: 0.504731}
   m_UseDelaunayMesh: 0
 --- !u!1 &8108817577409924218
 GameObject:
@@ -59240,6 +59244,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0362016bfc5a2a74f9fe9f4637e85bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnDestroyEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &9150193854707139770
 GameObject:
   m_ObjectHideFlags: 0
