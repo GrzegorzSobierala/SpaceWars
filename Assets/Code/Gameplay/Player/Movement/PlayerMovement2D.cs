@@ -2,12 +2,17 @@ using Game.Input.System;
 using Game.Utility;
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Zenject;
 
 namespace Game.Player.Ship
 {
     public class PlayerMovement2D : MonoBehaviour
     {
+        public Action<int> OnVerdicalMove;
+        public Action<int> OnHorizontalMove;
+        public Action<Vector2> OnBoost;
+
         [Inject] private InputProvider _inputProvider;
         [Inject] private Rigidbody2D _body;
 
@@ -19,17 +24,20 @@ namespace Game.Player.Ship
         [SerializeField] private float _velocityRotMulti = 0.5f;
         [SerializeField] private float _boostCooldown = 2f;
         [SerializeField] private float _boostSpeed = 100;
-
-        private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
+        [SerializeField] private bool _movementQE = false;
+        [SerializeField] private bool _reverseRotationInput = false;
 
         private Option _lastVerdical = Option.Default;
         private Option _lastHorizontal = Option.Default;
-
-        public Action<int> OnVerdicalMove;
-        public Action<int> OnHorizontalMove;
-        public Action<Vector2> OnBoost;
-
+        
         private float lastBoostTime = -100;
+
+        private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
+
+        private void FixedUpdate()
+        {
+            UpdateMovement();
+        }
 
         public void VerdicalMove()
         {
@@ -57,8 +65,20 @@ namespace Game.Player.Ship
 
         public void HorizontalMove()
         {
-            bool moveRight = Input.MoveRight.ReadValue<float>() == 1.0f;
-            bool moveLeft = Input.MoveLeft.ReadValue<float>() == 1.0f;
+            bool moveRight;
+            bool moveLeft;
+            if (_reverseRotationInput)
+            {
+                moveRight = Input.RotateRight.ReadValue<float>() == 1.0f;
+                moveLeft = Input.RotateLeft.ReadValue<float>() == 1.0f;
+            }
+            else
+            {
+                moveRight = Input.MoveRight.ReadValue<float>() == 1.0f;
+                moveLeft = Input.MoveLeft.ReadValue<float>() == 1.0f;
+            }
+
+           
 
             Option newestSide = LogicUtility.GetNewestOption(moveRight, moveLeft, 
                 ref _lastHorizontal);
@@ -76,6 +96,50 @@ namespace Game.Player.Ship
                 return;
             }
             OnHorizontalMove?.Invoke(0);
+        }
+
+        public void RotateToCursor()
+        {
+            if (_movementQE)
+                return;
+
+            Vector2 mousePos = Input.CursorPosition.ReadValue<Vector2>();
+            RotateToPoint(mousePos);
+        }
+
+        public void RotateToPoint(Vector2 point)
+        {
+            if (_movementQE)
+                return;
+
+            Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection(point);
+            float playerCursorAngle = Utils.AngleDirected(_body.position, intersectionPoint) - 90f;
+
+            float rotSpeed = _rotationSpeed * Time.fixedDeltaTime;
+            float newAngle = Mathf.MoveTowardsAngle(_body.rotation, playerCursorAngle, rotSpeed);
+
+            _body.MoveRotation(newAngle);
+
+            TransferVelocity(newAngle);
+        }
+
+        public void KeyRotate()
+        {
+            bool rotateLeft = Input.RotateLeft.ReadValue<float>() == 1.0f;
+            bool rotateRight = Input.RotateRight.ReadValue<float>() == 1.0f;
+
+            if (rotateLeft && rotateRight)
+            {
+                RotateByKey(0);
+            }
+            else if (rotateLeft)
+            {
+                RotateByKey(1);
+            }
+            else if (rotateRight)
+            {
+                RotateByKey(-1);
+            }
         }
 
         public void TryBoost()
@@ -114,46 +178,45 @@ namespace Game.Player.Ship
             TryMovePlayerBoost(boostVector.normalized);
         }
 
+        public void SetVelocityRotMulti(float value)
+        {
+            _velocityRotMulti = value;
+        }
+
+        private void RotateByKey(float value)
+        {
+            float rotSpeed = (value * _rotationSpeed * Time.fixedDeltaTime) + _body.rotation;
+            _body.MoveRotation(rotSpeed);
+            TransferVelocity(rotSpeed);
+        }
+
+        private void UpdateMovement()
+        {
+            if(Input.RotateLeft.ReadValue<float>() == 1.0f || Input.RotateRight.ReadValue<float>() == 1.0f)
+            {
+                KeyRotate();
+            }
+            else
+            {
+                RotateToCursor();
+            }
+
+            VerdicalMove();
+            HorizontalMove();
+            TryBoost();
+        }
+
         private void MovePlayer(Vector2 direction, float procentOfMaxSpeed)
         {
             Vector2 targetForce = direction * _moveSpeed * _body.mass;
             _body.AddRelativeForce(procentOfMaxSpeed * targetForce * Time.fixedDeltaTime);
         }
 
-        public void RotateToCursor()
-        {
-            Vector2 mousePos = Input.CursorPosition.ReadValue<Vector2>();
-            RotateToPoint(mousePos);
-        }
-
-        public void RotateToPoint(Vector2 point)
-        {
-            Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection(point);
-            float playerCursorAngle = Utils.AngleDirected(_body.position, intersectionPoint) - 90f;
-
-            float rotSpeed = _rotationSpeed * Time.fixedDeltaTime;
-            float newAngle = Mathf.MoveTowardsAngle(_body.rotation, playerCursorAngle, rotSpeed);
-
-            _body.MoveRotation(newAngle);
-
-            TransferVelocity(newAngle);
-        }
-
         private void TransferVelocity(float angle)
         {
-            // Calculate the relative angle between current rotation and target rotation
             float relativeAngle = Mathf.DeltaAngle(_body.rotation, angle);
-
-            // Calculate the angular velocity based on the relative angle and _velocityRotMulti
             float velocityAngle = relativeAngle * _velocityRotMulti;
-
-            // Rotate the current velocity vector
             _body.velocity = Utils.RotateVector(_body.velocity, velocityAngle);
-        }
-
-        public void SetVelocityRotMulti(float value)
-        {
-            _velocityRotMulti = value;
         }
 
         private void TryMovePlayerBoost(Vector2 direction)

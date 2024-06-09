@@ -5037,14 +5037,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213aea29dc6e2ea4ba6f9aeecca74176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _chargingTime: 1
-  _shootTime: 5
+  _chargingTime: 2.25
+  _shootTime: 6
   _reloadTime: 4
   _range: 500
   _chargingWidth: 4.5
   _fireWidth: 15
   _damage: 1
-  _dealDamageInterval: 0.3
+  _dealDamageInterval: 0.5
   OnStartReload:
     m_PersistentCalls:
       m_Calls:
@@ -5244,6 +5244,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a4ce5af71ecc58468db59aae2870404, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDamageHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
   _body: {fileID: 2019229498855179324}
   _particleSystem: {fileID: 8090314685885782089}
   _damage: 1
@@ -19873,6 +19879,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96918c401ce7c2649bcf49f38919a832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnShoot:
+    m_PersistentCalls:
+      m_Calls: []
   _rotationSpeed: 35
   _shootAimAngleToPlayer: 4
   _aimRange: 300
