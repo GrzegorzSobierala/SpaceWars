@@ -107,7 +107,7 @@ namespace Game.Player.Ship
 
             ReplaceHull(_currentHullPrototype);
             ReplaceGun(_currentGunPrototype);
-            //ReplaceBridge(_currentBridgePrototype);
+            ReplaceBridge(_currentBridgePrototype);
         }
 
         public void ReplaceHull(HullModuleBase hullPrototype)
@@ -120,7 +120,7 @@ namespace Game.Player.Ship
             HullModuleBase newHull = hullPrototype.Instatiate(transform, _container);
             _moduleHandler.SetHull(this, newHull);
             ReplaceGun(_currentGunPrototype);
-            //ReplaceBridge(_currentBridgePrototype);
+            ReplaceBridge(_currentBridgePrototype);
         }
 
         public void ReplaceGun(GunModuleBase gunPrototype)

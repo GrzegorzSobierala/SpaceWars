@@ -100,33 +100,6 @@ namespace Game.Input.System
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""RotateLeft"",
-                    ""type"": ""Button"",
-                    ""id"": ""a8a093b1-6ad6-4296-b3a9-b31b9979b7c8"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""RotateRight"",
-                    ""type"": ""Button"",
-                    ""id"": ""6d7b475d-4bff-4c44-9142-91cf6e8f7999"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""SwapSteering"",
-                    ""type"": ""Button"",
-                    ""id"": ""210137a4-ca57-4948-bd15-475873db803c"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -217,50 +190,6 @@ namespace Game.Input.System
                     ""action"": ""Boost"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f295a38e-5bde-4ee8-b8f6-3319df00ab34"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RotateLeft"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1f77cde4-5251-4d19-8261-ec1ef5303c14"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RotateRight"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7547152b-937c-4afa-8915-898d3b3e8b4c"",
-                    ""path"": ""<Mouse>/scroll"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SwapSteering"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""468d1c41-fbb5-4006-866e-c30e84dda251"",
-                    ""path"": ""<Keyboard>/ctrl"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SwapSteering"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -277,9 +206,6 @@ namespace Game.Input.System
             m_Gameplay_CursorPosition = m_Gameplay.FindAction("CursorPosition", throwIfNotFound: true);
             m_Gameplay_Shoot = m_Gameplay.FindAction("Shoot", throwIfNotFound: true);
             m_Gameplay_Aim = m_Gameplay.FindAction("Aim", throwIfNotFound: true);
-            m_Gameplay_RotateLeft = m_Gameplay.FindAction("RotateLeft", throwIfNotFound: true);
-            m_Gameplay_RotateRight = m_Gameplay.FindAction("RotateRight", throwIfNotFound: true);
-            m_Gameplay_SwapSteering = m_Gameplay.FindAction("SwapSteering", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -349,9 +275,6 @@ namespace Game.Input.System
         private readonly InputAction m_Gameplay_CursorPosition;
         private readonly InputAction m_Gameplay_Shoot;
         private readonly InputAction m_Gameplay_Aim;
-        private readonly InputAction m_Gameplay_RotateLeft;
-        private readonly InputAction m_Gameplay_RotateRight;
-        private readonly InputAction m_Gameplay_SwapSteering;
         public struct GameplayActions
         {
             private @PlayerControls m_Wrapper;
@@ -364,9 +287,6 @@ namespace Game.Input.System
             public InputAction @CursorPosition => m_Wrapper.m_Gameplay_CursorPosition;
             public InputAction @Shoot => m_Wrapper.m_Gameplay_Shoot;
             public InputAction @Aim => m_Wrapper.m_Gameplay_Aim;
-            public InputAction @RotateLeft => m_Wrapper.m_Gameplay_RotateLeft;
-            public InputAction @RotateRight => m_Wrapper.m_Gameplay_RotateRight;
-            public InputAction @SwapSteering => m_Wrapper.m_Gameplay_SwapSteering;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -400,15 +320,6 @@ namespace Game.Input.System
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
-                @RotateLeft.started += instance.OnRotateLeft;
-                @RotateLeft.performed += instance.OnRotateLeft;
-                @RotateLeft.canceled += instance.OnRotateLeft;
-                @RotateRight.started += instance.OnRotateRight;
-                @RotateRight.performed += instance.OnRotateRight;
-                @RotateRight.canceled += instance.OnRotateRight;
-                @SwapSteering.started += instance.OnSwapSteering;
-                @SwapSteering.performed += instance.OnSwapSteering;
-                @SwapSteering.canceled += instance.OnSwapSteering;
             }
 
             private void UnregisterCallbacks(IGameplayActions instance)
@@ -437,15 +348,6 @@ namespace Game.Input.System
                 @Aim.started -= instance.OnAim;
                 @Aim.performed -= instance.OnAim;
                 @Aim.canceled -= instance.OnAim;
-                @RotateLeft.started -= instance.OnRotateLeft;
-                @RotateLeft.performed -= instance.OnRotateLeft;
-                @RotateLeft.canceled -= instance.OnRotateLeft;
-                @RotateRight.started -= instance.OnRotateRight;
-                @RotateRight.performed -= instance.OnRotateRight;
-                @RotateRight.canceled -= instance.OnRotateRight;
-                @SwapSteering.started -= instance.OnSwapSteering;
-                @SwapSteering.performed -= instance.OnSwapSteering;
-                @SwapSteering.canceled -= instance.OnSwapSteering;
             }
 
             public void RemoveCallbacks(IGameplayActions instance)
@@ -473,9 +375,6 @@ namespace Game.Input.System
             void OnCursorPosition(InputAction.CallbackContext context);
             void OnShoot(InputAction.CallbackContext context);
             void OnAim(InputAction.CallbackContext context);
-            void OnRotateLeft(InputAction.CallbackContext context);
-            void OnRotateRight(InputAction.CallbackContext context);
-            void OnSwapSteering(InputAction.CallbackContext context);
         }
     }
 }
