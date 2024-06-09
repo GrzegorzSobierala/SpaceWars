@@ -9,6 +9,10 @@ namespace Game.Player.Ship
 {
     public class PlayerMovement2D : MonoBehaviour
     {
+        public Action<int> OnVerdicalMove;
+        public Action<int> OnHorizontalMove;
+        public Action<Vector2> OnBoost;
+
         [Inject] private InputProvider _inputProvider;
         [Inject] private Rigidbody2D _body;
 
@@ -25,11 +29,7 @@ namespace Game.Player.Ship
 
         private Option _lastVerdical = Option.Default;
         private Option _lastHorizontal = Option.Default;
-
-        public Action<int> OnVerdicalMove;
-        public Action<int> OnHorizontalMove;
-        public Action<Vector2> OnBoost;
-
+        
         private float lastBoostTime = -100;
 
         private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
@@ -128,18 +128,17 @@ namespace Game.Player.Ship
             bool rotateLeft = Input.RotateLeft.ReadValue<float>() == 1.0f;
             bool rotateRight = Input.RotateRight.ReadValue<float>() == 1.0f;
 
-            Option newestSide = LogicUtility.GetNewestOption(rotateLeft, rotateRight,
-                ref _lastVerdical);
-
-            if (newestSide == Option.Option1)
+            if (rotateLeft && rotateRight)
+            {
+                RotateByKey(0);
+            }
+            else if (rotateLeft)
             {
                 RotateByKey(1);
-                return;
             }
-            else if (newestSide == Option.Option2)
+            else if (rotateRight)
             {
                 RotateByKey(-1);
-                return;
             }
         }
 

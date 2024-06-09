@@ -7,6 +7,7 @@ namespace Game.Input.System
         public override void InstallBindings()
         {
             Container.Bind<InputProvider>().FromComponentOn(gameObject).AsSingle().NonLazy();
+            Container.Bind<InputManager>().FromComponentOn(gameObject).AsSingle().NonLazy();
         }
     }
 }
