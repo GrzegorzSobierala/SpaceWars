@@ -117,6 +117,7 @@ namespace Game.Room.Enemy
             }
             else
             {
+                Debug.Log($"Agent {_agent.name} cant find path to {targetPos}, ResetPath", _agent);
                 _agent.ResetPath();
             }
         }
