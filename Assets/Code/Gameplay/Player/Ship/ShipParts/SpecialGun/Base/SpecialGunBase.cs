@@ -12,7 +12,7 @@ namespace Game.Player.Ship
 
         protected abstract void OnShoot();
 
-        public void Shoot()
+        public void TryShoot()
         {
             OnShoot();
             OnShootEvent?.Invoke();

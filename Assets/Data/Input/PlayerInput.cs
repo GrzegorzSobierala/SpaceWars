@@ -93,7 +93,7 @@ namespace Game.Input.System
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Aim"",
+                    ""name"": ""SwitchGun"",
                     ""type"": ""Button"",
                     ""id"": ""195038b8-ca0e-474f-aea7-de8b44f8ecee"",
                     ""expectedControlType"": ""Button"",
@@ -203,7 +203,7 @@ namespace Game.Input.System
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Aim"",
+                    ""action"": ""SwitchGun"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -276,7 +276,7 @@ namespace Game.Input.System
             m_Gameplay_Boost = m_Gameplay.FindAction("Boost", throwIfNotFound: true);
             m_Gameplay_CursorPosition = m_Gameplay.FindAction("CursorPosition", throwIfNotFound: true);
             m_Gameplay_Shoot = m_Gameplay.FindAction("Shoot", throwIfNotFound: true);
-            m_Gameplay_Aim = m_Gameplay.FindAction("Aim", throwIfNotFound: true);
+            m_Gameplay_SwitchGun = m_Gameplay.FindAction("SwitchGun", throwIfNotFound: true);
             m_Gameplay_RotateLeft = m_Gameplay.FindAction("RotateLeft", throwIfNotFound: true);
             m_Gameplay_RotateRight = m_Gameplay.FindAction("RotateRight", throwIfNotFound: true);
             m_Gameplay_SwapSteering = m_Gameplay.FindAction("SwapSteering", throwIfNotFound: true);
@@ -348,7 +348,7 @@ namespace Game.Input.System
         private readonly InputAction m_Gameplay_Boost;
         private readonly InputAction m_Gameplay_CursorPosition;
         private readonly InputAction m_Gameplay_Shoot;
-        private readonly InputAction m_Gameplay_Aim;
+        private readonly InputAction m_Gameplay_SwitchGun;
         private readonly InputAction m_Gameplay_RotateLeft;
         private readonly InputAction m_Gameplay_RotateRight;
         private readonly InputAction m_Gameplay_SwapSteering;
@@ -363,7 +363,7 @@ namespace Game.Input.System
             public InputAction @Boost => m_Wrapper.m_Gameplay_Boost;
             public InputAction @CursorPosition => m_Wrapper.m_Gameplay_CursorPosition;
             public InputAction @Shoot => m_Wrapper.m_Gameplay_Shoot;
-            public InputAction @Aim => m_Wrapper.m_Gameplay_Aim;
+            public InputAction @SwitchGun => m_Wrapper.m_Gameplay_SwitchGun;
             public InputAction @RotateLeft => m_Wrapper.m_Gameplay_RotateLeft;
             public InputAction @RotateRight => m_Wrapper.m_Gameplay_RotateRight;
             public InputAction @SwapSteering => m_Wrapper.m_Gameplay_SwapSteering;
@@ -397,9 +397,9 @@ namespace Game.Input.System
                 @Shoot.started += instance.OnShoot;
                 @Shoot.performed += instance.OnShoot;
                 @Shoot.canceled += instance.OnShoot;
-                @Aim.started += instance.OnAim;
-                @Aim.performed += instance.OnAim;
-                @Aim.canceled += instance.OnAim;
+                @SwitchGun.started += instance.OnSwitchGun;
+                @SwitchGun.performed += instance.OnSwitchGun;
+                @SwitchGun.canceled += instance.OnSwitchGun;
                 @RotateLeft.started += instance.OnRotateLeft;
                 @RotateLeft.performed += instance.OnRotateLeft;
                 @RotateLeft.canceled += instance.OnRotateLeft;
@@ -434,9 +434,9 @@ namespace Game.Input.System
                 @Shoot.started -= instance.OnShoot;
                 @Shoot.performed -= instance.OnShoot;
                 @Shoot.canceled -= instance.OnShoot;
-                @Aim.started -= instance.OnAim;
-                @Aim.performed -= instance.OnAim;
-                @Aim.canceled -= instance.OnAim;
+                @SwitchGun.started -= instance.OnSwitchGun;
+                @SwitchGun.performed -= instance.OnSwitchGun;
+                @SwitchGun.canceled -= instance.OnSwitchGun;
                 @RotateLeft.started -= instance.OnRotateLeft;
                 @RotateLeft.performed -= instance.OnRotateLeft;
                 @RotateLeft.canceled -= instance.OnRotateLeft;
@@ -472,7 +472,7 @@ namespace Game.Input.System
             void OnBoost(InputAction.CallbackContext context);
             void OnCursorPosition(InputAction.CallbackContext context);
             void OnShoot(InputAction.CallbackContext context);
-            void OnAim(InputAction.CallbackContext context);
+            void OnSwitchGun(InputAction.CallbackContext context);
             void OnRotateLeft(InputAction.CallbackContext context);
             void OnRotateRight(InputAction.CallbackContext context);
             void OnSwapSteering(InputAction.CallbackContext context);

@@ -16,14 +16,14 @@ namespace Game.Player.Ship
 
         private void OnEnable()
         {
-            _input.PlayerControls.Gameplay.Aim.started += OnStartedInput;
-            _input.PlayerControls.Gameplay.Aim.canceled += OnEndedInput;
+            _input.PlayerControls.Gameplay.SwitchGun.started += OnStartedInput;
+            _input.PlayerControls.Gameplay.SwitchGun.canceled += OnEndedInput;
         }
 
         private void OnDisable()
         {
-            _input.PlayerControls.Gameplay.Aim.started -= OnStartedInput;
-            _input.PlayerControls.Gameplay.Aim.canceled -= OnEndedInput;
+            _input.PlayerControls.Gameplay.SwitchGun.started -= OnStartedInput;
+            _input.PlayerControls.Gameplay.SwitchGun.canceled -= OnEndedInput;
         }
 
         public BridgeModuleBase Instatiate(Transform parent, DiContainer container)

@@ -126581,6 +126581,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3420322338547137633, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -6.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 3420322338547137633, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.13
+      objectReference: {fileID: 0}
     - target: {fileID: 4391701158107053677, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
       propertyPath: m_Name
       value: ScavangerHull
@@ -126607,11 +126615,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8926292516285152521, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.93
+      value: 12.56
       objectReference: {fileID: 0}
     - target: {fileID: 8926292516285152521, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.13
+      value: 2.03
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -126692,6 +126700,7 @@ MonoBehaviour:
   shakeMulti: 500
   _gunSpot: {fileID: 502794206697447186}
   _bridgeSpot: {fileID: 1914028042722920852}
+  _specialGunSpot: {fileID: 5939590818525044346}
   _baseHp: 10
   _frontParticles: {fileID: 5288687106270593225}
   _backParticles: {fileID: 399193940439569526}
@@ -126721,6 +126730,11 @@ MonoBehaviour:
   boostLeft:
     m_PersistentCalls:
       m_Calls: []
+--- !u!4 &5939590818525044346 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3420322338547137633, guid: 8ec42e51662674e4c95103675c4affda, type: 3}
+  m_PrefabInstance: {fileID: 9014736865558012443}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6440819046265532336 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2628032519048400299, guid: 8ec42e51662674e4c95103675c4affda, type: 3}

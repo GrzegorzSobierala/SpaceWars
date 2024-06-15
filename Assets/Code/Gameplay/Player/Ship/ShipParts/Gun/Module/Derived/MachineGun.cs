@@ -4,7 +4,7 @@ namespace Game.Player.Ship
 {
     public class MachineGun : GunModuleBase
     {
-        [Header("MaschineGun properies")]
+        [Header("MachineGun properies")]
         [SerializeField] private int _maxAmmo = 20;
         [SerializeField] private float _loadCooldown = 0.1f;
 
@@ -22,15 +22,13 @@ namespace Game.Player.Ship
         private void Update()
         {
             TryLoad();
-
-            if (Input.Shoot.ReadValue<float>() == 1.0f)
-            {
-                TryShoot();
-            }
         }
 
-        protected override void OnShoot()
+        protected override bool OnTryShoot()
         {
+            if (Time.time - _lastShotTime < _cooldown || _currentAmmo <= 0)
+                return false;
+
             _lastShotTime = Time.time;
 
             GameObject damageDealer = _body.gameObject;
@@ -38,14 +36,7 @@ namespace Game.Player.Ship
             _shootableObjectPrototype.CreateCopy(damageDealer, parent).Shoot(_body, transform);
 
             _currentAmmo--;
-        }
-
-        private void TryShoot()
-        {
-            if (Time.time - _lastShotTime < _cooldown || _currentAmmo <= 0)
-                return;
-
-            Shoot();
+            return true;
         }
 
         private void TryLoad()
