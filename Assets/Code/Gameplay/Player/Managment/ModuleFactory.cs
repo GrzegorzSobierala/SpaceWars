@@ -170,9 +170,9 @@ namespace Game.Player.Ship
 
         public void ReplaceSpecialGun(SpecialGunModuleBase gunPrototype)
         {
-            if (_moduleHandler.CurrentGun != null)
+            if (_moduleHandler.CurrentSpecialGun != null)
             {
-                Destroy(_moduleHandler.CurrentGun.gameObject);
+                Destroy(_moduleHandler.CurrentSpecialGun.gameObject);
             }
 
             Transform gunSpot = _moduleHandler.CurrentHull.SpecialGunSpot;

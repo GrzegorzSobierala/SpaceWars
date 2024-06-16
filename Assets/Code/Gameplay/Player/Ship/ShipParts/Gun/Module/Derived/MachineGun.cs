@@ -14,6 +14,14 @@ namespace Game.Player.Ship
         public int MaxAmmo => _maxAmmo;
         public int CurrentAmmo => _currentAmmo;
 
+        public override bool IsGunReadyToShoot 
+        {  
+            get 
+            { 
+                return Time.time - _lastShotTime >= _cooldown && _currentAmmo > 0; 
+            } 
+        }
+
         private void Start()
         {
             _currentAmmo = _maxAmmo;
@@ -26,7 +34,7 @@ namespace Game.Player.Ship
 
         protected override bool OnTryShoot()
         {
-            if (Time.time - _lastShotTime < _cooldown || _currentAmmo <= 0)
+            if (!IsGunReadyToShoot)
                 return false;
 
             _lastShotTime = Time.time;

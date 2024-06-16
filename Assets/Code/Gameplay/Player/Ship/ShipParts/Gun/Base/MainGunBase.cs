@@ -8,6 +8,8 @@ namespace Game.Player.Ship
     {
         [SerializeField] protected UnityEvent OnShootEvent;
 
+        public abstract bool IsGunReadyToShoot { get; }
+
         protected abstract bool OnTryShoot();
 
         public void TryShoot()

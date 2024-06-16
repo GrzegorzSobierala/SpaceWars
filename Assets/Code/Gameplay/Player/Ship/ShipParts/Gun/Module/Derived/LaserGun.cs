@@ -4,9 +4,11 @@ namespace Game.Player.Ship
 {
     public class LaserGun : GunModuleBase
     {
+        public override bool IsGunReadyToShoot => Time.time - _lastShotTime >= _cooldown;
+
         protected override bool OnTryShoot()
         {
-            if (Time.time - _lastShotTime < _cooldown)
+            if (!IsGunReadyToShoot)
                 return false;
 
             _lastShotTime = Time.time;

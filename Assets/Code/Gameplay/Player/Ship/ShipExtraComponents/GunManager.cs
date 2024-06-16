@@ -10,24 +10,42 @@ namespace Game.Player.Ship
         [Inject] private InputProvider _input;
         [Inject] private ModuleHandler _moduleHandler;
 
-        private bool _isCurrentGunMainGun;
+        private bool _isCurrentGunMainGun = true;
+
+        private IGun CurrentGun
+        {
+            get
+            {
+                if (_isCurrentGunMainGun)
+                    return _moduleHandler.CurrentGun;
+                else
+                    return _moduleHandler.CurrentSpecialGun;
+            }
+        }
 
         private PlayerControls.GameplayActions GameplayActions => _input.PlayerControls.Gameplay;
 
-        private void OnEnable()
+        private void Update()
         {
-            GameplayActions.Shoot.performed += TryShootCurrentGun;
-            GameplayActions.SwitchGun.performed += OnSwitchGunInput;
+            if (GameplayActions.Shoot.ReadValue<float>() == 1.0f)
+            {
+                TryShootCurrentGun();
+            }
+
+            if (GameplayActions.SwitchGun.WasPerformedThisFrame())
+            {
+                SwitchCurrentGun();
+            }
         }
 
-        private void OnDisable()
+        private void TryShootCurrentGun()
         {
-            GameplayActions.Shoot.performed -= TryShootCurrentGun;
-            GameplayActions.SwitchGun.performed -= OnSwitchGunInput;
-        }
+            if (!_moduleHandler.CurrentGun.IsGunReadyToShoot)
+                return;
 
-        private void TryShootCurrentGun(InputAction.CallbackContext _)
-        {
+            if (!_moduleHandler.CurrentSpecialGun.IsGunReadyToShoot)
+                return;
+
             if(_isCurrentGunMainGun)
             {
                 _moduleHandler.CurrentGun.TryShoot();
