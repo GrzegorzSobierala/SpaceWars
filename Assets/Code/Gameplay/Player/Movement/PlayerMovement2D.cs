@@ -15,6 +15,7 @@ namespace Game.Player.Ship
 
         [Inject] private InputProvider _inputProvider;
         [Inject] private Rigidbody2D _body;
+        [Inject] private GunManager _gunManager;
 
         [SerializeField, Range(0.0f, 600.0f)] private float _moveSpeed = 100;
         [SerializeField, Range(0.0f, 200.0f)] private float _forwardSpeedMulti = 100;
@@ -192,7 +193,9 @@ namespace Game.Player.Ship
 
         private void UpdateMovement()
         {
-            if(Input.RotateLeft.ReadValue<float>() == 1.0f || Input.RotateRight.ReadValue<float>() == 1.0f)
+            if(!_gunManager.IsCurrentGunMainGun ||
+                Input.RotateLeft.ReadValue<float>() == 1.0f || 
+                Input.RotateRight.ReadValue<float>() == 1.0f)
             {
                 KeyRotate();
             }

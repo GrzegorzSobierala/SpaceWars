@@ -91,44 +91,7 @@ namespace Game.Player.Ship
             ReplaceSpecialGun (_currentSpecialGunPrototype);
         }
 
-        private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : IModule
-        {
-            int currentIndex = prototypes.IndexOf(currentModule);
-
-            if (currentIndex == -1)
-            {
-                Debug.Log($"Can't find prototype {currentModule.ToString()}, setting index 0");
-                currentIndex = 0;
-            }
-
-            int targetIndex = currentIndex + (goBack ? -1 : 1);
-
-            if (targetIndex >= prototypes.Count)
-            {
-                targetIndex = 0;
-            }
-            else if (targetIndex < 0)
-            {
-                targetIndex = prototypes.Count - 1;
-            }
-
-            currentModule = prototypes[targetIndex];
-        }
-
         #endregion
-
-        private void Init()
-        {
-            _currentHullPrototype = _hullPrefabs[0];
-            _currentGunPrototype = _gunPrefabs[0];
-            _currentBridgePrototype = _bridgesPrefabs[0];
-            _currentSpecialGunPrototype = _specialGunsPrefabs[0];
-
-            ReplaceHull(_currentHullPrototype);
-            ReplaceGun(_currentGunPrototype);
-            ReplaceSpecialGun(_currentSpecialGunPrototype);
-            //ReplaceBridge(_currentBridgePrototype);
-        }
 
         public void ReplaceHull(HullModuleBase hullPrototype)
         {
@@ -158,7 +121,7 @@ namespace Game.Player.Ship
 
         public void ReplaceBridge(BridgeModuleBase bridgePrototype)
         {
-            if(_moduleHandler.CurrentBridge != null)
+            if (_moduleHandler.CurrentBridge != null)
             {
                 Destroy(_moduleHandler.CurrentBridge.gameObject);
             }
@@ -178,6 +141,45 @@ namespace Game.Player.Ship
             Transform gunSpot = _moduleHandler.CurrentHull.SpecialGunSpot;
             SpecialGunModuleBase newGun = gunPrototype.Instatiate(gunSpot, _container);
             _moduleHandler.SetSpecialGun(this, newGun);
+        }
+
+
+        private void Init()
+        {
+            _currentHullPrototype = _hullPrefabs[0];
+            _currentGunPrototype = _gunPrefabs[0];
+            _currentBridgePrototype = _bridgesPrefabs[0];
+            _currentSpecialGunPrototype = _specialGunsPrefabs[0];
+
+            ReplaceHull(_currentHullPrototype);
+            ReplaceGun(_currentGunPrototype);
+            ReplaceSpecialGun(_currentSpecialGunPrototype);
+            //ReplaceBridge(_currentBridgePrototype);
+        }
+
+        
+        private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : IModule
+        {
+            int currentIndex = prototypes.IndexOf(currentModule);
+
+            if (currentIndex == -1)
+            {
+                Debug.Log($"Can't find prototype {currentModule.ToString()}, setting index 0");
+                currentIndex = 0;
+            }
+
+            int targetIndex = currentIndex + (goBack ? -1 : 1);
+
+            if (targetIndex >= prototypes.Count)
+            {
+                targetIndex = 0;
+            }
+            else if (targetIndex < 0)
+            {
+                targetIndex = prototypes.Count - 1;
+            }
+
+            currentModule = prototypes[targetIndex];
         }
 
         private void ReferencesCheck()

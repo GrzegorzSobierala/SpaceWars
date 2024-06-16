@@ -1,7 +1,10 @@
 using Game.Input.System;
+using Game.Utility;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 using Zenject;
+using static Zenject.CheatSheet;
 
 namespace Game.Player.Ship
 {
@@ -11,17 +14,12 @@ namespace Game.Player.Ship
         [Inject] private ModuleHandler _moduleHandler;
 
         private bool _isCurrentGunMainGun = true;
+        private Quaternion _startAimingGunRot;
 
-        private IGun CurrentGun
-        {
-            get
-            {
-                if (_isCurrentGunMainGun)
-                    return _moduleHandler.CurrentGun;
-                else
-                    return _moduleHandler.CurrentSpecialGun;
-            }
-        }
+        public bool IsCurrentGunMainGun => _isCurrentGunMainGun;
+
+        private GunModuleBase Gun => _moduleHandler.CurrentGun;
+        private SpecialGunModuleBase SpecialGun => _moduleHandler.CurrentSpecialGun;
 
         private PlayerControls.GameplayActions GameplayActions => _input.PlayerControls.Gameplay;
 
@@ -36,6 +34,11 @@ namespace Game.Player.Ship
             {
                 SwitchCurrentGun();
             }
+
+            if (!_isCurrentGunMainGun)
+            {
+                UpdateAimSpecialGun();
+            }
         }
 
         private void TryShootCurrentGun()
@@ -48,11 +51,11 @@ namespace Game.Player.Ship
 
             if(_isCurrentGunMainGun)
             {
-                _moduleHandler.CurrentGun.TryShoot();
+                Gun.TryShoot();
             }
             else
             {
-                _moduleHandler.CurrentSpecialGun.TryShoot();
+                SpecialGun.TryShoot();
             }
         }
 
@@ -64,6 +67,37 @@ namespace Game.Player.Ship
         private void SwitchCurrentGun()
         {
             _isCurrentGunMainGun = !_isCurrentGunMainGun;
+
+            if(_isCurrentGunMainGun)
+            {
+                OnEndAimSpecialGun();
+            }
+            else
+            {
+                OnStartAimSpecialGun();
+            }
+        }
+
+        private void OnStartAimSpecialGun()
+        {
+            //_startAimingGunRot = SpecialGun.transform.localRotation;
+        }
+
+        private void OnEndAimSpecialGun()
+        {
+            //SpecialGun.transform.localRotation = _startAimingGunRot;
+        }
+
+        private void UpdateAimSpecialGun()
+        {
+            Vector2 mousePos = GameplayActions.CursorPosition.ReadValue<Vector2>();
+            Vector2 aimPoint = Utils.ScreanPositionOn2DIntersection(mousePos);
+
+            Vector2 specialGunPos = (Vector2)SpecialGun.transform.position;
+            float angleDegrees = Utils.AngleDirected(specialGunPos, aimPoint) - 90f;
+
+            Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
+            SpecialGun.transform.rotation = rotation;
         }
     }
 }
