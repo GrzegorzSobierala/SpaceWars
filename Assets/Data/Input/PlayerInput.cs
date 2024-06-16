@@ -127,6 +127,15 @@ namespace Game.Input.System
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleAim"",
+                    ""type"": ""Button"",
+                    ""id"": ""a7dc14aa-0d3e-46ef-9e88-7578275e1998"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -261,6 +270,17 @@ namespace Game.Input.System
                     ""action"": ""SwapSteering"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1160060f-2d6a-4516-94ff-3da1f26b66af"",
+                    ""path"": ""<Keyboard>/leftAlt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleAim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -280,6 +300,7 @@ namespace Game.Input.System
             m_Gameplay_RotateLeft = m_Gameplay.FindAction("RotateLeft", throwIfNotFound: true);
             m_Gameplay_RotateRight = m_Gameplay.FindAction("RotateRight", throwIfNotFound: true);
             m_Gameplay_SwapSteering = m_Gameplay.FindAction("SwapSteering", throwIfNotFound: true);
+            m_Gameplay_ToggleAim = m_Gameplay.FindAction("ToggleAim", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -352,6 +373,7 @@ namespace Game.Input.System
         private readonly InputAction m_Gameplay_RotateLeft;
         private readonly InputAction m_Gameplay_RotateRight;
         private readonly InputAction m_Gameplay_SwapSteering;
+        private readonly InputAction m_Gameplay_ToggleAim;
         public struct GameplayActions
         {
             private @PlayerControls m_Wrapper;
@@ -367,6 +389,7 @@ namespace Game.Input.System
             public InputAction @RotateLeft => m_Wrapper.m_Gameplay_RotateLeft;
             public InputAction @RotateRight => m_Wrapper.m_Gameplay_RotateRight;
             public InputAction @SwapSteering => m_Wrapper.m_Gameplay_SwapSteering;
+            public InputAction @ToggleAim => m_Wrapper.m_Gameplay_ToggleAim;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -409,6 +432,9 @@ namespace Game.Input.System
                 @SwapSteering.started += instance.OnSwapSteering;
                 @SwapSteering.performed += instance.OnSwapSteering;
                 @SwapSteering.canceled += instance.OnSwapSteering;
+                @ToggleAim.started += instance.OnToggleAim;
+                @ToggleAim.performed += instance.OnToggleAim;
+                @ToggleAim.canceled += instance.OnToggleAim;
             }
 
             private void UnregisterCallbacks(IGameplayActions instance)
@@ -446,6 +472,9 @@ namespace Game.Input.System
                 @SwapSteering.started -= instance.OnSwapSteering;
                 @SwapSteering.performed -= instance.OnSwapSteering;
                 @SwapSteering.canceled -= instance.OnSwapSteering;
+                @ToggleAim.started -= instance.OnToggleAim;
+                @ToggleAim.performed -= instance.OnToggleAim;
+                @ToggleAim.canceled -= instance.OnToggleAim;
             }
 
             public void RemoveCallbacks(IGameplayActions instance)
@@ -476,6 +505,7 @@ namespace Game.Input.System
             void OnRotateLeft(InputAction.CallbackContext context);
             void OnRotateRight(InputAction.CallbackContext context);
             void OnSwapSteering(InputAction.CallbackContext context);
+            void OnToggleAim(InputAction.CallbackContext context);
         }
     }
 }

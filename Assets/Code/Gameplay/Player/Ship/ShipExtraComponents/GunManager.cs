@@ -2,9 +2,7 @@ using Game.Input.System;
 using Game.Utility;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 using Zenject;
-using static Zenject.CheatSheet;
 
 namespace Game.Player.Ship
 {
@@ -14,6 +12,7 @@ namespace Game.Player.Ship
         [Inject] private ModuleHandler _moduleHandler;
 
         private bool _isCurrentGunMainGun = true;
+        private bool _isToggleAim = false;
         private Quaternion _startAimingGunRot;
 
         public bool IsCurrentGunMainGun => _isCurrentGunMainGun;
@@ -34,10 +33,20 @@ namespace Game.Player.Ship
             {
                 SwitchCurrentGun();
             }
+            
+            if(!_isToggleAim && GameplayActions.SwitchGun.WasReleasedThisFrame())
+            {
+                SwitchCurrentGun();
+            }
 
             if (!_isCurrentGunMainGun)
             {
                 UpdateAimSpecialGun();
+            }
+
+            if(GameplayActions.ToggleAim.WasPerformedThisFrame())
+            {
+                SwitchAimType();
             }
         }
 
@@ -98,6 +107,16 @@ namespace Game.Player.Ship
 
             Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
             SpecialGun.transform.rotation = rotation;
+        }
+
+        private void SwitchAimType()
+        {
+            _isToggleAim = !_isToggleAim;
+
+            if(!_isToggleAim && !_isCurrentGunMainGun)
+            {
+                SwitchCurrentGun();
+            }
         }
     }
 }

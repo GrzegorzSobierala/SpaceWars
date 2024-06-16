@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 2030023764051676508}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2324339607598792243}
@@ -190,7 +190,7 @@ Transform:
   m_GameObject: {fileID: 5826095239523346999}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4690636273331019242}
@@ -246,16 +246,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac29903fd8eb31247bee9ca0f549956b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDamageHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
   _body: {fileID: 4562933555896563138}
   _particleSystem: {fileID: 7073141275021597805}
   _damage: 3
-  _speed: 600
-  _horizontalMoveInpactMulti: 0.3
+  _speed: 400
+  _horizontalMoveInpactMulti: 0
   _maxTimeAlive: 5
   _maxDistance: 250
   _speedMaxDistanceAliveMulti: 0.1
   _shootSpeedMulti: 0.15
-  _timeToLunch: 0.4
+  _timeToLunch: 0.8
 --- !u!50 &4562933555896563138
 Rigidbody2D:
   serializedVersion: 4
@@ -448,6 +454,14 @@ PrefabInstance:
     - target: {fileID: 3349788958732384251, guid: 1661ca34289650441b4efcbbff15f5ee, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3349788958732384251, guid: 1661ca34289650441b4efcbbff15f5ee, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3349788958732384251, guid: 1661ca34289650441b4efcbbff15f5ee, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3349788958732384251, guid: 1661ca34289650441b4efcbbff15f5ee, type: 3}
       propertyPath: m_LocalPosition.x
