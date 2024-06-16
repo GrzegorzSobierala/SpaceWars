@@ -10,10 +10,11 @@ namespace Game.Player.Ship
     {
         [Inject] private InputProvider _input;
         [Inject] private ModuleHandler _moduleHandler;
+        [Inject] private InputManager _inputManager;
 
         private bool _isCurrentGunMainGun = true;
         private bool _isToggleAim = false;
-        private Quaternion _startAimingGunRot;
+        private bool _isToggleSwapSteeringOnAim = false;
 
         public bool IsCurrentGunMainGun => _isCurrentGunMainGun;
 
@@ -48,6 +49,11 @@ namespace Game.Player.Ship
             {
                 SwitchAimType();
             }
+
+            if(GameplayActions.ToggleSwapSteeringOnAim.WasPerformedThisFrame())
+            {
+                SwitchToggleSwapSteeringOnAim();
+            }
         }
 
         private void TryShootCurrentGun()
@@ -77,24 +83,10 @@ namespace Game.Player.Ship
         {
             _isCurrentGunMainGun = !_isCurrentGunMainGun;
 
-            if(_isCurrentGunMainGun)
+            if (_isToggleSwapSteeringOnAim)
             {
-                OnEndAimSpecialGun();
+                SwapRotatAndVerdicalMoveInputs();
             }
-            else
-            {
-                OnStartAimSpecialGun();
-            }
-        }
-
-        private void OnStartAimSpecialGun()
-        {
-            //_startAimingGunRot = SpecialGun.transform.localRotation;
-        }
-
-        private void OnEndAimSpecialGun()
-        {
-            //SpecialGun.transform.localRotation = _startAimingGunRot;
         }
 
         private void UpdateAimSpecialGun()
@@ -117,6 +109,24 @@ namespace Game.Player.Ship
             {
                 SwitchCurrentGun();
             }
+        }
+
+        private void SwitchToggleSwapSteeringOnAim()
+        {
+            _isToggleSwapSteeringOnAim = !_isToggleSwapSteeringOnAim;
+
+            if(_isToggleSwapSteeringOnAim && !_isCurrentGunMainGun)
+            {
+                SwapRotatAndVerdicalMoveInputs();
+            }
+        }
+
+        private void SwapRotatAndVerdicalMoveInputs()
+        {
+            _inputManager.SwapBindings(GameplayActions.MoveLeft.bindings[0],
+                    GameplayActions.RotateLeft.bindings[0]);
+            _inputManager.SwapBindings(GameplayActions.MoveRight.bindings[0],
+                GameplayActions.RotateRight.bindings[0]);
         }
     }
 }

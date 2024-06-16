@@ -136,6 +136,15 @@ namespace Game.Input.System
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleSwapSteeringOnAim"",
+                    ""type"": ""Button"",
+                    ""id"": ""e6cd829d-eec8-4ede-a5dc-188e0e638dff"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -251,19 +260,8 @@ namespace Game.Input.System
                 },
                 {
                     ""name"": """",
-                    ""id"": ""7547152b-937c-4afa-8915-898d3b3e8b4c"",
-                    ""path"": ""<Mouse>/scroll"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SwapSteering"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""468d1c41-fbb5-4006-866e-c30e84dda251"",
-                    ""path"": ""<Keyboard>/ctrl"",
+                    ""path"": ""<Keyboard>/0"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -274,11 +272,22 @@ namespace Game.Input.System
                 {
                     ""name"": """",
                     ""id"": ""1160060f-2d6a-4516-94ff-3da1f26b66af"",
-                    ""path"": ""<Keyboard>/leftAlt"",
+                    ""path"": ""<Keyboard>/9"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ToggleAim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b9b049c3-c12c-43e5-a01c-f6b88d4e2e44"",
+                    ""path"": ""<Keyboard>/8"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleSwapSteeringOnAim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -301,6 +310,7 @@ namespace Game.Input.System
             m_Gameplay_RotateRight = m_Gameplay.FindAction("RotateRight", throwIfNotFound: true);
             m_Gameplay_SwapSteering = m_Gameplay.FindAction("SwapSteering", throwIfNotFound: true);
             m_Gameplay_ToggleAim = m_Gameplay.FindAction("ToggleAim", throwIfNotFound: true);
+            m_Gameplay_ToggleSwapSteeringOnAim = m_Gameplay.FindAction("ToggleSwapSteeringOnAim", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -374,6 +384,7 @@ namespace Game.Input.System
         private readonly InputAction m_Gameplay_RotateRight;
         private readonly InputAction m_Gameplay_SwapSteering;
         private readonly InputAction m_Gameplay_ToggleAim;
+        private readonly InputAction m_Gameplay_ToggleSwapSteeringOnAim;
         public struct GameplayActions
         {
             private @PlayerControls m_Wrapper;
@@ -390,6 +401,7 @@ namespace Game.Input.System
             public InputAction @RotateRight => m_Wrapper.m_Gameplay_RotateRight;
             public InputAction @SwapSteering => m_Wrapper.m_Gameplay_SwapSteering;
             public InputAction @ToggleAim => m_Wrapper.m_Gameplay_ToggleAim;
+            public InputAction @ToggleSwapSteeringOnAim => m_Wrapper.m_Gameplay_ToggleSwapSteeringOnAim;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -435,6 +447,9 @@ namespace Game.Input.System
                 @ToggleAim.started += instance.OnToggleAim;
                 @ToggleAim.performed += instance.OnToggleAim;
                 @ToggleAim.canceled += instance.OnToggleAim;
+                @ToggleSwapSteeringOnAim.started += instance.OnToggleSwapSteeringOnAim;
+                @ToggleSwapSteeringOnAim.performed += instance.OnToggleSwapSteeringOnAim;
+                @ToggleSwapSteeringOnAim.canceled += instance.OnToggleSwapSteeringOnAim;
             }
 
             private void UnregisterCallbacks(IGameplayActions instance)
@@ -475,6 +490,9 @@ namespace Game.Input.System
                 @ToggleAim.started -= instance.OnToggleAim;
                 @ToggleAim.performed -= instance.OnToggleAim;
                 @ToggleAim.canceled -= instance.OnToggleAim;
+                @ToggleSwapSteeringOnAim.started -= instance.OnToggleSwapSteeringOnAim;
+                @ToggleSwapSteeringOnAim.performed -= instance.OnToggleSwapSteeringOnAim;
+                @ToggleSwapSteeringOnAim.canceled -= instance.OnToggleSwapSteeringOnAim;
             }
 
             public void RemoveCallbacks(IGameplayActions instance)
@@ -506,6 +524,7 @@ namespace Game.Input.System
             void OnRotateRight(InputAction.CallbackContext context);
             void OnSwapSteering(InputAction.CallbackContext context);
             void OnToggleAim(InputAction.CallbackContext context);
+            void OnToggleSwapSteeringOnAim(InputAction.CallbackContext context);
         }
     }
 }

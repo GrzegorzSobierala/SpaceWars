@@ -112,6 +112,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleSwapSteeringOnAim",
+                    "type": "Button",
+                    "id": "e6cd829d-eec8-4ede-a5dc-188e0e638dff",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -227,19 +236,8 @@
                 },
                 {
                     "name": "",
-                    "id": "7547152b-937c-4afa-8915-898d3b3e8b4c",
-                    "path": "<Mouse>/scroll",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SwapSteering",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "468d1c41-fbb5-4006-866e-c30e84dda251",
-                    "path": "<Keyboard>/ctrl",
+                    "path": "<Keyboard>/0",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -250,11 +248,22 @@
                 {
                     "name": "",
                     "id": "1160060f-2d6a-4516-94ff-3da1f26b66af",
-                    "path": "<Keyboard>/leftAlt",
+                    "path": "<Keyboard>/9",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "ToggleAim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b9b049c3-c12c-43e5-a01c-f6b88d4e2e44",
+                    "path": "<Keyboard>/8",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleSwapSteeringOnAim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
