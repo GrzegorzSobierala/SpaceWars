@@ -26,14 +26,19 @@ namespace Game.Player.Ship
         [SerializeField] private float _boostCooldown = 2f;
         [SerializeField] private float _boostSpeed = 100;
         [SerializeField] private bool _movementQE = false;
-        [SerializeField] private bool _reverseRotationInput = false;
 
         private Option _lastVerdical = Option.Default;
         private Option _lastHorizontal = Option.Default;
         
         private float lastBoostTime = -100;
+        private bool _inverseRotWithVerMove = false;
 
         private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
+
+        private InputAction MoveLeft => _inverseRotWithVerMove ? Input.RotateLeft : Input.MoveLeft;
+        private InputAction MoveRight => _inverseRotWithVerMove ? Input.RotateRight : Input.MoveRight;
+        private InputAction RotateLeft => _inverseRotWithVerMove ? Input.MoveLeft : Input.RotateLeft;
+        private InputAction RotateRight => _inverseRotWithVerMove ? Input.MoveRight : Input.RotateRight;
 
         private void FixedUpdate()
         {
@@ -68,18 +73,9 @@ namespace Game.Player.Ship
         {
             bool moveRight;
             bool moveLeft;
-            if (_reverseRotationInput)
-            {
-                moveRight = Input.RotateRight.ReadValue<float>() == 1.0f;
-                moveLeft = Input.RotateLeft.ReadValue<float>() == 1.0f;
-            }
-            else
-            {
-                moveRight = Input.MoveRight.ReadValue<float>() == 1.0f;
-                moveLeft = Input.MoveLeft.ReadValue<float>() == 1.0f;
-            }
 
-           
+            moveRight = MoveRight.ReadValue<float>() == 1.0f;
+            moveLeft = MoveLeft.ReadValue<float>() == 1.0f;
 
             Option newestSide = LogicUtility.GetNewestOption(moveRight, moveLeft, 
                 ref _lastHorizontal);
@@ -126,8 +122,8 @@ namespace Game.Player.Ship
 
         public void KeyRotate()
         {
-            bool rotateLeft = Input.RotateLeft.ReadValue<float>() == 1.0f;
-            bool rotateRight = Input.RotateRight.ReadValue<float>() == 1.0f;
+            bool rotateLeft = RotateLeft.ReadValue<float>() == 1.0f;
+            bool rotateRight = RotateRight.ReadValue<float>() == 1.0f;
 
             if (rotateLeft && rotateRight)
             {
@@ -184,6 +180,11 @@ namespace Game.Player.Ship
             _velocityRotMulti = value;
         }
 
+        public void InverseRotWithVerMove()
+        {
+            _inverseRotWithVerMove = !_inverseRotWithVerMove;
+        }
+
         private void RotateByKey(float value)
         {
             float rotSpeed = (value * _rotationSpeed * Time.fixedDeltaTime) + _body.rotation;
@@ -194,8 +195,8 @@ namespace Game.Player.Ship
         private void UpdateMovement()
         {
             if(!_gunManager.IsCurrentGunMainGun ||
-                Input.RotateLeft.ReadValue<float>() == 1.0f || 
-                Input.RotateRight.ReadValue<float>() == 1.0f)
+                RotateLeft.ReadValue<float>() == 1.0f || 
+                RotateRight.ReadValue<float>() == 1.0f)
             {
                 KeyRotate();
             }

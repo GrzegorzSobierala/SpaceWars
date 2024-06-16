@@ -11,6 +11,7 @@ namespace Game.Player.Ship
         [Inject] private InputProvider _input;
         [Inject] private ModuleHandler _moduleHandler;
         [Inject] private InputManager _inputManager;
+        [Inject] private PlayerMovement2D _movement2D;
 
         private bool _isCurrentGunMainGun = true;
         private bool _isToggleAim = false;
@@ -38,6 +39,11 @@ namespace Game.Player.Ship
             if(!_isToggleAim && GameplayActions.SwitchGun.WasReleasedThisFrame())
             {
                 SwitchCurrentGun();
+            }
+
+            if (GameplayActions.SwitchGun.WasReleasedThisFrame())
+            {
+                Debug.Log("amigus");
             }
 
             if (!_isCurrentGunMainGun)
@@ -114,19 +120,11 @@ namespace Game.Player.Ship
         private void SwitchToggleSwapSteeringOnAim()
         {
             _isToggleSwapSteeringOnAim = !_isToggleSwapSteeringOnAim;
-
-            if(_isToggleSwapSteeringOnAim && !_isCurrentGunMainGun)
-            {
-                SwapRotatAndVerdicalMoveInputs();
-            }
         }
 
         private void SwapRotatAndVerdicalMoveInputs()
         {
-            _inputManager.SwapBindings(GameplayActions.MoveLeft.bindings[0],
-                    GameplayActions.RotateLeft.bindings[0]);
-            _inputManager.SwapBindings(GameplayActions.MoveRight.bindings[0],
-                GameplayActions.RotateRight.bindings[0]);
+            _movement2D.InverseRotWithVerMove();
         }
     }
 }
