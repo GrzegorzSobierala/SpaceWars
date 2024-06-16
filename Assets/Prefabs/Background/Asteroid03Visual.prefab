@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5275094961540169816}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Asteroid03Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5275094961540169816
 Transform:
@@ -41,12 +41,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1017891578215749709}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1017891578215749709
 Transform:
@@ -143,6 +143,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3dfdc1282c9295d4a9deb4331b985fd9, type: 3}
       propertyPath: m_Name
       value: Asteroid03Unity
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3dfdc1282c9295d4a9deb4331b985fd9, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3dfdc1282c9295d4a9deb4331b985fd9, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
