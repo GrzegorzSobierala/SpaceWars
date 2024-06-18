@@ -6,7 +6,7 @@ using Zenject;
 
 namespace Game.Player.Ship
 {
-    public abstract class GunModuleBase : MainGunBase , IModule
+    public abstract class GunModuleBase : GunBase , IModule
     {
         [Inject] protected Rigidbody2D _body;
         [Inject] protected PlayerManager _playerManager;

@@ -104,7 +104,6 @@ namespace Game.Player.Ship
             _moduleHandler.SetHull(this, newHull);
             ReplaceGun(_currentGunPrototype);
             ReplaceSpecialGun(_currentSpecialGunPrototype);
-            //ReplaceBridge(_currentBridgePrototype);
         }
 
         public void ReplaceGun(GunModuleBase gunPrototype)
@@ -154,7 +153,6 @@ namespace Game.Player.Ship
             ReplaceHull(_currentHullPrototype);
             ReplaceGun(_currentGunPrototype);
             ReplaceSpecialGun(_currentSpecialGunPrototype);
-            //ReplaceBridge(_currentBridgePrototype);
         }
 
         

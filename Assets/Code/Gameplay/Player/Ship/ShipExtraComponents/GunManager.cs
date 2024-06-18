@@ -10,7 +10,6 @@ namespace Game.Player.Ship
     {
         [Inject] private InputProvider _input;
         [Inject] private ModuleHandler _moduleHandler;
-        [Inject] private InputManager _inputManager;
         [Inject] private PlayerMovement2D _movement2D;
 
         private bool _isCurrentGunMainGun = true;
@@ -26,39 +25,43 @@ namespace Game.Player.Ship
 
         private void Update()
         {
-            if (GameplayActions.Shoot.ReadValue<float>() == 1.0f)
-            {
-                TryShootCurrentGun();
-            }
+            UpdateInput();
+            UpdateGuns();
+        }
 
-            if (GameplayActions.SwitchGun.WasPerformedThisFrame())
-            {
-                SwitchCurrentGun();
-            }
-            
-            if(!_isToggleAim && GameplayActions.SwitchGun.WasReleasedThisFrame())
-            {
-                SwitchCurrentGun();
-            }
-
-            if (GameplayActions.SwitchGun.WasReleasedThisFrame())
-            {
-                Debug.Log("amigus");
-            }
-
-            if (!_isCurrentGunMainGun)
-            {
-                UpdateAimSpecialGun();
-            }
-
-            if(GameplayActions.ToggleAim.WasPerformedThisFrame())
+        private void UpdateInput()
+        {
+            if (GameplayActions.ToggleAim.WasPerformedThisFrame())
             {
                 SwitchAimType();
             }
 
-            if(GameplayActions.ToggleSwapSteeringOnAim.WasPerformedThisFrame())
+            if (GameplayActions.ToggleSwapSteeringOnAim.WasPerformedThisFrame())
             {
                 SwitchToggleSwapSteeringOnAim();
+            }
+        }
+
+        private void UpdateGuns()
+        {
+            if (GameplayActions.SwitchGun.WasPerformedThisFrame())
+            {
+                SwitchCurrentGun();
+            }
+
+            if (!_isToggleAim && GameplayActions.SwitchGun.WasReleasedThisFrame())
+            {
+                SwitchCurrentGun();
+            }
+
+            if (!_isCurrentGunMainGun)
+            {
+                AimSpecialGun();
+            }
+
+            if (GameplayActions.Shoot.ReadValue<float>() == 1.0f)
+            {
+                TryShootCurrentGun();
             }
         }
 
@@ -80,11 +83,6 @@ namespace Game.Player.Ship
             }
         }
 
-        private void OnSwitchGunInput(InputAction.CallbackContext _)
-        {
-            SwitchCurrentGun();
-        }
-
         private void SwitchCurrentGun()
         {
             _isCurrentGunMainGun = !_isCurrentGunMainGun;
@@ -95,7 +93,7 @@ namespace Game.Player.Ship
             }
         }
 
-        private void UpdateAimSpecialGun()
+        private void AimSpecialGun()
         {
             Vector2 mousePos = GameplayActions.CursorPosition.ReadValue<Vector2>();
             Vector2 aimPoint = Utils.ScreanPositionOn2DIntersection(mousePos);
