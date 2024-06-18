@@ -28,7 +28,7 @@ namespace Game.Combat
             _shootShipSpeed = GetForwardSpeed(gunTransform, creatorBody.velocity);
 
             StartCoroutine(WaitAndLaunch());
-            StartCoroutine(DestroyByDistance());
+            StartCoroutine(WaitAndDestroy());
         }
 
 
@@ -48,7 +48,7 @@ namespace Game.Combat
             _body.AddRelativeForce(Vector2.up * targetForce, ForceMode2D.Impulse);
         }
 
-        private IEnumerator DestroyByDistance()
+        private IEnumerator WaitAndDestroy()
         {
             yield return new WaitUntil(() => SchouldNukeMySelf);
 

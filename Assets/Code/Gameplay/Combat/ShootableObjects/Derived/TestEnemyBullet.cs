@@ -20,7 +20,7 @@ namespace Game.Combat
             _shootPos = gunTransform.position;
             _shootShipSpeed = 0;
 
-            StartCoroutine(DestroyByDistance());
+            StartCoroutine(WaitAndDestroy());
         }
 
         public override void OnHit()
@@ -28,7 +28,7 @@ namespace Game.Combat
             PlayrParticlesAndDie();
         }
 
-        private IEnumerator DestroyByDistance()
+        private IEnumerator WaitAndDestroy()
         {
             yield return new WaitUntil(() => SchouldNukeMySelf);
 

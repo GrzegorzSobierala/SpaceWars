@@ -22,22 +22,22 @@ namespace Game.Combat
             _shootPos = _body.position;
             _shootShipSpeed = GetForwardSpeed(gunTransform, creatorBody.velocity);
 
-            StartCoroutine(DestroyByDistance());
+            StartCoroutine(WaitAndDestroy());
         }
 
         public override void OnHit()
         {
-            PlayrParticlesAndDie();
+            PlayParticlesAndDie();
         }
 
-        private IEnumerator DestroyByDistance()
+        private IEnumerator WaitAndDestroy()
         {
             yield return new WaitUntil(() => SchouldNukeMySelf);
 
             Destroy(gameObject);
         }
 
-        private void PlayrParticlesAndDie()
+        private void PlayParticlesAndDie()
         {
             _particleSystem.transform.SetParent(null);
             _particleSystem.Play();

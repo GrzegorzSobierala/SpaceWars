@@ -10,22 +10,6 @@ namespace Game.Combat
     {
         [SerializeField] protected UnityEvent OnHitEvent;
         [SerializeField] protected UnityEvent OnDamageHitEvent;
-        public float MaxDistance => _maxDistance;
-
-        protected bool SchouldNukeMySelf
-        {
-            get
-            {
-                float maxDistance = _maxDistance + (_shootShipSpeed * _speedMaxDistanceAliveMulti);
-                if (Vector2.Distance(_shootPos, _body.position) > maxDistance)
-                    return true;
-
-                if (Time.time > _maxTimeAlive + _shootTime)
-                    return true;
-
-                return false;
-            }
-        }
 
         [Header("Base Depedencies")]
         [SerializeField] protected Rigidbody2D _body;
@@ -45,8 +29,30 @@ namespace Game.Combat
 
         private GameObject _damageDealer;
 
+        public float MaxDistance => _maxDistance;
+
+        protected GameObject DamageDealer => _damageDealer;
+
+        protected bool SchouldNukeMySelf
+        {
+            get
+            {
+                float maxDistance = _maxDistance + (_shootShipSpeed * _speedMaxDistanceAliveMulti);
+                if (Vector2.Distance(_shootPos, _body.position) > maxDistance)
+                    return true;
+
+                if (Time.time > _maxTimeAlive + _shootTime)
+                    return true;
+
+                return false;
+            }
+        }
+
+
         protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
+            OnHitEvent?.Invoke();
+
             if (collision.collider == null)
             {
                 OnHit();
@@ -71,7 +77,6 @@ namespace Game.Combat
                 OnDamageHitEvent?.Invoke();
             }
 
-            OnHitEvent?.Invoke();
             OnHit();
         }
 
