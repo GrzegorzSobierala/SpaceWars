@@ -12,6 +12,8 @@ namespace Game.Player.Ship
     {
         public Transform GunSpot => _gunSpot;
         public Transform BridgeSpot => _bridgeSpot;
+        public Transform SpecialGunSpot => _specialGunSpot;
+
         public float CurrentHp => _currentHp; 
 
         [Inject] protected List<DamageHandlerBase> _damageHandlers;
@@ -19,6 +21,7 @@ namespace Game.Player.Ship
 
         [SerializeField] protected Transform _gunSpot;
         [SerializeField] protected Transform _bridgeSpot;
+        [SerializeField] protected Transform _specialGunSpot;
         [SerializeField] protected float _baseHp = 1f;
 
         protected float _maxHp;

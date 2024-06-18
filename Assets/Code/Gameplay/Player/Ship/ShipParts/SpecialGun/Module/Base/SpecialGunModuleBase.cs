@@ -31,10 +31,10 @@ namespace Game.Player.Ship
             _shootableObjectPrototype.gameObject.name = _shootableObjectPrefab.gameObject.name + "(Prototype)";
         }
 
-        public GunModuleBase Instatiate(Transform parent, DiContainer container)
+        public SpecialGunModuleBase Instatiate(Transform parent, DiContainer container)
         {
             GameObject gunGM = container.InstantiatePrefab(this, parent);
-            GunModuleBase gun = gunGM.GetComponent<GunModuleBase>();
+            SpecialGunModuleBase gun = gunGM.GetComponent<SpecialGunModuleBase>();
 
             gun.transform.localPosition = transform.localPosition;
             gun.transform.localRotation = transform.localRotation;

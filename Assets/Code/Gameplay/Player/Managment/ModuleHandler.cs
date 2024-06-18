@@ -7,11 +7,12 @@ namespace Game.Player.Ship
         public HullModuleBase CurrentHull => _currentHull;
         public GunModuleBase CurrentGun => _currentGun;
         public BridgeModuleBase CurrentBridge => _currentBridge;
+        public SpecialGunModuleBase CurrentSpecialGun => _currentspecialGun;
 
         private HullModuleBase _currentHull;
         private GunModuleBase _currentGun;
         private BridgeModuleBase _currentBridge;
-
+        private SpecialGunModuleBase _currentspecialGun;
         public void SetGun(ModuleFactory creator, GunModuleBase gun)
         {
             if(creator == null)
@@ -45,5 +46,15 @@ namespace Game.Player.Ship
             _currentBridge = viewfinder;
         }
 
+        public void SetSpecialGun(ModuleFactory creator, SpecialGunModuleBase specialGun)
+        {
+            if (creator == null)
+            {
+                Debug.LogError("Creator is null");
+                return;
+            }
+
+            _currentspecialGun = specialGun;
+        }
     }
 }

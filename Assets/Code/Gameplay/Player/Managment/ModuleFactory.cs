@@ -12,10 +12,12 @@ namespace Game.Player.Ship
         [SerializeField] private List<HullModuleBase> _hullPrefabs;
         [SerializeField] private List<GunModuleBase> _gunPrefabs;
         [SerializeField] private List<BridgeModuleBase> _bridgesPrefabs;
+        [SerializeField] private List<SpecialGunModuleBase> _specialGunsPrefabs;
 
         private HullModuleBase _currentHullPrototype;
         private GunModuleBase _currentGunPrototype;
         private BridgeModuleBase _currentBridgePrototype;
+        private SpecialGunModuleBase _currentSpecialGunPrototype;
 
         private void Awake()
         {
@@ -73,6 +75,87 @@ namespace Game.Player.Ship
             ReplaceBridge(_currentBridgePrototype);
         }
 
+        [ContextMenu("SetNextSpecialGun")]
+        public void SetNextSpecialGun()
+        {
+            SetNext(_specialGunsPrefabs, ref _currentSpecialGunPrototype, false);
+
+            ReplaceSpecialGun(_currentSpecialGunPrototype);
+        }
+
+        [ContextMenu("SetPreviusSpecialGun")]
+        public void SetPreviusSpecialGun()
+        {
+            SetNext(_specialGunsPrefabs, ref _currentSpecialGunPrototype, true);
+
+            ReplaceSpecialGun (_currentSpecialGunPrototype);
+        }
+
+        #endregion
+
+        public void ReplaceHull(HullModuleBase hullPrototype)
+        {
+            if (_moduleHandler.CurrentHull != null)
+            {
+                Destroy(_moduleHandler.CurrentHull.gameObject);
+            }
+
+            HullModuleBase newHull = hullPrototype.Instatiate(transform, _container);
+            _moduleHandler.SetHull(this, newHull);
+            ReplaceGun(_currentGunPrototype);
+            ReplaceSpecialGun(_currentSpecialGunPrototype);
+        }
+
+        public void ReplaceGun(GunModuleBase gunPrototype)
+        {
+            if (_moduleHandler.CurrentGun != null)
+            {
+                Destroy(_moduleHandler.CurrentGun.gameObject);
+            }
+
+            Transform gunSpot = _moduleHandler.CurrentHull.GunSpot;
+            GunModuleBase newGun = gunPrototype.Instatiate(gunSpot, _container);
+            _moduleHandler.SetGun(this, newGun);
+        }
+
+        public void ReplaceBridge(BridgeModuleBase bridgePrototype)
+        {
+            if (_moduleHandler.CurrentBridge != null)
+            {
+                Destroy(_moduleHandler.CurrentBridge.gameObject);
+            }
+
+            Transform bridgeSpot = _moduleHandler.CurrentHull.SpecialGunSpot;
+            BridgeModuleBase newBridge = bridgePrototype.Instatiate(bridgeSpot, _container);
+            _moduleHandler.SetBridge(this, newBridge);
+        }
+
+        public void ReplaceSpecialGun(SpecialGunModuleBase gunPrototype)
+        {
+            if (_moduleHandler.CurrentSpecialGun != null)
+            {
+                Destroy(_moduleHandler.CurrentSpecialGun.gameObject);
+            }
+
+            Transform gunSpot = _moduleHandler.CurrentHull.SpecialGunSpot;
+            SpecialGunModuleBase newGun = gunPrototype.Instatiate(gunSpot, _container);
+            _moduleHandler.SetSpecialGun(this, newGun);
+        }
+
+
+        private void Init()
+        {
+            _currentHullPrototype = _hullPrefabs[0];
+            _currentGunPrototype = _gunPrefabs[0];
+            _currentBridgePrototype = _bridgesPrefabs[0];
+            _currentSpecialGunPrototype = _specialGunsPrefabs[0];
+
+            ReplaceHull(_currentHullPrototype);
+            ReplaceGun(_currentGunPrototype);
+            ReplaceSpecialGun(_currentSpecialGunPrototype);
+        }
+
+        
         private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : IModule
         {
             int currentIndex = prototypes.IndexOf(currentModule);
@@ -97,56 +180,6 @@ namespace Game.Player.Ship
             currentModule = prototypes[targetIndex];
         }
 
-        #endregion
-
-        private void Init()
-        {
-            _currentHullPrototype = _hullPrefabs[0];
-            _currentGunPrototype = _gunPrefabs[0];
-            _currentBridgePrototype = _bridgesPrefabs[0];
-
-            ReplaceHull(_currentHullPrototype);
-            ReplaceGun(_currentGunPrototype);
-            //ReplaceBridge(_currentBridgePrototype);
-        }
-
-        public void ReplaceHull(HullModuleBase hullPrototype)
-        {
-            if (_moduleHandler.CurrentHull != null)
-            {
-                Destroy(_moduleHandler.CurrentHull.gameObject);
-            }
-
-            HullModuleBase newHull = hullPrototype.Instatiate(transform, _container);
-            _moduleHandler.SetHull(this, newHull);
-            ReplaceGun(_currentGunPrototype);
-            //ReplaceBridge(_currentBridgePrototype);
-        }
-
-        public void ReplaceGun(GunModuleBase gunPrototype)
-        {
-            if (_moduleHandler.CurrentGun != null)
-            {
-                Destroy(_moduleHandler.CurrentGun.gameObject);
-            }
-
-            Transform gunSpot = _moduleHandler.CurrentHull.GunSpot;
-            GunModuleBase newGun = gunPrototype.Instatiate(gunSpot, _container);
-            _moduleHandler.SetGun(this, newGun);
-        }
-
-        public void ReplaceBridge(BridgeModuleBase bridgePrototype)
-        {
-            if(_moduleHandler.CurrentBridge != null)
-            {
-                Destroy(_moduleHandler.CurrentBridge.gameObject);
-            }
-
-            Transform bridgeSpot = _moduleHandler.CurrentHull.BridgeSpot;
-            BridgeModuleBase newBridge = bridgePrototype.Instatiate(bridgeSpot, _container);
-            _moduleHandler.SetBridge(this, newBridge);
-        }
-
         private void ReferencesCheck()
         {
             if (_hullPrefabs.Count == 0)
@@ -161,7 +194,12 @@ namespace Game.Player.Ship
 
             if(_bridgesPrefabs.Count == 0)
             {
-                Debug.LogError("List of bridges is empty", this);
+                Debug.LogError("List of bridges prototypes is empty", this);
+            }
+
+            if(_specialGunsPrefabs.Count == 0)
+            {
+                Debug.LogError("List of special gun prototypes is empty", this);
             }
         }
     }

@@ -2,6 +2,8 @@ namespace Game.Player
 {
     public interface IGun
     {
-        public abstract void Shoot();
+        public bool IsGunReadyToShoot { get; }
+
+        public abstract void TryShoot();
     }
 }

@@ -1,4 +1,5 @@
 using Game.Management;
+using Game.Player.Ship;
 using Game.Room;
 using Zenject;
 
@@ -10,6 +11,7 @@ namespace Game.Player
         {
             Container.Bind<PlayerManager>().FromComponentInHierarchy(false).AsSingle();
             Container.Bind<TestSceneManager>().FromComponentInHierarchy(false).AsSingle();
+            Container.Bind<GunManager>().FromComponentInHierarchy(false).AsSingle();
         }
     }
 }

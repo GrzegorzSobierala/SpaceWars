@@ -37,8 +37,8 @@ namespace Game
             _setPreviiusHullButton.onClick.AddListener(ModuleCreator.SetPreviusHull);
             _setNextGunButton.onClick.AddListener(ModuleCreator.SetNextGun);
             _setPreviousGunButton.onClick.AddListener(ModuleCreator.SetPreviusGun);
-            _setNextBridgeButton.onClick.AddListener(ModuleCreator.SetNextBridge);
-            _setPreviousBridgeButton.onClick.AddListener(ModuleCreator.SetPreviusBridge);
+            _setNextBridgeButton.onClick.AddListener(ModuleCreator.SetNextSpecialGun);
+            _setPreviousBridgeButton.onClick.AddListener(ModuleCreator.SetPreviusSpecialGun);
             _inputField.onValueChanged.AddListener(SetVelocityRotationMulti);
         }
 
@@ -48,8 +48,8 @@ namespace Game
             _setPreviiusHullButton.onClick.RemoveListener(ModuleCreator.SetPreviusHull);
             _setNextGunButton.onClick.RemoveListener(ModuleCreator.SetNextGun);
             _setPreviousGunButton.onClick.RemoveListener(ModuleCreator.SetPreviusGun);
-            _setNextBridgeButton.onClick.RemoveListener(ModuleCreator.SetNextBridge);
-            _setPreviousBridgeButton.onClick.RemoveListener(ModuleCreator.SetPreviusBridge);
+            _setNextBridgeButton.onClick.RemoveListener(ModuleCreator.SetNextSpecialGun);
+            _setPreviousBridgeButton.onClick.RemoveListener(ModuleCreator.SetPreviusSpecialGun);
             _inputField.onValueChanged.RemoveListener(SetVelocityRotationMulti);
         }
 

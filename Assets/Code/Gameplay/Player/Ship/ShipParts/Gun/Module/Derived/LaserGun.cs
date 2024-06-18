@@ -4,31 +4,19 @@ namespace Game.Player.Ship
 {
     public class LaserGun : GunModuleBase
     {
-        private void Update()
-        {
-            if (Input.Shoot.ReadValue<float>() == 1.0f)
-            {
-                TryShoot();
-            }
-        }
+        public override bool IsGunReadyToShoot => Time.time - _lastShotTime >= _cooldown;
 
-        private void TryShoot()
+        protected override bool OnTryShoot()
         {
-            if (Time.time - _lastShotTime < _cooldown)
-            {
-                return;
-            }
+            if (!IsGunReadyToShoot)
+                return false;
 
-            Shoot();
-        }
-
-        protected override void OnShoot()
-        {
             _lastShotTime = Time.time;
 
             GameObject damageDealer = _body.gameObject;
             Transform parent = _playerManager.transform;
             _shootableObjectPrototype.CreateCopy(damageDealer, parent).Shoot(_body, transform);
+            return true;
         }
     }
 }

@@ -10,15 +10,12 @@ namespace Game.Player.Ship
     {
         [Inject] protected Rigidbody2D _body;
         [Inject] protected PlayerManager _playerManager;
-        [Inject] private InputProvider _input;
 
         [SerializeField] private ShootableObjectBase _shootableObjectPrefab;
         [SerializeField] protected float _cooldown = 1f;
 
         protected ShootableObjectBase _shootableObjectPrototype;
         protected float _lastShotTime = 0f;
-
-        protected PlayerControls.GameplayActions Input => _input.PlayerControls.Gameplay;
 
         protected virtual void Awake()
         {
