@@ -27,7 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2324339607598792243}
   m_RootOrder: -1
@@ -76,95 +76,12 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0, y: 5.028448}
-      - {x: -0.49628925, y: 3.533338}
-      - {x: -0.47121054, y: -3.5575557}
-      - {x: 0.48073503, y: -3.5450141}
-      - {x: 0.48781168, y: 3.5293152}
+    - - {x: 0, y: 7.0398273}
+      - {x: -0.69480497, y: 4.9466734}
+      - {x: -0.65969473, y: -4.980578}
+      - {x: 0.67302907, y: -4.96302}
+      - {x: 0.6829364, y: 4.9410415}
   m_UseDelaunayMesh: 0
---- !u!1 &2226872723978808125
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4690636273331019242}
-  - component: {fileID: 1094533783163082997}
-  - component: {fileID: 4496190485538106631}
-  m_Layer: 7
-  m_Name: Capsule
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &4690636273331019242
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2226872723978808125}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3907446705585901697}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1094533783163082997
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2226872723978808125}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &4496190485538106631
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2226872723978808125}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: ffd481fda64ed124888af45191257d79, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &5826095239523346999
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,7 +110,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4690636273331019242}
   - {fileID: 2323068815640703824}
   m_Father: {fileID: 4178018321249856976}
   m_RootOrder: -1
@@ -246,6 +162,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac29903fd8eb31247bee9ca0f549956b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDamageHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
   _body: {fileID: 4562933555896563138}
   _particleSystem: {fileID: 7073141275021597805}
   _damage: 3
@@ -329,15 +251,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4726feb765c75844f9291c206c76a901, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4726feb765c75844f9291c206c76a901, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4726feb765c75844f9291c206c76a901, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4726feb765c75844f9291c206c76a901, type: 3}
       propertyPath: m_LocalPosition.x
@@ -425,6 +347,14 @@ PrefabInstance:
       propertyPath: InitialModule.startSize.scalar
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 477354606789522619, guid: 1661ca34289650441b4efcbbff15f5ee, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 477354606789522619, guid: 1661ca34289650441b4efcbbff15f5ee, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.19
+      objectReference: {fileID: 0}
     - target: {fileID: 934817422308209099, guid: 1661ca34289650441b4efcbbff15f5ee, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -492,6 +422,14 @@ PrefabInstance:
     - target: {fileID: 3949570005585877437, guid: 1661ca34289650441b4efcbbff15f5ee, type: 3}
       propertyPath: lengthInSec
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4856224258533498145, guid: 1661ca34289650441b4efcbbff15f5ee, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4856224258533498145, guid: 1661ca34289650441b4efcbbff15f5ee, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.19
       objectReference: {fileID: 0}
     - target: {fileID: 5180715603271520147, guid: 1661ca34289650441b4efcbbff15f5ee, type: 3}
       propertyPath: m_IsActive
