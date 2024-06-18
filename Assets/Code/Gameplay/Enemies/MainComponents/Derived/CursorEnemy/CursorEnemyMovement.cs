@@ -14,6 +14,7 @@ namespace Game.Room.Enemy
         [SerializeField] private float _agentTargetUpdateInterval = 0.1f;
 
         private float _nextAgentTargetUpdateTime = 0;
+        private float _lastPathSetTry = 0;
 
         private void Start()
         {
@@ -25,7 +26,7 @@ namespace Game.Room.Enemy
         {
             base.OnGoingTo(fallowTarget);
 
-            TrySetAgentDestination(fallowTarget.position);
+            TrySetAgentDestinationInterval(fallowTarget.position);
 
             UpdateRotation(fallowTarget.position);
         }
@@ -35,17 +36,27 @@ namespace Game.Room.Enemy
             base.OnStartGoingTo(targetPosition);
 
             _agent.isStopped = false;
-            _agent.SetDestination(targetPosition);
+
+            SetPathToPosition(targetPosition);
         }
 
         protected override void OnGoingTo(Vector2 targetPosition)
         {
             base.OnGoingTo(targetPosition);
 
-            TrySetAgentDestination(targetPosition);
+            if(!_agent.hasPath)
+            {
+                if(Time.time >  _lastPathSetTry + _agentTargetUpdateInterval)
+                {
+                    SetPathToPosition(targetPosition);
+                }
+                else
+                {
+                    return;
+                }
+            }
 
-            
-            if (_agent.hasPath && _agent.remainingDistance < _agent.stoppingDistance)
+            if (_agent.remainingDistance < _agent.stoppingDistance)
             {
                 OnAchivedTarget?.Invoke();
             }
@@ -86,12 +97,27 @@ namespace Game.Room.Enemy
             transform.localRotation = Quaternion.Euler(newRot);
         }
 
-        private void TrySetAgentDestination(Vector2 targetPos)
+        private void TrySetAgentDestinationInterval(Vector2 targetPos)
         {
             if (Time.time >= _nextAgentTargetUpdateTime)
             {
                 _agent.SetDestination(targetPos);
                 _nextAgentTargetUpdateTime = Time.time + _agentTargetUpdateInterval;
+            }
+        }
+
+        private void SetPathToPosition(Vector2 targetPos)
+        {
+            _lastPathSetTry = Time.time;
+
+            NavMeshPath samplePath = new NavMeshPath();
+            if (_agent.CalculatePath(targetPos, samplePath))
+            {
+                _agent.SetPath(samplePath);
+            }
+            else
+            {
+                _agent.ResetPath();
             }
         }
     }
