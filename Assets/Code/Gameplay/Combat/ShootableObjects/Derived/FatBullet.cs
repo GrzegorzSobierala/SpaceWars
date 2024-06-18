@@ -1,9 +1,6 @@
-using Game.Combat;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game
+namespace Game.Combat
 {
     public class FatBullet : ShootableObjectBase
     {

@@ -2,7 +2,7 @@ using Game.Combat;
 using System.Collections;
 using UnityEngine;
 
-namespace Game.Room.Enemy
+namespace Game.Combat
 {
     public class TestEnemyBullet : ShootableObjectBase
     {

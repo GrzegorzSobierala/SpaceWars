@@ -2,7 +2,7 @@ using Game.Combat;
 using System.Collections;
 using UnityEngine;
 
-namespace Game.Player.Ship
+namespace Game.Combat
 {
     public class Rocket : ShootableObjectBase
     {
