@@ -1,11 +1,21 @@
+using Game.Utility;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Combat
 {
     public class FatBullet : ShootableObjectBase
     {
-        [SerializeField] private DamageAreaExplosion areaExplosion;
+        [SerializeField] private DamageAreaExplosion _areaExplosionPrefab;
+        [SerializeField] private Collider2D _proximityTrigger;
+        [Space]
+        [SerializeField] private LayerMask _triggerActivateLayerMask;
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            CheckTrigger(collision);
+        }
 
         public override void Shoot(Rigidbody2D creatorBody, Transform gunTransform)
         {
@@ -24,6 +34,8 @@ namespace Game.Combat
             _shootShipSpeed = GetForwardSpeed(gunTransform, creatorBody.velocity);
 
             StartCoroutine(WaitAndDestroy());
+
+            OverlapProximityTrigger();
         }
 
         public override void OnHit()
@@ -33,7 +45,7 @@ namespace Game.Combat
 
         private void Explode()
         {
-            areaExplosion.CreateCopy(DamageDealer, transform).Explode();
+            _areaExplosionPrefab.CreateCopy(DamageDealer, transform).Explode();
 
             _particleSystem.transform.SetParent(null);
             _particleSystem.Play();
@@ -45,12 +57,39 @@ namespace Game.Combat
         {
             yield return new WaitUntil(() => SchouldNukeMySelf);
 
-            areaExplosion.CreateCopy(DamageDealer, transform).Explode();
+            _areaExplosionPrefab.CreateCopy(DamageDealer, transform).Explode();
 
             _particleSystem.transform.SetParent(null);
             _particleSystem.Play();
 
             Destroy(gameObject);
+        }
+
+        private bool CheckTrigger(Collider2D collider)
+        {
+            if (!Utils.ContainsLayer(_triggerActivateLayerMask, collider.gameObject.layer))
+                return false;
+
+            Explode();
+            return true;
+        }
+
+        private void OverlapProximityTrigger()
+        {
+            ContactFilter2D contactFilter = new ContactFilter2D
+            {
+                useTriggers = false,
+                layerMask = _triggerActivateLayerMask,
+                useLayerMask = true
+            };
+
+            List<Collider2D> colliders = new();
+            _proximityTrigger.OverlapCollider(contactFilter, colliders);
+            foreach (var collider in colliders)
+            {
+                if (CheckTrigger(collider))
+                    return;
+            }
         }
     }
 }
