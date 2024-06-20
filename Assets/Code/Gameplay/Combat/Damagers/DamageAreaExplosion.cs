@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace Game.Combat
 {
-    [RequireComponent(typeof(Rigidbody2D), typeof(CircleCollider2D))]
+    [RequireComponent(typeof(CircleCollider2D))]
     public class DamageAreaExplosion : MonoBehaviour
     {
         [SerializeField] private float _aliveTime = 1.5f;
