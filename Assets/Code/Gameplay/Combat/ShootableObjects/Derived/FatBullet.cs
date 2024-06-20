@@ -34,8 +34,6 @@ namespace Game.Combat
             _shootShipSpeed = GetForwardSpeed(gunTransform, creatorBody.velocity);
 
             StartCoroutine(WaitAndDestroy());
-
-            OverlapProximityTrigger();
         }
 
         public override void OnHit()
@@ -72,24 +70,6 @@ namespace Game.Combat
 
             Explode();
             return true;
-        }
-
-        private void OverlapProximityTrigger()
-        {
-            ContactFilter2D contactFilter = new ContactFilter2D
-            {
-                useTriggers = false,
-                layerMask = _triggerActivateLayerMask,
-                useLayerMask = true
-            };
-
-            List<Collider2D> colliders = new();
-            _proximityTrigger.OverlapCollider(contactFilter, colliders);
-            foreach (var collider in colliders)
-            {
-                if (CheckTrigger(collider))
-                    return;
-            }
         }
     }
 }

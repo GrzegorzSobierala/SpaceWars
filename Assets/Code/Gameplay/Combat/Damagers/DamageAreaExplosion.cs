@@ -44,21 +44,6 @@ namespace Game.Combat
         {
             gameObject.SetActive(true);
             StartCoroutine(WaitAndEndExplosion());
-
-            ContactFilter2D contactFilter = new ContactFilter2D
-            {
-                useTriggers = false,
-                layerMask = _layerMask,
-                useLayerMask = true
-            };
-
-            List<Collider2D> overlapResults = new();
-            _collider.OverlapCollider(contactFilter, overlapResults);
-
-            foreach (Collider2D collider in overlapResults)
-            {
-                HitCollider(collider);
-            }
         }
 
         private void Init()
