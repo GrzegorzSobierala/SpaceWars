@@ -12,11 +12,11 @@ namespace Game.Combat
         [Space]
         [SerializeField] private float _rotationSpeed = 1.0f;
         [SerializeField, Range(0,1)] private float _velocityRotMulti = 0.8f;
-        [SerializeField] private float _explodeDistance = 25;
 
         private Vector2 _targetPosition = Vector2.zero;
         private bool _forwardSpeedChecked = false;
         private float _lastDistanceToTarget = float.MaxValue;
+        private float _explodeDistance = 50;
 
         private void FixedUpdate()
         {
@@ -98,6 +98,10 @@ namespace Game.Combat
                 return false;
 
             float distance = Vector2.Distance(_body.position, _targetPosition);
+
+            if(distance > _explodeDistance) 
+                return false;
+
             bool result = distance > _lastDistanceToTarget;
             _lastDistanceToTarget = distance;
 
