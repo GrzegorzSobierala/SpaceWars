@@ -4,23 +4,16 @@ using UnityEngine.Events;
 
 namespace Game.Combat
 {
-    [RequireComponent(typeof(CircleCollider2D))]
+    [RequireComponent(typeof(Collider2D))]
     public class DamageAreaExplosion : MonoBehaviour
     {
         [SerializeField] private float _aliveTime = 1.5f;
         [SerializeField] private float _damage = 1;
-        [SerializeField] private LayerMask _layerMask;
         [Space]
         [SerializeField] private UnityEvent OnDamageHitEvent;
         [SerializeField] private UnityEvent OnEndExplosion;
 
-        private CircleCollider2D _collider;
         private GameObject _damageDealer;
-
-        private void Awake()
-        {
-            Init();
-        }
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
@@ -43,11 +36,6 @@ namespace Game.Combat
         {
             gameObject.SetActive(true);
             StartCoroutine(WaitAndEndExplosion());
-        }
-
-        private void Init()
-        {
-            _collider = GetComponent<CircleCollider2D>();
         }
 
         private IEnumerator WaitAndEndExplosion()

@@ -53,12 +53,7 @@ namespace Game.Combat
         {
             yield return new WaitUntil(() => SchouldNukeMySelf);
 
-            _areaExplosionPrefab.CreateCopy(DamageDealer, transform).Explode();
-
-            _particleSystem.transform.SetParent(null);
-            _particleSystem.Play();
-
-            Destroy(gameObject);
+            Explode();
         }
 
         private bool CheckTrigger(Collider2D collider)
