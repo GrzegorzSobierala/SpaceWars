@@ -1,6 +1,5 @@
 using Game.Utility;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Combat
@@ -8,7 +7,6 @@ namespace Game.Combat
     public class FatBullet : ShootableObjectBase
     {
         [SerializeField] private DamageAreaExplosion _areaExplosionPrefab;
-        [SerializeField] private Collider2D _proximityTrigger;
         [Space]
         [SerializeField] private LayerMask _triggerActivateLayerMask;
 
