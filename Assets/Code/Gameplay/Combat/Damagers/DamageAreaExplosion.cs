@@ -9,6 +9,8 @@ namespace Game.Combat
     {
         [SerializeField] private float _aliveTime = 1.5f;
         [SerializeField] private float _damage = 1;
+        [SerializeField] private float _explodeForce = 20000000;
+        [SerializeField] private float _explodeForceAgent = 200;
         [Space]
         [SerializeField] private UnityEvent OnDamageHitEvent;
         [SerializeField] private UnityEvent OnEndExplosion;
@@ -70,6 +72,36 @@ namespace Game.Combat
             {
                 OnDamageHitEvent?.Invoke();
             }
+
+            ExplodeForce(collider);
+        }
+
+        private void ExplodeForce(Collider2D collider)
+        {
+            if (!collider.attachedRigidbody)
+                return;
+
+            Rigidbody2D hitBody = collider.attachedRigidbody;
+
+            if(collider.attachedRigidbody.isKinematic)
+            {
+                if (!hitBody.TryGetComponent(out AgentForceReceiver receiver))
+                    return;
+
+                receiver.AddForce(GetExplosionForce(hitBody));
+            }
+            else
+            {
+                hitBody.AddForce(GetExplosionForce(hitBody));
+            }
+        }
+
+        private Vector2 GetExplosionForce(Rigidbody2D body)
+        {
+            Vector2 force = body.position - (Vector2)transform.position;
+
+            force = force.normalized;
+            return force * _explodeForce;
         }
     }
 }

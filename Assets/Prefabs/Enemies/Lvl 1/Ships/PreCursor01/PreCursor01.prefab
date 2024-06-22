@@ -39237,6 +39237,7 @@ GameObject:
   - component: {fileID: 2159849205792520315}
   - component: {fileID: 9196227978536751886}
   - component: {fileID: 1307523644458332179}
+  - component: {fileID: 5059831504745663314}
   m_Layer: 8
   m_Name: PreCursor01
   m_TagString: Untagged
@@ -39337,7 +39338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24ba35595f5ccbd4e936f4de3bba036c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseHp: 2.5
+  _baseHp: 1000
 --- !u!114 &2159849205792520315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39387,6 +39388,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e39f6090724e4a4a8aadeb042afa2bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5059831504745663314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6953136812582892108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baec795d7d5a387489645234e4760ceb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mass: 150000
 --- !u!1 &7132516297328987161
 GameObject:
   m_ObjectHideFlags: 0
