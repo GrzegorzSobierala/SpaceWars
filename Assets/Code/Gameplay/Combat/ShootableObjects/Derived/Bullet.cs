@@ -2,9 +2,9 @@ using Game.Combat;
 using System.Collections;
 using UnityEngine;
 
-namespace Game.Player.Ship
+namespace Game.Combat
 {
-    public class Laser : ShootableObjectBase
+    public class Bullet : ShootableObjectBase
     {
         public override void Shoot(Rigidbody2D creatorBody, Transform gunTransform)
         {
@@ -21,23 +21,23 @@ namespace Game.Player.Ship
             _shootTime = Time.time;
             _shootPos = _body.position;
             _shootShipSpeed = GetForwardSpeed(gunTransform, creatorBody.velocity);
-;
-            StartCoroutine(DestroyByDistance());
+
+            StartCoroutine(WaitAndDestroy());
         }
 
         public override void OnHit()
         {
-            PlayrParticlesAndDie();
+            PlayParticlesAndDie();
         }
 
-        private IEnumerator DestroyByDistance()
+        private IEnumerator WaitAndDestroy()
         {
             yield return new WaitUntil(() => SchouldNukeMySelf);
 
             Destroy(gameObject);
         }
 
-        private void PlayrParticlesAndDie()
+        private void PlayParticlesAndDie()
         {
             _particleSystem.transform.SetParent(null);
             _particleSystem.Play();

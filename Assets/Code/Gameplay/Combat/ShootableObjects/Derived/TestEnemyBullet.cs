@@ -2,7 +2,7 @@ using Game.Combat;
 using System.Collections;
 using UnityEngine;
 
-namespace Game.Room.Enemy
+namespace Game.Combat
 {
     public class TestEnemyBullet : ShootableObjectBase
     {
@@ -20,7 +20,7 @@ namespace Game.Room.Enemy
             _shootPos = gunTransform.position;
             _shootShipSpeed = 0;
 
-            StartCoroutine(DestroyByDistance());
+            StartCoroutine(WaitAndDestroy());
         }
 
         public override void OnHit()
@@ -28,7 +28,7 @@ namespace Game.Room.Enemy
             PlayrParticlesAndDie();
         }
 
-        private IEnumerator DestroyByDistance()
+        private IEnumerator WaitAndDestroy()
         {
             yield return new WaitUntil(() => SchouldNukeMySelf);
 

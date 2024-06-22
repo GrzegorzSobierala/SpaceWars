@@ -2,53 +2,35 @@ using Game.Combat;
 using System.Collections;
 using UnityEngine;
 
-namespace Game.Player.Ship
+namespace Game.Combat
 {
-    public class Rocket : ShootableObjectBase
+    public class Laser : ShootableObjectBase
     {
-        [Header("Rocket properties")]
-        [SerializeField] private float _shootSpeedMulti = 0.1f;
-        [SerializeField] private float _timeToLunch = 0.5f;
-
         public override void Shoot(Rigidbody2D creatorBody, Transform gunTransform)
         {
             gameObject.SetActive(true);
 
-            transform.position = gunTransform.position;
             _body.position = gunTransform.position;
             _body.rotation = gunTransform.rotation.eulerAngles.z;
 
             SlowVelocityX(gunTransform, creatorBody.velocity, _horizontalMoveInpactMulti);
 
             float targetForce = _speed * _body.mass;
-            _body.AddRelativeForce(Vector2.up * targetForce * _shootSpeedMulti, ForceMode2D.Impulse);
+            _body.AddRelativeForce(Vector2.up * targetForce, ForceMode2D.Impulse);
 
             _shootTime = Time.time;
             _shootPos = _body.position;
             _shootShipSpeed = GetForwardSpeed(gunTransform, creatorBody.velocity);
-
-            StartCoroutine(WaitAndLaunch());
-            StartCoroutine(DestroyByDistance());
+;
+            StartCoroutine(WaitAndDestroy());
         }
-
 
         public override void OnHit()
         {
             PlayrParticlesAndDie();
         }
 
-        private IEnumerator WaitAndLaunch()
-        {
-            yield return new WaitForSeconds(_timeToLunch);
-
-            SlowVelocityX(transform, _body.velocity, 0);
-
-            float targetForce = _speed * _body.mass;
-
-            _body.AddRelativeForce(Vector2.up * targetForce, ForceMode2D.Impulse);
-        }
-
-        private IEnumerator DestroyByDistance()
+        private IEnumerator WaitAndDestroy()
         {
             yield return new WaitUntil(() => SchouldNukeMySelf);
 

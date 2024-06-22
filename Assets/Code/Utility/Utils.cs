@@ -105,6 +105,11 @@ namespace Game.Utility
 
             container.Bind<List<T>>().FromInstance(enemyFieldOfViews).AsSingle();
         }
+
+        public static bool ContainsLayer(this LayerMask layerMask, int layer)
+        {
+            return (layerMask.value & (1 << layer)) != 0;
+        }
     }
 
     public static class Async
