@@ -9,11 +9,13 @@ namespace Game.Combat
     {
         [SerializeField] private float _aliveTime = 1.5f;
         [SerializeField] private float _damage = 1;
+        [SerializeField] private float _explodeForce = 20000000;
         [Space]
         [SerializeField] private UnityEvent OnDamageHitEvent;
         [SerializeField] private UnityEvent OnEndExplosion;
 
         private GameObject _damageDealer;
+        private float _explodeTime;
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
@@ -35,6 +37,7 @@ namespace Game.Combat
         public void Explode()
         {
             gameObject.SetActive(true);
+            _explodeTime = Time.time;
             StartCoroutine(WaitAndEndExplosion());
         }
 
@@ -53,13 +56,13 @@ namespace Game.Combat
                 return;
             }
 
+            Vector2 hitPoint = collider.ClosestPoint(transform.position);
+
             IHittable[] hittables = collider.GetComponents<IHittable>();
             foreach (IHittable hittable in hittables)
             {
                 if (hittable == null)
                     continue;
-
-                Vector2 hitPoint = collider.ClosestPoint(transform.position);
 
                 DamageData damage = new DamageData(_damageDealer, _damage, hitPoint);
 
@@ -70,6 +73,40 @@ namespace Game.Combat
             {
                 OnDamageHitEvent?.Invoke();
             }
+
+            ExplodeForce(collider, hitPoint);
+        }
+
+        private void ExplodeForce(Collider2D collider, Vector2 hitPoint)
+        {
+            if (!collider.attachedRigidbody)
+                return;
+
+            Rigidbody2D hitBody = collider.attachedRigidbody;
+
+            if(collider.attachedRigidbody.isKinematic)
+            {
+                if (!hitBody.TryGetComponent(out AgentForceReceiver receiver))
+                    return;
+
+                receiver.AddForce(GetExplosionForce(hitBody));
+            }
+            else
+            {
+                hitBody.AddForceAtPosition(GetExplosionForce(hitBody), hitPoint);
+            }
+        }
+
+        private Vector2 GetExplosionForce(Rigidbody2D body)
+        {
+            Vector2 force = body.position - (Vector2)transform.position;
+
+            force = force.normalized;
+            float aliveTime = Time.time - _explodeTime;
+            float aliveForceMulti = (_aliveTime - aliveTime) / _aliveTime;
+            force *= Mathf.Clamp(aliveForceMulti, 0.3f, 1);
+
+            return force * _explodeForce;
         }
     }
 }

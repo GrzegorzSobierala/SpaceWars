@@ -23,7 +23,7 @@ namespace Game.Utility
         }
 
         /// <summary>
-        /// Screan point to 2D phisic plane intersection point 
+        /// Screan point to 2D physic plane intersection point 
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>

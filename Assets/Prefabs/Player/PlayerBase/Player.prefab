@@ -213,7 +213,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2885698903316898493}
   m_LocalRotation: {x: -0.043619405, y: 0, z: 0, w: 0.9990483}
-  m_LocalPosition: {x: 0, y: -181.67908, z: -697.3363}
+  m_LocalPosition: {x: 0, y: -181.6792, z: -697.3363}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -478,6 +478,7 @@ MonoBehaviour:
   - {fileID: 2670052336871671550, guid: 476c228dd1fd1614788c8d5e40e61db0, type: 3}
   - {fileID: 1226014815333710274, guid: d34f9ac38e160084aa8a31b06a3d9b6f, type: 3}
   _specialGunsPrefabs:
+  - {fileID: 4631285206517582132, guid: 77d5735e6590d734990d21b26770c987, type: 3}
   - {fileID: 4023972599263322102, guid: 8dd45275ab2acc4459c1756ac016391a, type: 3}
 --- !u!114 &9167951744479927178
 MonoBehaviour:
@@ -500,7 +501,6 @@ MonoBehaviour:
   _boostCooldown: 2
   _boostSpeed: 10000
   _movementQE: 0
-  _reverseRotationInput: 0
 --- !u!50 &488120537346839382
 Rigidbody2D:
   serializedVersion: 4
