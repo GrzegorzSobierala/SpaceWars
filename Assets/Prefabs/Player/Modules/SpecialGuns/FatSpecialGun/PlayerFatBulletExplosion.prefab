@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _aliveTime: 0.3
   _damage: 1.5
+  _explodeForce: 15000000
   OnDamageHitEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -88,7 +89,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 25
+  m_Radius: 37.5
 --- !u!1 &9106003524542752387
 GameObject:
   m_ObjectHideFlags: 0
