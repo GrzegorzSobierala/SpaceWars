@@ -55,13 +55,13 @@ namespace Game.Combat
                 return;
             }
 
+            Vector2 hitPoint = collider.ClosestPoint(transform.position);
+
             IHittable[] hittables = collider.GetComponents<IHittable>();
             foreach (IHittable hittable in hittables)
             {
                 if (hittable == null)
                     continue;
-
-                Vector2 hitPoint = collider.ClosestPoint(transform.position);
 
                 DamageData damage = new DamageData(_damageDealer, _damage, hitPoint);
 
@@ -73,10 +73,10 @@ namespace Game.Combat
                 OnDamageHitEvent?.Invoke();
             }
 
-            ExplodeForce(collider);
+            ExplodeForce(collider, hitPoint);
         }
 
-        private void ExplodeForce(Collider2D collider)
+        private void ExplodeForce(Collider2D collider, Vector2 hitPoint)
         {
             if (!collider.attachedRigidbody)
                 return;
@@ -92,7 +92,7 @@ namespace Game.Combat
             }
             else
             {
-                hitBody.AddForce(GetExplosionForce(hitBody));
+                hitBody.AddForceAtPosition(GetExplosionForce(hitBody), hitPoint);
             }
         }
 
