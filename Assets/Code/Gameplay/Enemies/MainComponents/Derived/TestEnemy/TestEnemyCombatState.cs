@@ -13,15 +13,13 @@ namespace Game.Room.Enemy
 
         [SerializeField] private float _spotPlayerRange = 750;
 
-        
-
         protected override void OnEnterState()
         {
             base.OnEnterState();
 
             _gun.StartAimingAt(_playerManager.PlayerBody.transform);
             _gun.StartShooting();
-            
+            StartCoroutine(TryFallowPlayer());
         }
 
         protected override void OnExitState()
