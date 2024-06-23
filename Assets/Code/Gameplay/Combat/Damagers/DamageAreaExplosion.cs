@@ -10,7 +10,6 @@ namespace Game.Combat
         [SerializeField] private float _aliveTime = 1.5f;
         [SerializeField] private float _damage = 1;
         [SerializeField] private float _explodeForce = 20000000;
-        [SerializeField] private float _explodeForceAgent = 200;
         [Space]
         [SerializeField] private UnityEvent OnDamageHitEvent;
         [SerializeField] private UnityEvent OnEndExplosion;
@@ -103,7 +102,7 @@ namespace Game.Combat
             Vector2 force = body.position - (Vector2)transform.position;
 
             force = force.normalized;
-            float aliveTime = Time.time - _explodeForce;
+            float aliveTime = Time.time - _explodeTime;
             float aliveForceMulti = (_aliveTime - aliveTime) / _aliveTime;
             force *= Mathf.Clamp(aliveForceMulti, 0.3f, 1);
 

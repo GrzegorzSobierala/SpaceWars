@@ -242,7 +242,7 @@ MonoBehaviour:
       m_Calls: []
   _body: {fileID: 7744581069813479855}
   _particleSystem: {fileID: 7073141275021597805}
-  _damage: 1
+  _damage: 1.25
   _speed: 125
   _horizontalMoveInpactMulti: 1
   _maxTimeAlive: 5
@@ -251,7 +251,6 @@ MonoBehaviour:
   _areaExplosionPrefab: {fileID: 6882746023685599253, guid: b31f16db852f5e64798d769d221015c5, type: 3}
   _rotationSpeed: 200
   _velocityRotMulti: 1
-  _explodeDistance: 25
 --- !u!50 &7744581069813479855
 Rigidbody2D:
   serializedVersion: 4
