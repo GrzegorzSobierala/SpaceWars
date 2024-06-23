@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6882746023685599253}
   - component: {fileID: 5908785753264964414}
   m_Layer: 7
-  m_Name: PlayerFatBulletExplosion
+  m_Name: PlayerFlakBulletExplosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,9 +129,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea625751f01ae0f41b27a1bfac188337, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _aliveTime: 0.3
-  _damage: 1.5
-  _explodeForce: 15000000
+  _aliveTime: 2.5
+  _damage: 1.25
+  _explodeForce: 20000000
+  _explodeForceAgent: 100
   OnDamageHitEvent:
     m_PersistentCalls:
       m_Calls: []

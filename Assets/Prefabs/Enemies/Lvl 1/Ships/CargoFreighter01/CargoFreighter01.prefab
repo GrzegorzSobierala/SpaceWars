@@ -312,6 +312,7 @@ GameObject:
   - component: {fileID: 7964856278564864377}
   - component: {fileID: 633672136587508781}
   - component: {fileID: 223531885114056726}
+  - component: {fileID: 1631751109823075745}
   m_Layer: 8
   m_Name: CargoFreighter01
   m_TagString: Untagged
@@ -465,6 +466,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e39f6090724e4a4a8aadeb042afa2bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1631751109823075745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934856488585992641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baec795d7d5a387489645234e4760ceb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mass: 800000
 --- !u!1 &1325912398688977308
 GameObject:
   m_ObjectHideFlags: 0
