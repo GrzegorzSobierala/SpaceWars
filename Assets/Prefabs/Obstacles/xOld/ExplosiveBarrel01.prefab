@@ -41,6 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 240265954085577171}
+  - component: {fileID: 4419042590824382664}
   - component: {fileID: 7085406299890313914}
   - component: {fileID: 6108705746974135350}
   - component: {fileID: 6966535355466404470}
@@ -68,6 +69,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4419042590824382664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8353949099744919645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0d5b16a88a28d64cb494c4c8ccbce4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  areaExplosionPrefab: {fileID: 6882746023685599253, guid: df79b2617ffe0ea4b9bfbe0332095ad8, type: 3}
+  _collisionSpeedToExplode: 20
 --- !u!114 &7085406299890313914
 MonoBehaviour:
   m_ObjectHideFlags: 0
