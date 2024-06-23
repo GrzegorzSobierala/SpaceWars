@@ -22,7 +22,7 @@ namespace Game.Player.Ship
         [SerializeField, Range(0.0f, 200.0f)] private float _horizontalSpeedMutli = 50;
         [SerializeField, Range(0.0f, 200.0f)] private float _backSpeedMulti = 30;
         [SerializeField] private float _rotationSpeed = 50;
-        [SerializeField] private float _velocityRotMulti = 0.5f;
+        [SerializeField] private float _velocityRotTransferMulti = 0.3f;
         [SerializeField] private float _boostCooldown = 2f;
         [SerializeField] private float _boostSpeed = 100;
         [SerializeField] private bool _movementQE = false;
@@ -177,7 +177,7 @@ namespace Game.Player.Ship
 
         public void SetVelocityRotMulti(float value)
         {
-            _velocityRotMulti = value;
+            _velocityRotTransferMulti = value;
         }
 
         public void InverseRotWithVerMove()
@@ -219,7 +219,7 @@ namespace Game.Player.Ship
         private void TransferVelocity(float angle)
         {
             float relativeAngle = Mathf.DeltaAngle(_body.rotation, angle);
-            float velocityAngle = relativeAngle * _velocityRotMulti;
+            float velocityAngle = relativeAngle * _velocityRotTransferMulti;
             _body.velocity = Utils.RotateVector(_body.velocity, velocityAngle);
         }
 
