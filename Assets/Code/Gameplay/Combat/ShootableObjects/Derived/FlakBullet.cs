@@ -1,8 +1,6 @@
-using Game.Input.System;
 using Game.Utility;
 using System.Collections;
 using UnityEngine;
-using Zenject;
 
 namespace Game.Combat
 {
@@ -10,7 +8,7 @@ namespace Game.Combat
     {
         [SerializeField] private DamageAreaExplosion _areaExplosionPrefab;
         [Space]
-        [SerializeField] private float _rotationSpeed = 1.0f;
+        [SerializeField] private float _rotationSpeed = 200.0f;
         [SerializeField, Range(0,1)] private float _velocityRotMulti = 0.8f;
 
         private Vector2 _targetPosition = Vector2.zero;
