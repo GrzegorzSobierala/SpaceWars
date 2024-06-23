@@ -16,6 +16,7 @@ namespace Game.Combat
         [SerializeField] private UnityEvent OnEndExplosion;
 
         private GameObject _damageDealer;
+        private float _explodeTime;
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
@@ -37,6 +38,7 @@ namespace Game.Combat
         public void Explode()
         {
             gameObject.SetActive(true);
+            _explodeTime = Time.time;
             StartCoroutine(WaitAndEndExplosion());
         }
 
@@ -101,6 +103,10 @@ namespace Game.Combat
             Vector2 force = body.position - (Vector2)transform.position;
 
             force = force.normalized;
+            float aliveTime = Time.time - _explodeForce;
+            float aliveForceMulti = (_aliveTime - aliveTime) / _aliveTime;
+            force *= Mathf.Clamp(aliveForceMulti, 0.3f, 1);
+
             return force * _explodeForce;
         }
     }
