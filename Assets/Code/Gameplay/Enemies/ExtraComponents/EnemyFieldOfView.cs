@@ -61,7 +61,7 @@ namespace Game.Room.Enemy
             _targetLayerMask = LayerMask.GetMask(Layers.Player);
             _allLayerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle, Layers.Enemy);
             _enemyLayerMask = LayerMask.GetMask(Layers.Enemy);
-            randomVertexZ = UnityEngine.Random.Range(-1.0f, 1.0f);
+            randomVertexZ = UnityEngine.Random.Range(-1.0f, 0);
         }
 
         private void UpdateView(bool debugMode = false)
