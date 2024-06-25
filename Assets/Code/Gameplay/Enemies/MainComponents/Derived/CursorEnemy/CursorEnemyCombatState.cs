@@ -22,21 +22,6 @@ namespace Game.Room.Enemy
         [SerializeField] private float _runSpeedMulti = 1.5f;
         [SerializeField] private float _spotPlayerRange = 750;
 
-        private IEnumerator TryFallowPlayer()
-        {
-            while (true)
-            {
-                Vector2 playerPos = _playerManager.PlayerBody.position;
-                if (Vector2.Distance(transform.position, playerPos) < _spotPlayerRange)
-                {
-                    FallowPlayer();
-                    break;
-                }
-
-                yield return null;
-            }
-        }
-
         protected override void OnEnterState()
         {
             base.OnEnterState();
@@ -118,6 +103,19 @@ namespace Game.Room.Enemy
             _movement.SubscribeOnAchivedTarget(FallowPlayer);
 
             _movement.SetSpeedModifier(_runSpeedMulti);
+        }
+
+        private IEnumerator TryFallowPlayer()
+        {
+            yield return new WaitUntil(IsPlayerInSpotRange);
+
+            FallowPlayer();
+        }
+
+        private bool IsPlayerInSpotRange()
+        {
+            Vector2 playerPos = _playerManager.PlayerBody.position;
+            return Vector2.Distance(transform.position, playerPos) < _spotPlayerRange;
         }
     }
 }

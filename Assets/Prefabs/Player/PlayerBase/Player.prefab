@@ -478,8 +478,8 @@ MonoBehaviour:
   - {fileID: 2670052336871671550, guid: 476c228dd1fd1614788c8d5e40e61db0, type: 3}
   - {fileID: 1226014815333710274, guid: d34f9ac38e160084aa8a31b06a3d9b6f, type: 3}
   _specialGunsPrefabs:
-  - {fileID: 4631285206517582132, guid: 77d5735e6590d734990d21b26770c987, type: 3}
   - {fileID: 4023972599263322102, guid: 8dd45275ab2acc4459c1756ac016391a, type: 3}
+  - {fileID: 4631285206517582132, guid: 77d5735e6590d734990d21b26770c987, type: 3}
 --- !u!114 &9167951744479927178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,7 +497,7 @@ MonoBehaviour:
   _horizontalSpeedMutli: 50
   _backSpeedMulti: 30
   _rotationSpeed: 150
-  _velocityRotMulti: 0.3
+  _velocityRotTransferMulti: 0.3
   _boostCooldown: 2
   _boostSpeed: 10000
   _movementQE: 0
