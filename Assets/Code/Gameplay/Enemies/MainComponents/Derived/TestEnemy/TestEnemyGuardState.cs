@@ -8,11 +8,18 @@ namespace Game.Room.Enemy
     {
         [Inject] private List<EnemyFieldOfView> _views;
         [Inject] private EnemyGunBase _enemyGun;
+        [Inject] private EnemyMovementBase _enemyMovement;
+
+        [SerializeField] private bool _startMovementOnEnter = false;
 
         protected override void OnEnterState()
         {
             base.OnEnterState();
             Subscribe();
+            if(_startMovementOnEnter)
+            {
+                _enemyMovement.StartGoingTo(_playerManager.PlayerBody.transform);
+            }
         }
 
         protected override void OnExitState()

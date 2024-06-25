@@ -22,11 +22,11 @@ namespace Game.Combat
             HitCollider(collider);
         }
 
-        public DamageAreaExplosion CreateCopy(GameObject damageDealer, Transform parent)
+        public DamageAreaExplosion CreateCopy(GameObject damageDealer, Transform creator)
         {
-            DamageAreaExplosion instance = Instantiate(this, parent);
+            DamageAreaExplosion instance = Instantiate(this, creator);
 
-            instance.transform.SetParent(parent.parent);
+            instance.transform.SetParent(creator.parent);
 
             instance.gameObject.SetActive(false);
             instance._damageDealer = damageDealer;

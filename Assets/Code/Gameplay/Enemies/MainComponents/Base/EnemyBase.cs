@@ -1,4 +1,5 @@
 using Game.Combat;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -7,7 +8,7 @@ namespace Game.Room.Enemy
 {
     public abstract class EnemyBase : MonoBehaviour
     {
-        public EnemyStateMachineBase StateMachine => _stateMachine;
+        public Action<float> OnHpChange;
 
         [Inject] protected EnemyStateMachineBase _stateMachine;
         [Inject] protected List<EnemyDamageHandler> _damageHandlers;
@@ -16,7 +17,10 @@ namespace Game.Room.Enemy
         protected float _currentHp;
 
         [SerializeField] private float _baseHp = 5f;
-        
+
+        public EnemyStateMachineBase StateMachine => _stateMachine;
+        public float CurrentHp => _currentHp;
+
         protected virtual void Awake()
         {
             SetStartHP();
@@ -57,6 +61,8 @@ namespace Game.Room.Enemy
                 _stateMachine.SwitchToCombatState();
                 return;
             }
+
+            OnHpChange?.Invoke(_currentHp);
         }
 
         private void SetStartHP()
