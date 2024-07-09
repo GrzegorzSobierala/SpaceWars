@@ -9,12 +9,16 @@ namespace Game.Player.UI
     {
         [Inject] private InputProvider _inputProvider;
 
-        [SerializeField, AutoFill] private Rigidbody2D aaaaaaaaasasaaaa;
-        [SerializeField, AutoFill] private Rigidbody2D aaaaaaaaasasaaaaasasa;
-        [SerializeField, AutoFill] private Rigidbody2D aaaaaaaaasasaaaaasadassasa;
+        [SerializeField] private GameObject _imagesParent;
 
         private void Start()
         {
+            _imagesParent.SetActive(true);
+        }
+
+        private void Update()
+        {
+            
         }
     }
 }
