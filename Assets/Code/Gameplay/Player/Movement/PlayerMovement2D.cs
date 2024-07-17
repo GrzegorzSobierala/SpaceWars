@@ -194,16 +194,16 @@ namespace Game.Player.Ship
 
         private void UpdateMovement()
         {
-            if(!_gunManager.IsCurrentGunMainGun ||
-                RotateLeft.ReadValue<float>() == 1.0f || 
-                RotateRight.ReadValue<float>() == 1.0f)
-            {
+            //if(!_gunManager.IsCurrentGunMainGun ||
+            //    RotateLeft.ReadValue<float>() == 1.0f || 
+            //    RotateRight.ReadValue<float>() == 1.0f)
+            //{
                 KeyRotate();
-            }
-            else
-            {
-                RotateToCursor();
-            }
+            //}
+            //else
+            //{
+            //    RotateToCursor();
+            //}
 
             VerdicalMove();
             HorizontalMove();
