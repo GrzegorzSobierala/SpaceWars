@@ -67,12 +67,6 @@ namespace Game.Player.Ship
 
         private void TryShootCurrentGun()
         {
-            if (!_moduleHandler.CurrentGun.IsGunReadyToShoot)
-                return;
-
-            if (!_moduleHandler.CurrentSpecialGun.IsGunReadyToShoot)
-                return;
-
             if(_isCurrentGunMainGun)
             {
                 Gun.TryShoot();
