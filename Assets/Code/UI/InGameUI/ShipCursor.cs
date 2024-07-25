@@ -103,6 +103,10 @@ namespace Game.Player.UI
             Input.MoveLeft.canceled += SetLeftImageInactive;
             Input.MoveRight.performed += SetRightImageActive;
             Input.MoveRight.canceled += SetRightImageInactive;
+            Input.RotateLeft.performed += SetLeftImageActive;
+            Input.RotateLeft.canceled += SetLeftImageInactive;
+            Input.RotateRight.performed += SetRightImageActive;
+            Input.RotateRight.canceled += SetRightImageInactive;
         }
 
         private void UnsubscribeInput()
@@ -111,6 +115,10 @@ namespace Game.Player.UI
             Input.MoveLeft.canceled -= SetLeftImageInactive;
             Input.MoveRight.performed -= SetRightImageActive;
             Input.MoveRight.canceled -= SetRightImageInactive;
+            Input.RotateLeft.performed -= SetLeftImageActive;
+            Input.RotateLeft.canceled -= SetLeftImageInactive;
+            Input.RotateRight.performed -= SetRightImageActive;
+            Input.RotateRight.canceled -= SetRightImageInactive;
         }
 
         private void SetLeftImageActive(InputAction.CallbackContext context)
