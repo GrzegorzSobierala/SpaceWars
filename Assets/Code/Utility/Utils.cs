@@ -74,6 +74,13 @@ namespace Game.Utility
             return dotProduct;
         }
 
+        public static Vector2 LocalToWorldDirection(Vector2 direction, Transform transform)
+        {
+            Vector3 localDirection3D = new Vector3(direction.x, direction.y, 0);
+            Vector3 worldDirection3D = transform.TransformDirection(localDirection3D);
+            Vector2 worldDirection = new Vector2(worldDirection3D.x, worldDirection3D.y);
+            return worldDirection;
+        }
 
         public static void BindGetComponent<T>(DiContainer container) 
             where T : Component
