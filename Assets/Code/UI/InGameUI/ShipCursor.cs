@@ -1,5 +1,6 @@
 using Game.Input.System;
 using Game.Management;
+using Game.Player.Ship;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -12,6 +13,7 @@ namespace Game.Player.UI
     {
         [Inject] private InputProvider _inputProvider;
         [Inject] private PlayerManager _playerManager;
+        [Inject] private GunManager _gunManager;
 
         [SerializeField] private GameObject _imagesParent;
         [SerializeField] private Image _leftImage;
@@ -26,6 +28,8 @@ namespace Game.Player.UI
         [SerializeField] private UnityEvent _onLeftImageInactive;
         [SerializeField] private UnityEvent _onRightImageActive;
         [SerializeField] private UnityEvent _onRightImageInactive;
+        [SerializeField] private UnityEvent _onAimMainGun;
+        [SerializeField] private UnityEvent _onAimSpecialGun;
 
         private Vector3 _startLeftImageSize;
         private Vector3 _startRightImageSize;
@@ -103,11 +107,14 @@ namespace Game.Player.UI
             Input.MoveLeft.canceled += SetLeftImageInactive;
             Input.MoveRight.performed += SetRightImageActive;
             Input.MoveRight.canceled += SetRightImageInactive;
-            Input.RotateLeft.performed += SetLeftImageActive;
-            Input.RotateLeft.canceled += SetLeftImageInactive;
-            Input.RotateRight.performed += SetRightImageActive;
-            Input.RotateRight.canceled += SetRightImageInactive;
+            //Input.RotateLeft.performed += SetLeftImageActive;
+            //Input.RotateLeft.canceled += SetLeftImageInactive;
+            //Input.RotateRight.performed += SetRightImageActive;
+            //Input.RotateRight.canceled += SetRightImageInactive;
+            _gunManager.OnSwitchToMainGun += OnAimMainGun;
+            _gunManager.OnSwitchToSpecialGun += OnAimSpecialGun;
         }
+
 
         private void UnsubscribeInput()
         {
@@ -115,10 +122,12 @@ namespace Game.Player.UI
             Input.MoveLeft.canceled -= SetLeftImageInactive;
             Input.MoveRight.performed -= SetRightImageActive;
             Input.MoveRight.canceled -= SetRightImageInactive;
-            Input.RotateLeft.performed -= SetLeftImageActive;
-            Input.RotateLeft.canceled -= SetLeftImageInactive;
-            Input.RotateRight.performed -= SetRightImageActive;
-            Input.RotateRight.canceled -= SetRightImageInactive;
+            //Input.RotateLeft.performed -= SetLeftImageActive;
+            //Input.RotateLeft.canceled -= SetLeftImageInactive;
+            //Input.RotateRight.performed -= SetRightImageActive;
+            //Input.RotateRight.canceled -= SetRightImageInactive;
+            _gunManager.OnSwitchToMainGun -= OnAimMainGun;
+            _gunManager.OnSwitchToSpecialGun -= OnAimSpecialGun;
         }
 
         private void SetLeftImageActive(InputAction.CallbackContext context)
@@ -139,6 +148,16 @@ namespace Game.Player.UI
         private void SetRightImageInactive(InputAction.CallbackContext context)
         {
             _onRightImageInactive?.Invoke();
+        }
+
+        private void OnAimMainGun()
+        {
+            _onAimMainGun?.Invoke();
+        }
+
+        private void OnAimSpecialGun()
+        {
+            _onAimSpecialGun?.Invoke();
         }
     }
 }

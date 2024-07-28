@@ -1,5 +1,6 @@
 using Game.Input.System;
 using Game.Utility;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
@@ -8,6 +9,9 @@ namespace Game.Player.Ship
 {
     public class GunManager : MonoBehaviour
     {
+        public Action OnSwitchToMainGun;
+        public Action OnSwitchToSpecialGun;
+
         [Inject] private InputProvider _input;
         [Inject] private ModuleHandler _moduleHandler;
         [Inject] private PlayerMovement2D _movement2D;
@@ -80,6 +84,15 @@ namespace Game.Player.Ship
         private void SwitchCurrentGun()
         {
             _isCurrentGunMainGun = !_isCurrentGunMainGun;
+
+            if(_isCurrentGunMainGun)
+            {
+                OnSwitchToMainGun?.Invoke();
+            }
+            else
+            {
+                OnSwitchToSpecialGun?.Invoke();
+            }
 
             if (_isToggleSwapSteeringOnAim)
             {

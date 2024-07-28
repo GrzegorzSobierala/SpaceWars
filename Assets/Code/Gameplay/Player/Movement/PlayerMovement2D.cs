@@ -226,10 +226,6 @@ namespace Game.Player.Ship
             _body.AddRelativeForce(procentOfMaxSpeed * targetForce * Time.fixedDeltaTime);
         }
 
-
-
-        
-
         private void TransferVelocity(float angle)
         {
             float relativeAngle = Mathf.DeltaAngle(_body.rotation, angle);
