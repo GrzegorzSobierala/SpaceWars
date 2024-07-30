@@ -107,14 +107,9 @@ namespace Game.Player.UI
             Input.MoveLeft.canceled += SetLeftImageInactive;
             Input.MoveRight.performed += SetRightImageActive;
             Input.MoveRight.canceled += SetRightImageInactive;
-            //Input.RotateLeft.performed += SetLeftImageActive;
-            //Input.RotateLeft.canceled += SetLeftImageInactive;
-            //Input.RotateRight.performed += SetRightImageActive;
-            //Input.RotateRight.canceled += SetRightImageInactive;
             _gunManager.OnSwitchToMainGun += OnAimMainGun;
             _gunManager.OnSwitchToSpecialGun += OnAimSpecialGun;
         }
-
 
         private void UnsubscribeInput()
         {
@@ -122,10 +117,6 @@ namespace Game.Player.UI
             Input.MoveLeft.canceled -= SetLeftImageInactive;
             Input.MoveRight.performed -= SetRightImageActive;
             Input.MoveRight.canceled -= SetRightImageInactive;
-            //Input.RotateLeft.performed -= SetLeftImageActive;
-            //Input.RotateLeft.canceled -= SetLeftImageInactive;
-            //Input.RotateRight.performed -= SetRightImageActive;
-            //Input.RotateRight.canceled -= SetRightImageInactive;
             _gunManager.OnSwitchToMainGun -= OnAimMainGun;
             _gunManager.OnSwitchToSpecialGun -= OnAimSpecialGun;
         }

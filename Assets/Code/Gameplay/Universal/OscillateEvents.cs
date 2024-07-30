@@ -15,14 +15,25 @@ namespace Game.Universal
 
         private void Start()
         {
-            _oscillateAction1?.Invoke();
+            StartOscillate();
         }
 
         private void Update()
         {
+            UpdateOscillate();
+        }
+
+        private void StartOscillate()
+        {
+            _oscillateAction1?.Invoke();
+            _isWaitingForOscillation1 = false;
+        }
+
+        private void UpdateOscillate()
+        {
             if (_lastOscilateTime + _oscilateTime < Time.time)
             {
-                if(_isWaitingForOscillation1)
+                if (_isWaitingForOscillation1)
                 {
                     _oscillateAction1?.Invoke();
                 }
@@ -32,10 +43,9 @@ namespace Game.Universal
                 }
 
                 _isWaitingForOscillation1 = !_isWaitingForOscillation1;
-                
+
                 _lastOscilateTime = Time.time;
             }
         }
-
     }
 }
