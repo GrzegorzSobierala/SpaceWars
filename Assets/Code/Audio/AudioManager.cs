@@ -18,8 +18,8 @@ namespace Game.Audio
         [Range(0, 1)]
         public float MusicVolume = 1;
 
-        private List<EventInstance> _eventInstances;
-        private List<StudioEventEmitter> _eventEmitters;
+        private List<EventInstance> _eventInstances = new List<EventInstance>();
+        private List<StudioEventEmitter> _eventEmitters = new List<StudioEventEmitter>();
 
         private Bus _masterBus;
         private Bus _sfxBus;
@@ -27,19 +27,12 @@ namespace Game.Audio
 
         private void Awake()
         {
-            _eventInstances = new List<EventInstance>();
-            _eventEmitters = new List<StudioEventEmitter>();
-
-            _masterBus = RuntimeManager.GetBus("bus:/");
-            _sfxBus = RuntimeManager.GetBus("bus:/SFX");
-            _musicBus = RuntimeManager.GetBus("bus:/Music");
+            GetBuses();
         }
 
         private void Update()
         {
-            _masterBus.setVolume(MasterVolume);
-            _sfxBus.setVolume(SfxVolume);
-            _musicBus.setVolume(MusicVolume);
+            SetVolumes();
         }
 
         private void OnDestroy()
@@ -101,6 +94,20 @@ namespace Game.Audio
             return eventEmitter;
         }
 
+        private void GetBuses()
+        {
+            _masterBus = RuntimeManager.GetBus("bus:/");
+            _sfxBus = RuntimeManager.GetBus("bus:/SFX");
+            _musicBus = RuntimeManager.GetBus("bus:/Music");
+        }
+
+        private void SetVolumes()
+        {
+            _masterBus.setVolume(MasterVolume);
+            _sfxBus.setVolume(SfxVolume);
+            _musicBus.setVolume(MusicVolume);
+        }
+
         private void CleanUp()
         {
             foreach (EventInstance eventInstance in _eventInstances)
@@ -109,9 +116,9 @@ namespace Game.Audio
                 eventInstance.release();
             }
 
-            foreach (StudioEventEmitter emitter in _eventEmitters)
+            foreach (StudioEventEmitter eventEmitter in _eventEmitters)
             {
-                emitter.Stop();
+                eventEmitter.Stop();
             }
         }
     }
