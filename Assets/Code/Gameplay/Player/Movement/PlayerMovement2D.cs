@@ -26,6 +26,7 @@ namespace Game.Player.Ship
         [SerializeField] private float _boostCooldown = 2f;
         [SerializeField] private float _boostSpeed = 100;
         [SerializeField] private bool _movementQE = false;
+        [SerializeField] private float _oppositeForce = 3;
 
         private Option _lastVerdical = Option.Default;
         private Option _lastHorizontal = Option.Default;
@@ -212,7 +213,16 @@ namespace Game.Player.Ship
 
         private void MovePlayer(Vector2 direction, float procentOfMaxSpeed)
         {
-            Vector2 targetForce = direction * _moveSpeed * _body.mass;
+            Vector2 worldDirection = Utils.LocalToWorldDirection(direction, _body.transform);
+
+            float dot = Vector2.Dot(worldDirection.normalized, _body.velocity.normalized);
+            float oppositeSideMulti = 1;
+            if(dot < 0)
+            {
+                oppositeSideMulti += -dot * _oppositeForce;
+            }
+
+            Vector2 targetForce = direction * _moveSpeed * _body.mass * oppositeSideMulti;
             _body.AddRelativeForce(procentOfMaxSpeed * targetForce * Time.fixedDeltaTime);
         }
 
