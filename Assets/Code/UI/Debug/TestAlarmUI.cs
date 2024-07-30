@@ -1,23 +1,37 @@
+using FMOD.Studio;
+using FMODUnity;
+using Game.Audio;
+using Game.Input.System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Player.UI
 {
     public class TestAlarmUI : MonoBehaviour
     {
+        [Inject] private AudioManager _audioManager;
+        [Inject] private FmodEvents _fmodEvents;
+
         [SerializeField] private TextMeshProUGUI _textMesh;
-        [SerializeField] private AudioSource _alarmAudioSource;
-        [SerializeField] private AudioSource _sneakyMusicAudioSource;
-        [SerializeField] private AudioSource _combatMusicAudioSource;
         [SerializeField] private float _colorChangeDuration = 1f;
         [SerializeField] private int _maxRepeats = 5;
+
         private Coroutine colorChangeCoroutine;
+        private EventInstance _musicEvent;
+        private EventInstance _alarmSfxEvent;
+
+        private enum MusicMode
+        {
+            SNEAKY_MODE = 0,
+            COMBAT_MODE = 1
+        }
 
         private void Start()
         {
-            _sneakyMusicAudioSource.Play();
-            _combatMusicAudioSource.Stop();
+            _musicEvent = _audioManager.CreateEventInstance(_fmodEvents.Music);
+            _musicEvent.start();
         }
 
         public void Activate()
@@ -28,9 +42,10 @@ namespace Game.Player.UI
             }
 
             colorChangeCoroutine = StartCoroutine(ChangeColorYoyo(Color.red));
-            _alarmAudioSource.Play();
-            _sneakyMusicAudioSource.Stop();
-            _combatMusicAudioSource.Play();
+            _alarmSfxEvent = _audioManager.CreateEventInstance(_fmodEvents.Alarm);
+            _alarmSfxEvent.start();
+            _alarmSfxEvent.release();
+            SetMusicMode(MusicMode.COMBAT_MODE);
         }
 
         public void Deactivate()
@@ -42,8 +57,12 @@ namespace Game.Player.UI
 
             _textMesh.color = Color.white;
             colorChangeCoroutine = null;
-            _sneakyMusicAudioSource.Play();
-            _combatMusicAudioSource.Stop();
+            SetMusicMode(MusicMode.SNEAKY_MODE);
+        }
+
+        private void SetMusicMode(MusicMode mode)
+        {
+            _musicEvent.setParameterByName("Mode", (float)mode);
         }
 
         private IEnumerator ChangeColorYoyo(Color targetColor)
