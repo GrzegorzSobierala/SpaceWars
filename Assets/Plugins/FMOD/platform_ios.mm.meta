@@ -12,7 +12,7 @@ PluginImporter:
   validateReferences: 1
   platformData:
   - first:
-      '': Any
+      : Any
     second:
       enabled: 0
       settings:
@@ -63,7 +63,7 @@ PluginImporter:
     second:
       enabled: 0
       settings:
-        CPU: x86_64
+        CPU: AnyCPU
   - first:
       Standalone: OSXUniversal
     second:
@@ -88,8 +88,8 @@ PluginImporter:
       enabled: 1
       settings:
         AddToEmbeddedBinaries: false
-        CompileFlags: 
         CPU: AnyCPU
+        CompileFlags: 
         FrameworkDependencies: 
   - first:
       iPhone: iOS

@@ -18,8 +18,8 @@ namespace Game.Audio
         [Range(0, 1)]
         public float MusicVolume = 1;
 
-        private List<EventInstance> _eventInstances = new List<EventInstance>();
-        private List<StudioEventEmitter> _eventEmitters = new List<StudioEventEmitter>();
+        [SerializeField] private List<EventInstance> _eventInstances = new List<EventInstance>();
+        [SerializeField] private List<StudioEventEmitter> _eventEmitters = new List<StudioEventEmitter>();
 
         private Bus _masterBus;
         private Bus _sfxBus;
@@ -40,46 +40,47 @@ namespace Game.Audio
             CleanUp();
         }
 
-        public EventInstance CreateEventInstance(EventReference eventReference)
+        public EventInstance CreateEventInstance(EventReferenceScriptable eventReferenceScriptable)
         {
-            EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+            EventInstance eventInstance = RuntimeManager.CreateInstance(eventReferenceScriptable.EventReference);
             _eventInstances.Add(eventInstance);
             return eventInstance;
+
         }
 
-        public EventInstance CreateEventInstance(EventReference eventReference, Transform parent)
+        public EventInstance CreateEventInstance(EventReferenceScriptable eventReferenceScriptable, Transform parent)
         {
-            EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+            EventInstance eventInstance = RuntimeManager.CreateInstance(eventReferenceScriptable.EventReference);
             RuntimeManager.AttachInstanceToGameObject(eventInstance, parent);
             _eventInstances.Add(eventInstance);
             return eventInstance;
         }
 
-        public EventInstance CreateEventInstance(EventReference eventReference, Vector3 position)
+        public EventInstance CreateEventInstance(EventReferenceScriptable eventReferenceScriptable, Vector3 position)
         {
-            EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+            EventInstance eventInstance = RuntimeManager.CreateInstance(eventReferenceScriptable.EventReference);
             eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(position));
             _eventInstances.Add(eventInstance);
             return eventInstance;
         }
 
-        public EventInstance PlayOneShot(EventReference eventReference)
+        public EventInstance PlayOneShot(EventReferenceScriptable eventReferenceScriptable)
         {
-            EventInstance eventInstance = CreateEventInstance(eventReference);
+            EventInstance eventInstance = CreateEventInstance(eventReferenceScriptable);
             eventInstance.start();
             eventInstance.release();
             return eventInstance;
         }
 
-        public EventInstance PlayOneShot(EventReference eventReference, Transform parent)
+        public EventInstance PlayOneShot(EventReferenceScriptable eventReferenceScriptable, Transform parent)
         {
-            EventInstance eventInstance = CreateEventInstance(eventReference, parent);
+            EventInstance eventInstance = CreateEventInstance(eventReferenceScriptable, parent);
             eventInstance.start();
             eventInstance.release();
             return eventInstance;
         }
 
-        public EventInstance PlayOneShot(EventReference eventReference, Vector3 position)
+        public EventInstance PlayOneShot(EventReferenceScriptable eventReference, Vector3 position)
         {
             EventInstance eventInstance = CreateEventInstance(eventReference, position);
             eventInstance.start();
@@ -87,11 +88,18 @@ namespace Game.Audio
             return eventInstance;
         }
 
-        public StudioEventEmitter InitializeEventEmitter(EventReference eventReference, StudioEventEmitter eventEmitter)
+        /*
+        public StudioEventEmitter InitializeEventEmitter(EventReferenceScriptable eventReferenceScriptable, StudioEventEmitter eventEmitter)
         {
-            eventEmitter.EventReference = eventReference;
+            eventEmitter.EventReference = eventReferenceScriptable.EventReference;
             _eventEmitters.Add(eventEmitter);
             return eventEmitter;
+        }
+        */
+
+        public void StartEventEmitter(StudioEventEmitter eventEmitter)
+        {
+            _eventEmitters.Add(eventEmitter);
         }
 
         private void GetBuses()

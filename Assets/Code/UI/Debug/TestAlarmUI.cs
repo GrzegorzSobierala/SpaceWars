@@ -18,9 +18,13 @@ namespace Game.Player.UI
         [SerializeField] private float _colorChangeDuration = 1f;
         [SerializeField] private int _maxRepeats = 5;
 
+        [Header("Sound")]
+        [SerializeField] private EventReferenceScriptable _musicScriptable;
+        [SerializeField] private EventReferenceScriptable _alarmSfxScriptable;
+
         private Coroutine colorChangeCoroutine;
-        private EventInstance _musicEvent;
-        private EventInstance _alarmSfxEvent;
+        private EventInstance _musicEventInstance;
+        private EventInstance _alarmSfxEventInstance;
 
         private enum MusicMode
         {
@@ -30,8 +34,8 @@ namespace Game.Player.UI
 
         private void Start()
         {
-            _musicEvent = _audioManager.CreateEventInstance(_fmodEvents.Music);
-            _musicEvent.start();
+            _musicEventInstance = _audioManager.CreateEventInstance(_musicScriptable);
+            _musicEventInstance.start();
         }
 
         public void Activate()
@@ -42,9 +46,9 @@ namespace Game.Player.UI
             }
 
             colorChangeCoroutine = StartCoroutine(ChangeColorYoyo(Color.red));
-            _alarmSfxEvent = _audioManager.CreateEventInstance(_fmodEvents.Alarm);
-            _alarmSfxEvent.start();
-            _alarmSfxEvent.release();
+            _alarmSfxEventInstance = _audioManager.CreateEventInstance(_alarmSfxScriptable);
+            _alarmSfxEventInstance.start();
+            _alarmSfxEventInstance.release();
             SetMusicMode(MusicMode.COMBAT_MODE);
         }
 
@@ -62,7 +66,7 @@ namespace Game.Player.UI
 
         private void SetMusicMode(MusicMode mode)
         {
-            _musicEvent.setParameterByName("Mode", (float)mode);
+            _musicEventInstance.setParameterByName("Mode", (float)mode);
         }
 
         private IEnumerator ChangeColorYoyo(Color targetColor)
