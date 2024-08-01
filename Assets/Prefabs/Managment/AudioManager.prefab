@@ -61,6 +61,7 @@ MonoBehaviour:
   MasterVolume: 1
   SfxVolume: 1
   MusicVolume: 1
+  _eventEmitters: []
 --- !u!114 &6990495561737726184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,5 +74,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894ba54eb235a1a41b858cf8e6e1e41d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Alarm>k__BackingField: {fileID: 11400000, guid: 1d7daf14a20c1814ab6aacad3a538a03, type: 2}
-  <Music>k__BackingField: {fileID: 11400000, guid: 28419558def9a6d439025a15cd81625a, type: 2}
+  <Alarm>k__BackingField:
+    Guid:
+      Data1: 1858783748
+      Data2: 1147011676
+      Data3: 1997941163
+      Data4: 1699561542
+    Path: event:/Alarm
+  <Music>k__BackingField:
+    Guid:
+      Data1: 1265972412
+      Data2: 1288763640
+      Data3: 1020217512
+      Data4: 938663518
+    Path: event:/TestMusic

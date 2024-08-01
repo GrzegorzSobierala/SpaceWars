@@ -19,8 +19,8 @@ namespace Game.Player.UI
         [SerializeField] private int _maxRepeats = 5;
 
         [Header("Sound")]
-        [SerializeField] private EventReferenceScriptable _musicScriptable;
-        [SerializeField] private EventReferenceScriptable _alarmSfxScriptable;
+        [SerializeField] private EventReference _music;
+        [SerializeField] private EventReference _alarmSfx;
 
         private Coroutine colorChangeCoroutine;
         private EventInstance _musicEventInstance;
@@ -34,7 +34,7 @@ namespace Game.Player.UI
 
         private void Start()
         {
-            _musicEventInstance = _audioManager.CreateEventInstance(_musicScriptable);
+            _musicEventInstance = _audioManager.CreateEventInstance(_music);
             _musicEventInstance.start();
         }
 
@@ -46,7 +46,7 @@ namespace Game.Player.UI
             }
 
             colorChangeCoroutine = StartCoroutine(ChangeColorYoyo(Color.red));
-            _alarmSfxEventInstance = _audioManager.CreateEventInstance(_alarmSfxScriptable);
+            _alarmSfxEventInstance = _audioManager.CreateEventInstance(_alarmSfx);
             _alarmSfxEventInstance.start();
             _alarmSfxEventInstance.release();
             SetMusicMode(MusicMode.COMBAT_MODE);

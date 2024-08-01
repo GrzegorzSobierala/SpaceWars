@@ -4,6 +4,8 @@ using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
 using UnityEngine.UIElements;
+using System.IO;
+using UnityEngine.Rendering;
 
 namespace Game.Audio
 {
@@ -28,6 +30,27 @@ namespace Game.Audio
         private void Awake()
         {
             GetBuses();
+
+            /*
+            RuntimeManager.StudioSystem.getBankList(out Bank[] banks);
+            foreach(Bank bank in banks)
+            {
+                bank.getEventList(out EventDescription[] eventDescs);
+                //bank.getPath(out string path);
+                //string text = "Bank: " + path;
+                foreach (EventDescription eventDesc in eventDescs)
+                {
+                    //eventDesc.getPath(out string paths);
+                    //text += "\nEvent path:" + paths;
+                    eventDesc.getInstanceList(out EventInstance[] eventInstances);
+                    foreach(EventInstance eventInstance in eventInstances)
+                    {
+                        //text += "\nInstance: " + eventInstance.GetHashCode();
+                    }
+                }
+                //Debug.Log(text);
+            }
+            */
         }
 
         private void Update()
@@ -40,62 +63,53 @@ namespace Game.Audio
             CleanUp();
         }
 
-        public EventInstance CreateEventInstance(EventReferenceScriptable eventReferenceScriptable)
+        public EventInstance CreateEventInstance(EventReference eventReference)
         {
-            EventInstance eventInstance = RuntimeManager.CreateInstance(eventReferenceScriptable.EventReference);
+            EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
             _eventInstances.Add(eventInstance);
             return eventInstance;
 
         }
 
-        public EventInstance CreateEventInstance(EventReferenceScriptable eventReferenceScriptable, Transform parent)
+        public EventInstance CreateEventInstance(EventReference eventReference, Transform parent)
         {
-            EventInstance eventInstance = RuntimeManager.CreateInstance(eventReferenceScriptable.EventReference);
+            EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
             RuntimeManager.AttachInstanceToGameObject(eventInstance, parent);
             _eventInstances.Add(eventInstance);
             return eventInstance;
         }
 
-        public EventInstance CreateEventInstance(EventReferenceScriptable eventReferenceScriptable, Vector3 position)
+        public EventInstance CreateEventInstance(EventReference eventReference, Vector3 position)
         {
-            EventInstance eventInstance = RuntimeManager.CreateInstance(eventReferenceScriptable.EventReference);
+            EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
             eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(position));
             _eventInstances.Add(eventInstance);
             return eventInstance;
         }
 
-        public EventInstance PlayOneShot(EventReferenceScriptable eventReferenceScriptable)
+        public EventInstance PlayOneShot(EventReference eventReference)
         {
-            EventInstance eventInstance = CreateEventInstance(eventReferenceScriptable);
+            EventInstance eventInstance = CreateEventInstance(eventReference);
             eventInstance.start();
             eventInstance.release();
             return eventInstance;
         }
 
-        public EventInstance PlayOneShot(EventReferenceScriptable eventReferenceScriptable, Transform parent)
+        public EventInstance PlayOneShot(EventReference eventReference, Transform parent)
         {
-            EventInstance eventInstance = CreateEventInstance(eventReferenceScriptable, parent);
+            EventInstance eventInstance = CreateEventInstance(eventReference, parent);
             eventInstance.start();
             eventInstance.release();
             return eventInstance;
         }
 
-        public EventInstance PlayOneShot(EventReferenceScriptable eventReference, Vector3 position)
+        public EventInstance PlayOneShot(EventReference eventReference, Vector3 position)
         {
             EventInstance eventInstance = CreateEventInstance(eventReference, position);
             eventInstance.start();
             eventInstance.release();
             return eventInstance;
         }
-
-        /*
-        public StudioEventEmitter InitializeEventEmitter(EventReferenceScriptable eventReferenceScriptable, StudioEventEmitter eventEmitter)
-        {
-            eventEmitter.EventReference = eventReferenceScriptable.EventReference;
-            _eventEmitters.Add(eventEmitter);
-            return eventEmitter;
-        }
-        */
 
         public void StartEventEmitter(StudioEventEmitter eventEmitter)
         {
