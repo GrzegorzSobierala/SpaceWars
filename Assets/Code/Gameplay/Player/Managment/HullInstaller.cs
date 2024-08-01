@@ -1,6 +1,7 @@
 using Zenject;
 using Game.Combat;
 using Game.Utility;
+using UnityEngine.AI;
 
 namespace Game.Player.Ship
 {
@@ -10,6 +11,7 @@ namespace Game.Player.Ship
         {
             Utils.BindGetComponent<HullModuleBase>(Container);
             Utils.BindComponentsInChildrens<DamageHandlerBase>(Container);
+            Container.Bind<NavMeshObstacle>().FromComponentInHierarchy().AsSingle();
         }
     }
 }
