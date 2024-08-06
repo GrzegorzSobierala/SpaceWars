@@ -46,6 +46,11 @@ namespace Game.Player.Ship
             UpdateMovement();
         }
 
+        private void OnCollisionStay2D(Collision2D collision)
+        {
+            MoveOutOfCollider(collision);
+        }
+
         public void VerdicalMove()
         {
             bool moveForward = Input.MoveForward.ReadValue<float>() == 1.0f;
@@ -247,6 +252,28 @@ namespace Game.Player.Ship
 
             _body.AddRelativeForce(targetForce);
             OnBoost?.Invoke(direction);
+        }
+
+        private void MoveOutOfCollider(Collision2D collision)
+        {
+            // Get the center of the Rigidbody2D
+            Vector2 rigidbodyCenter = _body.worldCenterOfMass;
+
+            // Get the Collider2D from the collision
+            Collider2D collider = collision.collider;
+
+            // Check if the center of the Rigidbody2D is inside the collider
+            if (collider.OverlapPoint(rigidbodyCenter))
+            {
+                // Calculate the direction to move the Rigidbody2D away from the center of the collider
+                Vector2 directionAwayFromCollider = (rigidbodyCenter - (Vector2)collider.bounds.center).normalized;
+
+                // Determine how far to move the Rigidbody2D
+                float moveDistance = collider.bounds.extents.magnitude;
+
+                // Move the Rigidbody2D away from the collider's center
+                _body.MovePosition(rigidbodyCenter + directionAwayFromCollider * moveDistance);
+            }
         }
     }
 }
