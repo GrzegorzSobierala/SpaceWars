@@ -301,8 +301,6 @@ namespace Game.Player.Ship
             {
                 _body.position = targetPos;
             }
-
-            _body.position = ();
             lastColldersStucked.Add(collider);
             wasUnstuckCalledThisFrame = true;
             Debug.Log($"Unstucking player force {1 + unStackForce}", this);
