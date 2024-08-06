@@ -271,12 +271,13 @@ namespace Game.Player.Ship
         {
             Collider2D collider = collision.collider;
 
-            if(collider.attachedRigidbody && collider.attachedRigidbody.bodyType == RigidbodyType2D.Dynamic)
+            if (!collider)
             {
                 return;
             }
 
-            if (!collider)
+            Rigidbody2D colliderBody = collider.attachedRigidbody;
+            if (colliderBody && colliderBody.bodyType == RigidbodyType2D.Dynamic)
             {
                 return;
             }
@@ -289,21 +290,22 @@ namespace Game.Player.Ship
             Vector2 collderToPlayerDir = (_body.position - (Vector2)collider.bounds.center);
             collderToPlayerDir = collderToPlayerDir.normalized;
             float moveDistance = collider.bounds.extents.magnitude;
-            float unStackForce = lastColldersStucked.Count * 0.1f;
-            moveDistance *= 0.5f + unStackForce;
-
+            float unStackForce = 0.5f + (lastColldersStucked.Count * 0.1f);
+            moveDistance *= unStackForce;
             Vector2 targetPos = _body.position + collderToPlayerDir * moveDistance;
-            if(lastColldersStucked.Count < 8)
+
+            if(lastColldersStucked.Count < 2)
             {
                 _body.MovePosition(targetPos);
+                Debug.Log($"Unstucking player force {unStackForce}", this);
             }
             else
             {
                 _body.position = targetPos;
+                Debug.Log($"HARD unstucking player force {unStackForce}", this);
             }
             lastColldersStucked.Add(collider);
             wasUnstuckCalledThisFrame = true;
-            Debug.Log($"Unstucking player force {1 + unStackForce}", this);
         }
     }
 }
