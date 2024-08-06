@@ -290,8 +290,19 @@ namespace Game.Player.Ship
             collderToPlayerDir = collderToPlayerDir.normalized;
             float moveDistance = collider.bounds.extents.magnitude;
             float unStackForce = lastColldersStucked.Count * 0.1f;
-            moveDistance *= 1 + unStackForce;
-            _body.MovePosition(_body.position + collderToPlayerDir * moveDistance);
+            moveDistance *= 0.5f + unStackForce;
+
+            Vector2 targetPos = _body.position + collderToPlayerDir * moveDistance;
+            if(lastColldersStucked.Count < 8)
+            {
+                _body.MovePosition(targetPos);
+            }
+            else
+            {
+                _body.position = targetPos;
+            }
+
+            _body.position = ();
             lastColldersStucked.Add(collider);
             wasUnstuckCalledThisFrame = true;
             Debug.Log($"Unstucking player force {1 + unStackForce}", this);
