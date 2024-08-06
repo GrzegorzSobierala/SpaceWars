@@ -1,6 +1,7 @@
 using Game.Input.System;
 using Game.Utility;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
@@ -33,6 +34,8 @@ namespace Game.Player.Ship
         
         private float lastBoostTime = -100;
         private bool _inverseRotWithVerMove = false;
+
+        private List<Collider2D> lastColldersStucked = new List<Collider2D>();
 
         private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
 
@@ -214,6 +217,7 @@ namespace Game.Player.Ship
             VerdicalMove();
             HorizontalMove();
             TryBoost();
+            lastColldersStucked.Clear();
         }
 
         private void MovePlayer(Vector2 direction, float procentOfMaxSpeed)
@@ -259,15 +263,21 @@ namespace Game.Player.Ship
             Collider2D collider = collision.collider;
 
             if (!collider)
+            {
                 return;
+            }
 
             if (!collider.OverlapPoint(_body.position))
+            {
                 return;
+            }
 
             Vector2 collderToPlayerDir = (_body.position - (Vector2)collider.bounds.center);
             collderToPlayerDir = collderToPlayerDir.normalized;
             float moveDistance = collider.bounds.extents.magnitude;
-            _body.MovePosition(_body.position + collderToPlayerDir * moveDistance * 1.1f);
+            moveDistance *= 1 + (lastColldersStucked.Count * 0.1f);
+            _body.MovePosition(_body.position + collderToPlayerDir * moveDistance);
+            lastColldersStucked.Add(collider);
         }
     }
 }
