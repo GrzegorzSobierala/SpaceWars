@@ -44,10 +44,14 @@ namespace Game.Editor
             base.OnGUI();
 
             scroll = GUILayout.BeginScrollView(scroll);
+
             if (!Application.isPlaying)
                 OnGuiNotPlayMode();
 
             OnGuiAlways();
+
+            if (Application.isPlaying)
+                OnGuiPlayMode();
 
             GUILayout.EndScrollView();
 
@@ -62,6 +66,11 @@ namespace Game.Editor
         private void OnGuiAlways()
         {
             TestingProperies();
+            TimeScaleTextInput();
+        }
+
+        private void OnGuiPlayMode()
+        {
         }
 
         private void SceneButtons()
@@ -96,8 +105,6 @@ namespace Game.Editor
             GUILayout.Space(10);
             GUILayout.Label("TESTING", EditorStyles.boldLabel);
             settings.AutoLoadRoom = GUILayout.Toggle(settings.AutoLoadRoom, "Auto load room");
-
-            TimeScaleTextInput();
         }
 
         private void TimeScaleTextInput()
@@ -110,8 +117,8 @@ namespace Game.Editor
             {
                 _currentTimeScaleText = "";
             }
-            else if (float.TryParse(timeScaleText, out float timeScale) && 
-                (_currentTimeScaleText != timeScaleText || _isFirstFrameOfAppPlay))
+            else if (Application.isPlaying && float.TryParse(timeScaleText, out float timeScale) && 
+                (_currentTimeScaleText != timeScaleText || _isFirstFrameOfAppPlay) )
             {
                 timeScale = math.clamp(timeScale, 0f, 10f);
                 settings.TimeScale = timeScale;
