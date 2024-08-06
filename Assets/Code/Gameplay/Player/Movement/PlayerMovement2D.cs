@@ -256,23 +256,13 @@ namespace Game.Player.Ship
 
         private void MoveOutOfCollider(Collision2D collision)
         {
-            // Get the center of the Rigidbody2D
-            Vector2 rigidbodyCenter = _body.worldCenterOfMass;
-
-            // Get the Collider2D from the collision
             Collider2D collider = collision.collider;
 
-            // Check if the center of the Rigidbody2D is inside the collider
-            if (collider.OverlapPoint(rigidbodyCenter))
+            if (collider.OverlapPoint(_body.position))
             {
-                // Calculate the direction to move the Rigidbody2D away from the center of the collider
-                Vector2 directionAwayFromCollider = (rigidbodyCenter - (Vector2)collider.bounds.center).normalized;
-
-                // Determine how far to move the Rigidbody2D
+                Vector2 directionAwayFromCollider = (_body.position - (Vector2)collider.bounds.center).normalized;
                 float moveDistance = collider.bounds.extents.magnitude;
-
-                // Move the Rigidbody2D away from the collider's center
-                _body.MovePosition(rigidbodyCenter + directionAwayFromCollider * moveDistance);
+                _body.MovePosition(_body.position + directionAwayFromCollider * moveDistance);
             }
         }
     }
