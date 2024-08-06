@@ -258,12 +258,16 @@ namespace Game.Player.Ship
         {
             Collider2D collider = collision.collider;
 
-            if (collider.OverlapPoint(_body.position))
-            {
-                Vector2 directionAwayFromCollider = (_body.position - (Vector2)collider.bounds.center).normalized;
-                float moveDistance = collider.bounds.extents.magnitude;
-                _body.MovePosition(_body.position + directionAwayFromCollider * moveDistance);
-            }
+            if (!collider)
+                return;
+
+            if (!collider.OverlapPoint(_body.position))
+                return;
+
+            Vector2 normalCenter = ((Vector2)collider.bounds.center).normalized;
+            Vector2 directionAwayFromCollider = (_body.position - normalCenter);
+            float moveDistance = collider.bounds.extents.magnitude;
+            _body.MovePosition(_body.position + directionAwayFromCollider * moveDistance * 1.5f);
         }
     }
 }
