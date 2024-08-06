@@ -36,6 +36,7 @@ namespace Game.Player.Ship
         private bool _inverseRotWithVerMove = false;
 
         private List<Collider2D> lastColldersStucked = new List<Collider2D>();
+        private bool wasUnstuckCalledThisFrame = false;
 
         private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
 
@@ -217,7 +218,15 @@ namespace Game.Player.Ship
             VerdicalMove();
             HorizontalMove();
             TryBoost();
-            lastColldersStucked.Clear();
+
+            if(wasUnstuckCalledThisFrame)
+            {
+                wasUnstuckCalledThisFrame = false;
+            }    
+            else
+            {
+                lastColldersStucked.Clear();
+            }
         }
 
         private void MovePlayer(Vector2 direction, float procentOfMaxSpeed)
@@ -262,6 +271,11 @@ namespace Game.Player.Ship
         {
             Collider2D collider = collision.collider;
 
+            if(collider.attachedRigidbody && collider.attachedRigidbody.bodyType == RigidbodyType2D.Dynamic)
+            {
+                return;
+            }
+
             if (!collider)
             {
                 return;
@@ -275,9 +289,12 @@ namespace Game.Player.Ship
             Vector2 collderToPlayerDir = (_body.position - (Vector2)collider.bounds.center);
             collderToPlayerDir = collderToPlayerDir.normalized;
             float moveDistance = collider.bounds.extents.magnitude;
-            moveDistance *= 1 + (lastColldersStucked.Count * 0.1f);
+            float unStackForce = lastColldersStucked.Count * 0.1f;
+            moveDistance *= 1 + unStackForce;
             _body.MovePosition(_body.position + collderToPlayerDir * moveDistance);
             lastColldersStucked.Add(collider);
+            wasUnstuckCalledThisFrame = true;
+            Debug.Log($"Unstucking player force {1 + unStackForce}", this);
         }
     }
 }
