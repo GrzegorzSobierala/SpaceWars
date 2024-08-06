@@ -264,10 +264,10 @@ namespace Game.Player.Ship
             if (!collider.OverlapPoint(_body.position))
                 return;
 
-            Vector2 normalCenter = ((Vector2)collider.bounds.center).normalized;
-            Vector2 directionAwayFromCollider = (_body.position - normalCenter);
+            Vector2 collderToPlayerDir = (_body.position - (Vector2)collider.bounds.center);
+            collderToPlayerDir = collderToPlayerDir.normalized;
             float moveDistance = collider.bounds.extents.magnitude;
-            _body.MovePosition(_body.position + directionAwayFromCollider * moveDistance * 1.5f);
+            _body.MovePosition(_body.position + collderToPlayerDir * moveDistance * 1.1f);
         }
     }
 }
