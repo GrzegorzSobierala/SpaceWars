@@ -28,7 +28,7 @@ namespace Game
         [SerializeField] private float _gunTravers = 45f;
         [SerializeField] private float _shootAtMaxDistanceMutli = 0.7f;
         [SerializeField] private float _beforeReloadEventTime = 0.5f;
-
+        [Space]
         [SerializeField] private UnityEvent _onBeforeReloaded;
         [SerializeField] private UnityEvent _onShootLeftGun; 
         [SerializeField] private UnityEvent _onShootRightGun;
