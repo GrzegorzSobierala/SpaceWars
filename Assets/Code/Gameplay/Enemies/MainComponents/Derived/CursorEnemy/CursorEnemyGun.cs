@@ -29,10 +29,12 @@ namespace Game
         [SerializeField] private float _shootAtMaxDistanceMutli = 0.7f;
         [SerializeField] private float _beforeReloadEventTime = 0.5f;
 
-        [SerializeField] private UnityEvent OnBeforeReloaded;
+        [SerializeField] private UnityEvent _onBeforeReloaded;
+        [SerializeField] private UnityEvent _onShootLeftGun; 
+        [SerializeField] private UnityEvent _onShootRightGun;
 
-        private Action OnStartReload;
-        private Action OnStopReload;
+        private Action _onStartReload;
+        private Action _onStopReload;
 
         private Coroutine _reloadCoroutine;
         private float _lastShotTime = 0f;
@@ -54,22 +56,22 @@ namespace Game
 
         public void SubscribeOnStartReload(Action onReloadAction)
         {
-            OnStartReload += onReloadAction;
+            _onStartReload += onReloadAction;
         }
 
         public void UnsubscribeOnStartReload(Action onReloadAction)
         {
-            OnStartReload -= onReloadAction;
+            _onStartReload -= onReloadAction;
         }
 
         public void SubscribeOnStopReload(Action onReloadAction)
         {
-            OnStopReload += onReloadAction;
+            _onStopReload += onReloadAction;
         }
 
         public void UnsubscribeOnStopReload(Action onReloadAction)
         {
-            OnStopReload -= onReloadAction;
+            _onStopReload -= onReloadAction;
         }
 
         protected override void OnAimingAt(Transform target)
@@ -126,6 +128,15 @@ namespace Game
 
             Transform shootTransform = _isAimingLeft ? _leftGunShootPoint : _rightGunShootPoint;
 
+            if (_isAimingLeft)
+            {
+                _onShootLeftGun?.Invoke();
+            }
+            else
+            {
+                _onShootRightGun?.Invoke();
+            }
+
             _bulletPrototype.CreateCopy(damageDealer, parent).Shoot(_body, shootTransform);
 
             _currenaMagAmmo--;
@@ -157,7 +168,7 @@ namespace Game
         {
             if(!_wasOnBeforeReloadedCalled && Time.time > _endReloadTime - _beforeReloadEventTime)
             {
-                OnBeforeReloaded?.Invoke();
+                _onBeforeReloaded?.Invoke();
                 _wasOnBeforeReloadedCalled = true;
             }
 
@@ -171,7 +182,7 @@ namespace Game
         private void Reload()
         {
             _currenaMagAmmo = _magCapasity;
-            OnStopReload?.Invoke();
+            _onStopReload?.Invoke();
             _wasOnBeforeReloadedCalled = true;
         }
 
@@ -184,7 +195,7 @@ namespace Game
             }
 
             _endReloadTime = Time.time + _reloadTime;
-            OnStartReload?.Invoke();
+            _onStartReload?.Invoke();
             StartCoroutine(ReloadingMag());
         }
 
