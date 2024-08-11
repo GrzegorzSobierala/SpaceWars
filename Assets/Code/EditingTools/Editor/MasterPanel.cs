@@ -117,8 +117,8 @@ namespace Game.Editor
             {
                 _currentTimeScaleText = "";
             }
-            else if (float.TryParse(timeScaleText, out float timeScale) && 
-                (_currentTimeScaleText != timeScaleText || _isFirstFrameOfAppPlay) )
+            else if ((_currentTimeScaleText != timeScaleText || _isFirstFrameOfAppPlay) && 
+                float.TryParse(timeScaleText, out float timeScale))
             {
                 timeScale = math.clamp(timeScale, 0f, 10f);
                 settings.TimeScale = timeScale;
