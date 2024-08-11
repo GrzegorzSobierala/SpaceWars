@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Game.Player.Ship
 {
-    public class ScavangerHull : HullModuleBase
+    public class ScavengerHull : HullModuleBase
     {
         [Inject] private PlayerMovement2D _playerMovement;
 
