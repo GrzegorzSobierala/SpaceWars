@@ -9,9 +9,9 @@ namespace Game.Room.Enemy
         {
             base.InstallBindings();
 
-            Utils.BindGetComponent<NavMeshAgent>(Container);
+            Utils.BindGetComponent<NavMeshAgent>(Container, gameObject);
 
-            Utils.BindComponentsInChildrens<EnemyGunBase>(Container);
+            Utils.BindComponentsInChildrens<EnemyGunBase>(Container, gameObject);
         }
     }
 }

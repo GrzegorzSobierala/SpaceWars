@@ -82,11 +82,9 @@ namespace Game.Utility
             return worldDirection;
         }
 
-        public static void BindGetComponent<T>(DiContainer container) 
+        public static void BindGetComponent<T>(DiContainer container, GameObject gameObject) 
             where T : Component
         {
-            GameObject gameObject = container.DefaultParent.gameObject;
-
             if (!gameObject.TryGetComponent(out T component))
             {
                 string message = $"There is no {typeof(T)} on a GameObject: {gameObject.name}";
@@ -97,11 +95,9 @@ namespace Game.Utility
             container.Bind<T>().FromInstance(component).AsSingle();
         }
 
-        public static void BindComponentsInChildrens<T>(DiContainer container, bool includeInactive = true)
+        public static void BindComponentsInChildrens<T>(DiContainer container, GameObject gameObject, bool includeInactive = true)
             where T : Component
         {
-            GameObject gameObject = container.DefaultParent.gameObject;
-
             List<T> enemyFieldOfViews = gameObject.GetComponentsInChildren<T>(includeInactive).ToList();
 
             if (enemyFieldOfViews.Count == 0)

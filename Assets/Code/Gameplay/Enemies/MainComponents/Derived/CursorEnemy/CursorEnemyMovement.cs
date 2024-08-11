@@ -14,7 +14,6 @@ namespace Game.Room.Enemy
         [SerializeField] private float _agentTargetUpdateInterval = 0.1f;
 
         private float _nextAgentTargetUpdateTime = 0;
-        private float _lastPathSetTry = 0;
 
         private void Start()
         {

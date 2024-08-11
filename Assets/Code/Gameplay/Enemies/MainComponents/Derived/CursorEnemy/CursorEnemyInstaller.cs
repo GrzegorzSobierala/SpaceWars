@@ -9,7 +9,7 @@ namespace Game.Room.Enemy
         {
             base.InstallBindings();
 
-            Utils.BindGetComponent<NavMeshAgent>(Container);
+            Utils.BindGetComponent<NavMeshAgent>(Container, gameObject);
 
             Container.Bind<PatrolController>().FromComponentInHierarchy().AsSingle();
             Container.Bind<EnemyGunBase>().FromComponentInHierarchy().AsSingle();

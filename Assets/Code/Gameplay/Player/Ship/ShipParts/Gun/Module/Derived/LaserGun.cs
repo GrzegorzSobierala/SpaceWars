@@ -14,8 +14,8 @@ namespace Game.Player.Ship
             _lastShotTime = Time.time;
 
             GameObject damageDealer = _body.gameObject;
-            Transform parent = _playerManager.transform;
-            _shootableObjectPrototype.CreateCopy(damageDealer, parent).Shoot(_body, transform);
+            _shootableObjectPrototype.CreateCopy(damageDealer, BulletParent)
+                .Shoot(_body, transform);
             return true;
         }
     }

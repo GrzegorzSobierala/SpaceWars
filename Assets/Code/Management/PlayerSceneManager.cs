@@ -9,16 +9,18 @@ using System.Collections.Generic;
 
 namespace Game.Room
 {
-    public class TestSceneManager : MonoBehaviour
+    public class PlayerSceneManager : MonoBehaviour
     {
+        public Action OnRoomMainObjectiveCompleted;
+
         [Inject] private PlayerManager _playerManager;
         [Inject] private ZenjectSceneLoader _sceneLoader;
 
         private List<EnemyBase> _roomEnemies;
-
-        public Action OnRoomMainObjectiveCompleted;
+        private RoomManager _currentRoomManager;
 
         public List<EnemyBase> RoomEnemies => _roomEnemies;
+        public RoomManager CurrentRoomManager => _currentRoomManager;
 
         public void Load()
         {
@@ -50,6 +52,11 @@ namespace Game.Room
         public void SetListOfRoomEnemies(List<EnemyBase> enemies)
         {
             _roomEnemies = enemies;
+        }
+
+        public void SetCurrentRoomManager(RoomManager roomManager)
+        {
+            _currentRoomManager = roomManager;
         }
     }
 }

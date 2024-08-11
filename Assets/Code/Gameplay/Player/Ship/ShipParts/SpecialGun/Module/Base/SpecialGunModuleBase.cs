@@ -1,6 +1,7 @@
 using Game.Combat;
 using Game.Input.System;
 using Game.Management;
+using Game.Room;
 using UnityEngine;
 using Zenject;
 
@@ -10,6 +11,7 @@ namespace Game.Player.Ship
     {
         [Inject] protected Rigidbody2D _body;
         [Inject] protected PlayerManager _playerManager;
+        [Inject] protected PlayerSceneManager _playerSceneManager;
         [Inject] private InputProvider _input;
 
         [SerializeField] private ShootableObjectBase _shootableObjectPrefab;
@@ -19,6 +21,8 @@ namespace Game.Player.Ship
         protected float _lastShotTime = 0f;
 
         protected PlayerControls.GameplayActions Input => _input.PlayerControls.Gameplay;
+        protected Transform BulletParent => _playerSceneManager.CurrentRoomManager.
+           PlayerObjectsParent.transform;
 
         protected virtual void Awake()
         {

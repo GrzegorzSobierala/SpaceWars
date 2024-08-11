@@ -18,8 +18,7 @@ namespace Game.Player.Ship
             _lastShotTime = Time.time;
 
             GameObject damageDealer = _body.gameObject;
-            Transform parent = _playerManager.transform;
-            ShootableObjectBase bullet = _shootableObjectPrototype.CreateCopy(damageDealer, parent);
+            ShootableObjectBase bullet = _shootableObjectPrototype.CreateCopy(damageDealer, BulletParent);
             
             if(bullet is FlakBullet flakBullet)
             {

@@ -7,7 +7,7 @@ namespace Game.Player.Ship
     {
         public override void InstallBindings()
         {
-            Utils.BindGetComponent<BridgeModuleBase>(Container);
+            Utils.BindGetComponent<BridgeModuleBase>(Container, gameObject);
         }
     }
 }
