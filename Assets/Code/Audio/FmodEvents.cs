@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
 
 namespace Game.Audio
 {
-    public class FmodEvents : MonoBehaviour
+    public class FMODEvents : MonoBehaviour
     {
         [field: Header("SFX")]
         [field: SerializeField] public EventReference Alarm { get; private set; }

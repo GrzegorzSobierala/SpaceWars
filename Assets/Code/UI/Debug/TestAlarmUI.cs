@@ -1,19 +1,13 @@
 using FMOD.Studio;
 using FMODUnity;
-using Game.Audio;
-using Game.Input.System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using Zenject;
 
 namespace Game.Player.UI
 {
     public class TestAlarmUI : MonoBehaviour
     {
-        [Inject] private AudioManager _audioManager;
-        [Inject] private FmodEvents _fmodEvents;
-
         [SerializeField] private TextMeshProUGUI _textMesh;
         [SerializeField] private float _colorChangeDuration = 1f;
         [SerializeField] private int _maxRepeats = 5;
@@ -34,7 +28,7 @@ namespace Game.Player.UI
 
         private void Start()
         {
-            _musicEventInstance = _audioManager.CreateEventInstance(_music);
+            _musicEventInstance = RuntimeManager.CreateInstance(_music);
             _musicEventInstance.start();
         }
 
@@ -44,11 +38,9 @@ namespace Game.Player.UI
             {
                 StopCoroutine(colorChangeCoroutine);
             }
-
             colorChangeCoroutine = StartCoroutine(ChangeColorYoyo(Color.red));
-            _alarmSfxEventInstance = _audioManager.CreateEventInstance(_alarmSfx);
-            _alarmSfxEventInstance.start();
-            _alarmSfxEventInstance.release();
+
+            RuntimeManager.PlayOneShot(_alarmSfx);
             SetMusicMode(MusicMode.COMBAT_MODE);
         }
 
@@ -61,6 +53,7 @@ namespace Game.Player.UI
 
             _textMesh.color = Color.white;
             colorChangeCoroutine = null;
+
             SetMusicMode(MusicMode.SNEAKY_MODE);
         }
 
