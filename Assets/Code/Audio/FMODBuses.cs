@@ -6,15 +6,15 @@ namespace Game.Audio
 {
     public class FMODBuses : MonoBehaviour
     {
-        public Bus MasterBus { get; private set; }
-        public Bus SfxBus { get; private set; }
-        public Bus MusicBus { get; private set; }
+        public Bus Master { get; private set; }
+        public Bus SFX { get; private set; }
+        public Bus Music { get; private set; }
 
         private void Awake()
         {
-            MasterBus = RuntimeManager.GetBus("bus:/");
-            SfxBus = RuntimeManager.GetBus("bus:/SFX");
-            MusicBus = RuntimeManager.GetBus("bus:/Music");
+            Master = RuntimeManager.GetBus("bus:/");
+            SFX = RuntimeManager.GetBus("bus:/SFX");
+            Music = RuntimeManager.GetBus("bus:/Music");
         }
     }
 }

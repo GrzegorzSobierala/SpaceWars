@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7176365907930275298}
   - component: {fileID: 6303167405772486593}
   - component: {fileID: 6289885793268056629}
+  - component: {fileID: 1816646098855683334}
   - component: {fileID: 6990495561737726184}
   - component: {fileID: 2613484254868244911}
   m_Layer: 0
@@ -60,8 +61,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MasterVolume: 1
-  SfxVolume: 1
+  SFXVolume: 0.5
   MusicVolume: 1
+--- !u!114 &1816646098855683334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 673511692949409161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 895071f187ff4cb428a3580b2c7989cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6990495561737726184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,6 +94,13 @@ MonoBehaviour:
       Data3: 1997941163
       Data4: 1699561542
     Path: event:/Alarm
+  <Rain>k__BackingField:
+    Guid:
+      Data1: 1843180440
+      Data2: 1190404206
+      Data3: -1914177107
+      Data4: 1363481284
+    Path: event:/Rain
   <Music>k__BackingField:
     Guid:
       Data1: 1265972412

@@ -1,35 +1,30 @@
 using FMOD.Studio;
 using FMODUnity;
+using Game.Audio;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Player.UI
 {
     public class TestAlarmUI : MonoBehaviour
     {
+        [Inject] private BackgroundMusic _music;
+
         [SerializeField] private TextMeshProUGUI _textMesh;
         [SerializeField] private float _colorChangeDuration = 1f;
         [SerializeField] private int _maxRepeats = 5;
 
-        [Header("Sound")]
-        [SerializeField] private EventReference _music;
-        [SerializeField] private EventReference _alarmSfx;
+        [SerializeField] private EventReference _musicEventRef;
+        [SerializeField] private EventReference _alarmEventRef;
 
         private Coroutine colorChangeCoroutine;
-        private EventInstance _musicEventInstance;
-        private EventInstance _alarmSfxEventInstance;
-
-        private enum MusicMode
-        {
-            SNEAKY_MODE = 0,
-            COMBAT_MODE = 1
-        }
+        private EventInstance _alarmSFXEventInstance;
 
         private void Start()
         {
-            _musicEventInstance = RuntimeManager.CreateInstance(_music);
-            _musicEventInstance.start();
+            _music.SetMusic(_musicEventRef);
         }
 
         public void Activate()
@@ -40,8 +35,8 @@ namespace Game.Player.UI
             }
             colorChangeCoroutine = StartCoroutine(ChangeColorYoyo(Color.red));
 
-            RuntimeManager.PlayOneShot(_alarmSfx);
-            SetMusicMode(MusicMode.COMBAT_MODE);
+            RuntimeManager.PlayOneShot(_alarmEventRef);
+            _music.SetMusicMode(BackgroundMusic.LevelMusicMode.COMBAT_MODE);
         }
 
         public void Deactivate()
@@ -54,14 +49,8 @@ namespace Game.Player.UI
             _textMesh.color = Color.white;
             colorChangeCoroutine = null;
 
-            SetMusicMode(MusicMode.SNEAKY_MODE);
+            _music.SetMusicMode(BackgroundMusic.LevelMusicMode.SNEAK_MODE);
         }
-
-        private void SetMusicMode(MusicMode mode)
-        {
-            _musicEventInstance.setParameterByName("Mode", (float)mode);
-        }
-
         private IEnumerator ChangeColorYoyo(Color targetColor)
         {
             Color startColor = _textMesh.color;
