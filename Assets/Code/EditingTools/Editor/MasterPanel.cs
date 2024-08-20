@@ -7,6 +7,9 @@ using Zenject;
 using UnityEngine.SceneManagement;
 using Unity.Mathematics;
 using Game.Player.Ship;
+using Game.Room.Enemy;
+using UnityEngine.AI;
+using System.Collections.Generic;
 
 namespace Game.Editor
 {
@@ -15,12 +18,15 @@ namespace Game.Editor
         [Inject] private TestingSettings settings;
         [Inject] private TestingSettingsInstaller settingsInstaller;
 
-        static string scenePath = "Assets/Scenes/";
-        static Vector2 scroll;
-        string _currentTimeScaleText = "";
-        string _currentPlayerHp = "";
-        bool _wasAppPlayLastFrame = false;
-        bool _isFirstFrameOfAppPlay = false;
+        private static string scenePath = "Assets/Scenes/";
+        private static Vector2 scroll;
+        private string _currentTimeScaleText = "";
+        private string _currentPlayerHp = "";
+        private bool _isEnemyMovement = true;
+        private bool _wasAppPlayLastFrame = false;
+        private bool _isFirstFrameOfAppPlay = false;
+        private Dictionary<EnemyMovementBase, float> speedByMovement = new();
+        
 
         public override void InstallBindings()
         {
@@ -75,6 +81,7 @@ namespace Game.Editor
 
         private void OnGuiPlayMode()
         {
+            EnemyMovementToggle();
         }
 
         private void SceneButtons()
@@ -138,7 +145,7 @@ namespace Game.Editor
         private void PlayerHpInput()
         {
             GUILayout.BeginHorizontal();
-            string playerHpText = GUILayout.TextField(_currentPlayerHp, GUILayout.Width(30));
+            string playerHpText = GUILayout.TextField(_currentPlayerHp, GUILayout.Width(40));
             GUILayout.Label("Player HP (1 - 9999)", GUILayout.Width(130));
             GUILayout.EndHorizontal();
             if (playerHpText == "")
@@ -155,6 +162,38 @@ namespace Game.Editor
                 if (Application.isPlaying)
                 {
                     FindObjectOfType<HullModuleBase>().DEBUG_SetHp(playerHp);
+                }
+            }
+        }
+
+        private void EnemyMovementToggle()
+        {
+            if(_isFirstFrameOfAppPlay)
+            {
+                _isEnemyMovement = true;
+            }
+
+            bool newIsEnemyMovement = GUILayout.Toggle(_isEnemyMovement, "Enemies movement");
+            if(newIsEnemyMovement != _isEnemyMovement)
+            {
+                _isEnemyMovement = newIsEnemyMovement;
+
+                if (!newIsEnemyMovement)
+                {
+                    speedByMovement.Clear();
+                }
+
+                foreach (var movement in FindObjectsOfType<EnemyMovementBase>())
+                {
+                    if(!newIsEnemyMovement)
+                    {
+                        speedByMovement.Add(movement, movement.CurrentSpeedModifier);
+                        movement.SetSpeedModifier(0);
+                    }
+                    else if(movement.CurrentSpeedModifier == 0 && speedByMovement.ContainsKey(movement))
+                    {
+                        movement.SetSpeedModifier(speedByMovement[movement]);
+                    }
                 }
             }
         }
