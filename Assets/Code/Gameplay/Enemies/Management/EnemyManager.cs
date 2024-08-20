@@ -9,7 +9,7 @@ namespace Game.Room.Enemy
     {
         [Inject] private PlayerManager _playerManager;
         [Inject] private List<EnemyBase> _roomEnemies;
-        [Inject] private TestSceneManager _testSceneManager;
+        [Inject] private PlayerSceneManager _testSceneManager;
 
         private bool _roomClear = false;
 

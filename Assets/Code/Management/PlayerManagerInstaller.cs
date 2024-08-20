@@ -10,7 +10,7 @@ namespace Game.Player
         public override void InstallBindings()
         {
             Container.Bind<PlayerManager>().FromComponentInHierarchy(false).AsSingle();
-            Container.Bind<TestSceneManager>().FromComponentInHierarchy(false).AsSingle();
+            Container.Bind<PlayerSceneManager>().FromComponentInHierarchy(false).AsSingle();
             Container.Bind<GunManager>().FromComponentInHierarchy(false).AsSingle();
         }
     }

@@ -14,7 +14,6 @@ namespace Game.Room.Enemy
         [SerializeField] private float _agentTargetUpdateInterval = 0.1f;
 
         private float _nextAgentTargetUpdateTime = 0;
-        private float _lastPathSetTry = 0;
 
         private void Start()
         {
@@ -44,16 +43,9 @@ namespace Game.Room.Enemy
         {
             base.OnGoingTo(targetPosition);
 
-            if(!_agent.hasPath)
+            if (_agent.pathPending || !_agent.hasPath)
             {
-                if(Time.time >  _lastPathSetTry + _agentTargetUpdateInterval)
-                {
-                    SetPathToPosition(targetPosition);
-                }
-                else
-                {
-                    return;
-                }
+                return;
             }
 
             if (_agent.remainingDistance < _agent.stoppingDistance)
@@ -108,16 +100,9 @@ namespace Game.Room.Enemy
 
         private void SetPathToPosition(Vector2 targetPos)
         {
-            _lastPathSetTry = Time.time;
-
-            NavMeshPath samplePath = new NavMeshPath();
-            if (_agent.CalculatePath(targetPos, samplePath))
+            if (!_agent.SetDestination(targetPos))
             {
-                _agent.SetPath(samplePath);
-            }
-            else
-            {
-                _agent.ResetPath();
+                Debug.LogError("SetDestination failed", this);
             }
         }
     }

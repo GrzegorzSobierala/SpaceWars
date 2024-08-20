@@ -4,6 +4,7 @@ using Game.Management;
 using UnityEngine;
 using Zenject;
 using UnityEngine.Events;
+using System;
 
 namespace Game.Room.Enemy
 {
@@ -70,6 +71,7 @@ namespace Game.Room.Enemy
             GameObject damageDealer = _body.gameObject;
             Transform parent = _enemyManager.transform;
             _enemyBulletPrototype.CreateCopy(damageDealer, parent).Shoot(null, _gunTransform);
+            _wasOnBeforeShootCalled = false;
 
             OnShoot?.Invoke();
         }

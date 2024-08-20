@@ -12,7 +12,7 @@ namespace Game.Player.UI
 {
     public class TestResetUi : MonoBehaviour
     {
-        [Inject] private TestSceneManager _testSceneManager;
+        [Inject] private PlayerSceneManager _testSceneManager;
         [Inject] private InputProvider _inputProvider;
         [Inject] private TestingSettings _testingSettings;
         [Inject] private TestAlarmUI _alarmUI;

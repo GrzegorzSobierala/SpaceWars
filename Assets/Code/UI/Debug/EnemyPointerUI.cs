@@ -11,7 +11,7 @@ namespace Game.Player.UI
     public class EnemyPointerUI : MonoBehaviour
     {
         [Inject] private PlayerManager _playerManager;
-        [Inject] private TestSceneManager _sceneManager;
+        [Inject] private PlayerSceneManager _sceneManager;
 
         public GameObject pointer;
         public Canvas canvas;

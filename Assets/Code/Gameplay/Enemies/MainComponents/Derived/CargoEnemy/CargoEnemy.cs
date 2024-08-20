@@ -23,6 +23,11 @@ namespace Game.Room.Enemy
             _baseColor = _emisiveMaterial.GetColor(_emisionID);
         }
 
+        private void Start()
+        {
+            ChangeToReloaded();
+        }
+
         public override void GetDamage(DamageData damage)
         {
             ChangeCurrentHp(-damage.BaseDamage);

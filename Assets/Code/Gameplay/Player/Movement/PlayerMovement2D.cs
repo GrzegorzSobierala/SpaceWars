@@ -1,6 +1,7 @@
 using Game.Input.System;
 using Game.Utility;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
@@ -34,6 +35,9 @@ namespace Game.Player.Ship
         private float lastBoostTime = -100;
         private bool _inverseRotWithVerMove = false;
 
+        private List<Collider2D> lastColldersStucked = new List<Collider2D>();
+        private bool wasUnstuckCalledThisFrame = false;
+
         private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
 
         private InputAction MoveLeft => _inverseRotWithVerMove ? Input.RotateLeft : Input.MoveLeft;
@@ -44,6 +48,11 @@ namespace Game.Player.Ship
         private void FixedUpdate()
         {
             UpdateMovement();
+        }
+
+        private void OnCollisionStay2D(Collision2D collision)
+        {
+            MoveOutOfCollider(collision);
         }
 
         public void VerdicalMove()
@@ -209,6 +218,15 @@ namespace Game.Player.Ship
             VerdicalMove();
             HorizontalMove();
             TryBoost();
+
+            if(wasUnstuckCalledThisFrame)
+            {
+                wasUnstuckCalledThisFrame = false;
+            }    
+            else
+            {
+                lastColldersStucked.Clear();
+            }
         }
 
         private void MovePlayer(Vector2 direction, float procentOfMaxSpeed)
@@ -247,6 +265,47 @@ namespace Game.Player.Ship
 
             _body.AddRelativeForce(targetForce);
             OnBoost?.Invoke(direction);
+        }
+
+        private void MoveOutOfCollider(Collision2D collision)
+        {
+            Collider2D collider = collision.collider;
+
+            if (!collider)
+            {
+                return;
+            }
+
+            Rigidbody2D colliderBody = collider.attachedRigidbody;
+            if (colliderBody && colliderBody.bodyType == RigidbodyType2D.Dynamic)
+            {
+                return;
+            }
+
+            if (!collider.OverlapPoint(_body.position))
+            {
+                return;
+            }
+
+            Vector2 collderToPlayerDir = (_body.position - (Vector2)collider.bounds.center);
+            collderToPlayerDir = collderToPlayerDir.normalized;
+            float moveDistance = collider.bounds.extents.magnitude;
+            float unStackForce = 0.5f + (lastColldersStucked.Count * 0.1f);
+            moveDistance *= unStackForce;
+            Vector2 targetPos = _body.position + collderToPlayerDir * moveDistance;
+
+            if(lastColldersStucked.Count < 2)
+            {
+                _body.MovePosition(targetPos);
+                Debug.Log($"Unstucking player force {unStackForce}", this);
+            }
+            else
+            {
+                _body.position = targetPos;
+                Debug.Log($"HARD unstucking player force {unStackForce}", this);
+            }
+            lastColldersStucked.Add(collider);
+            wasUnstuckCalledThisFrame = true;
         }
     }
 }

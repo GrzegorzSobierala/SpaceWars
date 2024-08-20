@@ -5,6 +5,7 @@ using Game.Utility.Globals;
 using Game.Testing;
 using Zenject;
 using UnityEngine.SceneManagement;
+using Unity.Mathematics;
 
 namespace Game.Editor
 {
@@ -15,7 +16,10 @@ namespace Game.Editor
 
         static string scenePath = "Assets/Scenes/";
         static Vector2 scroll;
-        
+        string _currentTimeScaleText = "";
+        bool _wasAppPlayLastFrame = false;
+        bool _isFirstFrameOfAppPlay = false;
+
         public override void InstallBindings()
         {
             TestingSettingsInstaller.CheckResources();
@@ -28,19 +32,30 @@ namespace Game.Editor
             MasterPanel window = (MasterPanel)GetWindow(typeof(MasterPanel));
             window.titleContent = new GUIContent("Master Panel");
             window.Show();
+            window._currentTimeScaleText = window.settings.TimeScale.ToString();
+            window._wasAppPlayLastFrame = Application.isPlaying;
         }
 
+        
         public override void OnGUI()
         {
+            _isFirstFrameOfAppPlay = !_wasAppPlayLastFrame && Application.isPlaying;
+
             base.OnGUI();
 
             scroll = GUILayout.BeginScrollView(scroll);
+
             if (!Application.isPlaying)
                 OnGuiNotPlayMode();
 
             OnGuiAlways();
 
+            if (Application.isPlaying)
+                OnGuiPlayMode();
+
             GUILayout.EndScrollView();
+
+            _wasAppPlayLastFrame = Application.isPlaying;
         }
 
         private void OnGuiNotPlayMode()
@@ -51,6 +66,11 @@ namespace Game.Editor
         private void OnGuiAlways()
         {
             TestingProperies();
+            TimeScaleTextInput();
+        }
+
+        private void OnGuiPlayMode()
+        {
         }
 
         private void SceneButtons()
@@ -79,14 +99,36 @@ namespace Game.Editor
             }
         }
 
+
         private void TestingProperies()
         {
             GUILayout.Space(10);
             GUILayout.Label("TESTING", EditorStyles.boldLabel);
-
             settings.AutoLoadRoom = GUILayout.Toggle(settings.AutoLoadRoom, "Auto load room");
-            settingsInstaller.MarkDirty();
+        }
 
+        private void TimeScaleTextInput()
+        {
+            GUILayout.BeginHorizontal();
+            string timeScaleText = GUILayout.TextField(_currentTimeScaleText, GUILayout.Width(30));
+            GUILayout.Label("TimeScale (0-10)", GUILayout.Width(110));
+            GUILayout.EndHorizontal();
+            if (timeScaleText == "")
+            {
+                _currentTimeScaleText = "";
+            }
+            else if ((_currentTimeScaleText != timeScaleText || _isFirstFrameOfAppPlay) && 
+                float.TryParse(timeScaleText, out float timeScale))
+            {
+                timeScale = math.clamp(timeScale, 0f, 10f);
+                settings.TimeScale = timeScale;
+                _currentTimeScaleText = timeScaleText;
+
+                if (Application.isPlaying)
+                {
+                    Time.timeScale = timeScale;
+                }
+            }
         }
 
         private void LoadSceneGroup(string[] scenes)

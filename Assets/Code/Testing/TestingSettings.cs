@@ -6,5 +6,6 @@ namespace Game.Testing
     public class TestingSettings
     {
         public bool AutoLoadRoom = false;
+        public float TimeScale = 1.0f;
     }
 }

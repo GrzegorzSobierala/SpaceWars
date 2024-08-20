@@ -12,18 +12,12 @@ namespace Game.Combat
         [SerializeField, Range(0,1)] private float _velocityRotMulti = 0.8f;
 
         private Vector2 _targetPosition = Vector2.zero;
-        private bool _forwardSpeedChecked = false;
         private float _lastDistanceToTarget = float.MaxValue;
         private float _explodeDistance = 50;
 
         private void FixedUpdate()
         {
             RotateToPoint(_targetPosition);
-
-            if (!_forwardSpeedChecked ) 
-            { 
-                EnsureForwardSpeed(_speed);
-            }
         }
 
         public override void Shoot(Rigidbody2D creatorBody, Transform gunTransform)
@@ -44,6 +38,7 @@ namespace Game.Combat
 
             StartCoroutine(WaitAndDestroy());
             StartCoroutine(ExplodeOnReachedTarget());
+            StartCoroutine(EnsureForwardSpeedEnu());
         }
 
         public override void OnHit()
@@ -82,16 +77,13 @@ namespace Game.Combat
 
         private IEnumerator EnsureForwardSpeedEnu()
         {
-            yield return null;
+            yield return new WaitForFixedUpdate();
 
-            EnsureForwardSpeed(_speed);
+            EnsureForwardSpeed(_speed - 1);
         }
 
         private bool IsInExplodeRange()
         {
-            if(_forwardSpeedChecked)
-                return false;
-
             if (_targetPosition == Vector2.zero) 
                 return false;
 

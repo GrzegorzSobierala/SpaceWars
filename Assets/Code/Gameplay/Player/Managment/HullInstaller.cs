@@ -8,8 +8,8 @@ namespace Game.Player.Ship
     {
         public override void InstallBindings()
         {
-            Utils.BindGetComponent<HullModuleBase>(Container);
-            Utils.BindComponentsInChildrens<DamageHandlerBase>(Container);
+            Utils.BindGetComponent<HullModuleBase>(Container, gameObject);
+            Utils.BindComponentsInChildrens<DamageHandlerBase>(Container, gameObject);
         }
     }
 }

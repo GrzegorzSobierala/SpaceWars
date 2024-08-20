@@ -1,3 +1,4 @@
+using Game.Utility.Globals;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -99,6 +100,10 @@ namespace Game.Combat
 
         private Vector2 GetExplosionForce(Rigidbody2D body)
         {
+            if (body.gameObject.layer == LayerMask.NameToLayer(Layers.EnemyCombat)
+                || body.gameObject.layer == LayerMask.NameToLayer(Layers.PlayerCombat))
+                return Vector2.zero;
+
             Vector2 force = body.position - (Vector2)transform.position;
 
             force = force.normalized;
