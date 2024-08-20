@@ -7,7 +7,6 @@ namespace Game.Player.Ship
     public class FatSpecialGun : SpecialGunModuleBase
     {
         public override bool IsGunReadyToShoot => Time.time - _lastShotTime >= _cooldown;
-       
 
         protected override bool OnTryShoot()
         {
