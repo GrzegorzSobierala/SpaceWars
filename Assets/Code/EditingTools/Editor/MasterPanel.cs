@@ -6,6 +6,7 @@ using Game.Testing;
 using Zenject;
 using UnityEngine.SceneManagement;
 using Unity.Mathematics;
+using Game.Player.Ship;
 
 namespace Game.Editor
 {
@@ -17,6 +18,7 @@ namespace Game.Editor
         static string scenePath = "Assets/Scenes/";
         static Vector2 scroll;
         string _currentTimeScaleText = "";
+        string _currentPlayerHp = "";
         bool _wasAppPlayLastFrame = false;
         bool _isFirstFrameOfAppPlay = false;
 
@@ -32,7 +34,8 @@ namespace Game.Editor
             MasterPanel window = (MasterPanel)GetWindow(typeof(MasterPanel));
             window.titleContent = new GUIContent("Master Panel");
             window.Show();
-            window._currentTimeScaleText = window.settings.TimeScale.ToString();
+            window._currentTimeScaleText = window.settings.TimeScale;
+            window._currentPlayerHp = window.settings.PlayerHp;
             window._wasAppPlayLastFrame = Application.isPlaying;
         }
 
@@ -67,6 +70,7 @@ namespace Game.Editor
         {
             TestingProperies();
             TimeScaleTextInput();
+            PlayerHpInput();
         }
 
         private void OnGuiPlayMode()
@@ -121,12 +125,36 @@ namespace Game.Editor
                 float.TryParse(timeScaleText, out float timeScale))
             {
                 timeScale = math.clamp(timeScale, 0f, 10f);
-                settings.TimeScale = timeScale;
+                settings.TimeScale = timeScale.ToString();
                 _currentTimeScaleText = timeScaleText;
 
                 if (Application.isPlaying)
                 {
                     Time.timeScale = timeScale;
+                }
+            }
+        }
+
+        private void PlayerHpInput()
+        {
+            GUILayout.BeginHorizontal();
+            string playerHpText = GUILayout.TextField(_currentPlayerHp, GUILayout.Width(30));
+            GUILayout.Label("Player HP (1 - 9999)", GUILayout.Width(130));
+            GUILayout.EndHorizontal();
+            if (playerHpText == "")
+            {
+                _currentPlayerHp = "";
+            }
+            else if ((_currentPlayerHp != playerHpText || _isFirstFrameOfAppPlay) &&
+                int.TryParse(playerHpText, out int playerHp))
+            {
+                playerHp = math.clamp(playerHp, 1, 9999);
+                settings.PlayerHp = playerHp.ToString();
+                _currentPlayerHp = playerHpText;
+
+                if (Application.isPlaying)
+                {
+                    FindObjectOfType<HullModuleBase>().DEBUG_SetHp(playerHp);
                 }
             }
         }

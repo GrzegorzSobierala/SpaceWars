@@ -75,7 +75,7 @@ namespace Game.Player.Ship
 
             float newCurrentHp = _currentHp + hpChange;
 
-            _currentHp = Mathf.Clamp(newCurrentHp, 0, _maxHp);
+            _currentHp = Mathf.Clamp(newCurrentHp, 0, float.MaxValue);
 
             if (_currentHp == 0)
             {
@@ -88,6 +88,11 @@ namespace Game.Player.Ship
         {
             _maxHp = _baseHp;
             _currentHp = _baseHp;
+        }
+
+        public void DEBUG_SetHp(int hp)
+        {
+            _currentHp = hp;
         }
 
         private void GetDefeated()
