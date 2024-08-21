@@ -3,9 +3,6 @@ using FMOD.Studio;
 
 namespace Game.Audio
 {
-    [RequireComponent(typeof(BackgroundMusic))]
-    [RequireComponent(typeof(FMODEvents))]
-    [RequireComponent(typeof(FMODBuses))]
     public class AudioManager : MonoBehaviour
     {
         public void SetBusVolume(Bus bus, float volume)

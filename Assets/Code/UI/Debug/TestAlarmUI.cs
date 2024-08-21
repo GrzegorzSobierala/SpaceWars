@@ -10,7 +10,7 @@ namespace Game.Player.UI
 {
     public class TestAlarmUI : MonoBehaviour
     {
-        [Inject] private BackgroundMusic _music;
+        [Inject] private BackgroundMusicManager _music;
 
         [SerializeField] private TextMeshProUGUI _textMesh;
         [SerializeField] private float _colorChangeDuration = 1f;
@@ -20,7 +20,6 @@ namespace Game.Player.UI
         [SerializeField] private EventReference _alarmEventRef;
 
         private Coroutine colorChangeCoroutine;
-        private EventInstance _alarmSFXEventInstance;
 
         private void Start()
         {
@@ -36,7 +35,7 @@ namespace Game.Player.UI
             colorChangeCoroutine = StartCoroutine(ChangeColorYoyo(Color.red));
 
             RuntimeManager.PlayOneShot(_alarmEventRef);
-            _music.SetMusicMode(BackgroundMusic.LevelMusicMode.COMBAT_MODE);
+            _music.SetMusicMode(BackgroundMusicManager.LevelMusicMode.COMBAT_MODE);
         }
 
         public void Deactivate()
@@ -49,7 +48,7 @@ namespace Game.Player.UI
             _textMesh.color = Color.white;
             colorChangeCoroutine = null;
 
-            _music.SetMusicMode(BackgroundMusic.LevelMusicMode.SNEAK_MODE);
+            _music.SetMusicMode(BackgroundMusicManager.LevelMusicMode.SNEAK_MODE);
         }
         private IEnumerator ChangeColorYoyo(Color targetColor)
         {

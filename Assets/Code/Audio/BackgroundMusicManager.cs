@@ -4,14 +4,8 @@ using UnityEngine;
 
 namespace Game.Audio
 {
-    public class BackgroundMusic : MonoBehaviour
+    public class BackgroundMusicManager : MonoBehaviour
     {
-        public enum LevelMusicMode
-        {
-            SNEAK_MODE = 0,
-            COMBAT_MODE = 1
-        }
-
         private EventInstance _musicEventInstance;
 
         public void SetMusic(EventReference eventRef)
@@ -43,6 +37,12 @@ namespace Game.Audio
             _musicEventInstance.release();
             _musicEventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             _musicEventInstance = RuntimeManager.CreateInstance(eventRef);
+        }
+
+        public enum LevelMusicMode
+        {
+            SNEAK_MODE = 0,
+            COMBAT_MODE = 1
         }
     }
 }
