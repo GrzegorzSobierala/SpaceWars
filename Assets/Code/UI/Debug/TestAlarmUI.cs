@@ -1,23 +1,29 @@
+using FMOD.Studio;
+using FMODUnity;
+using Game.Audio;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Player.UI
 {
     public class TestAlarmUI : MonoBehaviour
     {
+        [Inject] private BackgroundMusicManager _music;
+
         [SerializeField] private TextMeshProUGUI _textMesh;
-        [SerializeField] private AudioSource _alarmAudioSource;
-        [SerializeField] private AudioSource _sneakyMusicAudioSource;
-        [SerializeField] private AudioSource _combatMusicAudioSource;
         [SerializeField] private float _colorChangeDuration = 1f;
         [SerializeField] private int _maxRepeats = 5;
+
+        [SerializeField] private EventReference _musicEventRef;
+        [SerializeField] private EventReference _alarmEventRef;
+
         private Coroutine colorChangeCoroutine;
 
         private void Start()
         {
-            _sneakyMusicAudioSource.Play();
-            _combatMusicAudioSource.Stop();
+            _music.SetMusic(_musicEventRef);
         }
 
         public void Activate()
@@ -26,11 +32,10 @@ namespace Game.Player.UI
             {
                 StopCoroutine(colorChangeCoroutine);
             }
-
             colorChangeCoroutine = StartCoroutine(ChangeColorYoyo(Color.red));
-            _alarmAudioSource.Play();
-            _sneakyMusicAudioSource.Stop();
-            _combatMusicAudioSource.Play();
+
+            RuntimeManager.PlayOneShot(_alarmEventRef);
+            _music.SetMusicMode(BackgroundMusicManager.LevelMusicMode.COMBAT_MODE);
         }
 
         public void Deactivate()
@@ -42,10 +47,9 @@ namespace Game.Player.UI
 
             _textMesh.color = Color.white;
             colorChangeCoroutine = null;
-            _sneakyMusicAudioSource.Play();
-            _combatMusicAudioSource.Stop();
-        }
 
+            _music.SetMusicMode(BackgroundMusicManager.LevelMusicMode.SNEAK_MODE);
+        }
         private IEnumerator ChangeColorYoyo(Color targetColor)
         {
             Color startColor = _textMesh.color;

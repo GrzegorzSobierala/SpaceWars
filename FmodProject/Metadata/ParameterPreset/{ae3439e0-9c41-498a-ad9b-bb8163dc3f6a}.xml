@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="ParameterPreset" id="{ae3439e0-9c41-498a-ad9b-bb8163dc3f6a}">
+		<property name="name">
+			<value>Mode</value>
+		</property>
+		<relationship name="folder">
+			<destination>{966c1489-b369-490e-b1e9-be5847b35ac9}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{128072ee-8e4c-4177-96a6-efdde19adf16}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{128072ee-8e4c-4177-96a6-efdde19adf16}">
+		<property name="parameterType">
+			<value>2</value>
+		</property>
+		<property name="maximum">
+			<value>2</value>
+		</property>
+		<property name="enumerationLabels">
+			<value>Sneak</value>
+			<value>Combat</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>
