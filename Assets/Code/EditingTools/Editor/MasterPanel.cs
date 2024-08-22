@@ -10,6 +10,7 @@ using Game.Player.Ship;
 using Game.Room.Enemy;
 using UnityEngine.AI;
 using System.Collections.Generic;
+using UnityEditor.PackageManager.UI;
 
 namespace Game.Editor
 {
@@ -26,7 +27,15 @@ namespace Game.Editor
         private bool _wasAppPlayLastFrame = false;
         private bool _isFirstFrameOfAppPlay = false;
         private Dictionary<EnemyMovementBase, float> speedByMovement = new();
-        
+
+        public override void OnEnable()
+        {
+            base.OnEnable();
+
+            _currentTimeScaleText = settings.TimeScale;
+            _currentPlayerHp = settings.PlayerHp;
+            _wasAppPlayLastFrame = Application.isPlaying;
+        }
 
         public override void InstallBindings()
         {
@@ -40,9 +49,6 @@ namespace Game.Editor
             MasterPanel window = (MasterPanel)GetWindow(typeof(MasterPanel));
             window.titleContent = new GUIContent("Master Panel");
             window.Show();
-            window._currentTimeScaleText = window.settings.TimeScale;
-            window._currentPlayerHp = window.settings.PlayerHp;
-            window._wasAppPlayLastFrame = Application.isPlaying;
         }
 
         
@@ -115,7 +121,12 @@ namespace Game.Editor
         {
             GUILayout.Space(10);
             GUILayout.Label("TESTING", EditorStyles.boldLabel);
-            settings.AutoLoadRoom = GUILayout.Toggle(settings.AutoLoadRoom, "Auto load room");
+            bool newAutoLoadRoom = GUILayout.Toggle(settings.AutoLoadRoom, "Auto load room");
+            if (newAutoLoadRoom != settings.AutoLoadRoom)
+            {
+                settings.AutoLoadRoom = newAutoLoadRoom;
+                settingsInstaller.MarkDirty();
+            }
         }
 
         private void TimeScaleTextInput()
@@ -124,16 +135,20 @@ namespace Game.Editor
             string timeScaleText = GUILayout.TextField(_currentTimeScaleText, GUILayout.Width(30));
             GUILayout.Label("TimeScale (0-10)", GUILayout.Width(110));
             GUILayout.EndHorizontal();
-            if (timeScaleText == "")
+
+            if (_currentTimeScaleText != timeScaleText && timeScaleText == "")
             {
                 _currentTimeScaleText = "";
+                settings.TimeScale = _currentTimeScaleText;
+                settingsInstaller.MarkDirty();
             }
             else if ((_currentTimeScaleText != timeScaleText || _isFirstFrameOfAppPlay) && 
                 float.TryParse(timeScaleText, out float timeScale))
             {
                 timeScale = math.clamp(timeScale, 0f, 10f);
                 settings.TimeScale = timeScale.ToString();
-                _currentTimeScaleText = timeScaleText;
+                _currentTimeScaleText = settings.TimeScale;
+                settingsInstaller.MarkDirty();
 
                 if (Application.isPlaying)
                 {
@@ -148,16 +163,20 @@ namespace Game.Editor
             string playerHpText = GUILayout.TextField(_currentPlayerHp, GUILayout.Width(40));
             GUILayout.Label("Player HP (1 - 9999)", GUILayout.Width(130));
             GUILayout.EndHorizontal();
-            if (playerHpText == "")
+
+            if (_currentPlayerHp != playerHpText && playerHpText == "")
             {
                 _currentPlayerHp = "";
+                settings.PlayerHp = _currentPlayerHp;
+                settingsInstaller.MarkDirty();
             }
             else if ((_currentPlayerHp != playerHpText || _isFirstFrameOfAppPlay) &&
                 int.TryParse(playerHpText, out int playerHp))
             {
                 playerHp = math.clamp(playerHp, 1, 9999);
                 settings.PlayerHp = playerHp.ToString();
-                _currentPlayerHp = playerHpText;
+                _currentPlayerHp = settings.PlayerHp;
+                settingsInstaller.MarkDirty();
 
                 if (Application.isPlaying)
                 {
