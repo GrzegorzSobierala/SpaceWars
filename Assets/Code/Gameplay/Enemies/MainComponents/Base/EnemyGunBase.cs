@@ -1,11 +1,15 @@
+using Game.Testing;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
 
 namespace Game.Room.Enemy
 {
     public abstract class EnemyGunBase : MonoBehaviour
     {
+        [Inject] private TestingSettings testingSettings;
+
         [SerializeField] protected UnityEvent OnShoot;
 
         protected Action OnAimTarget;
@@ -126,6 +130,9 @@ namespace Game.Room.Enemy
 
         private void TryShoot()
         {
+            if (!testingSettings.EnableEnemyShooting)
+                return;
+
             if (_isShooting)
             {
                 OnShooting();

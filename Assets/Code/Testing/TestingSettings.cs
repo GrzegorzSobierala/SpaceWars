@@ -9,5 +9,6 @@ namespace Game.Testing
         public string TimeScale = "";
         public string PlayerHp = "";
         public bool ShowEnemiesFov = false;
+        public bool EnableEnemyShooting = false;
     }
 }

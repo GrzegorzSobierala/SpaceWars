@@ -8,10 +8,7 @@ using UnityEngine.SceneManagement;
 using Unity.Mathematics;
 using Game.Player.Ship;
 using Game.Room.Enemy;
-using UnityEngine.AI;
 using System.Collections.Generic;
-using UnityEditor.PackageManager.UI;
-using UnityEditor.TerrainTools;
 
 namespace Game.Editor
 {
@@ -82,12 +79,15 @@ namespace Game.Editor
         
         private void OnGuiNotPlayMode()
         {
+            GUILayout.Label("EDIT MODE PROPERTIES", EditorStyles.boldLabel);
             SceneButtons();
             ShowSelectedFovToogle();
         }
 
         private void OnGuiAlways()
         {
+            GUILayout.Space(10);
+            GUILayout.Label("ALWAYS ON PROPERTIES", EditorStyles.boldLabel);
             TestingProperies();
             TimeScaleTextInput();
             PlayerHpInput();
@@ -95,7 +95,10 @@ namespace Game.Editor
 
         private void OnGuiPlayMode()
         {
+            GUILayout.Space(10);
+            GUILayout.Label("PLAY MODE PROPERTIES", EditorStyles.boldLabel);
             EnemyMovementToggle();
+            EnemyShootingToogle();
         }
 
         private void OnSceneGUI(SceneView sceneView)
@@ -105,7 +108,7 @@ namespace Game.Editor
 
         private void SceneButtons()
         {
-            GUILayout.Label("SCENE MANAGEMENT", EditorStyles.boldLabel);
+            GUILayout.Label("Scene managment", EditorStyles.boldLabel);
 
             if (GUILayout.Button("Start up"))
             {
@@ -127,13 +130,12 @@ namespace Game.Editor
                 Scene scene = SceneManager.GetSceneByName(Scenes.PlayerTesting);
                 SceneManager.SetActiveScene(scene);
             }
+            GUILayout.Space(10);
         }
 
 
         private void TestingProperies()
         {
-            GUILayout.Space(10);
-            GUILayout.Label("TESTING", EditorStyles.boldLabel);
             bool newAutoLoadRoom = GUILayout.Toggle(settings.AutoLoadRoom, "Auto load room");
             if (newAutoLoadRoom != settings.AutoLoadRoom)
             {
@@ -262,12 +264,27 @@ namespace Game.Editor
                             fovs.Add(childFov);
                         }
                     }
-
                 }
                 foreach (var fov in fovs)
                 {
                     fov.DrawViewGizmos();
                 }
+            }
+        }
+
+        private void EnemyShootingToogle()
+        {
+            if (_isFirstFrameOfAppPlay)
+            {
+                settings.EnableEnemyShooting = true;
+            }
+
+            bool newDisableShooting = GUILayout.Toggle(settings.EnableEnemyShooting, "EnemyShooting");
+
+            if (newDisableShooting != settings.EnableEnemyShooting)
+            {
+                settings.EnableEnemyShooting = newDisableShooting;
+                settingsInstaller.MarkDirty();
             }
         }
 
