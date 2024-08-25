@@ -11,6 +11,7 @@ using Game.Room.Enemy;
 using UnityEngine.AI;
 using System.Collections.Generic;
 using UnityEditor.PackageManager.UI;
+using UnityEditor.TerrainTools;
 
 namespace Game.Editor
 {
@@ -28,21 +29,6 @@ namespace Game.Editor
         private bool _isFirstFrameOfAppPlay = false;
         private Dictionary<EnemyMovementBase, float> speedByMovement = new();
 
-        public override void OnEnable()
-        {
-            base.OnEnable();
-
-            _currentTimeScaleText = settings.TimeScale;
-            _currentPlayerHp = settings.PlayerHp;
-            _wasAppPlayLastFrame = Application.isPlaying;
-        }
-
-        public override void InstallBindings()
-        {
-            TestingSettingsInstaller.CheckResources();
-            TestingSettingsInstaller.InstallFromResource(Container);
-        }
-
         [MenuItem("SpaceWars/MasterPanel")]
         private static void Init()
         {
@@ -51,6 +37,26 @@ namespace Game.Editor
             window.Show();
         }
 
+        public override void InstallBindings()
+        {
+            TestingSettingsInstaller.CheckResources();
+            TestingSettingsInstaller.InstallFromResource(Container);
+        }
+
+        public override void OnEnable()
+        {
+            base.OnEnable();
+
+            _currentTimeScaleText = settings.TimeScale;
+            _currentPlayerHp = settings.PlayerHp;
+            _wasAppPlayLastFrame = Application.isPlaying;
+            SceneView.duringSceneGui += OnSceneGUI;
+        }
+
+        public override void OnDisable()
+        {
+            SceneView.duringSceneGui -= OnSceneGUI;
+        }
         
         public override void OnGUI()
         {
@@ -73,9 +79,11 @@ namespace Game.Editor
             _wasAppPlayLastFrame = Application.isPlaying;
         }
 
+        
         private void OnGuiNotPlayMode()
         {
             SceneButtons();
+            ShowSelectedFovToogle();
         }
 
         private void OnGuiAlways()
@@ -88,6 +96,11 @@ namespace Game.Editor
         private void OnGuiPlayMode()
         {
             EnemyMovementToggle();
+        }
+
+        private void OnSceneGUI(SceneView sceneView)
+        {
+            TryShowFovs();
         }
 
         private void SceneButtons()
@@ -213,6 +226,47 @@ namespace Game.Editor
                     {
                         movement.SetSpeedModifier(speedByMovement[movement]);
                     }
+                }
+            }
+        }
+
+        private void ShowSelectedFovToogle()
+        {
+            bool newShowEnemiesFov = GUILayout.Toggle(settings.ShowEnemiesFov, "EnemiesFov (can lag)");
+
+            if(newShowEnemiesFov != settings.ShowEnemiesFov)
+            {
+                settings.ShowEnemiesFov = newShowEnemiesFov;
+                settingsInstaller.MarkDirty();
+            }
+        }
+
+        private void TryShowFovs()
+        {
+            if (settings.ShowEnemiesFov)
+            {
+                List<EnemyFieldOfView> fovs = new();
+                foreach (var go in Selection.gameObjects)
+                {
+                    if (go.TryGetComponent(out EnemyFieldOfView fov))
+                    {
+                        if (!fovs.Contains(fov))
+                        {
+                            fovs.Add(fov);
+                        }
+                    }
+                    foreach (var childFov in go.GetComponentsInChildren<EnemyFieldOfView>())
+                    {
+                        if (!fovs.Contains(childFov))
+                        {
+                            fovs.Add(childFov);
+                        }
+                    }
+
+                }
+                foreach (var fov in fovs)
+                {
+                    fov.DrawViewGizmos();
                 }
             }
         }

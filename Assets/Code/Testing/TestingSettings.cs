@@ -8,5 +8,6 @@ namespace Game.Testing
         public bool AutoLoadRoom = false;
         public string TimeScale = "";
         public string PlayerHp = "";
+        public bool ShowEnemiesFov = false;
     }
 }
