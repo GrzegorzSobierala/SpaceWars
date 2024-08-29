@@ -12,13 +12,14 @@ namespace Game.Room.Enemy
         public float CurrentAngularSpeed => _baseAngularSpeed * _angularSpeedModifier;
         public float DeltaTime => UseFixedUpdate ? Time.fixedDeltaTime : Time.deltaTime;
 
+        public float BaseSpeed => _baseSpeed;
+        public float BaseSpeedForce => _baseSpeedForce;
+        public float BaseAngularSpeed => _baseAngularSpeed;
+        public float CurrentSpeedModifier => _speedModifier;
+        public float CurrentAngularSpeedModifier => _angularSpeedModifier;
+
         protected Action OnAchivedTarget;
         protected Action OnChangedTarget;
-
-        protected float BaseSpeed => _baseSpeed;
-        protected float BaseSpeedForce => _baseSpeedForce;
-        protected float BaseAngularSpeed => _baseAngularSpeed;
-        protected float CurrentSpeedModifier => _speedModifier;
 
         [Inject] protected Rigidbody2D _body;
 
