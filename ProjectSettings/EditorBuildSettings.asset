@@ -5,16 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/PlayerTesting.unity
-    guid: 0eada07d2119cf9459a08667516fccfb
   - enabled: 0
-    path: Assets/Scenes/MainManagment.unity
+    path: Assets/Scenes/MainScenes/GameInit.unity
     guid: dfd56348d7505c545aae933234c00805
   - enabled: 0
-    path: Assets/Scenes/MainMenu.unity
+    path: Assets/Scenes/MainScenes/MainMenu.unity
     guid: 2098a31c58f33b1479c3dc0f783fae76
   - enabled: 1
-    path: Assets/Scenes/RoomTesting.unity
+    path: Assets/Scenes/MainScenes/PlayerTesting.unity
+    guid: 0eada07d2119cf9459a08667516fccfb
+  - enabled: 1
+    path: Assets/Scenes/Rooms/RoomTesting.unity
     guid: b8ed5a619f068d544a99e859e3e5cd5e
   m_configObjects: {}

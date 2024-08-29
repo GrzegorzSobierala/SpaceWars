@@ -4,15 +4,15 @@ namespace Game.Utility.Globals
     {
         #region SingeScenes
         public static readonly string MainMenu = "MainMenu";
-        public static readonly string PlayerTesting = "PlayerTesting";
+        public static readonly string PlayerTesting = "PlayerScene";
         public static readonly string RoomTesting = "RoomTesting";
-        public static readonly string MainManagment = "MainManagment";
+        public static readonly string GameInit = "GameInit";
         #endregion
 
         #region MultiScenes
         public static readonly string[] MainMenuMulti = { MainMenu };
-        public static readonly string[] TestingMulti = { PlayerTesting ,RoomTesting };
-        public static readonly string[] MainManagmentMulti = { MainManagment };
+        public static readonly string[] TestingMulti = { PlayerTesting, RoomTesting };
+        public static readonly string[] GameInitMulti = { GameInit };
         #endregion
     }
 }

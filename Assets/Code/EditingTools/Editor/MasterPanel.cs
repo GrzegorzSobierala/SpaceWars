@@ -17,7 +17,6 @@ namespace Game.Editor
         [Inject] private TestingSettings settings;
         [Inject] private TestingSettingsInstaller settingsInstaller;
 
-        private static string scenePath = "Assets/Scenes/";
         private static Vector2 scroll;
         private string _currentTimeScaleText = "";
         private string _currentPlayerHp = "";
@@ -113,7 +112,7 @@ namespace Game.Editor
             if (GUILayout.Button("Start up"))
             {
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-                LoadSceneGroup(Scenes.MainManagmentMulti);
+                LoadSceneGroup(Scenes.GameInitMulti);
             }
 
             if (GUILayout.Button("Main menu"))
@@ -292,11 +291,28 @@ namespace Game.Editor
         {
             for (int i = 0; i < scenes.Length; ++i)
             {
-                string path = scenePath + scenes[i] + ".unity";
+                string path = GetScenePathByName(scenes[i]);
                 EditorSceneManager.OpenScene(path, i == 0 ? OpenSceneMode.Single : OpenSceneMode.Additive);
             }
 
             EditorSceneManager.SetActiveScene(EditorSceneManager.GetSceneByName(scenes[scenes.Length - 1]));
+        }
+
+        private string GetScenePathByName(string sceneName)
+        {
+            string[] sceneGUIDs = AssetDatabase.FindAssets("t:Scene");
+
+            foreach (string guid in sceneGUIDs)
+            {
+                string scenePath = AssetDatabase.GUIDToAssetPath(guid);
+                string sceneAssetName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
+                if (sceneAssetName == sceneName)
+                {
+                    return scenePath; 
+                }
+            }
+            Debug.LogError($"Scene with name '{sceneName}' not found in the project.");
+            return null;
         }
     }
 }
