@@ -194,7 +194,7 @@ namespace Game.Editor
 
                 if (Application.isPlaying)
                 {
-                    FindObjectOfType<HullModuleBase>().DEBUG_SetHp(playerHp);
+                    FindObjectOfType<HullModuleBase>().DEBUG_TrySetHp(_currentPlayerHp);
                 }
             }
         }
