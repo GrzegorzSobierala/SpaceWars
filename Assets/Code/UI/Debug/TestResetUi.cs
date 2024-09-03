@@ -17,6 +17,7 @@ namespace Game.Player.UI
         [Inject] private TestingSettings _testingSettings;
         [Inject] private TestAlarmUI _alarmUI;
         [Inject] private PlayerManager _playerManager;
+        [Inject] private TestingSettings _testing;
 
         [SerializeField] private Button _onOffButton;
         [SerializeField] private GameObject _panel;
@@ -105,7 +106,16 @@ namespace Game.Player.UI
 
         private void OffPanel()
         {
-            Time.timeScale = 1;
+            if(float.TryParse(_testing.TimeScale, out float testScale))
+            {
+                Time.timeScale = testScale;
+            }
+            else
+            {
+                Time.timeScale = 1;
+            }
+
+
             _inputProvider.SetGameplayInput();
             _panel.SetActive(false);
         }
