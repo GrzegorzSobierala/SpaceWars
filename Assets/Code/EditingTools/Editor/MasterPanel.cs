@@ -14,8 +14,8 @@ namespace Game.Editor
 {
     public class MasterPanel : ZenjectEditorWindow
     {
-        [Inject] private TestingSettings settings;
-        [Inject] private TestingSettingsInstaller settingsInstaller;
+        [Inject] private TestingSettings _settings;
+        [Inject] private TestingSettingsInstaller _settingsInstaller;
 
         private static Vector2 scroll;
         private string _currentTimeScaleText = "";
@@ -43,14 +43,15 @@ namespace Game.Editor
         {
             base.OnEnable();
 
-            _currentTimeScaleText = settings.TimeScale;
-            _currentPlayerHp = settings.PlayerHp;
+            _currentTimeScaleText = _settings.TimeScale;
+            _currentPlayerHp = _settings.PlayerHp;
             _wasAppPlayLastFrame = Application.isPlaying;
             SceneView.duringSceneGui += OnSceneGUI;
         }
 
         public override void OnDisable()
         {
+            _settings.EnemySpeedMulti = 1;
             SceneView.duringSceneGui -= OnSceneGUI;
         }
         
@@ -75,7 +76,6 @@ namespace Game.Editor
             _wasAppPlayLastFrame = Application.isPlaying;
         }
 
-        
         private void OnGuiNotPlayMode()
         {
             GUILayout.Label("EDIT MODE PROPERTIES", EditorStyles.boldLabel);
@@ -135,11 +135,11 @@ namespace Game.Editor
 
         private void TestingProperies()
         {
-            bool newAutoLoadRoom = GUILayout.Toggle(settings.AutoLoadRoom, "Auto load room");
-            if (newAutoLoadRoom != settings.AutoLoadRoom)
+            bool newAutoLoadRoom = GUILayout.Toggle(_settings.AutoLoadRoom, "Auto load room");
+            if (newAutoLoadRoom != _settings.AutoLoadRoom)
             {
-                settings.AutoLoadRoom = newAutoLoadRoom;
-                settingsInstaller.MarkDirty();
+                _settings.AutoLoadRoom = newAutoLoadRoom;
+                _settingsInstaller.MarkDirty();
             }
         }
 
@@ -153,16 +153,16 @@ namespace Game.Editor
             if (_currentTimeScaleText != timeScaleText && timeScaleText == "")
             {
                 _currentTimeScaleText = "";
-                settings.TimeScale = _currentTimeScaleText;
-                settingsInstaller.MarkDirty();
+                _settings.TimeScale = _currentTimeScaleText;
+                _settingsInstaller.MarkDirty();
             }
             else if ((_currentTimeScaleText != timeScaleText || _isFirstFrameOfAppPlay) && 
                 float.TryParse(timeScaleText, out float timeScale))
             {
                 timeScale = math.clamp(timeScale, 0f, 10f);
-                settings.TimeScale = timeScale.ToString();
-                _currentTimeScaleText = settings.TimeScale;
-                settingsInstaller.MarkDirty();
+                _settings.TimeScale = timeScale.ToString();
+                _currentTimeScaleText = _settings.TimeScale;
+                _settingsInstaller.MarkDirty();
 
                 if (Application.isPlaying)
                 {
@@ -181,16 +181,16 @@ namespace Game.Editor
             if (_currentPlayerHp != playerHpText && playerHpText == "")
             {
                 _currentPlayerHp = "";
-                settings.PlayerHp = _currentPlayerHp;
-                settingsInstaller.MarkDirty();
+                _settings.PlayerHp = _currentPlayerHp;
+                _settingsInstaller.MarkDirty();
             }
             else if ((_currentPlayerHp != playerHpText || _isFirstFrameOfAppPlay) &&
                 int.TryParse(playerHpText, out int playerHp))
             {
                 playerHp = math.clamp(playerHp, 1, 9999);
-                settings.PlayerHp = playerHp.ToString();
-                _currentPlayerHp = settings.PlayerHp;
-                settingsInstaller.MarkDirty();
+                _settings.PlayerHp = playerHp.ToString();
+                _currentPlayerHp = _settings.PlayerHp;
+                _settingsInstaller.MarkDirty();
 
                 if (Application.isPlaying)
                 {
@@ -222,10 +222,12 @@ namespace Game.Editor
                     {
                         speedByMovement.Add(movement, movement.CurrentSpeedModifier);
                         movement.SetSpeedModifier(0);
+                        _settings.EnemySpeedMulti = 0;
                     }
                     else if(movement.CurrentSpeedModifier == 0 && speedByMovement.ContainsKey(movement))
                     {
                         movement.SetSpeedModifier(speedByMovement[movement]);
+                        _settings.EnemySpeedMulti = 1;
                     }
                 }
             }
@@ -233,18 +235,18 @@ namespace Game.Editor
 
         private void ShowSelectedFovToogle()
         {
-            bool newShowEnemiesFov = GUILayout.Toggle(settings.ShowEnemiesFov, "EnemiesFov (can lag)");
+            bool newShowEnemiesFov = GUILayout.Toggle(_settings.ShowEnemiesFov, "EnemiesFov (can lag)");
 
-            if(newShowEnemiesFov != settings.ShowEnemiesFov)
+            if(newShowEnemiesFov != _settings.ShowEnemiesFov)
             {
-                settings.ShowEnemiesFov = newShowEnemiesFov;
-                settingsInstaller.MarkDirty();
+                _settings.ShowEnemiesFov = newShowEnemiesFov;
+                _settingsInstaller.MarkDirty();
             }
         }
 
         private void TryShowFovs()
         {
-            if (settings.ShowEnemiesFov)
+            if (_settings.ShowEnemiesFov)
             {
                 List<EnemyFieldOfView> fovs = new();
                 foreach (var go in Selection.gameObjects)
@@ -275,15 +277,15 @@ namespace Game.Editor
         {
             if (_isFirstFrameOfAppPlay)
             {
-                settings.EnableEnemyShooting = true;
+                _settings.EnableEnemyShooting = true;
             }
 
-            bool newDisableShooting = GUILayout.Toggle(settings.EnableEnemyShooting, "EnemyShooting");
+            bool newDisableShooting = GUILayout.Toggle(_settings.EnableEnemyShooting, "EnemyShooting");
 
-            if (newDisableShooting != settings.EnableEnemyShooting)
+            if (newDisableShooting != _settings.EnableEnemyShooting)
             {
-                settings.EnableEnemyShooting = newDisableShooting;
-                settingsInstaller.MarkDirty();
+                _settings.EnableEnemyShooting = newDisableShooting;
+                _settingsInstaller.MarkDirty();
             }
         }
 

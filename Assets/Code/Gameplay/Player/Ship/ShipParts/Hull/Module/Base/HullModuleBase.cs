@@ -107,7 +107,6 @@ namespace Game.Player.Ship
             {
                 Debug.LogError($"Can't parse {nameof(hpString)}: {hpString} to float");
             }
-
         }
 
         private void GetDefeated()

@@ -1,3 +1,4 @@
+using Game.Testing;
 using System;
 using UnityEngine;
 using Zenject;
@@ -8,10 +9,9 @@ namespace Game.Room.Enemy
     {
         public abstract bool UseFixedUpdate { get; }
 
-        public float CurrentSpeed => _baseSpeed * _speedModifier;
+        public float CurrentSpeed => _baseSpeed * _speedModifier * _test.EnemySpeedMulti;
         public float CurrentAngularSpeed => _baseAngularSpeed * _angularSpeedModifier;
         public float DeltaTime => UseFixedUpdate ? Time.fixedDeltaTime : Time.deltaTime;
-
         public float BaseSpeed => _baseSpeed;
         public float BaseSpeedForce => _baseSpeedForce;
         public float BaseAngularSpeed => _baseAngularSpeed;
@@ -22,6 +22,7 @@ namespace Game.Room.Enemy
         protected Action OnChangedTarget;
 
         [Inject] protected Rigidbody2D _body;
+        [Inject] protected TestingSettings _test;
 
         [SerializeField] private float _baseSpeed;
         [SerializeField] private float _baseAngularSpeed;
