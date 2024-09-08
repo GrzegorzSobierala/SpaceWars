@@ -2,6 +2,7 @@ using CodeMonkey.Utils;
 using Game.Management;
 using Game.Utility;
 using Game.Utility.Globals;
+using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

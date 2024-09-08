@@ -24,20 +24,20 @@ namespace Game.Room
 
         public void Load()
         {
-            if (!SceneManager.GetSceneByName(Scenes.RoomTesting).isLoaded)
+            if (!SceneManager.GetSceneByName(Scenes.CargoTestRoom).isLoaded)
             {
-                _sceneLoader.LoadScene(Scenes.RoomTesting, LoadSceneMode.Additive);
+                _sceneLoader.LoadScene(Scenes.CargoTestRoom, LoadSceneMode.Additive);
             }
         }
 
         public void RestartRoom()
         { 
-            if(SceneManager.GetSceneByName(Scenes.RoomTesting).isLoaded)
+            if(SceneManager.GetSceneByName(Scenes.CargoTestRoom).isLoaded)
             {
-                SceneManager.UnloadSceneAsync(Scenes.RoomTesting);
+                SceneManager.UnloadSceneAsync(Scenes.CargoTestRoom);
             }
 
-            _sceneLoader.LoadScene(Scenes.RoomTesting, LoadSceneMode.Additive);
+            _sceneLoader.LoadScene(Scenes.CargoTestRoom, LoadSceneMode.Additive);
             _playerManager.PlayerBody.position = Vector2.zero;
             _playerManager.PlayerBody.rotation = 0;
         }

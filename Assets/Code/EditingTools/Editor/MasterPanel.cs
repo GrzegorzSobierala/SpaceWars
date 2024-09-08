@@ -126,7 +126,7 @@ namespace Game.Editor
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
                 LoadSceneGroup(Scenes.TestingMulti);
 
-                Scene scene = SceneManager.GetSceneByName(Scenes.PlayerTesting);
+                Scene scene = SceneManager.GetSceneByName(Scenes.Player);
                 SceneManager.SetActiveScene(scene);
             }
             GUILayout.Space(10);
@@ -235,7 +235,7 @@ namespace Game.Editor
 
         private void ShowSelectedFovToogle()
         {
-            bool newShowEnemiesFov = GUILayout.Toggle(_settings.ShowEnemiesFov, "EnemiesFov (can lag)");
+            bool newShowEnemiesFov = GUILayout.Toggle(_settings.ShowEnemiesFov, "Show selected enemies FOV");
 
             if(newShowEnemiesFov != _settings.ShowEnemiesFov)
             {
