@@ -23,6 +23,8 @@ namespace Game.Management
 
         private const UnloadSceneOptions UNLOAD_OPTION = UnloadSceneOptions.UnloadAllEmbeddedSceneObjects;
 
+        private bool _isLoading = false;
+
         public TaskAwaiter LoadMainMenu()
         {
             string [] unloadScenes = _roomScenes.
@@ -43,26 +45,43 @@ namespace Game.Management
             return ReloadScenes(new string[] {_hubScene}, new string[] {roomScene}).GetAwaiter();
         }
 
+        public TaskAwaiter ReloadCurrentRoom()
+        {
+            string roomName = string.Empty;
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                Scene activeScene = SceneManager.GetSceneAt(i);
+                if (_roomScenes.Contains(activeScene.name))
+                {
+                    roomName = activeScene.name;
+                    break;
+                }
+            }
+
+            if(roomName == string.Empty)
+            {
+                Debug.LogError("ThereIsNoRoomToReload");
+                return new TaskAwaiter();
+            }
+
+            return ReloadScenes(new string[] { roomName }, new string[] { roomName }).GetAwaiter();
+        }
+
         private async Task ReloadScenes(string[] unloadScenes, string[] loadScenes)
         {
+            if(!TryMarkLoading())
+                return;
+
             await CreateTask(_sceneLoader.LoadSceneAsync(_loadingScene, LoadSceneMode.Additive));
             await TryUnloadScenes(unloadScenes);
             await CreateTask(Resources.UnloadUnusedAssets());
             await TryLoadScenes(loadScenes);
             await CreateTask(SceneManager.UnloadSceneAsync(_loadingScene, UNLOAD_OPTION));
+            TryUnmarkLoading();
         }
 
         private async Task TryUnloadScenes(string[] scenes)
         {
-            //for (int i = 0; i < SceneManager.sceneCount; i++)
-            //{
-            //    Scene scene = SceneManager.GetSceneAt(i);
-            //    if (!scenes.Contains(scene.name))
-            //        continue;
-            //
-            //    await CreateTask(SceneManager.UnloadSceneAsync(scene.name, UNLOAD_OPTION));
-            //}
-
             foreach (var scene in scenes)
             {
                 bool contains = false;
@@ -103,19 +122,6 @@ namespace Game.Management
                     await CreateTask(_sceneLoader.LoadSceneAsync(scene, LoadSceneMode.Additive));
                 }
             }
-
-
-
-            //for (int i = 0; i < SceneManager.sceneCount; i++)
-            //{
-            //    Scene scene = SceneManager.GetSceneAt(i);
-            //    if (!scenes.Contains(scene.name))
-            //    {
-            //        await CreateTask(_sceneLoader.LoadSceneAsync(scene.name, LoadSceneMode.Additive));
-            //        continue;
-            //    }
-            //
-            //}
         }
 
         private Task CreateTask(AsyncOperation operation)
@@ -123,6 +129,34 @@ namespace Game.Management
             var tcs = new TaskCompletionSource<bool>();
             operation.completed += (AsyncOperation op) => tcs.SetResult(true);
             return tcs.Task;
+        }
+
+        private bool TryMarkLoading()
+        {
+            if(_isLoading)
+            {
+                Debug.LogError("Is loading");
+                return false;
+            }
+            else
+            {
+                _isLoading = true;
+                return true;
+            }
+        }
+
+        private bool TryUnmarkLoading()
+        {
+            if (_isLoading)
+            {
+                _isLoading = false;
+                return true;
+            }
+            else
+            {
+                Debug.LogError("Isn't loading");
+                return false;
+            }
         }
 
         [Button]

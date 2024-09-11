@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using Zenject;
 using Game.Management;
@@ -21,7 +20,7 @@ namespace Game.Player.UI
 
         private List<EnemyBase> enemyPositions => _sceneManager.RoomEnemies;
 
-        void Update()
+        private void Update()
         {
             // Update nearest enemy
             nearestEnemy = GetNearestEnemy();
@@ -52,6 +51,11 @@ namespace Game.Player.UI
         {
             // Clear the list of visible enemies
             List<Transform> visibleEnemies = new List<Transform>();
+
+            if(enemyPositions == null)
+            {
+                return null;
+            }
 
             // Find visible enemies
             foreach (EnemyBase enemy in enemyPositions)
@@ -107,7 +111,5 @@ namespace Game.Player.UI
             Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, dirToEnemy);
             pointer.transform.rotation = targetRotation;
         }
-
-
     }
 }
