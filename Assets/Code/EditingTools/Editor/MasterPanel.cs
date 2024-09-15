@@ -129,7 +129,7 @@ namespace Game.Editor
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
                 LoadSceneGroup(new string[] { _scenesData.PlayerScene, _scenesData.HubScene});
 
-                Scene scene = SceneManager.GetSceneByName(Scenes.Player);
+                Scene scene = SceneManager.GetSceneByName(_scenesData.PlayerScene);
                 SceneManager.SetActiveScene(scene);
             }
 
@@ -145,7 +145,7 @@ namespace Game.Editor
                 LoadSceneGroup(new string[] {_scenesData.PlayerScene,
                     _scenesData.RoomScenes[_settings.RoomSceneIndex]});
 
-                Scene scene = SceneManager.GetSceneByName(Scenes.Player);
+                Scene scene = SceneManager.GetSceneByName(_scenesData.PlayerScene);
                 SceneManager.SetActiveScene(scene);
             }
 

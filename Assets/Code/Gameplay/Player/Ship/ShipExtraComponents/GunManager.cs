@@ -1,6 +1,5 @@
 using Game.Input.System;
 using Game.Utility;
-using NaughtyAttributes;
 using System;
 using UnityEngine;
 using Zenject;

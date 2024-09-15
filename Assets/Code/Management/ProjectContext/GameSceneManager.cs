@@ -157,18 +157,6 @@ namespace Game.Management
         }
 
         [Button]
-        private void DEBUG_MainMenu()
-        {
-            LoadMainMenu();
-        }
-
-        [Button]
-        private void DEBUG_Hub()
-        {
-            LoadHub();
-        }
-
-        [Button]
         private void DEBUG_LoadRoom()
         {
             LoadRoom(_DEBUG_sceneToLoad);
