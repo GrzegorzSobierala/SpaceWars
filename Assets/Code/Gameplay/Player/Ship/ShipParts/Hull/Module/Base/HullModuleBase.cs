@@ -5,6 +5,7 @@ using UnityEngine;
 using Zenject;
 using Game.Combat;
 using Game.Management;
+using Game.Testing;
 
 namespace Game.Player.Ship
 {
@@ -18,6 +19,7 @@ namespace Game.Player.Ship
 
         [Inject] protected List<DamageHandlerBase> _damageHandlers;
         [Inject] protected PlayerManager _playerManager;
+        [Inject] protected TestingSettings _testingSettings;
 
         [SerializeField] protected Transform _gunSpot;
         [SerializeField] protected Transform _bridgeSpot;
@@ -88,11 +90,23 @@ namespace Game.Player.Ship
         {
             _maxHp = _baseHp;
             _currentHp = _baseHp;
+
+            DEBUG_TrySetHp(_testingSettings.PlayerHp);
         }
 
-        public void DEBUG_SetHp(int hp)
+        public void DEBUG_TrySetHp(string hpString)
         {
-            _currentHp = hp;
+            if (string.IsNullOrEmpty(hpString))
+                return;
+
+            if(float.TryParse(hpString,  out float hp))
+            {
+                _currentHp = hp;   
+            }
+            else
+            {
+                Debug.LogError($"Can't parse {nameof(hpString)}: {hpString} to float");
+            }
         }
 
         private void GetDefeated()

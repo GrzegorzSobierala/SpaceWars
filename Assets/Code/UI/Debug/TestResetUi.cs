@@ -12,11 +12,11 @@ namespace Game.Player.UI
 {
     public class TestResetUi : MonoBehaviour
     {
-        [Inject] private PlayerSceneManager _testSceneManager;
+        [Inject] private PlayerSceneManager _playerSceneManager;
         [Inject] private InputProvider _inputProvider;
-        [Inject] private TestingSettings _testingSettings;
         [Inject] private TestAlarmUI _alarmUI;
         [Inject] private PlayerManager _playerManager;
+        [Inject] private TestingSettings _testing;
 
         [SerializeField] private Button _onOffButton;
         [SerializeField] private GameObject _panel;
@@ -28,19 +28,6 @@ namespace Game.Player.UI
 
         private float _startRoomTime = 0;
         private List<float> _winTimes = new List<float>();
-
-        private void Start()
-        {
-            if (_testingSettings.AutoLoadRoom)
-            {
-                _inputProvider.SetGameplayInput();
-                _testSceneManager.Load();
-            }
-            else
-            {
-                OnPanel();
-            }
-        }
 
         private void OnEnable()
         {
@@ -79,7 +66,7 @@ namespace Game.Player.UI
             _restartButton.onClick.AddListener(Restart);
             _exitButton.onClick.AddListener(ExitGame);
             _playerManager.OnPlayerDied += OnDeadPlayer;
-            _testSceneManager.OnRoomMainObjectiveCompleted += OnRoomClear;
+            _playerSceneManager.OnRoomMainObjectiveCompleted += OnRoomClear;
         }
 
         private void Unsubscribe()
@@ -88,7 +75,7 @@ namespace Game.Player.UI
             _restartButton.onClick.RemoveListener(Restart);
             _exitButton.onClick.RemoveListener(ExitGame);
             _playerManager.OnPlayerDied -= OnDeadPlayer;
-            _testSceneManager.OnRoomMainObjectiveCompleted -= OnRoomClear;
+            _playerSceneManager.OnRoomMainObjectiveCompleted -= OnRoomClear;
         }
 
         private void OnOffPanel()
@@ -105,7 +92,15 @@ namespace Game.Player.UI
 
         private void OffPanel()
         {
-            Time.timeScale = 1;
+            if(float.TryParse(_testing.TimeScale, out float testScale))
+            {
+                Time.timeScale = testScale;
+            }
+            else
+            {
+                Time.timeScale = 1;
+            }
+
             _inputProvider.SetGameplayInput();
             _panel.SetActive(false);
         }
@@ -113,14 +108,18 @@ namespace Game.Player.UI
         private void OnPanel()
         {
             Time.timeScale = 0;
-            _inputProvider.SetGameplayInput();
+            _inputProvider.SetUiInput();
             _panel.SetActive(true);
         }
 
         private void Restart()
         {
+            _playerSceneManager.RestartRoom().OnCompleted(OnRestarted);
+        }
+
+        private void OnRestarted()
+        {
             _startRoomTime = Time.time;
-            _testSceneManager.RestartRoom();
             OffPanel();
             _alarmUI.Deactivate();
             _onOffButton.gameObject.SetActive(true);

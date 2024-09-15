@@ -9,15 +9,16 @@ using Unity.Mathematics;
 using Game.Player.Ship;
 using Game.Room.Enemy;
 using System.Collections.Generic;
+using Game.Management;
 
 namespace Game.Editor
 {
     public class MasterPanel : ZenjectEditorWindow
     {
-        [Inject] private TestingSettings settings;
-        [Inject] private TestingSettingsInstaller settingsInstaller;
+        [Inject] private TestingSettings _settings;
+        [Inject] private TestingSettingsInstaller _settingsInstaller;
+        [Inject] private ScenesData _scenesData;
 
-        private static string scenePath = "Assets/Scenes/";
         private static Vector2 scroll;
         private string _currentTimeScaleText = "";
         private string _currentPlayerHp = "";
@@ -38,20 +39,22 @@ namespace Game.Editor
         {
             TestingSettingsInstaller.CheckResources();
             TestingSettingsInstaller.InstallFromResource(Container);
+            ScenesData.InstallFromResource(Container);
         }
 
         public override void OnEnable()
         {
             base.OnEnable();
 
-            _currentTimeScaleText = settings.TimeScale;
-            _currentPlayerHp = settings.PlayerHp;
+            _currentTimeScaleText = _settings.TimeScale;
+            _currentPlayerHp = _settings.PlayerHp;
             _wasAppPlayLastFrame = Application.isPlaying;
             SceneView.duringSceneGui += OnSceneGUI;
         }
 
         public override void OnDisable()
         {
+            _settings.EnemySpeedMulti = 1;
             SceneView.duringSceneGui -= OnSceneGUI;
         }
         
@@ -76,7 +79,6 @@ namespace Game.Editor
             _wasAppPlayLastFrame = Application.isPlaying;
         }
 
-        
         private void OnGuiNotPlayMode()
         {
             GUILayout.Label("EDIT MODE PROPERTIES", EditorStyles.boldLabel);
@@ -110,37 +112,57 @@ namespace Game.Editor
         {
             GUILayout.Label("Scene managment", EditorStyles.boldLabel);
 
-            if (GUILayout.Button("Start up"))
-            {
-                EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-                LoadSceneGroup(Scenes.MainManagmentMulti);
-            }
-
             if (GUILayout.Button("Main menu"))
             {
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-                LoadSceneGroup(Scenes.MainMenuMulti);
+                LoadSceneGroup(new string[] {_scenesData.MainMeneScene});
             }
 
-            if (GUILayout.Button("Testing"))
+            if (GUILayout.Button("Loading"))
             {
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-                LoadSceneGroup(Scenes.TestingMulti);
+                LoadSceneGroup(new string[] {_scenesData.LoadingScene});
+            }
 
-                Scene scene = SceneManager.GetSceneByName(Scenes.PlayerTesting);
+            if (GUILayout.Button("Hub"))
+            {
+                EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+                LoadSceneGroup(new string[] { _scenesData.PlayerScene, _scenesData.HubScene});
+
+                Scene scene = SceneManager.GetSceneByName(Scenes.Player);
                 SceneManager.SetActiveScene(scene);
             }
+
+            if (GUILayout.Button("Room scene"))
+            {
+                EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+
+                if(_scenesData.RoomScenes.Length <= _settings.RoomSceneIndex)
+                {
+                    _settings.RoomSceneIndex = 0;
+                }    
+
+                LoadSceneGroup(new string[] {_scenesData.PlayerScene,
+                    _scenesData.RoomScenes[_settings.RoomSceneIndex]});
+
+                Scene scene = SceneManager.GetSceneByName(Scenes.Player);
+                SceneManager.SetActiveScene(scene);
+            }
+
+            _settings.RoomSceneIndex = EditorGUILayout.Popup(
+                "Room scene to load", _settings.RoomSceneIndex, _scenesData.RoomScenes);
+
             GUILayout.Space(10);
         }
 
 
         private void TestingProperies()
         {
-            bool newAutoLoadRoom = GUILayout.Toggle(settings.AutoLoadRoom, "Auto load room");
-            if (newAutoLoadRoom != settings.AutoLoadRoom)
+            bool newAutoLoadRoom = GUILayout.Toggle(_settings.AutoLoadRoom, "Auto load room");
+            if (newAutoLoadRoom != _settings.AutoLoadRoom)
             {
-                settings.AutoLoadRoom = newAutoLoadRoom;
-                settingsInstaller.MarkDirty();
+                _settings.AutoLoadRoom = newAutoLoadRoom;
+                _settingsInstaller.MarkDirty();
             }
         }
 
@@ -154,16 +176,16 @@ namespace Game.Editor
             if (_currentTimeScaleText != timeScaleText && timeScaleText == "")
             {
                 _currentTimeScaleText = "";
-                settings.TimeScale = _currentTimeScaleText;
-                settingsInstaller.MarkDirty();
+                _settings.TimeScale = _currentTimeScaleText;
+                _settingsInstaller.MarkDirty();
             }
             else if ((_currentTimeScaleText != timeScaleText || _isFirstFrameOfAppPlay) && 
                 float.TryParse(timeScaleText, out float timeScale))
             {
                 timeScale = math.clamp(timeScale, 0f, 10f);
-                settings.TimeScale = timeScale.ToString();
-                _currentTimeScaleText = settings.TimeScale;
-                settingsInstaller.MarkDirty();
+                _settings.TimeScale = timeScale.ToString();
+                _currentTimeScaleText = _settings.TimeScale;
+                _settingsInstaller.MarkDirty();
 
                 if (Application.isPlaying)
                 {
@@ -182,20 +204,20 @@ namespace Game.Editor
             if (_currentPlayerHp != playerHpText && playerHpText == "")
             {
                 _currentPlayerHp = "";
-                settings.PlayerHp = _currentPlayerHp;
-                settingsInstaller.MarkDirty();
+                _settings.PlayerHp = _currentPlayerHp;
+                _settingsInstaller.MarkDirty();
             }
             else if ((_currentPlayerHp != playerHpText || _isFirstFrameOfAppPlay) &&
                 int.TryParse(playerHpText, out int playerHp))
             {
                 playerHp = math.clamp(playerHp, 1, 9999);
-                settings.PlayerHp = playerHp.ToString();
-                _currentPlayerHp = settings.PlayerHp;
-                settingsInstaller.MarkDirty();
+                _settings.PlayerHp = playerHp.ToString();
+                _currentPlayerHp = _settings.PlayerHp;
+                _settingsInstaller.MarkDirty();
 
                 if (Application.isPlaying)
                 {
-                    FindObjectOfType<HullModuleBase>().DEBUG_SetHp(playerHp);
+                    FindObjectOfType<HullModuleBase>().DEBUG_TrySetHp(_currentPlayerHp);
                 }
             }
         }
@@ -223,10 +245,12 @@ namespace Game.Editor
                     {
                         speedByMovement.Add(movement, movement.CurrentSpeedModifier);
                         movement.SetSpeedModifier(0);
+                        _settings.EnemySpeedMulti = 0;
                     }
                     else if(movement.CurrentSpeedModifier == 0 && speedByMovement.ContainsKey(movement))
                     {
                         movement.SetSpeedModifier(speedByMovement[movement]);
+                        _settings.EnemySpeedMulti = 1;
                     }
                 }
             }
@@ -234,18 +258,18 @@ namespace Game.Editor
 
         private void ShowSelectedFovToogle()
         {
-            bool newShowEnemiesFov = GUILayout.Toggle(settings.ShowEnemiesFov, "EnemiesFov (can lag)");
+            bool newShowEnemiesFov = GUILayout.Toggle(_settings.ShowEnemiesFov, "Show selected enemies FOV");
 
-            if(newShowEnemiesFov != settings.ShowEnemiesFov)
+            if(newShowEnemiesFov != _settings.ShowEnemiesFov)
             {
-                settings.ShowEnemiesFov = newShowEnemiesFov;
-                settingsInstaller.MarkDirty();
+                _settings.ShowEnemiesFov = newShowEnemiesFov;
+                _settingsInstaller.MarkDirty();
             }
         }
 
         private void TryShowFovs()
         {
-            if (settings.ShowEnemiesFov)
+            if (_settings.ShowEnemiesFov)
             {
                 List<EnemyFieldOfView> fovs = new();
                 foreach (var go in Selection.gameObjects)
@@ -276,15 +300,15 @@ namespace Game.Editor
         {
             if (_isFirstFrameOfAppPlay)
             {
-                settings.EnableEnemyShooting = true;
+                _settings.EnableEnemyShooting = true;
             }
 
-            bool newDisableShooting = GUILayout.Toggle(settings.EnableEnemyShooting, "EnemyShooting");
+            bool newDisableShooting = GUILayout.Toggle(_settings.EnableEnemyShooting, "EnemyShooting");
 
-            if (newDisableShooting != settings.EnableEnemyShooting)
+            if (newDisableShooting != _settings.EnableEnemyShooting)
             {
-                settings.EnableEnemyShooting = newDisableShooting;
-                settingsInstaller.MarkDirty();
+                _settings.EnableEnemyShooting = newDisableShooting;
+                _settingsInstaller.MarkDirty();
             }
         }
 
@@ -292,11 +316,28 @@ namespace Game.Editor
         {
             for (int i = 0; i < scenes.Length; ++i)
             {
-                string path = scenePath + scenes[i] + ".unity";
+                string path = GetScenePathByName(scenes[i]);
                 EditorSceneManager.OpenScene(path, i == 0 ? OpenSceneMode.Single : OpenSceneMode.Additive);
             }
 
             EditorSceneManager.SetActiveScene(EditorSceneManager.GetSceneByName(scenes[scenes.Length - 1]));
+        }
+
+        private string GetScenePathByName(string sceneName)
+        {
+            string[] sceneGUIDs = AssetDatabase.FindAssets("t:Scene");
+
+            foreach (string guid in sceneGUIDs)
+            {
+                string scenePath = AssetDatabase.GUIDToAssetPath(guid);
+                string sceneAssetName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
+                if (sceneAssetName == sceneName)
+                {
+                    return scenePath; 
+                }
+            }
+            Debug.LogError($"Scene with name '{sceneName}' not found in the project.");
+            return null;
         }
     }
 }

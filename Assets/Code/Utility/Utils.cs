@@ -1,10 +1,7 @@
-using Game.Room.Enemy;
 using System.Collections;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using Zenject;
 
@@ -82,7 +79,7 @@ namespace Game.Utility
             return worldDirection;
         }
 
-        public static void BindGetComponent<T>(DiContainer container, GameObject gameObject) 
+        public static void BindGetComponent<T>(DiContainer container, GameObject gameObject, bool nonLazy = false) 
             where T : Component
         {
             if (!gameObject.TryGetComponent(out T component))
@@ -92,7 +89,14 @@ namespace Game.Utility
                 throw new System.NullReferenceException(message);
             }
 
-            container.Bind<T>().FromInstance(component).AsSingle();
+            if(nonLazy)
+            {
+                container.Bind<T>().FromInstance(component).AsSingle().NonLazy();
+            }
+            else
+            {
+                container.Bind<T>().FromInstance(component).AsSingle();
+            }
         }
 
         public static void BindComponentsInChildrens<T>(DiContainer container, GameObject gameObject, bool includeInactive = true)
