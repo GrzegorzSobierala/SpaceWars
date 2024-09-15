@@ -37,7 +37,6 @@ namespace Game.Management
             }
         }
 
-
         public override void InstallBindings()
         {
             Container.BindInstance(this);
