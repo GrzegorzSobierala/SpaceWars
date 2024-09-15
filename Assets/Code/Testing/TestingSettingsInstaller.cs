@@ -13,7 +13,6 @@ namespace Game.Testing
         private const string settingsPath = "Assets/Data/Testing/Resources/Installers/";
         private const string settingsName = "TestingSettingsInstaller.asset";
 
-
         public TestingSettings Settings;
 
         public override void InstallBindings()

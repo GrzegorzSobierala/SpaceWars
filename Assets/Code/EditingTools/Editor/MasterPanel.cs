@@ -9,6 +9,7 @@ using Unity.Mathematics;
 using Game.Player.Ship;
 using Game.Room.Enemy;
 using System.Collections.Generic;
+using Game.Management;
 
 namespace Game.Editor
 {
@@ -16,6 +17,7 @@ namespace Game.Editor
     {
         [Inject] private TestingSettings _settings;
         [Inject] private TestingSettingsInstaller _settingsInstaller;
+        [Inject] private ScenesData _scenesData;
 
         private static Vector2 scroll;
         private string _currentTimeScaleText = "";
@@ -37,6 +39,7 @@ namespace Game.Editor
         {
             TestingSettingsInstaller.CheckResources();
             TestingSettingsInstaller.InstallFromResource(Container);
+            ScenesData.InstallFromResource(Container);
         }
 
         public override void OnEnable()
@@ -109,26 +112,46 @@ namespace Game.Editor
         {
             GUILayout.Label("Scene managment", EditorStyles.boldLabel);
 
-            if (GUILayout.Button("Start up"))
-            {
-                EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-                LoadSceneGroup(Scenes.GameInitMulti);
-            }
-
             if (GUILayout.Button("Main menu"))
             {
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-                LoadSceneGroup(Scenes.MainMenuMulti);
+                LoadSceneGroup(new string[] {_scenesData.MainMeneScene});
             }
 
-            if (GUILayout.Button("Testing"))
+            if (GUILayout.Button("Loading"))
             {
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-                LoadSceneGroup(Scenes.TestingMulti);
+                LoadSceneGroup(new string[] {_scenesData.LoadingScene});
+            }
+
+            if (GUILayout.Button("Hub"))
+            {
+                EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+                LoadSceneGroup(new string[] { _scenesData.PlayerScene, _scenesData.HubScene});
 
                 Scene scene = SceneManager.GetSceneByName(Scenes.Player);
                 SceneManager.SetActiveScene(scene);
             }
+
+            if (GUILayout.Button("Room scene"))
+            {
+                EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+
+                if(_scenesData.RoomScenes.Length <= _settings.RoomSceneIndex)
+                {
+                    _settings.RoomSceneIndex = 0;
+                }    
+
+                LoadSceneGroup(new string[] {_scenesData.PlayerScene,
+                    _scenesData.RoomScenes[_settings.RoomSceneIndex]});
+
+                Scene scene = SceneManager.GetSceneByName(Scenes.Player);
+                SceneManager.SetActiveScene(scene);
+            }
+
+            _settings.RoomSceneIndex = EditorGUILayout.Popup(
+                "Room scene to load", _settings.RoomSceneIndex, _scenesData.RoomScenes);
+
             GUILayout.Space(10);
         }
 

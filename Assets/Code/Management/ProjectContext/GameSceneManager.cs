@@ -13,11 +13,7 @@ namespace Game.Management
     {
         [Inject] private ZenjectSceneLoader _sceneLoader;
 
-        [Scene, SerializeField] private string _loadingScene;
-        [Scene, SerializeField] private string _mainMeneScene;
-        [Scene, SerializeField] private string _playerScene;
-        [Scene, SerializeField] private string _hubScene;
-        [Scene, SerializeField] private string[] _roomScenes;
+        [SerializeField] private ScenesData _data;
 
         [Scene, SerializeField] private string _DEBUG_sceneToLoad;
 
@@ -27,22 +23,23 @@ namespace Game.Management
 
         public TaskAwaiter LoadMainMenu()
         {
-            string [] unloadScenes = _roomScenes.
-                Concat(new string[] { _hubScene , _playerScene }).ToArray();
+            string [] unloadScenes = _data.RoomScenes.
+                Concat(new string[] { _data.HubScene , _data.PlayerScene }).ToArray();
 
-            return ReloadScenes(unloadScenes, new string[] {_mainMeneScene}).GetAwaiter();
+            return ReloadScenes(unloadScenes, new string[] { _data.MainMeneScene }).GetAwaiter();
         }
 
         public TaskAwaiter LoadHub()
         {
-            string[] unloadScenes = _roomScenes.Concat(new string[] {_mainMeneScene}).ToArray();
-            string[] loadScenes = new string[] { _playerScene, _hubScene };
+            string[] unloadScenes = _data.RoomScenes.
+                Concat(new string[] { _data.MainMeneScene }).ToArray();
+            string[] loadScenes = new string[] { _data.PlayerScene, _data.HubScene };
             return ReloadScenes(unloadScenes, loadScenes).GetAwaiter();
         }
 
         public TaskAwaiter LoadRoom(string roomScene)
         {
-            return ReloadScenes(new string[] {_hubScene}, new string[] {roomScene}).GetAwaiter();
+            return ReloadScenes(new string[] { _data.HubScene }, new string[] {roomScene}).GetAwaiter();
         }
 
         public TaskAwaiter ReloadCurrentRoom()
@@ -51,7 +48,7 @@ namespace Game.Management
             for (int i = 0; i < SceneManager.sceneCount; i++)
             {
                 Scene activeScene = SceneManager.GetSceneAt(i);
-                if (_roomScenes.Contains(activeScene.name))
+                if (_data.RoomScenes.Contains(activeScene.name))
                 {
                     roomName = activeScene.name;
                     break;
@@ -72,11 +69,11 @@ namespace Game.Management
             if(!TryMarkLoading())
                 return;
 
-            await CreateTask(_sceneLoader.LoadSceneAsync(_loadingScene, LoadSceneMode.Additive));
+            await CreateTask(_sceneLoader.LoadSceneAsync(_data.LoadingScene, LoadSceneMode.Additive));
             await TryUnloadScenes(unloadScenes);
             await CreateTask(Resources.UnloadUnusedAssets());
             await TryLoadScenes(loadScenes);
-            await CreateTask(SceneManager.UnloadSceneAsync(_loadingScene, UNLOAD_OPTION));
+            await CreateTask(SceneManager.UnloadSceneAsync(_data.LoadingScene, UNLOAD_OPTION));
             TryUnmarkLoading();
         }
 
