@@ -12,8 +12,7 @@ namespace Game.Management
     public class GameSceneManager : MonoBehaviour
     {
         [Inject] private ZenjectSceneLoader _sceneLoader;
-
-        [SerializeField] private ScenesData _data;
+        [Inject] private ScenesData _data;
 
         [Scene, SerializeField] private string _DEBUG_sceneToLoad;
 

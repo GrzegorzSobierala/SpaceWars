@@ -149,8 +149,15 @@ namespace Game.Editor
                 SceneManager.SetActiveScene(scene);
             }
 
-            _settings.RoomSceneIndex = EditorGUILayout.Popup(
+            int index = EditorGUILayout.Popup(
                 "Room scene to load", _settings.RoomSceneIndex, _scenesData.RoomScenes);
+
+            if(index != _settings.RoomSceneIndex)
+            {
+                _settings.RoomSceneIndex = index;
+                _settingsInstaller.MarkDirty();
+            }
+
 
             GUILayout.Space(10);
         }

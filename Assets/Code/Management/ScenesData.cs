@@ -33,6 +33,7 @@ namespace Game.Management
 
                     roomSceneNames.Add(scene);
                 }
+                roomSceneNames.Sort();
                 return roomSceneNames.ToArray();
             }
         }
