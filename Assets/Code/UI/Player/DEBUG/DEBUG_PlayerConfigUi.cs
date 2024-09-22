@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Game
 {
-    public class TestPlayerConfigUI : MonoBehaviour
+    public class DEBUG_PlayerConfigUi : MonoBehaviour
     {
         [Inject] private PlayerManager _playerManager;
 

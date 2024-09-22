@@ -4,9 +4,9 @@ using Zenject;
 using Game.Player.Ship;
 using Game.Management;
 
-namespace Game.Player.UI
+namespace Game.Player.Ui
 {
-    public class TestMachineGunUI : MonoBehaviour
+    public class MachineGunUi : MonoBehaviour
     {
         [Inject] PlayerManager _playerManager;
 

@@ -6,9 +6,9 @@ using TMPro;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Player.UI
+namespace Game.Player.Ui
 {
-    public class TestAlarmUI : MonoBehaviour
+    public class AlarmUi : MonoBehaviour
     {
         [Inject] private BackgroundMusicManager _music;
 

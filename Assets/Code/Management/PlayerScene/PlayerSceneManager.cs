@@ -23,11 +23,6 @@ namespace Game.Room
         public List<EnemyBase> RoomEnemies => _roomEnemies;
         public RoomManager CurrentRoomManager => _currentRoomManager;
 
-        private void Start()
-        {
-            _input.SwitchActionMap(_input.PlayerControls.Gameplay);
-        }
-
         public void SetListOfRoomEnemies(List<EnemyBase> enemies)
         {
             _roomEnemies = enemies;

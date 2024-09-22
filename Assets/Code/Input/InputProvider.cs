@@ -19,11 +19,11 @@ namespace Game.Input.System
             {
                 if (map == actionMap)
                 {
-                    actionMap.Enable();
+                    map.Enable();
                 }
                 else
                 {
-                    actionMap.Disable();
+                    map.Disable();
                 }
             }  
         }

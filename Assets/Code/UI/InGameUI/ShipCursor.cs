@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Game.Player.UI
+namespace Game.Player.Ui
 {
     public class ShipCursor : MonoBehaviour
     {

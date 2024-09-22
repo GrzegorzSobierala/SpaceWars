@@ -3,10 +3,10 @@ using TMPro;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Player.UI
+namespace Game.Player.Ui
 {
     [RequireComponent(typeof(TextMeshProUGUI))]
-    public class TestPlayerHpUi : MonoBehaviour
+    public class PlayerHpUi : MonoBehaviour
     {
         [Inject] private PlayerManager playerManager;
 

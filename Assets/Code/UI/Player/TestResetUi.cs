@@ -8,13 +8,13 @@ using Game.Testing;
 using Game.Management;
 using Game.Room;
 
-namespace Game.Player.UI
+namespace Game.Player.Ui
 {
     public class TestResetUi : MonoBehaviour
     {
         [Inject] private PlayerSceneManager _playerSceneManager;
         [Inject] private InputProvider _input;
-        [Inject] private TestAlarmUI _alarmUI;
+        [Inject] private AlarmUi _alarmUI;
         [Inject] private PlayerManager _playerManager;
         [Inject] private TestingSettings _testing;
 

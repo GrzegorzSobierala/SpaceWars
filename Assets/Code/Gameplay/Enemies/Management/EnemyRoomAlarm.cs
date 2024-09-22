@@ -1,4 +1,4 @@
-using Game.Player.UI;
+using Game.Player.Ui;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -10,7 +10,7 @@ namespace Game.Room.Enemy
         public bool IsActivated => _isActivated;
 
         [Inject] private List<EnemyBase> _enemies;
-        [Inject] private TestAlarmUI _alarmUi;
+        [Inject] private AlarmUi _alarmUi;
 
         private bool _isActivated = false;
 

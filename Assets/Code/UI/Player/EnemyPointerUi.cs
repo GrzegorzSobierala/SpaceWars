@@ -5,9 +5,9 @@ using Game.Management;
 using Game.Room;
 using Game.Room.Enemy;
 
-namespace Game.Player.UI
+namespace Game.Player.Ui
 {
-    public class EnemyPointerUI : MonoBehaviour
+    public class EnemyPointerUi : MonoBehaviour
     {
         [Inject] private PlayerManager _playerManager;
         [Inject] private PlayerSceneManager _sceneManager;
