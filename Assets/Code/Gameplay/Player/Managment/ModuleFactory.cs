@@ -8,7 +8,7 @@ namespace Game.Player.Ship
     {
         [Inject] private DiContainer _container;
         [Inject] private ModuleHandler _moduleHandler;
-
+        
         [SerializeField] private List<HullModuleBase> _hullPrefabs;
         [SerializeField] private List<GunModuleBase> _gunPrefabs;
         [SerializeField] private List<BridgeModuleBase> _bridgesPrefabs;
@@ -100,7 +100,8 @@ namespace Game.Player.Ship
                 Destroy(_moduleHandler.CurrentHull.gameObject);
             }
 
-            HullModuleBase newHull = hullPrototype.Instatiate(transform, _container);
+            Transform parent = _moduleHandler.ModulesParent;
+            HullModuleBase newHull = hullPrototype.Instatiate(parent, _container);
             _moduleHandler.SetHull(this, newHull);
             ReplaceGun(_currentGunPrototype);
             ReplaceSpecialGun(_currentSpecialGunPrototype);

@@ -17,5 +17,15 @@ namespace Game.Management
         public ModuleFactory ModuleCreator => _moduleCreator;
         public Rigidbody2D PlayerBody => _body;
         public PlayerMovement2D PlayerMovement => _movement;
+
+        public void SetShipHubMode()
+        {
+            _moduleHandler.ModulesParent.gameObject.SetActive(false);
+        }
+
+        public void SetShipRoomMode()
+        {
+            _moduleHandler.ModulesParent.gameObject.SetActive(true);
+        }
     }
 }
