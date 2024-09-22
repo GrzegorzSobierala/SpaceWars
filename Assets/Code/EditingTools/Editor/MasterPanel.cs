@@ -1,7 +1,6 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using Game.Utility.Globals;
 using Game.Testing;
 using Zenject;
 using UnityEngine.SceneManagement;

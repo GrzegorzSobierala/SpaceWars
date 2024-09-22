@@ -1,5 +1,5 @@
 {
-    "name": "PlayerInput",
+    "name": "PlayerControls",
     "maps": [
         {
             "name": "Gameplay",
@@ -264,6 +264,34 @@
                     "processors": "",
                     "groups": "",
                     "action": "ToggleSwapSteeringOnAim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Ui",
+            "id": "6a5d5995-9858-4e32-9f36-dfc3f00f8b75",
+            "actions": [
+                {
+                    "name": "Back",
+                    "type": "Button",
+                    "id": "50fe0b21-e07b-4ae3-b9bd-c867755aa855",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e16489ac-04c4-4781-a032-4734a5e017e4",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Back",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

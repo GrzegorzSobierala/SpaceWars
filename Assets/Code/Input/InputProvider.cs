@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Game.Input.System
 {
@@ -12,14 +13,19 @@ namespace Game.Input.System
             _playerControls = new PlayerControls();
         }
 
-        public void SetGameplayInput()
+        public void SwitchActionMap(InputActionMap actionMap)
         {
-            _playerControls.Gameplay.Enable();
-        }
-
-        public void SetUiInput()
-        {
-            _playerControls.Gameplay.Disable();
+            foreach (var map in _playerControls.asset.actionMaps)
+            {
+                if (map == actionMap)
+                {
+                    actionMap.Enable();
+                }
+                else
+                {
+                    actionMap.Disable();
+                }
+            }  
         }
     }
 }

@@ -14,8 +14,7 @@ namespace Game.Room
     {
         public Action OnRoomMainObjectiveCompleted;
 
-        [Inject] private TestingSettings _testingSettings;
-        [Inject] private InputProvider _inputProvider;
+        [Inject] private InputProvider _input;
         [Inject] private GameSceneManager _gameSceneManager;
 
         private List<EnemyBase> _roomEnemies;
@@ -26,7 +25,7 @@ namespace Game.Room
 
         private void Start()
         {
-            _inputProvider.SetGameplayInput();
+            _input.SwitchActionMap(_input.PlayerControls.Gameplay);
         }
 
         public void SetListOfRoomEnemies(List<EnemyBase> enemies)

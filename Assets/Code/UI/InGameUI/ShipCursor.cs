@@ -34,7 +34,7 @@ namespace Game.Player.UI
         private Vector3 _startLeftImageSize;
         private Vector3 _startRightImageSize;
 
-        private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
+        private Input.System.PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
 
         private void Start()
         {

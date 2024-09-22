@@ -11,7 +11,7 @@ namespace Game.Player.Ship
 
         private bool IsOffOnToogle = false;
 
-        protected PlayerControls.GameplayActions _Input => _input.PlayerControls.Gameplay;
+        protected Input.System.PlayerControls.GameplayActions _Input => _input.PlayerControls.Gameplay;
         protected bool IsAiming { get; private set; } = false;
 
         private void OnEnable()

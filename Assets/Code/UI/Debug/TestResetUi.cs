@@ -13,7 +13,7 @@ namespace Game.Player.UI
     public class TestResetUi : MonoBehaviour
     {
         [Inject] private PlayerSceneManager _playerSceneManager;
-        [Inject] private InputProvider _inputProvider;
+        [Inject] private InputProvider _input;
         [Inject] private TestAlarmUI _alarmUI;
         [Inject] private PlayerManager _playerManager;
         [Inject] private TestingSettings _testing;
@@ -101,14 +101,14 @@ namespace Game.Player.UI
                 Time.timeScale = 1;
             }
 
-            _inputProvider.SetGameplayInput();
+            _input.SwitchActionMap(_input.PlayerControls.Gameplay);
             _panel.SetActive(false);
         }
 
         private void OnPanel()
         {
             Time.timeScale = 0;
-            _inputProvider.SetUiInput();
+            _input.SwitchActionMap(_input.PlayerControls.Ui);
             _panel.SetActive(true);
         }
 
