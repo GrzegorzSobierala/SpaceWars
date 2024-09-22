@@ -7,7 +7,7 @@ using Zenject;
 namespace Game.Hub.Ui
 {
     [RequireComponent(typeof(Button))]
-    public class RoomOpenerButtonListener : MonoBehaviour
+    public class RoomSceneOpenerButtonListener : MonoBehaviour
     {
         [Inject] GameSceneManager _gameSceneManager;
         [SerializeField, Scene] string _roomName;

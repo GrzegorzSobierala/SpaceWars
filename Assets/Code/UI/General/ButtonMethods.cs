@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.UI
+namespace Game.Ui
 {
     public class ButtonMethods : MonoBehaviour
     {

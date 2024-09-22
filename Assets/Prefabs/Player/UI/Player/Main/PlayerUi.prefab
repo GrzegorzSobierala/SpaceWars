@@ -303,7 +303,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 210283819735818434, guid: fc7861abfd8e7644abbac05185f07279, type: 3}
       propertyPath: m_Name
-      value: TestAlarmUI
+      value: AlarmUi
       objectReference: {fileID: 0}
     - target: {fileID: 430894746335122860, guid: fc7861abfd8e7644abbac05185f07279, type: 3}
       propertyPath: m_Pivot.x
@@ -409,7 +409,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2628243398124009028, guid: 7d83a825d4174704eb91338ebd986a52, type: 3}
       propertyPath: m_Name
-      value: ShipCursor
+      value: ShipCursorUi
       objectReference: {fileID: 0}
     - target: {fileID: 3169749612838488947, guid: 7d83a825d4174704eb91338ebd986a52, type: 3}
       propertyPath: m_Pivot.x
@@ -599,7 +599,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6941206911112457716, guid: 49beaccd06afc82449aa761624aa955b, type: 3}
       propertyPath: m_Name
-      value: TestMiddlePoint
+      value: DEBUG_UiMiddlePoint
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -705,7 +705,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7582015181307302611, guid: 3403b6fb4770887498d1df06f1aab6f1, type: 3}
       propertyPath: m_Name
-      value: TestPlayerConfig
+      value: DEBUG_PlayerConfigUi
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -823,7 +823,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7982223859015868440, guid: 93ba537363e55804b9fdc265faa02ab9, type: 3}
       propertyPath: m_Name
-      value: TestMachineGun
+      value: MachineGunUi
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -927,9 +927,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3287594289181638174, guid: 58aed51abe4297c4eacccec8b8221165, type: 3}
+      propertyPath: m_Name
+      value: UiPointer
+      objectReference: {fileID: 0}
     - target: {fileID: 3761495104992668836, guid: 58aed51abe4297c4eacccec8b8221165, type: 3}
       propertyPath: m_Name
-      value: TestEnemyPointer
+      value: EnemyPointerUi
       objectReference: {fileID: 0}
     - target: {fileID: 5571805843133327069, guid: 58aed51abe4297c4eacccec8b8221165, type: 3}
       propertyPath: canvas
@@ -955,7 +959,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1598670737513289085, guid: 1ad50412770199147ba5c849556880b0, type: 3}
       propertyPath: m_Name
-      value: TestPlayerHp
+      value: PlayerHpUi
       objectReference: {fileID: 0}
     - target: {fileID: 5514911559696747700, guid: 1ad50412770199147ba5c849556880b0, type: 3}
       propertyPath: m_Pivot.x
@@ -1145,7 +1149,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8595408824839713988, guid: 96098df02107e42458e677590aa98ffc, type: 3}
       propertyPath: m_Name
-      value: TestResetUI
+      value: PauseUi
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1167,7 +1171,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 155786793488095950, guid: eff662895579cb249bbb22e0d7c114fe, type: 3}
       propertyPath: m_Name
-      value: TestControls
+      value: DEBUG_Controls
       objectReference: {fileID: 0}
     - target: {fileID: 8259981224483702236, guid: eff662895579cb249bbb22e0d7c114fe, type: 3}
       propertyPath: m_Pivot.x
@@ -1273,7 +1277,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 653228763871117637, guid: b2242c8022658a6449f81045eae9fe4e, type: 3}
       propertyPath: m_Name
-      value: FpsCounter
+      value: FpsCounterUi
       objectReference: {fileID: 0}
     - target: {fileID: 705345531839201270, guid: b2242c8022658a6449f81045eae9fe4e, type: 3}
       propertyPath: m_Pivot.x
