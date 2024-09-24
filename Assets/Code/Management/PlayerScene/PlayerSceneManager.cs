@@ -2,11 +2,8 @@ using UnityEngine;
 using System;
 using Game.Room.Enemy;
 using System.Collections.Generic;
-using Game.Input.System;
-using Game.Testing;
 using Zenject;
 using Game.Management;
-using System.Runtime.CompilerServices;
 
 namespace Game.Room
 {
@@ -14,7 +11,6 @@ namespace Game.Room
     {
         public Action OnRoomMainObjectiveCompleted;
 
-        [Inject] private InputProvider _input;
         [Inject] private GameSceneManager _gameSceneManager;
 
         private List<EnemyBase> _roomEnemies;
@@ -33,9 +29,9 @@ namespace Game.Room
             _currentRoomManager = roomManager;
         }
 
-        public TaskAwaiter RestartRoom()
+        public void RestartRoom(Action onEnd = null)
         {
-            return _gameSceneManager.ReloadCurrentRoom();
+            _gameSceneManager.ReloadCurrentRoom(onEnd);
         }
     }
 }

@@ -114,7 +114,7 @@ namespace Game.Player.Ui
 
         private void Restart()
         {
-            _playerSceneManager.RestartRoom().OnCompleted(OnRestarted);
+            _playerSceneManager.RestartRoom(OnRestarted);
         }
 
         private void OnRestarted()

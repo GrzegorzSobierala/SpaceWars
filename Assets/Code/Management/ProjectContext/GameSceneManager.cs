@@ -1,8 +1,8 @@
 using NaughtyAttributes;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -18,30 +18,30 @@ namespace Game.Management
 
         private const UnloadSceneOptions UNLOAD_OPTION = UnloadSceneOptions.UnloadAllEmbeddedSceneObjects;
 
-        private bool _isLoading = false;
+        private Coroutine loadCoroutine;
 
-        public TaskAwaiter LoadMainMenu()
+        public void LoadMainMenu(Action onEnd = null)
         {
             string [] unloadScenes = _data.RoomScenes.
                 Concat(new string[] { _data.HubScene , _data.PlayerScene }).ToArray();
 
-            return ReloadScenes(unloadScenes, new string[] { _data.MainMeneScene }).GetAwaiter();
+            StartSwitchingScenes(unloadScenes, new string[] { _data.MainMeneScene }, onEnd);
         }
 
-        public TaskAwaiter LoadHub()
+        public void LoadHub(Action onEnd = null)
         {
             string[] unloadScenes = _data.RoomScenes.
                 Concat(new string[] { _data.MainMeneScene }).ToArray();
             string[] loadScenes = new string[] { _data.PlayerScene, _data.HubScene };
-            return ReloadScenes(unloadScenes, loadScenes).GetAwaiter();
+            StartSwitchingScenes(unloadScenes, loadScenes, onEnd);
         }
 
-        public TaskAwaiter LoadRoom(string roomScene)
+        public void LoadRoom(string roomScene, Action onEnd = null)
         {
-            return ReloadScenes(new string[] { _data.HubScene }, new string[] {roomScene}).GetAwaiter();
+            StartSwitchingScenes(new string[] { _data.HubScene }, new string[] {roomScene}, onEnd);
         }
 
-        public TaskAwaiter ReloadCurrentRoom()
+        public void ReloadCurrentRoom(Action onEnd = null)
         {
             string roomName = string.Empty;
             for (int i = 0; i < SceneManager.sceneCount; i++)
@@ -54,29 +54,38 @@ namespace Game.Management
                 }
             }
 
-            if(roomName == string.Empty)
+            if (roomName == string.Empty)
             {
                 Debug.LogError("ThereIsNoRoomToReload");
-                return new TaskAwaiter();
             }
 
-            return ReloadScenes(new string[] { roomName }, new string[] { roomName }).GetAwaiter();
+            StartSwitchingScenes(new string[] { roomName }, new string[] { roomName }, onEnd);
         }
 
-        private async Task ReloadScenes(string[] unloadScenes, string[] loadScenes)
+        private void StartSwitchingScenes(string[] unloadScenes, string[] loadScenes, Action onEnd)
         {
-            if(!TryMarkLoading())
-                return;
+            if (loadCoroutine != null)
+            {
+                StopCoroutine(loadCoroutine);
+                Debug.LogError("Stoped loading scene and start new loading");
+            }
 
-            await CreateTask(_sceneLoader.LoadSceneAsync(_data.LoadingScene, LoadSceneMode.Additive));
-            await TryUnloadScenes(unloadScenes);
-            await CreateTask(Resources.UnloadUnusedAssets());
-            await TryLoadScenes(loadScenes);
-            await CreateTask(SceneManager.UnloadSceneAsync(_data.LoadingScene, UNLOAD_OPTION));
-            TryUnmarkLoading();
+            loadCoroutine = StartCoroutine(SwitchScenes(unloadScenes, loadScenes, onEnd));
         }
 
-        private async Task TryUnloadScenes(string[] scenes)
+        private IEnumerator SwitchScenes(string[] unloadScenes, string[] loadScenes, Action onEnd)
+        {
+            yield return SceneManager.LoadSceneAsync(_data.LoadingScene, LoadSceneMode.Additive);
+            yield return TryUnloadScenes(unloadScenes);
+            yield return Resources.UnloadUnusedAssets();
+            yield return TryLoadScenes(loadScenes);
+            yield return SceneManager.UnloadSceneAsync(_data.LoadingScene, UNLOAD_OPTION);
+
+            loadCoroutine = null;
+            onEnd?.Invoke();
+        }
+
+        private IEnumerator TryUnloadScenes(string[] scenes)
         {
             foreach (var scene in scenes)
             {
@@ -84,7 +93,7 @@ namespace Game.Management
                 for (int i = 0; i < SceneManager.sceneCount; i++)
                 {
                     Scene activeScene = SceneManager.GetSceneAt(i);
-                    if (scene == activeScene.name)
+                    if (scene.ToString() == activeScene.name)
                     {
                         contains = true;
                         break;
@@ -93,12 +102,12 @@ namespace Game.Management
 
                 if (contains)
                 {
-                    await CreateTask(SceneManager.UnloadSceneAsync(scene, UNLOAD_OPTION));
+                    yield return SceneManager.UnloadSceneAsync(scene.ToString(), UNLOAD_OPTION);
                 }
             }
         }
 
-        private async Task TryLoadScenes(string[] scenes)
+        private IEnumerator TryLoadScenes(string[] scenes)
         {
             foreach (var scene in scenes)
             {
@@ -106,7 +115,7 @@ namespace Game.Management
                 for (int i = 0; i < SceneManager.sceneCount; i++)
                 {
                     Scene activeScene = SceneManager.GetSceneAt(i);
-                    if (scene == activeScene.name)
+                    if (scene.ToString() == activeScene.name)
                     {
                         contains = true;
                         break;
@@ -115,44 +124,30 @@ namespace Game.Management
 
                 if (!contains)
                 {
-                    await CreateTask(_sceneLoader.LoadSceneAsync(scene, LoadSceneMode.Additive));
+                    AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene.ToString(), LoadSceneMode.Additive);
+
+                    while (!asyncLoad.isDone)
+                    {
+                        yield return null;
+                    }
                 }
             }
         }
 
-        private Task CreateTask(AsyncOperation operation)
+        private string[] GetActiveScenes()
         {
-            var tcs = new TaskCompletionSource<bool>();
-            operation.completed += (AsyncOperation op) => tcs.SetResult(true);
-            return tcs.Task;
-        }
+            List<string> roomSceneNames = new();
 
-        private bool TryMarkLoading()
-        {
-            if(_isLoading)
+            for (int i = 0; i < SceneManager.sceneCount; i++)
             {
-                Debug.LogError("Is loading");
-                return false;
-            }
-            else
-            {
-                _isLoading = true;
-                return true;
-            }
-        }
+                if (SceneManager.GetSceneAt(i).name == _data.LoadingScene)
+                {
+                    continue;
+                }
 
-        private bool TryUnmarkLoading()
-        {
-            if (_isLoading)
-            {
-                _isLoading = false;
-                return true;
+                roomSceneNames.Add(SceneManager.GetSceneAt(i).name);
             }
-            else
-            {
-                Debug.LogError("Isn't loading");
-                return false;
-            }
+            return roomSceneNames.ToArray();
         }
 
         [Button]
