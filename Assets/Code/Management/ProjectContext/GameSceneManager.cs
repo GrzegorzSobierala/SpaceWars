@@ -93,7 +93,7 @@ namespace Game.Management
                 for (int i = 0; i < SceneManager.sceneCount; i++)
                 {
                     Scene activeScene = SceneManager.GetSceneAt(i);
-                    if (scene.ToString() == activeScene.name)
+                    if (scene == activeScene.name)
                     {
                         contains = true;
                         break;
@@ -102,7 +102,7 @@ namespace Game.Management
 
                 if (contains)
                 {
-                    yield return SceneManager.UnloadSceneAsync(scene.ToString(), UNLOAD_OPTION);
+                    yield return SceneManager.UnloadSceneAsync(scene, UNLOAD_OPTION);
                 }
             }
         }
@@ -115,7 +115,7 @@ namespace Game.Management
                 for (int i = 0; i < SceneManager.sceneCount; i++)
                 {
                     Scene activeScene = SceneManager.GetSceneAt(i);
-                    if (scene.ToString() == activeScene.name)
+                    if (scene == activeScene.name)
                     {
                         contains = true;
                         break;
@@ -124,12 +124,7 @@ namespace Game.Management
 
                 if (!contains)
                 {
-                    AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene.ToString(), LoadSceneMode.Additive);
-
-                    while (!asyncLoad.isDone)
-                    {
-                        yield return null;
-                    }
+                    yield return SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
                 }
             }
         }
