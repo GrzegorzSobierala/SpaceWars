@@ -18,7 +18,7 @@ namespace Game.Management
 
         private const UnloadSceneOptions UNLOAD_OPTION = UnloadSceneOptions.UnloadAllEmbeddedSceneObjects;
 
-        private Coroutine loadCoroutine;
+        private Coroutine _loadCoroutine;
 
         public void LoadMainMenu(Action onEnd = null)
         {
@@ -64,13 +64,13 @@ namespace Game.Management
 
         private void StartSwitchingScenes(string[] unloadScenes, string[] loadScenes, Action onEnd)
         {
-            if (loadCoroutine != null)
+            if (_loadCoroutine != null)
             {
-                StopCoroutine(loadCoroutine);
+                StopCoroutine(_loadCoroutine);
                 Debug.LogError("Stoped loading scene and start new loading");
             }
 
-            loadCoroutine = StartCoroutine(SwitchScenes(unloadScenes, loadScenes, onEnd));
+            _loadCoroutine = StartCoroutine(SwitchScenes(unloadScenes, loadScenes, onEnd));
         }
 
         private IEnumerator SwitchScenes(string[] unloadScenes, string[] loadScenes, Action onEnd)
@@ -81,7 +81,7 @@ namespace Game.Management
             yield return TryLoadScenes(loadScenes);
             yield return SceneManager.UnloadSceneAsync(_data.LoadingScene, UNLOAD_OPTION);
 
-            loadCoroutine = null;
+            _loadCoroutine = null;
             onEnd?.Invoke();
         }
 

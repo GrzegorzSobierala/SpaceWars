@@ -155,7 +155,6 @@ namespace Game.Player.Ship
             ReplaceGun(_currentGunPrototype);
             ReplaceSpecialGun(_currentSpecialGunPrototype);
         }
-
         
         private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : IModule
         {

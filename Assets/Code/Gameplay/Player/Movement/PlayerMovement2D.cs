@@ -38,7 +38,7 @@ namespace Game.Player.Ship
         private List<Collider2D> lastColldersStucked = new List<Collider2D>();
         private bool wasUnstuckCalledThisFrame = false;
 
-        private Input.System.PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
+        private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
 
         private InputAction MoveLeft => _inverseRotWithVerMove ? Input.RotateLeft : Input.MoveLeft;
         private InputAction MoveRight => _inverseRotWithVerMove ? Input.RotateRight : Input.MoveRight;

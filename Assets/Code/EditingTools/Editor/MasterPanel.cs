@@ -157,10 +157,8 @@ namespace Game.Editor
                 _settingsInstaller.MarkDirty();
             }
 
-
             GUILayout.Space(10);
         }
-
 
         private void TestingProperies()
         {
