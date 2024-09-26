@@ -1,3 +1,6 @@
+using Game.Input.System;
+using Game.Management;
+using Game.Player.Ui;
 using UnityEngine;
 using Zenject;
 
@@ -7,12 +10,18 @@ namespace Game.Room
     {
         [Inject] private PlayerSceneManager _playerSceneManager;
         [Inject] private PlayerObjectsParent _playerObjectsParent;
+        [Inject] private PlayerUiController _playerUiController;
+        [Inject] private PlayerManager _playerManager;
+        [Inject] private InputProvider _input;
 
         public PlayerObjectsParent PlayerObjectsParent => _playerObjectsParent;
 
         private void Start()
         {
             _playerSceneManager.SetCurrentRoomManager(this);
+            _input.SwitchActionMap(_input.PlayerControls.Gameplay);
+            _playerUiController.SetActive(true);
+            _playerManager.SetShipRoomMode();
         }
     }
 }

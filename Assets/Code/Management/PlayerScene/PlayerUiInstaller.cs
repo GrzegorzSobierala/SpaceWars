@@ -1,5 +1,5 @@
 using Zenject;
-using Game.Player.UI;
+using Game.Player.Ui;
 
 namespace Game.Player
 {
@@ -7,7 +7,8 @@ namespace Game.Player
     {
         public override void InstallBindings()
         {
-            Container.Bind<TestAlarmUI>().FromComponentInHierarchy(false).AsSingle();
+            Container.Bind<AlarmUi>().FromComponentInHierarchy(false).AsSingle();
+            Container.Bind<PlayerUiController>().FromComponentInHierarchy(false).AsSingle();
         }
     }
 }

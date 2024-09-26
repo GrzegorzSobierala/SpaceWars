@@ -1,7 +1,6 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using Game.Utility.Globals;
 using Game.Testing;
 using Zenject;
 using UnityEngine.SceneManagement;
@@ -129,7 +128,7 @@ namespace Game.Editor
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
                 LoadSceneGroup(new string[] { _scenesData.PlayerScene, _scenesData.HubScene});
 
-                Scene scene = SceneManager.GetSceneByName(Scenes.Player);
+                Scene scene = SceneManager.GetSceneByName(_scenesData.PlayerScene);
                 SceneManager.SetActiveScene(scene);
             }
 
@@ -145,16 +144,21 @@ namespace Game.Editor
                 LoadSceneGroup(new string[] {_scenesData.PlayerScene,
                     _scenesData.RoomScenes[_settings.RoomSceneIndex]});
 
-                Scene scene = SceneManager.GetSceneByName(Scenes.Player);
+                Scene scene = SceneManager.GetSceneByName(_scenesData.PlayerScene);
                 SceneManager.SetActiveScene(scene);
             }
 
-            _settings.RoomSceneIndex = EditorGUILayout.Popup(
+            int index = EditorGUILayout.Popup(
                 "Room scene to load", _settings.RoomSceneIndex, _scenesData.RoomScenes);
+
+            if(index != _settings.RoomSceneIndex)
+            {
+                _settings.RoomSceneIndex = index;
+                _settingsInstaller.MarkDirty();
+            }
 
             GUILayout.Space(10);
         }
-
 
         private void TestingProperies()
         {

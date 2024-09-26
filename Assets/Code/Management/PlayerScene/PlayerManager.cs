@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Game.Player.Ship;
 using Zenject;
@@ -19,5 +17,15 @@ namespace Game.Management
         public ModuleFactory ModuleCreator => _moduleCreator;
         public Rigidbody2D PlayerBody => _body;
         public PlayerMovement2D PlayerMovement => _movement;
+
+        public void SetShipHubMode()
+        {
+            _moduleHandler.ModulesParent.gameObject.SetActive(false);
+        }
+
+        public void SetShipRoomMode()
+        {
+            _moduleHandler.ModulesParent.gameObject.SetActive(true);
+        }
     }
 }

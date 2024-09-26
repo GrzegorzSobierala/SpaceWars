@@ -1,3 +1,4 @@
+using Game.Utility;
 using UnityEngine;
 using Zenject;
 
@@ -9,8 +10,8 @@ namespace Game.Player.Ship
         {
             Container.Bind<Rigidbody2D>().FromComponentOn(gameObject).AsSingle();
             Container.Bind<PlayerMovement2D>().FromComponentOn(gameObject).AsSingle();
-            Container.Bind<ModuleHandler>().FromComponentOn(gameObject).AsSingle();
-            Container.Bind<ModuleFactory>().FromComponentOn(gameObject).AsSingle();
+            Utils.BindGetComponent<ModuleHandler>(Container, gameObject);
+            Utils.BindGetComponent<ModuleFactory>(Container, gameObject);
 
             SignalBusInstaller.Install(Container);
             Container.DeclareSignal<PlayerCollisionEnter2DSignal>().OptionalSubscriber();

@@ -1,9 +1,7 @@
 using NaughtyAttributes;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Profiling;
 using UnityEngine.SceneManagement;
 using Zenject;
 
@@ -22,7 +20,6 @@ namespace Game.Management
         {
             get
             {
-                Profiler.BeginSample("amigus");
                 List<string> roomSceneNames = new();
                 for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
                 {
@@ -36,11 +33,10 @@ namespace Game.Management
 
                     roomSceneNames.Add(scene);
                 }
-                Profiler.EndSample();
+                roomSceneNames.Sort();
                 return roomSceneNames.ToArray();
             }
         }
-
 
         public override void InstallBindings()
         {
