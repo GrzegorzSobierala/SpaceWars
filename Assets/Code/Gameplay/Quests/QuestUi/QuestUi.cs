@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -7,12 +5,12 @@ namespace Game
 {
     public class QuestUi : MonoBehaviour
     {
-        [SerializeField] private TMP_Text text;
+        [SerializeField] private TMP_Text _text;
         [Space]
-        [SerializeField] private Color successColor;
-        [SerializeField] private Color failureColor;
-        [SerializeField] private Color activeColor;
-        [SerializeField] private Color futureColor;
+        [SerializeField] private Color _successColor;
+        [SerializeField] private Color _failureColor;
+        [SerializeField] private Color _activeColor;
+        [SerializeField] private Color _futureColor;
 
         public QuestUi Instantiate(Transform parent)
         {
@@ -22,26 +20,41 @@ namespace Game
 
         public void SetSuccess()
         {
-            text.color = successColor;
-            text.fontStyle = FontStyles.Strikethrough;
+            gameObject.SetActive(true);
+            _text.color = _successColor;
+            _text.fontStyle = FontStyles.Strikethrough;
         }
 
         public void SetFailure()
         {
-            text.color = failureColor;
-            text.fontStyle = FontStyles.Strikethrough;
+            gameObject.SetActive(true);
+            _text.color = _failureColor;
+            _text.fontStyle = FontStyles.Strikethrough;
         }
 
         public void SetActive() 
         {
-            text.color = activeColor;
-            text.fontStyle = FontStyles.Normal;
+            gameObject.SetActive(true);
+            _text.color = _activeColor;
+            _text.fontStyle = FontStyles.Normal;
         }
 
         public void SetFuture()
         {
-            text.color = futureColor;
-            text.fontStyle = FontStyles.Normal;
+            gameObject.SetActive(true);
+            _text.color = _futureColor;
+            _text.fontStyle = FontStyles.Normal;
+        }
+
+        public void SetInvisible()
+        {
+            gameObject.SetActive(false);
+        }
+
+        public void SetNameText(string name)
+        {
+            _text.name = name + "UiQuest";
+            _text.text = name;
         }
     }
 }

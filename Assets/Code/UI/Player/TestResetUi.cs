@@ -66,7 +66,7 @@ namespace Game.Player.Ui
             _restartButton.onClick.AddListener(Restart);
             _exitButton.onClick.AddListener(ExitGame);
             _playerManager.OnPlayerDied += OnDeadPlayer;
-            _playerSceneManager.OnRoomMainObjectiveCompleted += OnRoomClear;
+            _playerSceneManager.OnEndRoom += OnEndRoom;
         }
 
         private void Unsubscribe()
@@ -75,7 +75,7 @@ namespace Game.Player.Ui
             _restartButton.onClick.RemoveListener(Restart);
             _exitButton.onClick.RemoveListener(ExitGame);
             _playerManager.OnPlayerDied -= OnDeadPlayer;
-            _playerSceneManager.OnRoomMainObjectiveCompleted -= OnRoomClear;
+            _playerSceneManager.OnEndRoom -= OnEndRoom;
         }
 
         private void OnOffPanel()
@@ -134,7 +134,7 @@ namespace Game.Player.Ui
             _messageText.text = "u ded :((";
         }
 
-        private void OnRoomClear()
+        private void OnEndRoom()
         {
             float currentRoomTime = Time.time - _startRoomTime;
             _winTimes.Add(currentRoomTime);

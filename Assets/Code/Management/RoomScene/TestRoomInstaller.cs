@@ -1,3 +1,4 @@
+using Game.Objectives;
 using Game.Room.Enemy;
 using Game.Utility;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace Game.Room
         {
             Utils.BindGetComponent<RoomManager>(Container, gameObject);
             Container.Bind<PlayerObjectsParent>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<RoomQuestController>().FromComponentInHierarchy().AsSingle();
         }
     }
 }

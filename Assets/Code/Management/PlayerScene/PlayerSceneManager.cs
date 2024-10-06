@@ -9,7 +9,7 @@ namespace Game.Room
 {
     public class PlayerSceneManager : MonoBehaviour
     {
-        public Action OnRoomMainObjectiveCompleted;
+        public event Action OnEndRoom;
 
         [Inject] private GameSceneManager _gameSceneManager;
 
@@ -32,6 +32,11 @@ namespace Game.Room
         public void RestartRoom(Action onEnd = null)
         {
             _gameSceneManager.ReloadCurrentRoom(onEnd);
+        }
+
+        public void EndRoom()
+        {
+            OnEndRoom.Invoke();
         }
     }
 }

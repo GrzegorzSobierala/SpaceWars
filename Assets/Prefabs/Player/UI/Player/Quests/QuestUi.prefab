@@ -59,11 +59,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 556ed969b71c9894e8c0472027aeb7ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: {fileID: 4328431152787597651}
-  successColor: {r: 0.41960785, g: 1, b: 0.39215687, a: 0.3137255}
-  failureColor: {r: 1, g: 0.39215687, b: 0.44313726, a: 0.3137255}
-  activeColor: {r: 0.99607843, g: 1, b: 0.2784314, a: 0.5882353}
-  futureColor: {r: 1, g: 1, b: 1, a: 0.3137255}
+  _text: {fileID: 4328431152787597651}
+  _successColor: {r: 0.41960785, g: 1, b: 0.39215687, a: 0.3137255}
+  _failureColor: {r: 1, g: 0.39215687, b: 0.44313726, a: 0.3137255}
+  _activeColor: {r: 0.99607843, g: 1, b: 0.2784314, a: 0.5882353}
+  _futureColor: {r: 1, g: 1, b: 1, a: 0.3137255}
 --- !u!1 &6236280719941070963
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,8 +139,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 1348796267
-  m_fontColor: {r: 0.41992456, g: 1, b: 0.3915094, a: 0.3137255}
+    rgba: 1358954495
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0.3137255}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -163,7 +163,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 64
+  m_fontStyle: 0
   m_HorizontalAlignment: 4
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
