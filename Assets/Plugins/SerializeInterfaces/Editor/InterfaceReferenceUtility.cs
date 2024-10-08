@@ -164,9 +164,32 @@ namespace AYellowpaper.Editor
             return null;
         }
 
-        private static bool TryFindSuitableComponent(GameObject go, InterfaceObjectArguments args, out Component component)
+        private static bool TryFindSuitableComponent(GameObject go, 
+            InterfaceObjectArguments args, out Component component)
         {
             component = go.GetComponent(args.InterfaceType);
+
+            if(component == null)
+            {
+                Component[] components = go.GetComponentsInChildren(args.InterfaceType);
+
+                if (components.Length == 0)
+                {
+                    return false;
+                }
+                else if (components.Length == 1)
+                {
+                    component = components[0];
+                    return true;
+                }
+                else
+                {
+                    Debug.Log($"Found more than one typeof: {args.InterfaceType}");
+                    return false;
+                }
+
+            }
+
             return component != null;
         }
 
