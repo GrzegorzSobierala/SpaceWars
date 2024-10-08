@@ -154,7 +154,7 @@ namespace AYellowpaper.Editor
         {
             if (CanAssign(obj, args))
                 return obj;
-            if (args.ObjectType.IsSubclassOf(typeof(Component)))
+            if (args.ObjectType.IsSubclassOf(typeof(Component)) || obj is GameObject)
             {
                 if (obj is GameObject go && TryFindSuitableComponent(go, args, out Component foundComponent))
                     return foundComponent;
@@ -166,17 +166,8 @@ namespace AYellowpaper.Editor
 
         private static bool TryFindSuitableComponent(GameObject go, InterfaceObjectArguments args, out Component component)
         {
-            foreach (var comp in go.GetComponents(args.ObjectType))
-            {
-                if (CanAssign(comp, args))
-                {
-                    component = comp;
-                    return true;
-                }
-            }
-
-            component = null;
-            return false;
+            component = go.GetComponent(args.InterfaceType);
+            return component != null;
         }
 
         private static bool IsAssignedAndHasWrongInterface(UnityEngine.Object obj, InterfaceObjectArguments args) => obj != null && !args.InterfaceType.IsAssignableFrom(obj.GetType());

@@ -114,8 +114,8 @@ namespace AYellowpaper.Editor
             rootVisualElement.Add(tabContainer);
 
             _listView = new ListView(_filteredItems, 16, MakeItem, BindItem);
-            _listView.onSelectionChange += ItemSelectionChanged;
-            _listView.onItemsChosen += ItemsChosen;
+            _listView.selectionChanged += ItemSelectionChanged;
+            _listView.itemsChosen += ItemsChosen;
             rootVisualElement.Add(_listView);
 
             _detailsLabel = new Label();
