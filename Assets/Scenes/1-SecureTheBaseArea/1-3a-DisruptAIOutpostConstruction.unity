@@ -175,6 +175,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1532819135657364453, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3926950970943475696, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
       propertyPath: _mainDock
       value: 
@@ -191,12 +195,6 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2267230171579846668, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 4117767668394575261, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 6070233324088286811, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
@@ -474,6 +472,28 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
+--- !u!114 &482529027 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9129755987294741360, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
+  m_PrefabInstance: {fileID: 482529026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0362016bfc5a2a74f9fe9f4637e85bba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &482529028 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1631693799793060874, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
+  m_PrefabInstance: {fileID: 482529026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0362016bfc5a2a74f9fe9f4637e85bba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &563391945 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2048170900723462386, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
@@ -736,6 +756,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6651570090638292703, guid: 72ddc98cf387df141b0e572f47c831b7, type: 3}
+      propertyPath: targets.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6651570090638292703, guid: 72ddc98cf387df141b0e572f47c831b7, type: 3}
+      propertyPath: targets.Array.data[0]._underlyingValue
+      value: 
+      objectReference: {fileID: 482529028}
+    - target: {fileID: 6651570090638292703, guid: 72ddc98cf387df141b0e572f47c831b7, type: 3}
+      propertyPath: targets.Array.data[1]._underlyingValue
+      value: 
+      objectReference: {fileID: 482529027}
+    - target: {fileID: 6651570090638292703, guid: 72ddc98cf387df141b0e572f47c831b7, type: 3}
+      propertyPath: <NextQuestsOnEnd>k__BackingField.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -793,25 +829,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1405140949771455633, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
-      propertyPath: m_NavMeshData
-      value: 
-      objectReference: {fileID: 23800000, guid: aaf4940e0126cc5498a06ed57c8ffa92, type: 2}
-    - target: {fileID: 1771012470980059633, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.8333333
-      objectReference: {fileID: 0}
-    - target: {fileID: 4144713248879244963, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
-      propertyPath: m_NavMeshData
-      value: 
-      objectReference: {fileID: 23800000, guid: d9b7f822d2b51a24f93aafd059b025f2, type: 2}
     - target: {fileID: 4698385095336037033, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
       propertyPath: m_Name
       value: 1-3a-EnviroSpace
-      objectReference: {fileID: 0}
-    - target: {fileID: 5197743888111443249, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 8.333333
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

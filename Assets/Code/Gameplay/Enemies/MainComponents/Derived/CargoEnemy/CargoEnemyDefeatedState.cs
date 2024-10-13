@@ -9,6 +9,8 @@ namespace Game.Room.Enemy
 
         protected override void OnEnterState()
         {
+            base.OnEnterState();
+
             Destroy(_enemy.gameObject);
         }
 
