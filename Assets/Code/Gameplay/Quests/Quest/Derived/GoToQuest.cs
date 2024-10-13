@@ -8,22 +8,22 @@ namespace Game.Objectives
     {
         protected override void OnStartQuest()
         {
-            throw new System.NotImplementedException();
+            Debug.LogError("No failure implemented");
         }
 
         protected override void OnSuccess()
         {
-            throw new System.NotImplementedException();
+            Debug.LogError("No failure implemented");
         }
 
         protected override void OnFailure()
         {
-            throw new System.NotImplementedException();
+            Debug.LogError("No failure implemented");
         }
 
         protected override void OnEnd()
         {
-            throw new System.NotImplementedException();
+            Debug.LogError("No failure implemented");
         }
     }
 }

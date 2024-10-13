@@ -472,6 +472,28 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
+--- !u!114 &482529027 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9129755987294741360, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
+  m_PrefabInstance: {fileID: 482529026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0362016bfc5a2a74f9fe9f4637e85bba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &482529028 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1631693799793060874, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
+  m_PrefabInstance: {fileID: 482529026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0362016bfc5a2a74f9fe9f4637e85bba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &563391945 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2048170900723462386, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
@@ -732,6 +754,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3939569821326280490, guid: 72ddc98cf387df141b0e572f47c831b7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6651570090638292703, guid: 72ddc98cf387df141b0e572f47c831b7, type: 3}
+      propertyPath: targets.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6651570090638292703, guid: 72ddc98cf387df141b0e572f47c831b7, type: 3}
+      propertyPath: targets.Array.data[0]._underlyingValue
+      value: 
+      objectReference: {fileID: 482529028}
+    - target: {fileID: 6651570090638292703, guid: 72ddc98cf387df141b0e572f47c831b7, type: 3}
+      propertyPath: targets.Array.data[1]._underlyingValue
+      value: 
+      objectReference: {fileID: 482529027}
+    - target: {fileID: 6651570090638292703, guid: 72ddc98cf387df141b0e572f47c831b7, type: 3}
+      propertyPath: <NextQuestsOnEnd>k__BackingField.Array.size
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
