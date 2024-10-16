@@ -4,34 +4,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Player.Ui
+namespace Game.Dialogues
 {
     [CreateAssetMenu(fileName = "DialogueLine", menuName = "Dialogues/DialogueLine")]
     public class DialogueLine : ScriptableObject
     {
-        [BoxGroup("Type")] 
-        public DialogueLineType LineType;
+        [HideInInspector] public DialogueLineType LineType;
 
-        [BoxGroup("Character")] [HideIf("TypeIsDescription")] 
+        [ShowIf("_overrideIsEmpty"), HideIf("_typeIsDescription"), ReadOnly, Label("Character")]
         public CharacterType CharacterType;
-        [BoxGroup("Character")] [HideIf("TypeIsDescription")] [Tooltip("Not used if blank.")] 
+        [HideIf("_overrideIsEmptyOrTypeIsDescription"), ReadOnly, Label("Character"), Tooltip("Not used if blank.")]
         public string OverrideCharacterName;
-        [BoxGroup("Character")] [HideIf("TypeIsDescription")] [ShowAssetPreview] 
-        public Sprite CharacterSprite;
+        [HideInInspector] public Sprite CharacterSprite;
 
-        [BoxGroup("Text")] [TextArea(1, 20)] 
+        [HideInInspector] public EventReference VoiceEventRef;
+        [HideInInspector, Tooltip("Not used if null.")] public EventReference SoundEventRef;
+        [HideInInspector] public float SoundStartTime;
+
+        [TextArea(1, 20), Label("")]
         public string LineText;
 
-        [BoxGroup("Audio")] [HideIf("TypeIsDescription")] 
-        public EventReference VoiceEventRef;
-        [BoxGroup("Audio")] [Tooltip("Not used if null.")] 
-        public EventReference SoundEventRef;
-        [BoxGroup("Audio")] 
-        public float SoundStartTime;
-
-        private bool TypeIsDescription()
-        {
-            return LineType == DialogueLineType.DescriptionLine;
-        }
+        private bool _overrideIsEmpty => (OverrideCharacterName == "");
+        private bool _typeIsDescription => (LineType == DialogueLineType.DescriptionLine);
+        private bool _overrideIsEmptyOrTypeIsDescription => (_overrideIsEmpty || _typeIsDescription);
     }
 }
