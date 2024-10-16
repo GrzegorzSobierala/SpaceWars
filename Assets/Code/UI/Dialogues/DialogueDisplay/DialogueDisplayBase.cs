@@ -8,6 +8,6 @@ namespace Game.Dialogues
     {
         [field: SerializeField] public DialogueSequenceType SequenceType { get; private set; }
 
-        public abstract IEnumerator DisplaySequence(DialogueSequence dialogueSequence, Action onDialogueEnd);
+        public abstract void DisplaySequence(DialogueSequence dialogueSequence, Action onDialogueEnd);
     }
 }

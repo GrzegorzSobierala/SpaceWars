@@ -7,7 +7,7 @@ namespace Game.Dialogues
 {
     public class DialogueDisplayManager : MonoBehaviour
     {
-        [SerializeField] private List<DialogueDisplayBase> _displayControllers;
+        [SerializeField] private List<DialogueDisplayBase> _dialogueDisplays;
 
         private bool _dialogueIsDisplayed = false;
 
@@ -15,13 +15,15 @@ namespace Game.Dialogues
         {
             if (!_dialogueIsDisplayed)
             {
-                foreach (DialogueDisplayBase displayController in _displayControllers)
+                foreach (DialogueDisplayBase dialogueDisplay in _dialogueDisplays)
                 {
-                    if (dialogueSequence.SequenceType == displayController.SequenceType)
+                    if (dialogueSequence.SequenceType == dialogueDisplay.SequenceType)
                     {
                         _dialogueIsDisplayed = true;
                         onDialogueEnd += () => { _dialogueIsDisplayed = false; };
-                        StartCoroutine(displayController.DisplaySequence(dialogueSequence, onDialogueEnd));
+
+                        dialogueDisplay.DisplaySequence(dialogueSequence, onDialogueEnd);
+
                         return;
                     }
                 }
@@ -34,7 +36,13 @@ namespace Game.Dialogues
             }
         }
 
+
+
+
+
+
         //TESTING------------------------------------------------------------------
+        [Space(200)]
         [HorizontalLine(color: EColor.Gray)]
         [Header("Testing")]
         [SerializeField] private DialogueSequence _sequenceForTesting;

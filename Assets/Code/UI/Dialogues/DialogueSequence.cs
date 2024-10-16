@@ -14,10 +14,10 @@ namespace Game.Dialogues
         [BoxGroup("Lines in this sequence"), Expandable, ReorderableList] 
         public List<DialogueLine> DialogueLines;
 
-        [BoxGroup("Options after this sequence"), ShowIf(nameof(_typeIsOptions)), 
-        SerializedDictionary("Option text", "Option sequence")]
+        [BoxGroup("Choices after this sequence"), ShowIf(nameof(_typeIsChoice)), 
+        SerializedDictionary("Choice text", "Choice sequence")]
         public SerializedDictionary<string, DialogueSequence> Options;
 
-        private bool _typeIsOptions => SequenceType == DialogueSequenceType.OptionsSequence;
+        private bool _typeIsChoice => SequenceType == DialogueSequenceType.ChoiceHubSequence;
     }
 }
