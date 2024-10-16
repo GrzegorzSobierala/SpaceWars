@@ -1,7 +1,5 @@
 using FMODUnity;
 using NaughtyAttributes;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Dialogues
@@ -11,9 +9,9 @@ namespace Game.Dialogues
     {
         [HideInInspector] public DialogueLineType LineType;
 
-        [ShowIf("_overrideIsEmpty"), HideIf("_typeIsDescription"), ReadOnly, Label("Character")]
+        [ShowIf(nameof(_overrideEmptyAndTypeNotDesc)), ReadOnly, Label("Character")]
         public CharacterType CharacterType;
-        [HideIf("_overrideIsEmptyOrTypeIsDescription"), ReadOnly, Label("Character"), Tooltip("Not used if blank.")]
+        [ShowIf(nameof(_overrideNotEmptyAndTypeNotDesc)), ReadOnly, Label("Character"), Tooltip("Not used if blank.")]
         public string OverrideCharacterName;
         [HideInInspector] public Sprite CharacterSprite;
 
@@ -26,6 +24,8 @@ namespace Game.Dialogues
 
         private bool _overrideIsEmpty => (OverrideCharacterName == "");
         private bool _typeIsDescription => (LineType == DialogueLineType.DescriptionLine);
-        private bool _overrideIsEmptyOrTypeIsDescription => (_overrideIsEmpty || _typeIsDescription);
+        private bool _overrideEmptyAndTypeNotDesc => (_overrideIsEmpty && !_typeIsDescription);
+        private bool _overrideNotEmptyAndTypeNotDesc => (!_overrideIsEmpty && !_typeIsDescription);
+
     }
 }

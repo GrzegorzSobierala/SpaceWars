@@ -35,82 +35,103 @@ namespace Game.Dialogues
             LineText = serializedObject.FindProperty(nameof(DialogueLine.LineText));
         }
 
+        DialogueLine dialogueLine;
+        GUIStyle textAreaStyle;
+        GUIStyle titleStyle;
         private float _spaceSizeBig = 30f;
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            DialogueLine dialogueLine = (DialogueLine)target;
-            EditorGUIUtility.labelWidth = 150;
 
-            GUIStyle titleStyle = new GUIStyle(GUI.skin.label);
-            titleStyle.fontSize = 18;
-            titleStyle.fontStyle = FontStyle.Bold;
-            titleStyle.alignment = TextAnchor.MiddleCenter;
+            dialogueLine = (DialogueLine)target;
 
-            GUIStyle textAreaStyle = new GUIStyle(EditorStyles.textArea)
-            {
-                wordWrap = true
-            };
-
-
-            GUILayout.Label("Type", titleStyle);
-            EditorGUILayout.Space();
-            EditorGUILayout.PropertyField(LineType);
+            SetupOptions();
+            DisplayTypeField();
 
 
             if (dialogueLine.LineType == DialogueLineType.DescriptionLine)
             {
-                EditorGUILayout.Space(_spaceSizeBig);
-                GUILayout.Label("Audio", titleStyle);
-                EditorGUILayout.Space();
-                EditorGUILayout.PropertyField(SoundEventRef);
-                EditorGUILayout.PropertyField(SoundStartTime);
-
-                EditorGUILayout.Space(_spaceSizeBig);
-                GUILayout.Label("Text", titleStyle);
-                EditorGUILayout.Space();
-                dialogueLine.LineText = EditorGUILayout.TextArea(dialogueLine.LineText, textAreaStyle);
+                DisplayAudioFields(displaVoiceEventRef: false);
+                DisplayTextArea();
             }
             else
             {
-                EditorGUILayout.Space(_spaceSizeBig);
-                GUILayout.Label("Character", titleStyle);
-                EditorGUILayout.Space();
-                if (dialogueLine.CharacterSprite == null)
-                {
-                    EditorGUILayout.PropertyField(CharacterType);
-                    EditorGUILayout.PropertyField(OverrideCharacterName);
-                    EditorGUILayout.PropertyField(CharacterSprite);
-                }
-                else
-                {
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.BeginVertical();
-                    EditorGUILayout.PropertyField(CharacterType);
-                    EditorGUILayout.PropertyField(OverrideCharacterName);
-                    EditorGUILayout.PropertyField(CharacterSprite);
-                    EditorGUILayout.EndVertical();
-                    GUILayout.Box(dialogueLine.CharacterSprite.texture, GUILayout.Width(150), GUILayout.Height(200));
-                    EditorGUILayout.EndHorizontal();
-                }
-
-
-                EditorGUILayout.Space(_spaceSizeBig);
-                GUILayout.Label("Audio", titleStyle);
-                EditorGUILayout.Space();
-                EditorGUILayout.PropertyField(VoiceEventRef);
-                EditorGUILayout.PropertyField(SoundEventRef);
-                EditorGUILayout.PropertyField(SoundStartTime);
-
-
-                EditorGUILayout.Space(_spaceSizeBig);
-                GUILayout.Label("Text", titleStyle);
-                EditorGUILayout.Space();
-                dialogueLine.LineText = EditorGUILayout.TextArea(dialogueLine.LineText, textAreaStyle);
+                DisplayCharacterFields();
+                DisplayAudioFields(displaVoiceEventRef: true);
+                DisplayTextArea();
             }
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void SetupOptions()
+        {
+            EditorGUIUtility.labelWidth = 150;
+
+            titleStyle = new GUIStyle(GUI.skin.label);
+            titleStyle.fontSize = 18;
+            titleStyle.fontStyle = FontStyle.Bold;
+            titleStyle.alignment = TextAnchor.MiddleCenter;
+
+            textAreaStyle = new GUIStyle(EditorStyles.textArea)
+            {
+                wordWrap = true
+            };
+        }
+
+        private void DisplayTypeField()
+        {
+            GUILayout.Label("Type", titleStyle);
+            EditorGUILayout.Space();
+            EditorGUILayout.PropertyField(LineType);
+        }
+
+        private void DisplayCharacterFields()
+        {
+            EditorGUILayout.Space(_spaceSizeBig);
+            GUILayout.Label("Character", titleStyle);
+            EditorGUILayout.Space();
+            if (dialogueLine.CharacterSprite == null)
+            {
+                EditorGUILayout.PropertyField(CharacterType);
+                EditorGUILayout.PropertyField(OverrideCharacterName);
+                EditorGUILayout.PropertyField(CharacterSprite);
+            }
+            else
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.BeginVertical();
+                EditorGUILayout.PropertyField(CharacterType);
+                EditorGUILayout.PropertyField(OverrideCharacterName);
+                EditorGUILayout.PropertyField(CharacterSprite);
+                EditorGUILayout.EndVertical();
+                GUILayout.Box(dialogueLine.CharacterSprite.texture, GUILayout.Width(150), GUILayout.Height(200));
+                EditorGUILayout.EndHorizontal();
+            }
+        }
+
+        private void DisplayAudioFields(bool displaVoiceEventRef)
+        {
+            EditorGUILayout.Space(_spaceSizeBig);
+            GUILayout.Label("Audio", titleStyle);
+            EditorGUILayout.Space();
+
+            if (displaVoiceEventRef)
+            {
+                EditorGUILayout.PropertyField(VoiceEventRef);
+            }
+
+            EditorGUILayout.PropertyField(SoundEventRef);
+            EditorGUILayout.PropertyField(SoundStartTime);
+        }
+
+        private void DisplayTextArea()
+        {
+            EditorGUILayout.Space(_spaceSizeBig);
+            GUILayout.Label("Text", titleStyle);
+            EditorGUILayout.Space();
+            dialogueLine.LineText = EditorGUILayout.TextArea(dialogueLine.LineText, textAreaStyle);
         }
     }
 }
