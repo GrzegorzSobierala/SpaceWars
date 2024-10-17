@@ -320,6 +320,56 @@ namespace Game.Input.System
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Dialogues"",
+            ""id"": ""22d1bc6b-183f-4b71-98c5-7dba1ee2664c"",
+            ""actions"": [
+                {
+                    ""name"": ""Skip"",
+                    ""type"": ""Button"",
+                    ""id"": ""3600a2fc-c02b-47a0-be74-a56074aab835"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""1fb58146-67fd-4383-9805-7e78fbf42f38"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Skip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""de44f8ec-4c73-4484-b94f-be6b6813113d"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Skip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""728974de-e535-4bdd-ad5b-d4877a0e2c44"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Skip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -342,6 +392,9 @@ namespace Game.Input.System
             // Ui
             m_Ui = asset.FindActionMap("Ui", throwIfNotFound: true);
             m_Ui_Back = m_Ui.FindAction("Back", throwIfNotFound: true);
+            // Dialogues
+            m_Dialogues = asset.FindActionMap("Dialogues", throwIfNotFound: true);
+            m_Dialogues_Skip = m_Dialogues.FindAction("Skip", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -587,6 +640,52 @@ namespace Game.Input.System
             }
         }
         public UiActions @Ui => new UiActions(this);
+
+        // Dialogues
+        private readonly InputActionMap m_Dialogues;
+        private List<IDialoguesActions> m_DialoguesActionsCallbackInterfaces = new List<IDialoguesActions>();
+        private readonly InputAction m_Dialogues_Skip;
+        public struct DialoguesActions
+        {
+            private @PlayerControls m_Wrapper;
+            public DialoguesActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Skip => m_Wrapper.m_Dialogues_Skip;
+            public InputActionMap Get() { return m_Wrapper.m_Dialogues; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(DialoguesActions set) { return set.Get(); }
+            public void AddCallbacks(IDialoguesActions instance)
+            {
+                if (instance == null || m_Wrapper.m_DialoguesActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_DialoguesActionsCallbackInterfaces.Add(instance);
+                @Skip.started += instance.OnSkip;
+                @Skip.performed += instance.OnSkip;
+                @Skip.canceled += instance.OnSkip;
+            }
+
+            private void UnregisterCallbacks(IDialoguesActions instance)
+            {
+                @Skip.started -= instance.OnSkip;
+                @Skip.performed -= instance.OnSkip;
+                @Skip.canceled -= instance.OnSkip;
+            }
+
+            public void RemoveCallbacks(IDialoguesActions instance)
+            {
+                if (m_Wrapper.m_DialoguesActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IDialoguesActions instance)
+            {
+                foreach (var item in m_Wrapper.m_DialoguesActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_DialoguesActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public DialoguesActions @Dialogues => new DialoguesActions(this);
         public interface IGameplayActions
         {
             void OnMoveForward(InputAction.CallbackContext context);
@@ -606,6 +705,10 @@ namespace Game.Input.System
         public interface IUiActions
         {
             void OnBack(InputAction.CallbackContext context);
+        }
+        public interface IDialoguesActions
+        {
+            void OnSkip(InputAction.CallbackContext context);
         }
     }
 }

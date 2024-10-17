@@ -1,7 +1,9 @@
+using Game.Input.System;
 using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Dialogues
 {
@@ -46,11 +48,15 @@ namespace Game.Dialogues
         [HorizontalLine(color: EColor.Gray)]
         [Header("Testing")]
         [SerializeField] private DialogueSequence _sequenceForTesting;
+        [Inject] protected InputProvider _inputProvider;
         private Action _onDialogueEnd;
+
         [Button]
         private void TestDialogue()
         {
+            _inputProvider.SwitchActionMap(_inputProvider.PlayerControls.Dialogues);
             _onDialogueEnd = null;
+            _onDialogueEnd += () => { _inputProvider.SwitchActionMap(_inputProvider.PlayerControls.Gameplay);  };
             _onDialogueEnd += () => { Debug.Log("Dialogue ended!"); };
             StartDialogue(_sequenceForTesting, _onDialogueEnd);
         }

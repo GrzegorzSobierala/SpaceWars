@@ -12,31 +12,31 @@ namespace Game.Dialogues
         [SerializeField] private TextMeshProUGUI _characterLineTMP;
         [SerializeField] private TextMeshProUGUI _descriptionTMP;
 
-        private DialogueLine CurrentLine => _dialogueDisplay.CurrentLine;
+        private DialogueLine _currentLine => _dialogueDisplay.CurrentLine;
 
         public void DisplayCharacterName()
         {
             _characterNameTMP.gameObject.SetActive(true);
-            if (CurrentLine.OverrideCharacterName == "")
+            if (_currentLine.OverrideCharacterName == "")
             {
-                _characterNameTMP.text = CurrentLine.CharacterType.ToString();
+                _characterNameTMP.text = _currentLine.CharacterType.ToString();
             }
             else
             {
-                _characterNameTMP.text = CurrentLine.OverrideCharacterName;
+                _characterNameTMP.text = _currentLine.OverrideCharacterName;
             }
         }
 
         public void DisplayCharacterLineText()
         {
             _characterLineTMP.gameObject.SetActive(true);
-            _characterLineTMP.text = CurrentLine.LineText;
+            _characterLineTMP.text = _currentLine.LineText;
         }
 
         public void DisplayDescriptionLineText()
         {
             _descriptionTMP.gameObject.SetActive(true);
-            _descriptionTMP.text = CurrentLine.LineText;
+            _descriptionTMP.text = _currentLine.LineText;
         }
 
         public void ClearDisplay()

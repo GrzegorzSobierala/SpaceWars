@@ -21,15 +21,15 @@ namespace Game.Dialogues
         protected int _currentLineIndex;
         protected Action _onDialogueEnd;
 
-        protected PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
-        protected InputAction Skip => Input.SwitchGun;
+        protected PlayerControls.DialoguesActions Input => _inputProvider.PlayerControls.Dialogues;
 
         public void DisplaySequence(DialogueSequence dialogueSequence, Action onDialogueEnd)
         {
             CurrentSequence = dialogueSequence;
             _currentLineIndex = 0;
-            gameObject.SetActive(true);
             _onDialogueEnd += () => { onDialogueEnd?.Invoke(); _onDialogueEnd = null; };
+
+            gameObject.SetActive(true);
 
             StartCoroutine(DisplayCurrentDialogueLine());
         }
@@ -43,7 +43,7 @@ namespace Game.Dialogues
             SetupDisplays();
 
             yield return null;
-            while (!Skip.WasPerformedThisFrame())
+            while (!Input.Skip.WasPerformedThisFrame())
             {
                 yield return null;
             }
