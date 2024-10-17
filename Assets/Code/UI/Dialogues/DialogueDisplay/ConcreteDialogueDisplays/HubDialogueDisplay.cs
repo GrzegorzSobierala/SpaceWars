@@ -1,4 +1,4 @@
-
+using UnityEngine;
 
 namespace Game.Dialogues
 {

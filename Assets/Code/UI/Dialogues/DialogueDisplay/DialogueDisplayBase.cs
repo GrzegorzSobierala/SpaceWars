@@ -2,7 +2,6 @@ using Game.Input.System;
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Zenject;
 
 namespace Game.Dialogues
@@ -27,6 +26,7 @@ namespace Game.Dialogues
         {
             CurrentSequence = dialogueSequence;
             _currentLineIndex = 0;
+            CurrentLine = CurrentSequence.DialogueLines[_currentLineIndex];
             _onDialogueEnd += () => { onDialogueEnd?.Invoke(); _onDialogueEnd = null; };
 
             gameObject.SetActive(true);
@@ -36,10 +36,6 @@ namespace Game.Dialogues
 
         protected virtual IEnumerator DisplayCurrentDialogueLine()
         {
-            ClearDisplay();
-
-            CurrentLine = CurrentSequence.DialogueLines[_currentLineIndex];
-
             SetupDisplays();
 
             yield return null;
@@ -49,20 +45,13 @@ namespace Game.Dialogues
             }
             yield return null;
 
-            if (_currentLineIndex <= CurrentSequence.DialogueLines.Count - 2)
-            {
-                _currentLineIndex++;
-                StartCoroutine(DisplayCurrentDialogueLine());
-            }
-            else
-            {
-                EndSequence();
-            }
+            ManageDisplayingNextLine();
         }
 
-        protected void SetupDisplays()
+
+        protected virtual void SetupDisplays()
         {
-            ClearDisplay();
+            ClearDisplays();
 
             if (CurrentLine.LineType != DialogueLineType.DescriptionLine)
             {
@@ -76,10 +65,24 @@ namespace Game.Dialogues
             }
         }
 
-        protected virtual void ClearDisplay()
+        protected virtual void ClearDisplays()
         {
             _characterSpriteDisplay.ClearDisplay();
             _dialogueTextDisplay.ClearDisplay();
+        }
+
+        protected virtual void ManageDisplayingNextLine()
+        {
+            if (_currentLineIndex <= CurrentSequence.DialogueLines.Count - 2)
+            {
+                _currentLineIndex++;
+                CurrentLine = CurrentSequence.DialogueLines[_currentLineIndex];
+                StartCoroutine(DisplayCurrentDialogueLine());
+            }
+            else
+            {
+                EndSequence();
+            }
         }
 
         protected void ClearCurrentFields()

@@ -44,21 +44,52 @@ namespace Game.Dialogues
 
 
         //TESTING------------------------------------------------------------------
-        [Space(200)]
+        [Space(100)]
         [HorizontalLine(color: EColor.Gray)]
         [Header("Testing")]
-        [SerializeField] private DialogueSequence _sequenceForTesting;
-        [Inject] protected InputProvider _inputProvider;
+        [SerializeField] private DialogueSequence _hubSequence;
+        [SerializeField] private DialogueSequence _choiceSequence;
+        [SerializeField] private DialogueSequence _blockSequence;
+        [SerializeField] private DialogueSequence _backgroundSequence;
+        [Inject] private InputProvider _inputProvider;
         private Action _onDialogueEnd;
 
         [Button]
-        private void TestDialogue()
+        private void TestDialogueHub()
         {
             _inputProvider.SwitchActionMap(_inputProvider.PlayerControls.Dialogues);
             _onDialogueEnd = null;
             _onDialogueEnd += () => { _inputProvider.SwitchActionMap(_inputProvider.PlayerControls.Gameplay);  };
-            _onDialogueEnd += () => { Debug.Log("Dialogue ended!"); };
-            StartDialogue(_sequenceForTesting, _onDialogueEnd);
+            _onDialogueEnd += () => { Debug.Log("Dialogue ended"); };
+            StartDialogue(_hubSequence, _onDialogueEnd);
+        }
+
+        [Button]
+        private void TestDialogueChoice()
+        {
+            _inputProvider.SwitchActionMap(_inputProvider.PlayerControls.Dialogues);
+            _onDialogueEnd = null;
+            _onDialogueEnd += () => { _inputProvider.SwitchActionMap(_inputProvider.PlayerControls.Gameplay); };
+            _onDialogueEnd += () => { Debug.Log("Dialogue ended"); };
+            StartDialogue(_choiceSequence, _onDialogueEnd);
+        }
+
+        [Button]
+        private void TestDialogueBlock()
+        {
+            _inputProvider.SwitchActionMap(_inputProvider.PlayerControls.Dialogues);
+            _onDialogueEnd = null;
+            _onDialogueEnd += () => { _inputProvider.SwitchActionMap(_inputProvider.PlayerControls.Gameplay); };
+            _onDialogueEnd += () => { Debug.Log("Dialogue ended"); };
+            StartDialogue(_blockSequence, _onDialogueEnd);
+        }
+
+        [Button]
+        private void TestDialogueBackground()
+        {
+            _onDialogueEnd = null;
+            _onDialogueEnd += () => { Debug.Log("Dialogue ended"); };
+            StartDialogue(_backgroundSequence, _onDialogueEnd);
         }
     }
 }
