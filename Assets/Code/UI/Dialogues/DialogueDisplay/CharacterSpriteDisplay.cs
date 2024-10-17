@@ -6,13 +6,13 @@ namespace Game.Dialogues
 {
     public class CharacterSpriteDisplay : MonoBehaviour
     {
-        [Inject] private BlockMissionDialogueDisplay _blockMissionDialogueDisplay;
+        [Inject] private DialogueDisplayBase _dialogueDisplay;
 
         [SerializeField] private Image _characterLeftSprite;
         [SerializeField] private Image _characterRightSprite;
         [SerializeField] private Image _nonShipCharacterSprite;
 
-        private DialogueLine CurrentLine => _blockMissionDialogueDisplay.CurrentLine;
+        private DialogueLine CurrentLine => _dialogueDisplay.CurrentLine;
 
         public void DisplayCharacterSprite()
         {

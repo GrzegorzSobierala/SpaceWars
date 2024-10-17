@@ -16,7 +16,7 @@ namespace Game.Dialogues
 
         [BoxGroup("Choices after this sequence"), ShowIf(nameof(_typeIsChoice)), 
         SerializedDictionary("Choice text", "Choice sequence")]
-        public SerializedDictionary<string, DialogueSequence> Options;
+        public SerializedDictionary<string, DialogueSequence> Choices;
 
         private bool _typeIsChoice => SequenceType == DialogueSequenceType.ChoiceHubSequence;
     }

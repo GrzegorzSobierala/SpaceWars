@@ -6,13 +6,13 @@ namespace Game.Dialogues
 {
     public class DialogueTextDisplay : MonoBehaviour
     {
-        [Inject] private BlockMissionDialogueDisplay _blockMissionDialogueDisplay;
+        [Inject] private DialogueDisplayBase _dialogueDisplay;
 
         [SerializeField] private TextMeshProUGUI _characterNameTMP;
         [SerializeField] private TextMeshProUGUI _characterLineTMP;
         [SerializeField] private TextMeshProUGUI _descriptionTMP;
 
-        private DialogueLine CurrentLine => _blockMissionDialogueDisplay.CurrentLine;
+        private DialogueLine CurrentLine => _dialogueDisplay.CurrentLine;
 
         public void DisplayCharacterName()
         {
