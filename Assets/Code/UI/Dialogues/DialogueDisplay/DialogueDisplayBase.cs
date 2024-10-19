@@ -73,16 +73,21 @@ namespace Game.Dialogues
 
         protected virtual void ManageDisplayingNextLine()
         {
-            if (_currentLineIndex <= CurrentSequence.DialogueLines.Count - 2)
+            if (_currentLineIndex + 1 <= CurrentSequence.DialogueLines.Count - 1)
             {
-                _currentLineIndex++;
-                CurrentLine = CurrentSequence.DialogueLines[_currentLineIndex];
-                StartCoroutine(DisplayCurrentDialogueLine());
+                DisplayNextLine();
             }
             else
             {
-                EndSequence();
+                EndDialogue();
             }
+        }
+
+        protected void DisplayNextLine()
+        {
+            _currentLineIndex++;
+            CurrentLine = CurrentSequence.DialogueLines[_currentLineIndex];
+            StartCoroutine(DisplayCurrentDialogueLine());
         }
 
         protected void ClearCurrentFields()
@@ -92,7 +97,7 @@ namespace Game.Dialogues
             _currentLineIndex = 0;
         }
 
-        protected virtual void EndSequence()
+        protected virtual void EndDialogue()
         {
             ClearCurrentFields();
             gameObject.SetActive(false);

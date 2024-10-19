@@ -9,39 +9,69 @@ namespace Game.Dialogues
 
         [SerializeField] private ChoicesDisplay _choicesDisplay;
 
-        public void DisplayChoiceSequence(DialogueSequence dialogueSequence)
+        public void DisplayChosenSequenceOnClick(DialogueSequence dialogueSequence)
         {
             CurrentSequence = dialogueSequence;
             _currentLineIndex = 0;
+            CurrentLine = CurrentSequence.DialogueLines[_currentLineIndex];
             StartCoroutine(DisplayCurrentDialogueLine());
         }
 
-        public void EndDialogue()
+        public void EndDialogueOnClick()
         {
-            ClearCurrentFields();
-            gameObject.SetActive(false);
-            _onDialogueEnd?.Invoke();
+            EndDialogue();
         }
 
-        protected override void EndSequence()
+        protected override void SetupDisplays()
+        {
+            ClearDisplays();
+
+            if (CurrentLine.LineType != DialogueLineType.DescriptionLine)
+            {
+                _characterSpriteDisplay.DisplayCharacterSprite();
+                _dialogueTextDisplay.DisplayCharacterName();
+                _dialogueTextDisplay.DisplayCharacterLineText();
+            }
+            else
+            {
+                _dialogueTextDisplay.DisplayDescriptionLineText();
+            }
+
+            if (_currentLineIndex == CurrentSequence.DialogueLines.Count - 1)
+            {
+                ManageDisplayingChoices();
+            }
+        }
+
+        protected override void ManageDisplayingNextLine()
+        {
+            if (_currentLineIndex + 1 <= CurrentSequence.DialogueLines.Count - 1)
+            {
+                DisplayNextLine();
+            }
+        }
+
+        private void ManageDisplayingChoices()
         {
             if (MainChoices == null)
             {
                 MainChoices = CurrentSequence.Choices;
                 _onDialogueEnd += () => { MainChoices = null; };
-                _choicesDisplay.DisplayOptions(MainChoices);
+                _choicesDisplay.DisplayChoices(MainChoices);
             }
             else if (CurrentSequence.SequenceType == DialogueSequenceType.HubSequence)
             {
-                _choicesDisplay.DisplayOptions(MainChoices);
+                _choicesDisplay.DisplayChoices(MainChoices);
             }
             else if (CurrentSequence.SequenceType == DialogueSequenceType.ChoiceHubSequence)
             {
-                _choicesDisplay.DisplayOptions(CurrentSequence.Choices);
+                _choicesDisplay.DisplayChoices(CurrentSequence.Choices);
             }
             else
             {
-                Debug.LogWarning("One of the choices is not a ChoiceHubSequence nor HubSequence.");
+                Debug.LogError("Current sequence was not a ChoiceHubSequence nor a HubSequence. " +
+                    "Subsequences in the ChoiceHubSequence should only be on of these two." +
+                    "Dialogue ended because of this error.");
                 EndDialogue();
             }
         }

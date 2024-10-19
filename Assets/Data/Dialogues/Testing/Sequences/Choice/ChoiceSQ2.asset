@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7738eab5b39f6034a955c5cd8e70d31c, type: 3}
-  m_Name: ChoiceTest
+  m_Name: ChoiceSQ2
   m_EditorClassIdentifier: 
   SequenceType: 1
   DialogueLines:
   - {fileID: 11400000, guid: 76bc175773c2f2341b76fd8d95071fca, type: 2}
-  - {fileID: 11400000, guid: 921d62ed8e1beda47846353587847163, type: 2}
-  - {fileID: 11400000, guid: 06ba9aaf75fdfc741b651d80be92153f, type: 2}
   Choices:
     _serializedList:
-    - Key: ChoiceTest 1
-      Value: {fileID: 11400000, guid: 5c1b59a2fa17a3b41b7b7d7a9ee07d6a, type: 2}
-    - Key: ChoiceTest 2
-      Value: {fileID: 11400000, guid: 9d7d8fae94ca4054fa44a4a0b23c9361, type: 2}
+    - Key: "Kim on by\u0142?"
+      Value: {fileID: 11400000, guid: 60443022f6566d14ca9d7a4a1ca896fd, type: 2}
+    - Key: "Chcesz go odnale\u017A\u0107?"
+      Value: {fileID: 11400000, guid: 6b67de05dce0b9245a5e110b07c2c48b, type: 2}
+    - Key: "Co si\u0119 sta\u0142o z twoj\u0105 matk\u0105, gdy si\u0119 rozeszli?"
+      Value: {fileID: 11400000, guid: e70fb5644204fef44a04078d3efe7cd4, type: 2}

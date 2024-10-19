@@ -14,7 +14,7 @@ namespace Game.Dialogues
 
         private List<ChoiceButton> _buttons;
 
-        public void DisplayOptions(Dictionary<string, DialogueSequence> choices)
+        public void DisplayChoices(Dictionary<string, DialogueSequence> choices)
         {
             _buttons = new List<ChoiceButton>();
 
@@ -33,7 +33,7 @@ namespace Game.Dialogues
                 _buttons.Add(exitButton);
                 exitButton.ChoiceText = _exitButtonText;
                 exitButton.Button.onClick.AddListener(DestroyButtons);
-                exitButton.Button.onClick.AddListener(_choiceHubDialogueDisplay.EndDialogue);
+                exitButton.Button.onClick.AddListener(_choiceHubDialogueDisplay.EndDialogueOnClick);
             }
         }
 

@@ -30,11 +30,11 @@ namespace Game.Dialogues
                     }
                 }
 
-                Debug.LogWarning("No display implemented for " + dialogueSequence.SequenceType.ToString() + " type.");
+                Debug.LogError("No display implemented for " + dialogueSequence.SequenceType.ToString() + " type.");
             }
             else
             {
-                Debug.LogWarning("Trying to display dialogue while other is displayed.");
+                Debug.LogError("Trying to display dialogue while other is displayed.");
             }
         }
 

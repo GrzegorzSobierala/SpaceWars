@@ -22,18 +22,9 @@ namespace Game.Dialogues
 
             if (ChoiceSequence != null)
             {
-                Button.onClick.AddListener(DisplaySequence);
+                Button.onClick.AddListener(() => { 
+                    _choiceHubDialogueDisplay.DisplayChosenSequenceOnClick(ChoiceSequence); });
             }
-            else
-            {
-                Button.onClick.AddListener(() => { Debug.LogWarning("Choice sequence not assigned."); });
-            }
-        }
-
-        private void DisplaySequence()
-        {
-            Debug.Log(_choiceHubDialogueDisplay);
-            _choiceHubDialogueDisplay.DisplayChoiceSequence(ChoiceSequence);
         }
     }
 }
