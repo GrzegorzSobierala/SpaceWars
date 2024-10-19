@@ -9,8 +9,8 @@ namespace Game.Dialogues
         [Inject] private ChoiceHubDialogueDisplay _choiceHubDialogueDisplay;
         [Inject] private DiContainer _container;
 
-        [SerializeField] private string _exitButtonText = "See ya!";
         [SerializeField] private ChoiceButton _choiceButtonPrefab;
+        [SerializeField] private string _exitButtonText = "See ya!";
 
         private List<ChoiceButton> _buttons;
 
@@ -43,6 +43,7 @@ namespace Game.Dialogues
             {
                 Destroy(button.gameObject);
             }
+            _buttons.Clear();
         }
     }
 }

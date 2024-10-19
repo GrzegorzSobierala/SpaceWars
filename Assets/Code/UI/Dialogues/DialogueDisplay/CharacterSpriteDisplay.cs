@@ -8,9 +8,9 @@ namespace Game.Dialogues
     {
         [Inject] private DialogueDisplayBase _dialogueDisplay;
 
-        [SerializeField] private Image _characterLeftSprite;
-        [SerializeField] private Image _characterRightSprite;
-        [SerializeField] private Image _nonShipCharacterSprite;
+        [SerializeField] private Image _characterLeftImage;
+        [SerializeField] private Image _characterRightImage;
+        [SerializeField] private Image _nonShipCharacterImage;
 
         private DialogueLine CurrentLine => _dialogueDisplay.CurrentLine;
 
@@ -21,27 +21,27 @@ namespace Game.Dialogues
                 if (CurrentLine.CharacterType == CharacterType.MainCharacter
                     && CurrentLine.OverrideCharacterName == "")
                 {
-                    _characterRightSprite.gameObject.SetActive(true);
-                    _characterRightSprite.sprite = CurrentLine.CharacterSprite;
+                    _characterRightImage.gameObject.SetActive(true);
+                    _characterRightImage.sprite = CurrentLine.CharacterSprite;
                 }
                 else
                 {
-                    _characterLeftSprite.gameObject.SetActive(true);
-                    _characterLeftSprite.sprite = CurrentLine.CharacterSprite;
+                    _characterLeftImage.gameObject.SetActive(true);
+                    _characterLeftImage.sprite = CurrentLine.CharacterSprite;
                 }
             }
             else if (CurrentLine.LineType == DialogueLineType.NonShipCharacterLine)
             {
-                _nonShipCharacterSprite.gameObject.SetActive(true);
-                _nonShipCharacterSprite.sprite = CurrentLine.CharacterSprite;
+                _nonShipCharacterImage.gameObject.SetActive(true);
+                _nonShipCharacterImage.sprite = CurrentLine.CharacterSprite;
             }
         }
 
         public void ClearDisplay()
         {
-            _characterLeftSprite.gameObject.SetActive(false);
-            _characterRightSprite.gameObject.SetActive(false);
-            _nonShipCharacterSprite.gameObject.SetActive(false);
+            _characterLeftImage.gameObject.SetActive(false);
+            _characterRightImage.gameObject.SetActive(false);
+            _nonShipCharacterImage.gameObject.SetActive(false);
         }
     }
 }

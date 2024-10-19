@@ -9,9 +9,9 @@ namespace Game.Dialogues
     {
         [HideInInspector] public DialogueLineType LineType;
 
-        [ShowIf(nameof(_overrideEmptyAndTypeNotDesc)), ReadOnly, Label("Character")]
+        [ShowIf(nameof(OverrideEmptyAndTypeNotDesc)), ReadOnly, Label("Character")]
         public CharacterType CharacterType;
-        [ShowIf(nameof(_overrideNotEmptyAndTypeNotDesc)), ReadOnly, Label("Character"), Tooltip("Not used if blank.")]
+        [ShowIf(nameof(OverrideNotEmptyAndTypeNotDesc)), ReadOnly, Label("Character"), Tooltip("Not used if blank.")]
         public string OverrideCharacterName;
         [HideInInspector] public Sprite CharacterSprite;
 
@@ -22,10 +22,9 @@ namespace Game.Dialogues
         [TextArea(1, 20), Label("")]
         public string LineText;
 
-        private bool _overrideIsEmpty => (OverrideCharacterName == "");
-        private bool _typeIsDescription => (LineType == DialogueLineType.DescriptionLine);
-        private bool _overrideEmptyAndTypeNotDesc => (_overrideIsEmpty && !_typeIsDescription);
-        private bool _overrideNotEmptyAndTypeNotDesc => (!_overrideIsEmpty && !_typeIsDescription);
-
+        private bool OverrideIsEmpty => (OverrideCharacterName == "");
+        private bool TypeIsDescription => (LineType == DialogueLineType.DescriptionLine);
+        private bool OverrideEmptyAndTypeNotDesc => (OverrideIsEmpty && !TypeIsDescription);
+        private bool OverrideNotEmptyAndTypeNotDesc => (!OverrideIsEmpty && !TypeIsDescription);
     }
 }

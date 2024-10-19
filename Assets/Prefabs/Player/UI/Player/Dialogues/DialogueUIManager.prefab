@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3087532729615612700}
   - component: {fileID: 965163441957222505}
   m_Layer: 5
-  m_Name: NonShipCharacterSprite
+  m_Name: NonShipCharacterImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -165,7 +165,7 @@ GameObject:
   - component: {fileID: 8752687966422098172}
   - component: {fileID: 5066554343035019648}
   m_Layer: 5
-  m_Name: CharacterLeftSprite
+  m_Name: CharacterLeftImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -414,9 +414,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43954ce273e27e241939294a72fa85c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterLeftSprite: {fileID: 2524734675536653605}
-  _characterRightSprite: {fileID: 8806946023737898814}
-  _nonShipCharacterSprite: {fileID: 965163441957222505}
+  _characterLeftImage: {fileID: 2524734675536653605}
+  _characterRightImage: {fileID: 8806946023737898814}
+  _nonShipCharacterImage: {fileID: 965163441957222505}
 --- !u!1 &1356135969675734802
 GameObject:
   m_ObjectHideFlags: 0
@@ -1286,7 +1286,7 @@ GameObject:
   - component: {fileID: 2388489222818545672}
   - component: {fileID: 8712408402951839428}
   m_Layer: 5
-  m_Name: CharacterRightSprite
+  m_Name: CharacterRightImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1426,8 +1426,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e38a8b707d4a2a4fa9f578640d5e6fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _exitButtonText: See ya!
   _choiceButtonPrefab: {fileID: 3577102256762424091, guid: c2b861c74e37ca344a9d2a6f524fd4e1, type: 3}
+  _exitButtonText: See ya!
 --- !u!1 &3289023764063948200
 GameObject:
   m_ObjectHideFlags: 0
@@ -1774,7 +1774,7 @@ GameObject:
   - component: {fileID: 9046413134405332409}
   - component: {fileID: 8821949823481048592}
   m_Layer: 5
-  m_Name: NonShipCharacterSprite
+  m_Name: NonShipCharacterImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1851,7 +1851,7 @@ GameObject:
   - component: {fileID: 6692183285760002800}
   - component: {fileID: 2116810039910759960}
   m_Layer: 5
-  m_Name: NonShipCharacterSprite
+  m_Name: NonShipCharacterImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2044,9 +2044,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43954ce273e27e241939294a72fa85c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterLeftSprite: {fileID: 1497068744902655805}
-  _characterRightSprite: {fileID: 5093053035075929612}
-  _nonShipCharacterSprite: {fileID: 1728989530617735125}
+  _characterLeftImage: {fileID: 1497068744902655805}
+  _characterRightImage: {fileID: 5093053035075929612}
+  _nonShipCharacterImage: {fileID: 1728989530617735125}
 --- !u!1 &3769358543506055578
 GameObject:
   m_ObjectHideFlags: 0
@@ -2158,8 +2158,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 120}
-  m_SizeDelta: {x: 1920, y: 250}
+  m_AnchoredPosition: {x: 0, y: 122.5}
+  m_SizeDelta: {x: 1920, y: 245}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1706976517180715710
 CanvasRenderer:
@@ -2211,7 +2211,7 @@ GameObject:
   - component: {fileID: 1645403722234680039}
   - component: {fileID: 1497068744902655805}
   m_Layer: 5
-  m_Name: CharacterLeftSprite
+  m_Name: CharacterLeftImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2424,7 +2424,7 @@ GameObject:
   - component: {fileID: 6587139853455761489}
   - component: {fileID: 5093053035075929612}
   m_Layer: 5
-  m_Name: CharacterRightSprite
+  m_Name: CharacterRightImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2899,9 +2899,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43954ce273e27e241939294a72fa85c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterLeftSprite: {fileID: 5066554343035019648}
-  _characterRightSprite: {fileID: 798276044282847191}
-  _nonShipCharacterSprite: {fileID: 8821949823481048592}
+  _characterLeftImage: {fileID: 5066554343035019648}
+  _characterRightImage: {fileID: 798276044282847191}
+  _nonShipCharacterImage: {fileID: 8821949823481048592}
 --- !u!1 &6549096816034012794
 GameObject:
   m_ObjectHideFlags: 0
@@ -3053,7 +3053,7 @@ GameObject:
   - component: {fileID: 6825860575685760359}
   - component: {fileID: 1728989530617735125}
   m_Layer: 5
-  m_Name: NonShipCharacterSprite
+  m_Name: NonShipCharacterImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3317,8 +3317,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 120}
-  m_SizeDelta: {x: 1920, y: 250}
+  m_AnchoredPosition: {x: 0, y: 122.5}
+  m_SizeDelta: {x: 1920, y: 245}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7952827148449839614
 CanvasRenderer:
@@ -3851,9 +3851,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43954ce273e27e241939294a72fa85c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterLeftSprite: {fileID: 6998627738553406084}
-  _characterRightSprite: {fileID: 8712408402951839428}
-  _nonShipCharacterSprite: {fileID: 2116810039910759960}
+  _characterLeftImage: {fileID: 6998627738553406084}
+  _characterRightImage: {fileID: 8712408402951839428}
+  _nonShipCharacterImage: {fileID: 2116810039910759960}
 --- !u!1 &7890298397589439027
 GameObject:
   m_ObjectHideFlags: 0
@@ -3866,7 +3866,7 @@ GameObject:
   - component: {fileID: 2998018006323142884}
   - component: {fileID: 2524734675536653605}
   m_Layer: 5
-  m_Name: CharacterLeftSprite
+  m_Name: CharacterLeftImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4084,7 +4084,7 @@ GameObject:
   - component: {fileID: 7678718766093017955}
   - component: {fileID: 798276044282847191}
   m_Layer: 5
-  m_Name: CharacterRightSprite
+  m_Name: CharacterRightImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4183,8 +4183,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 120}
-  m_SizeDelta: {x: 1920, y: 250}
+  m_AnchoredPosition: {x: 0, y: 122.5}
+  m_SizeDelta: {x: 1920, y: 245}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1318410272082712657
 CanvasRenderer:
@@ -4236,7 +4236,7 @@ GameObject:
   - component: {fileID: 8699761206057428873}
   - component: {fileID: 6998627738553406084}
   m_Layer: 5
-  m_Name: CharacterLeftSprite
+  m_Name: CharacterLeftImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4449,7 +4449,7 @@ GameObject:
   - component: {fileID: 1768116271871868434}
   - component: {fileID: 8806946023737898814}
   m_Layer: 5
-  m_Name: CharacterRightSprite
+  m_Name: CharacterRightImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

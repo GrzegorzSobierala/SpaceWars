@@ -46,26 +46,26 @@ namespace Game.Dialogues
 
             dialogueLine = (DialogueLine)target;
 
-            SetupOptions();
+            SetupStyleOptions();
             DisplayTypeField();
 
 
             if (dialogueLine.LineType == DialogueLineType.DescriptionLine)
             {
-                DisplayAudioFields(displaVoiceEventRef: false);
+                DisplayAudioFields(displayVoiceField: false);
                 DisplayTextArea();
             }
             else
             {
                 DisplayCharacterFields();
-                DisplayAudioFields(displaVoiceEventRef: true);
+                DisplayAudioFields(displayVoiceField: true);
                 DisplayTextArea();
             }
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void SetupOptions()
+        private void SetupStyleOptions()
         {
             EditorGUIUtility.labelWidth = 150;
 
@@ -111,13 +111,13 @@ namespace Game.Dialogues
             }
         }
 
-        private void DisplayAudioFields(bool displaVoiceEventRef)
+        private void DisplayAudioFields(bool displayVoiceField)
         {
             EditorGUILayout.Space(_spaceSizeBig);
             GUILayout.Label("Audio", titleStyle);
             EditorGUILayout.Space();
 
-            if (displaVoiceEventRef)
+            if (displayVoiceField)
             {
                 EditorGUILayout.PropertyField(VoiceEventRef);
             }

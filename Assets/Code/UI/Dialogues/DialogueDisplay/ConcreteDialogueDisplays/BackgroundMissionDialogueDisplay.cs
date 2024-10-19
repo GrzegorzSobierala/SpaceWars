@@ -14,18 +14,18 @@ namespace Game.Dialogues
         {
             SetupDisplays();
 
-            yield return new WaitForSeconds(LineDisplayLength(CurrentLine));
+            yield return new WaitForSecondsRealtime(LineDisplayTime(CurrentLine));
 
             ManageDisplayingNextLine();
         }
 
-        private float LineDisplayLength(DialogueLine dialogueLine)
+        private float LineDisplayTime(DialogueLine dialogueLine)
         {
-            float lineDisplayLength = _backupTime;
+            float lineDisplayTime = 0;
             int countChars = dialogueLine.LineText.Replace(" ", null).Length;
-            lineDisplayLength += countChars / _charsPerSecond;
+            lineDisplayTime += _backupTime + (countChars / _charsPerSecond);
 
-            return lineDisplayLength;
+            return lineDisplayTime;
         }
     }
 }

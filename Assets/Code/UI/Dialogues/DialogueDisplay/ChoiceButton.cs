@@ -22,8 +22,7 @@ namespace Game.Dialogues
 
             if (ChoiceSequence != null)
             {
-                Button.onClick.AddListener(() => { 
-                    _choiceHubDialogueDisplay.DisplayChosenSequenceOnClick(ChoiceSequence); });
+                Button.onClick.AddListener(() => { _choiceHubDialogueDisplay.DisplayChosenSequenceOnClick(ChoiceSequence); });
             }
         }
     }

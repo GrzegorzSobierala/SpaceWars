@@ -10,7 +10,7 @@ namespace Game.Dialogues
     {
         [Inject] protected InputProvider _inputProvider;
 
-        [field: SerializeField] public DialogueSequenceType SequenceType { get; protected set; }
+        [field: SerializeField] public DialogueSequenceType SequenceType { get; private set; }
         public DialogueSequence CurrentSequence { get; protected set; }
         public DialogueLine CurrentLine { get; protected set; }
 
@@ -22,7 +22,7 @@ namespace Game.Dialogues
 
         protected PlayerControls.DialoguesActions Input => _inputProvider.PlayerControls.Dialogues;
 
-        public void DisplaySequence(DialogueSequence dialogueSequence, Action onDialogueEnd)
+        public void DisplayDialogue(DialogueSequence dialogueSequence, Action onDialogueEnd)
         {
             CurrentSequence = dialogueSequence;
             _currentLineIndex = 0;
@@ -38,7 +38,6 @@ namespace Game.Dialogues
         {
             SetupDisplays();
 
-            yield return null;
             while (!Input.Skip.WasPerformedThisFrame())
             {
                 yield return null;
@@ -90,18 +89,18 @@ namespace Game.Dialogues
             StartCoroutine(DisplayCurrentDialogueLine());
         }
 
-        protected void ClearCurrentFields()
-        {
-            CurrentSequence = null;
-            CurrentLine = null;
-            _currentLineIndex = 0;
-        }
-
         protected virtual void EndDialogue()
         {
             ClearCurrentFields();
             gameObject.SetActive(false);
             _onDialogueEnd?.Invoke();
+        }
+
+        protected void ClearCurrentFields()
+        {
+            CurrentSequence = null;
+            CurrentLine = null;
+            _currentLineIndex = 0;
         }
     }
 }
