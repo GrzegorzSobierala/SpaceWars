@@ -10,7 +10,8 @@ namespace Game.Dialogues
         [Inject] private DiContainer _container;
 
         [SerializeField] private ChoiceButton _choiceButtonPrefab;
-        [SerializeField] private string _exitButtonText = "See ya!";
+        [SerializeField] private string _exitButtonText = "See ya! [End dialogue]";
+        [SerializeField] private string _returnButtonText = "[Return]";
 
         private List<ChoiceButton> _buttons;
 
@@ -34,6 +35,14 @@ namespace Game.Dialogues
                 exitButton.ChoiceText = _exitButtonText;
                 exitButton.Button.onClick.AddListener(DestroyButtons);
                 exitButton.Button.onClick.AddListener(_choiceHubDialogueDisplay.EndDialogueOnClick);
+            }
+            else
+            {
+                ChoiceButton returnButton = _container.InstantiatePrefabForComponent<ChoiceButton>(_choiceButtonPrefab, transform);
+                _buttons.Add(returnButton);
+                returnButton.ChoiceText = _returnButtonText;
+                returnButton.Button.onClick.AddListener(DestroyButtons);
+                //returnButton.Button.onClick.AddListener(_choiceHubDialogueDisplay.DisplayPreviousChoicesOnClick);
             }
         }
 

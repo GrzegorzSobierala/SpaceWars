@@ -9,10 +9,10 @@ namespace Game.Dialogues
     {
         [Inject] private ChoiceHubDialogueDisplay _choiceHubDialogueDisplay;
 
-        public Button Button;
+        [field: SerializeField] public Button Button { get; set; }
 
-        [HideInInspector] public string ChoiceText;
-        [HideInInspector] public DialogueSequence ChoiceSequence;
+        public string ChoiceText { get; set; }
+        public DialogueSequence ChoiceSequence { get; set; }
 
         [SerializeField] private TextMeshProUGUI TMP;
 

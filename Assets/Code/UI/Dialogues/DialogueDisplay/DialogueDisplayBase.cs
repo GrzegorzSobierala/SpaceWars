@@ -89,7 +89,7 @@ namespace Game.Dialogues
             StartCoroutine(DisplayCurrentDialogueLine());
         }
 
-        protected virtual void EndDialogue()
+        protected void EndDialogue()
         {
             ClearCurrentFields();
             gameObject.SetActive(false);

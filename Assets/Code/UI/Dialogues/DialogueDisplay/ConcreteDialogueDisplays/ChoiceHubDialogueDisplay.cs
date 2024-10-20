@@ -36,14 +36,6 @@ namespace Game.Dialogues
             {
                 _dialogueTextDisplay.DisplayDescriptionLineText();
             }
-
-            //enable if automatically show choices on last line
-            /*
-            if (_currentLineIndex == CurrentSequence.DialogueLines.Count - 1)
-            {
-                ManageDisplayingChoices();
-            }
-            */
         }
 
         protected override void ManageDisplayingNextLine()
@@ -52,13 +44,10 @@ namespace Game.Dialogues
             {
                 DisplayNextLine();
             }
-            //enable if show choices on last line after one more skip
-            ///*
             else
             {
                 ManageDisplayingChoices();
             }
-            //*/
         }
 
         private void ManageDisplayingChoices()
