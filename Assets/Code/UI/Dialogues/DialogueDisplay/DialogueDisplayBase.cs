@@ -82,6 +82,13 @@ namespace Game.Dialogues
             }
         }
 
+        protected virtual void ClearCurrentFields()
+        {
+            CurrentSequence = null;
+            CurrentLine = null;
+            _currentLineIndex = 0;
+        }
+
         protected void DisplayNextLine()
         {
             _currentLineIndex++;
@@ -94,13 +101,6 @@ namespace Game.Dialogues
             ClearCurrentFields();
             gameObject.SetActive(false);
             _onDialogueEnd?.Invoke();
-        }
-
-        protected void ClearCurrentFields()
-        {
-            CurrentSequence = null;
-            CurrentLine = null;
-            _currentLineIndex = 0;
         }
     }
 }

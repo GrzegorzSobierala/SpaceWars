@@ -62,6 +62,11 @@ namespace Game.Dialogues
                 DisplayTextArea();
             }
 
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(target);
+            }
+
             serializedObject.ApplyModifiedProperties();
         }
 

@@ -42,7 +42,7 @@ namespace Game.Dialogues
                 _buttons.Add(returnButton);
                 returnButton.ChoiceText = _returnButtonText;
                 returnButton.Button.onClick.AddListener(DestroyButtons);
-                //returnButton.Button.onClick.AddListener(_choiceHubDialogueDisplay.DisplayPreviousChoicesOnClick);
+                returnButton.Button.onClick.AddListener(_choiceHubDialogueDisplay.DisplayPreviousChoicesOnClick);
             }
         }
 
