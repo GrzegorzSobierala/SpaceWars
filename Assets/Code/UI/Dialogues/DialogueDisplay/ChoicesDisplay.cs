@@ -28,21 +28,21 @@ namespace Game.Dialogues
                 choiceButton.Button.onClick.AddListener(DestroyButtons);
             }
 
-            if (choices == _choiceHubDialogueDisplay.MainChoices)
-            {
-                ChoiceButton exitButton = _container.InstantiatePrefabForComponent<ChoiceButton>(_choiceButtonPrefab, transform);
-                _buttons.Add(exitButton);
-                exitButton.ChoiceText = _exitButtonText;
-                exitButton.Button.onClick.AddListener(DestroyButtons);
-                exitButton.Button.onClick.AddListener(_choiceHubDialogueDisplay.EndDialogueOnClick);
-            }
-            else
+            if (choices != _choiceHubDialogueDisplay.MainChoices)
             {
                 ChoiceButton returnButton = _container.InstantiatePrefabForComponent<ChoiceButton>(_choiceButtonPrefab, transform);
                 _buttons.Add(returnButton);
                 returnButton.ChoiceText = _returnButtonText;
                 returnButton.Button.onClick.AddListener(DestroyButtons);
                 returnButton.Button.onClick.AddListener(_choiceHubDialogueDisplay.DisplayPreviousChoicesOnClick);
+            }
+            else
+            {
+                ChoiceButton exitButton = _container.InstantiatePrefabForComponent<ChoiceButton>(_choiceButtonPrefab, transform);
+                _buttons.Add(exitButton);
+                exitButton.ChoiceText = _exitButtonText;
+                exitButton.Button.onClick.AddListener(DestroyButtons);
+                exitButton.Button.onClick.AddListener(_choiceHubDialogueDisplay.EndDialogueOnClick);
             }
         }
 

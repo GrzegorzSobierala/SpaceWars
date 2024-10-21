@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Game.Dialogues
@@ -10,18 +11,11 @@ namespace Game.Dialogues
         [SerializeField] private ChoicesDisplay _choicesDisplay;
 
         private Dictionary<string, DialogueSequence> _currentChoices;
-        private Dictionary<
-            Dictionary<string, DialogueSequence>,
-            Dictionary<string, DialogueSequence>
-                > _choiceParent;
+        private Stack<Dictionary<string, DialogueSequence>> _choicesStack;
 
         public void DisplayChosenSequenceOnClick(DialogueSequence dialogueSequence)
         {
-            if (dialogueSequence.SequenceType == DialogueSequenceType.ChoiceHubSequence)
-            {
-                AddParentChoices(dialogueSequence, CurrentSequence);
-            }
-
+            _choicesStack.Push(_currentChoices);
             CurrentSequence = dialogueSequence;
             _currentLineIndex = 0;
             CurrentLine = CurrentSequence.DialogueLines[_currentLineIndex];
@@ -30,7 +24,7 @@ namespace Game.Dialogues
 
         public void DisplayPreviousChoicesOnClick()
         {
-            _currentChoices = _choiceParent[_currentChoices];
+            _currentChoices = _choicesStack.Pop();
             _choicesDisplay.DisplayChoices(_currentChoices);
         }
 
@@ -73,7 +67,6 @@ namespace Game.Dialogues
             CurrentLine = null;
             _currentLineIndex = 0;
 
-            _onDialogueEnd = null;
             MainChoices = null;
             _currentChoices = null;
         }
@@ -83,17 +76,17 @@ namespace Game.Dialogues
             if (MainChoices == null)
             {
                 MainChoices = CurrentSequence.Choices;
-                _currentChoices = MainChoices;
+                _choicesStack = new();
+            }
+
+            if (CurrentSequence.SequenceType == DialogueSequenceType.ChoiceHubSequence)
+            {
+                _currentChoices = CurrentSequence.Choices;
                 _choicesDisplay.DisplayChoices(_currentChoices);
             }
             else if (CurrentSequence.SequenceType == DialogueSequenceType.HubSequence)
             {
-                _choicesDisplay.DisplayChoices(_currentChoices);
-            }
-            else if (CurrentSequence.SequenceType == DialogueSequenceType.ChoiceHubSequence)
-            {
-                _currentChoices = CurrentSequence.Choices;
-                _choicesDisplay.DisplayChoices(_currentChoices);
+                _choicesDisplay.DisplayChoices(_choicesStack.Pop());
             }
             else
             {
@@ -101,19 +94,6 @@ namespace Game.Dialogues
                     "Subsequences in ChoiceHubSequence should only be on of these two." +
                     "Dialogue ended because of this error.");
                 EndDialogue();
-            }
-        }
-
-        private void AddParentChoices(DialogueSequence choiceSequence, DialogueSequence parentChoiceSequence)
-        {
-            if (_choiceParent == null)
-            {
-                _choiceParent = new();
-            }
-
-            if (!_choiceParent.ContainsKey(choiceSequence.Choices))
-            {
-                _choiceParent.Add(choiceSequence.Choices, parentChoiceSequence.Choices);
             }
         }
     }
