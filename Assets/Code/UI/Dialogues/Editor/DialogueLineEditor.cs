@@ -65,6 +65,7 @@ namespace Game.Dialogues
             if (GUI.changed)
             {
                 EditorUtility.SetDirty(target);
+                //AssetDatabase.SaveAssets();
             }
 
             serializedObject.ApplyModifiedProperties();
