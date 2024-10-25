@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7738eab5b39f6034a955c5cd8e70d31c, type: 3}
+  m_Name: SQ0
+  m_EditorClassIdentifier: 
+  SequenceType: 1
+  DialogueLines:
+  - {fileID: 11400000, guid: 650ab0cafe2e5974ea8df004dec70857, type: 2}
+  - {fileID: 11400000, guid: 3bac1ca08d64de346b5ef1bfadec4c3e, type: 2}
+  - {fileID: 11400000, guid: 4255ad8fa464f484f94b28cf75b0de52, type: 2}
+  - {fileID: 11400000, guid: 59c42a1ea2e8d9140b9883a3d45c217b, type: 2}
+  - {fileID: 11400000, guid: b3b4b1ae2d36f424882f08b289d5c8ed, type: 2}
+  Choices:
+    _serializedList:
+    - Key: "Jak si\u0119 czujesz?"
+      Value: {fileID: 11400000, guid: 5c1b59a2fa17a3b41b7b7d7a9ee07d6a, type: 2}
+    - Key: "Chcia\u0142am pogada\u0107 o twoim ojcu..."
+      Value: {fileID: 11400000, guid: 9d7d8fae94ca4054fa44a4a0b23c9361, type: 2}
+    - Key: "Chcesz wyskoczy\u0107 na wud\u0119 jutro?"
+      Value: {fileID: 11400000, guid: 85a6afd04ae6dad4ab9fbe8bcaac2d4f, type: 2}
