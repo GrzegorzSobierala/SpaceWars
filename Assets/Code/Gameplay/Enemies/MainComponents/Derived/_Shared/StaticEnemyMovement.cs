@@ -1,6 +1,6 @@
 namespace Game.Room.Enemy
 {
-    public class StaticMovement : EnemyMovementBase
+    public class StaticEnemyMovement : EnemyMovementBase
     {
         public override bool UseFixedUpdate => false;
     }

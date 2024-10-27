@@ -8,40 +8,44 @@ using Zenject;
 
 namespace Game.Room.Enemy
 {
-    public class CursorEnemyGun : EnemyGunBase
+    public class BasicEnemyGun : EnemyGunBase
     {
+        public event Action OnStartReload;
+        public event Action OnStopReload;
+
         [Inject] private PlayerManager _playerManager;
 
-        [SerializeField] private Transform _leftGunTransform;
-        [SerializeField] private Transform _leftGunShootPoint;
-        [SerializeField] private Transform _rightGunTransform;
-        [SerializeField] private Transform _rightGunShootPoint;
+        [SerializeField] private Transform _gunTransform;
+        [SerializeField] private Transform _gunShootPoint;
         [SerializeField] private ShootableObjectBase _bulletPrototype;
+        [Space, Header("Aim")]
+        [SerializeField] private LayerMask _blockAimLayerMask;
+        [SerializeField] private float _gunTravers = 45f;
+        [SerializeField] private float _rotateSpeed = 100f;
+        [SerializeField] private float _aimedAngle = 4;
+        [SerializeField] private float _aimRange = 500f;
+        [SerializeField] private float _aimFallowTime = 2f;
+        [Space, Header("Shoot")]
         [SerializeField] private float _shotInterval = 0.5f;
         [SerializeField] private int _magCapasity = 5;
         [SerializeField] private float _reloadTime = 7f;
-        [SerializeField] private float _gunTravers = 45f;
         [SerializeField] private float _shootAtMaxDistanceMutli = 0.7f;
         [SerializeField] private float _beforeReloadEventTime = 0.5f;
         [Space]
         [SerializeField] private UnityEvent _onBeforeReloaded;
-        [SerializeField] private UnityEvent _onShootLeftGun; 
-        [SerializeField] private UnityEvent _onShootRightGun;
-
-        private Action _onStartReload;
-        private Action _onStopReload;
+        [SerializeField] private UnityEvent _onShootGun;
 
         private Coroutine _reloadCoroutine;
         private float _lastShotTime = 0f;
         private float _endReloadTime = 0f;
         private int _currenaMagAmmo = 0;
-        private bool _isAimed = false;
-        private bool _isAimingLeft = false;
         private bool _wasOnBeforeReloadedCalled = false;
+        private ContactFilter2D _contactFilter;
 
         private void Awake()
         {
             _currenaMagAmmo = _magCapasity;
+            Initalize();
         }
 
         public override void Prepare()
@@ -49,55 +53,25 @@ namespace Game.Room.Enemy
             _lastShotTime = Time.time;
         }
 
-        public void SubscribeOnStartReload(Action onReloadAction)
-        {
-            _onStartReload += onReloadAction;
-        }
-
-        public void UnsubscribeOnStartReload(Action onReloadAction)
-        {
-            _onStartReload -= onReloadAction;
-        }
-
-        public void SubscribeOnStopReload(Action onReloadAction)
-        {
-            _onStopReload += onReloadAction;
-        }
-
-        public void UnsubscribeOnStopReload(Action onReloadAction)
-        {
-            _onStopReload -= onReloadAction;
-        }
-
         protected override void OnAimingAt(Transform target)
         {
-            Vector2 vectorToTarget = target.position - transform.position;
-            float angleToTarget = Vector2.SignedAngle(_body.transform.up, vectorToTarget);
+            base.OnAimingAt(target);
 
-            if (angleToTarget >= -_gunTravers / 2 && angleToTarget <= _gunTravers / 2)
+            if (IsKnowWherePlayerIs(target.position, _gunTransform, _aimRange,
+                _aimFallowTime, _contactFilter))
             {
-                OnAimTarget?.Invoke();
-                _isAimed = true;
+                Vector2 lookForwardPoint = _gunTransform.transform.up + _gunTransform.transform.position;
+                Aim(lookForwardPoint, _gunTransform, _gunTravers, _rotateSpeed, _aimedAngle, false);
             }
             else
             {
-                _isAimed = false;
+                Aim(target.position, _gunTransform, _gunTravers, _rotateSpeed, _aimedAngle, true);
             }
-
-            float newLeftAngle = Mathf.Clamp(angleToTarget, 0, _gunTravers / 2);
-            float newRightAngle = Mathf.Clamp(angleToTarget, -_gunTravers / 2, 0);
-
-            _leftGunTransform.localRotation = Quaternion.Euler(0, 0, newLeftAngle);
-            _rightGunTransform.localRotation = Quaternion.Euler(0, 0, newRightAngle);
-
-            _isAimingLeft = newLeftAngle != 0;
         }
 
         protected override void OnStopAiming()
         {
             base.OnStopAiming();
-
-            _isAimed = false;
         }
 
         protected override void OnShooting()
@@ -114,6 +88,16 @@ namespace Game.Room.Enemy
             StartReloading();
         }
 
+        private void Initalize()
+        {
+            _contactFilter = new ContactFilter2D
+            {
+                useTriggers = false,
+                layerMask = _blockAimLayerMask,
+                useLayerMask = true,
+            };
+        }
+
         private void Shoot()
         {
             _lastShotTime = Time.time;
@@ -121,18 +105,9 @@ namespace Game.Room.Enemy
             GameObject damageDealer = _body.gameObject;
             Transform parent = _playerManager.transform;
 
-            Transform shootTransform = _isAimingLeft ? _leftGunShootPoint : _rightGunShootPoint;
+            _onShootGun?.Invoke();
 
-            if (_isAimingLeft)
-            {
-                _onShootLeftGun?.Invoke();
-            }
-            else
-            {
-                _onShootRightGun?.Invoke();
-            }
-
-            _bulletPrototype.CreateCopy(damageDealer, parent).Shoot(_body, shootTransform);
+            _bulletPrototype.CreateCopy(damageDealer, parent).Shoot(_body, _gunShootPoint);
 
             _currenaMagAmmo--;
 
@@ -149,10 +124,11 @@ namespace Game.Room.Enemy
             if (Time.time - _lastShotTime < _shotInterval || _currenaMagAmmo <= 0)
                 return;
 
-            if (!_isAimed)
+            if (!IsAimedAtPlayer)
                 return;
 
-            float targetDistance = Vector2.Distance(_playerManager.PlayerBody.position, transform.position);
+            float targetDistance = Vector2.Distance(_playerManager.PlayerBody.position, 
+                transform.position);
             if (targetDistance > _bulletPrototype.MaxDistance * _shootAtMaxDistanceMutli)
                 return;
 
@@ -161,7 +137,7 @@ namespace Game.Room.Enemy
 
         private bool TryReload()
         {
-            if(!_wasOnBeforeReloadedCalled && Time.time > _endReloadTime - _beforeReloadEventTime)
+            if (!_wasOnBeforeReloadedCalled && Time.time > _endReloadTime - _beforeReloadEventTime)
             {
                 _onBeforeReloaded?.Invoke();
                 _wasOnBeforeReloadedCalled = true;
@@ -177,30 +153,29 @@ namespace Game.Room.Enemy
         private void Reload()
         {
             _currenaMagAmmo = _magCapasity;
-            _onStopReload?.Invoke();
+            OnStopReload?.Invoke();
             _wasOnBeforeReloadedCalled = true;
         }
 
         private void StartReloading()
         {
-            if(_reloadCoroutine != null)
+            if (_reloadCoroutine != null)
             {
                 Debug.Log($"Reloading is already in progress. Time left {Time.time - _endReloadTime}");
                 return;
             }
 
             _endReloadTime = Time.time + _reloadTime;
-            _onStartReload?.Invoke();
+            OnStartReload?.Invoke();
             StartCoroutine(ReloadingMag());
         }
 
         private IEnumerator ReloadingMag()
         {
-            while(!TryReload()) 
-            {
-                yield return null;
-            }
+            yield return new WaitUntil(TryReload);
+
             _reloadCoroutine = null;
         }
     }
 }
+

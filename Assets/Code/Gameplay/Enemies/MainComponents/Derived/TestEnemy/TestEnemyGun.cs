@@ -14,8 +14,7 @@ namespace Game.Room.Enemy
 
         [Inject] private PlayerManager _playerManager;
         [Inject] private EnemyManager _enemyManager;
-        [Inject] private Rigidbody2D _body;
-
+        
         [SerializeField] private Transform _gunTransform;
         [SerializeField] private TestEnemyBullet _enemyBulletPrototype;
         [SerializeField] private float _shotInterval = 2f;

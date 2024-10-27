@@ -1,4 +1,5 @@
 using Game.Testing;
+using Game.Utility.Globals;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,6 +9,7 @@ namespace Game.Room.Enemy
 {
     public abstract class EnemyGunBase : MonoBehaviour
     {
+        [Inject] protected Rigidbody2D _body;
         [Inject] private TestingSettings testingSettings;
 
         [SerializeField] protected UnityEvent OnShoot;
@@ -20,6 +22,11 @@ namespace Game.Room.Enemy
         private Transform _aimTargetTransform;
         private Vector2 _aimTargetPos;
         private float _aimTargetRot;
+
+        private float _lastTargetAimableTime = -100;
+        protected bool _isAimedAtPlayer = false;
+
+        protected bool IsAimedAtPlayer => _isAimedAtPlayer;
 
         protected virtual void Update()
         {
@@ -98,7 +105,10 @@ namespace Game.Room.Enemy
 
         protected virtual void OnStartAimingAt(float localRotation) { }
 
-        protected virtual void OnStopAiming() { }
+        protected virtual void OnStopAiming() 
+        {
+            _isAimedAtPlayer = false;
+        }
 
         protected virtual void OnShooting() { }
 
@@ -107,7 +117,87 @@ namespace Game.Room.Enemy
         protected virtual void OnAimingAt(Vector2 worldPosition) { }
 
         protected virtual void OnAimingAt(float localRotation) { }
-        
+
+        #region HelperMethods
+
+        protected bool IsTargetVisable(RaycastHit2D[] raycastHits)
+        {
+            if (raycastHits[0].rigidbody == null)
+            {
+                return false;
+            }
+
+            int layer = LayerMask.NameToLayer(Layers.Player);
+            if (raycastHits[0].rigidbody.gameObject.layer == layer)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        protected bool IsKnowWherePlayerIs(Vector2 targetPos, Transform handle, float range, 
+            float noSeeKnowTime, ContactFilter2D contactFilter)
+        {
+            Vector2 gunPos = handle.position;
+            Vector2 gunToTargetDir = targetPos - (Vector2)handle.position;
+            float distanceToTarget = Vector2.Distance(targetPos, gunPos);
+            bool isInRange = distanceToTarget < range;
+
+            bool isVisable = isInRange;
+            if (isInRange)
+            {
+                RaycastHit2D[] raycastHits = new RaycastHit2D[1];
+                Physics2D.Raycast(gunPos, gunToTargetDir, contactFilter, raycastHits, range);
+                isVisable = IsTargetVisable(raycastHits);
+            }
+
+            if (isVisable)
+            {
+                _lastTargetAimableTime = Time.time;
+            }
+
+            return _lastTargetAimableTime + noSeeKnowTime < Time.time;
+        }
+
+        protected void Aim(Vector2 pos, Transform toRotate, float travers, float rotateSpeed, 
+            float aimedAngle , bool isAimingPlayer)
+        {
+            Vector2 vectorToTarget = pos - (Vector2)toRotate.position;
+            float angleToTarget = Vector2.SignedAngle(_body.transform.up, vectorToTarget);
+
+            float currentAngle = toRotate.localEulerAngles.z;
+            float targetAngle = Mathf.Clamp(angleToTarget, -travers / 2, travers / 2);
+            float maxDelta = rotateSpeed * Time.deltaTime;
+            float newAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, maxDelta);
+
+            toRotate.localRotation = Quaternion.Euler(0, 0, newAngle);
+
+            Vector2 newVectorToTarget = pos - (Vector2)toRotate.position;
+            float newAngleToTarget = Vector2.SignedAngle(toRotate.up, newVectorToTarget);
+
+            if (newAngleToTarget >= -aimedAngle / 2 && newAngleToTarget <= aimedAngle / 2)
+            {
+                OnAimTarget?.Invoke();
+                _isAimedAtPlayer = isAimingPlayer;
+            }
+            else
+            {
+                _isAimedAtPlayer = false;
+            }
+        }
+
+       
+
+        protected void VerticalRotate(Transform toRotate, Transform handle, Vector2 target)
+        {
+            float distance = Vector2.Distance(handle.position, target);
+            Vector2 lookAtPos = handle.up * distance + handle.position;
+            toRotate.LookAt(lookAtPos, -handle.forward);
+        }
+
+        #endregion
+
         private void TryAimGun()
         {
             if (_currentAimType == AimType.Transform)

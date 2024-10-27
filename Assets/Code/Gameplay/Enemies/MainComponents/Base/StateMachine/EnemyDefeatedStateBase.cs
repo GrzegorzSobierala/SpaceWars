@@ -16,6 +16,11 @@ namespace Game.Room.Enemy
             onDefeated?.Invoke();
         }
 
+        protected override void OnExitState()
+        {
+
+        }
+
         protected virtual void OnDestroy()
         {
             OnDestroyEvent?.Invoke();
