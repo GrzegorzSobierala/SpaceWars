@@ -1,9 +1,11 @@
 using Game.Combat;
 using Game.Management;
+using NaughtyAttributes;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 using Zenject;
 
 namespace Game.Room.Enemy
@@ -15,8 +17,8 @@ namespace Game.Room.Enemy
 
         [Inject] private PlayerManager _playerManager;
 
-        [SerializeField] private Transform _gunTransform;
-        [SerializeField] private Transform _gunShootPoint;
+        [SerializeField, AutoFill] private Transform _gunTransform;
+        [SerializeField, AutoFill] private Transform _gunShootPoint;
         [SerializeField] private ShootableObjectBase _bulletPrototype;
         [Space, Header("Aim")]
         [SerializeField] private LayerMask _blockAimLayerMask;
@@ -98,6 +100,7 @@ namespace Game.Room.Enemy
             };
         }
 
+        [Button]
         private void Shoot()
         {
             _lastShotTime = Time.time;

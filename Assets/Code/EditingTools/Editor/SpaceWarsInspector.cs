@@ -1,15 +1,28 @@
+using NaughtyAttributes.Editor;
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
 namespace Game.Editor
 {
-    [CustomEditor(typeof(MonoBehaviour), true)]
-    public class AutoAssignEditor : UnityEditor.Editor
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(UnityEngine.Object), true)]
+    public class SpaceWarsInspector : NaughtyInspector
     {
-        private void OnEnable()
+        protected override void OnEnable()
         {
-            MonoBehaviour monoBehaviour = (MonoBehaviour)target;
+            base.OnEnable();
+
+            TryAutoFill();
+        }
+
+        private void TryAutoFill()
+        {
+            if (target is not MonoBehaviour monoBehaviour)
+                return;
+
             FieldInfo[] fields = monoBehaviour.GetType()
                 .GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
 
@@ -25,7 +38,7 @@ namespace Game.Editor
                     continue;
                 }
 
-                if(field.GetCustomAttribute<SerializeField>() == null && !field.IsPublic)
+                if (field.GetCustomAttribute<SerializeField>() == null && !field.IsPublic)
                 {
                     Debug.LogError($" Field: {field.Name} has not SerializeField or is not public"
                         , monoBehaviour);

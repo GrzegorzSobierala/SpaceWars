@@ -6,8 +6,9 @@ using UnityEngine;
 
 namespace NaughtyAttributes.Editor
 {
-    [CanEditMultipleObjects]
-    [CustomEditor(typeof(UnityEngine.Object), true)]
+    //Replaced by SpaceWarsInspector
+    //[CanEditMultipleObjects]
+    //[CustomEditor(typeof(UnityEngine.Object), true)]
     public class NaughtyInspector : UnityEditor.Editor
     {
         private List<SerializedProperty> _serializedProperties = new List<SerializedProperty>();

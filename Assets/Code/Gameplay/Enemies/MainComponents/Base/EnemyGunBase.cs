@@ -187,8 +187,6 @@ namespace Game.Room.Enemy
             }
         }
 
-       
-
         protected void VerticalRotate(Transform toRotate, Transform handle, Vector2 target)
         {
             float distance = Vector2.Distance(handle.position, target);
