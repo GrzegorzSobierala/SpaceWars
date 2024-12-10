@@ -8,14 +8,12 @@ namespace Game.Room.Enemy
 {
     public class StationEnemyStateMachine : EnemyStateMachineBase
     {
-        [Inject] BasicEnemyGun gun;
-        [Inject] PlayerManager playerManager;
+        [Inject] BasicEnemyGun _gun;
+        [Inject] PlayerManager _playerManager;
 
         protected override void Start()
         {
             base.Start();
-
-            gun.StartAimingAt(playerManager.PlayerBody.transform);
         }
     }
 }

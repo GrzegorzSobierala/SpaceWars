@@ -7,7 +7,7 @@ namespace Game.Room.Enemy
     {
         public override void GetDamage(DamageData damage)
         {
-            ChangeCurrentHp(-damage.BaseDamage);
+            SubtractCurrentHp(damage);
         }
     }
 }

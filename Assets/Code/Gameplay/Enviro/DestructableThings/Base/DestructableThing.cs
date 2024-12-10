@@ -1,32 +1,35 @@
 using Game.Combat;
+using Game.Room.Enviro;
 using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Rendering;
 using Zenject;
 
-namespace Game.Room.Enemy
+namespace Game
 {
-    public abstract class EnemyBase : MonoBehaviour
+    public abstract class DestructableThing : MonoBehaviour
     {
-        public Action<float> OnHpChange;
-
-        [Inject] protected EnemyStateMachineBase _stateMachine;
-        [Inject] protected List<EnemyDamageHandler> _damageHandlers;
+        [Inject] protected List<DestroyableThingDamageHandler> _damageHandlers;
 
         [ShowNonSerializedField] protected float _maxHp;
         [ShowNonSerializedField] protected float _currentHp;
 
         [SerializeField] private float _baseHp = 5f;
+        [SerializeField] private UnityEvent _onDestructEvent;
+        [SerializeField] private UnityEvent _onHpChange;
 
-        public EnemyStateMachineBase StateMachine => _stateMachine;
+        private bool _isDestructed = false;
+
         public float CurrentHp => _currentHp;
 
         protected virtual void Awake()
         {
             SetStartHP();
 
-            foreach (EnemyDamageHandler handler in _damageHandlers)
+            foreach (DestroyableThingDamageHandler handler in _damageHandlers)
             {
                 handler.Subscribe(GetDamage);
             }
@@ -34,7 +37,7 @@ namespace Game.Room.Enemy
 
         protected virtual void OnDestroy()
         {
-            foreach (EnemyDamageHandler handler in _damageHandlers)
+            foreach (DestroyableThingDamageHandler handler in _damageHandlers)
             {
                 if (handler != null)
                     return;
@@ -45,14 +48,13 @@ namespace Game.Room.Enemy
 
         public abstract void GetDamage(DamageData damage);
 
-        protected virtual void SetStartHP()
-        {
-            _maxHp = _baseHp;
-            _currentHp = _baseHp;
-        }
+        protected abstract void OnDestruct(DamageData lastHit);
 
         protected void SubtractCurrentHp(DamageData damage)
         {
+            if (_isDestructed)
+                return;
+
             if (damage.BaseDamage < 0)
             {
                 Debug.LogError($"Can't subtract minus number from current hp");
@@ -63,10 +65,18 @@ namespace Game.Room.Enemy
                 return;
 
             ChangeCurrentHp(-damage.BaseDamage);
+
+            if (_currentHp <= 0)
+            {
+                Destruct(damage);
+            }
         }
 
         protected void AddCurrentHp(float hp)
         {
+            if (_isDestructed)
+                return;
+
             if (hp < 0)
             {
                 Debug.LogError($"Can't add minus number to current hp");
@@ -79,25 +89,26 @@ namespace Game.Room.Enemy
             ChangeCurrentHp(hp);
         }
 
-        protected void ChangeCurrentHp(float hpChange)
+        private void ChangeCurrentHp(float hpChange)
         {
             float newCurrentHp = _currentHp + hpChange;
-            
+
             _currentHp = Mathf.Clamp(newCurrentHp, 0, _maxHp);
 
-            if (_currentHp == 0 && _stateMachine.CurrentState is not EnemyDefeatedStateBase)
-            {
-                _stateMachine.SwitchToDefeatedState();
-                return;
-            }
+            _onHpChange?.Invoke();
+        }
 
-            if (_currentHp > 0 && _stateMachine.CurrentState is EnemyDefeatedStateBase)
-            {
-                _stateMachine.SwitchToCombatState();
-                return;
-            }
+        private void Destruct(DamageData damage)
+        {
+            _isDestructed = true;
+            OnDestruct(damage);
+            _onDestructEvent?.Invoke();
+        }
 
-            OnHpChange?.Invoke(_currentHp);
+        private void SetStartHP()
+        {
+            _maxHp = _baseHp;
+            _currentHp = _baseHp;
         }
     }
 }

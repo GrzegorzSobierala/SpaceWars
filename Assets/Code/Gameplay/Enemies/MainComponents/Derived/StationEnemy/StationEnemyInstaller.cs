@@ -1,3 +1,4 @@
+using Game.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,8 @@ namespace Game.Room.Enemy
             base.InstallBindings();
 
             Container.Bind<BasicEnemyGun>().FromComponentInHierarchy().AsSingle();
+
+            Utils.BindComponentsInChildrens<SilosHp>(Container, gameObject, false);
         }
     }
 }

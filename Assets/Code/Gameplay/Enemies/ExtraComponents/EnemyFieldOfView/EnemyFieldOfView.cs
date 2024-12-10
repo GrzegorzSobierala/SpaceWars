@@ -25,6 +25,8 @@ namespace Game.Room.Enemy
         [SerializeField] private float _viewDistance = 500f;
         [SerializeField] private SerializedDictionary<Collider2D,OneEnum> _ignoreColliders;
 
+        private static HashSet<Collider2D> _DEBUG_wrongLayerColliders = new();
+
         private float AngleIncrease => _fov / _rayCount;
         private const float PlayerCameraMaxViewDistance = 500f;
 
@@ -185,13 +187,17 @@ namespace Game.Room.Enemy
                 return false;
             }
 
-            if (hit.collider.TryGetComponent(out EnemyDamageHandler damageHandler))
+            if (hit.collider.TryGetComponent(out IGuardStateDetectable EnemyStateDetectable))
             {
-                return !damageHandler.IsEnemyInGuardState;
+                return !EnemyStateDetectable.IsEnemyInGuardState;
             }
             else
             {
-                Debug.LogError($"Collider on {Layers.Enemy} layer hasn't EnemyDamageHandler", hit.collider.gameObject);
+                if(_DEBUG_wrongLayerColliders.Contains(hit.collider))
+                    return false;
+
+                Debug.LogError($"Collider on {Layers.Enemy} layer hasn't IGuardStateDetectable", hit.collider);
+                _DEBUG_wrongLayerColliders.Add(hit.collider);
                 return false;
             }
         }

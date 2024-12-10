@@ -22,14 +22,14 @@ namespace Game.Room.Enemy
         [SerializeField] private ShootableObjectBase _bulletPrototype;
         [Space, Header("Aim")]
         [SerializeField] private LayerMask _blockAimLayerMask;
-        [SerializeField] private float _gunTravers = 45f;
+        [SerializeField] private float _gunTraverse = 45f;
         [SerializeField] private float _rotateSpeed = 100f;
         [SerializeField] private float _aimedAngle = 4;
         [SerializeField] private float _aimRange = 500f;
-        [SerializeField] private float _aimFallowTime = 2f;
+        [SerializeField] private float _aimFollowTime = 2f;
         [Space, Header("Shoot")]
         [SerializeField] private float _shotInterval = 0.5f;
-        [SerializeField] private int _magCapasity = 5;
+        [SerializeField] private int _magCapacity = 5;
         [SerializeField] private float _reloadTime = 7f;
         [SerializeField] private float _shootAtMaxDistanceMutli = 0.7f;
         [SerializeField] private float _beforeReloadEventTime = 0.5f;
@@ -46,7 +46,7 @@ namespace Game.Room.Enemy
 
         private void Awake()
         {
-            _currenaMagAmmo = _magCapasity;
+            _currenaMagAmmo = _magCapacity;
             Initalize();
         }
 
@@ -60,14 +60,14 @@ namespace Game.Room.Enemy
             base.OnAimingAt(target);
 
             if (IsKnowWherePlayerIs(target.position, _gunTransform, _aimRange,
-                _aimFallowTime, _contactFilter))
+                _aimFollowTime, _contactFilter))
             {
                 Vector2 lookForwardPoint = _gunTransform.transform.up + _gunTransform.transform.position;
-                Aim(lookForwardPoint, _gunTransform, _gunTravers, _rotateSpeed, _aimedAngle, false);
+                Aim(lookForwardPoint, _gunTransform, _gunTraverse, _rotateSpeed, _aimedAngle, false);
             }
             else
             {
-                Aim(target.position, _gunTransform, _gunTravers, _rotateSpeed, _aimedAngle, true);
+                Aim(target.position, _gunTransform, _gunTraverse, _rotateSpeed, _aimedAngle, true);
             }
         }
 
@@ -155,7 +155,7 @@ namespace Game.Room.Enemy
 
         private void Reload()
         {
-            _currenaMagAmmo = _magCapasity;
+            _currenaMagAmmo = _magCapacity;
             OnStopReload?.Invoke();
             _wasOnBeforeReloadedCalled = true;
         }

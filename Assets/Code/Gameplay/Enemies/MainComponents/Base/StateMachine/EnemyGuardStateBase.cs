@@ -38,6 +38,27 @@ namespace Game.Room.Enemy
             }
         }
 
+        protected void SubscribeToFOVs(List<EnemyFieldOfView> views)
+        {
+            foreach (var view in views)
+            {
+                view.OnTargetFound += OnPlayerFind;
+            }
+        }
+
+        protected void UnubscribeToFOVs(List<EnemyFieldOfView> views)
+        {
+            foreach (var view in views)
+            {
+                view.OnTargetFound -= OnPlayerFind;
+            }
+        }
+
+        private void OnPlayerFind(GameObject foundTarget)
+        {
+            _stateMachine.SwitchToCombatState();
+        }
+
         private void TrySwitchToCombatState(DamageData damage)
         {
             if (_playerManager.PlayerBody.gameObject != damage.DamageDealer)

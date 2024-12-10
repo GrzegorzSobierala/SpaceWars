@@ -19,9 +19,5 @@ namespace Game.Room.Enemy
                 gun.StartShooting();
             }
         }
-
-
-
-
     }
 }
