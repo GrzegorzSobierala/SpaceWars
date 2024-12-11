@@ -63,9 +63,14 @@ namespace Game.Room.Enemy
             _meshFilter = GetComponent<MeshFilter>();
             _meshFilter.mesh = _mesh;
             _targetLayerMask = LayerMask.GetMask(Layers.Player);
-            _allLayerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle, Layers.Enemy);
+            _allLayerMask = GetAllLayerMask();
             _enemyLayerMask = LayerMask.GetMask(Layers.Enemy);
             randomVertexZ = UnityEngine.Random.Range(-1.0f, 0);
+        }
+
+        private LayerMask GetAllLayerMask()
+        {
+            return LayerMask.GetMask(Layers.Player, Layers.Obstacle, Layers.Enemy);
         }
 
         private void UpdateView(bool debugMode = false)
@@ -228,6 +233,31 @@ namespace Game.Room.Enemy
             }
 
             return false;
+        }
+
+        public void ClearAndAssignColliders()
+        {
+            EnemyBase enemy = Utils.FindEnemyInParents<EnemyBase>(transform);
+
+            if(enemy == null)
+            {
+                Debug.LogError($"Can't find {nameof(EnemyBase)} in parents");
+                return;
+            }
+
+            _ignoreColliders.Clear();
+
+            foreach (var collider in enemy.GetComponentsInChildren<Collider2D>())
+            {
+                if (!Utils.ContainsLayer(GetAllLayerMask(), collider.gameObject.layer))
+                    continue;
+
+                _ignoreColliders.Add(collider, OneEnum.OneEnum);
+            }
+
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
     }
 }

@@ -1,4 +1,5 @@
 using Game.Combat;
+using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,11 +9,12 @@ namespace Game.Room.Enemy
 {
     public class StationEnemy : EnemyBase
     {
-        public const float SILOS_DAMAGE_TO_STATION = 1.0f; 
+        public const float SILOS_DAMAGE_TO_STATION = 1.0f;
 
-        [Inject] private List<SilosHp> silosList;
+        [Inject] private List<SilosHp> _silosList;
 
-        [Tooltip("Base hp automaitc set by amount of HpTowers")]
+        [SerializeField] private bool _useAmountOfSilosInstedForBaseHp = true;
+
         public override void GetDamage(DamageData damage)
         {
             SubtractCurrentHp(damage);
@@ -27,8 +29,15 @@ namespace Game.Room.Enemy
 
         protected override void SetStartHP()
         {
-            _maxHp = silosList.Count;
-            _currentHp = silosList.Count;
+            if(_useAmountOfSilosInstedForBaseHp)
+            {
+                _maxHp = _silosList.Count;
+                _currentHp = _silosList.Count;
+            }
+            else
+            {
+                base.SetStartHP();
+            }
         }
     }
 }

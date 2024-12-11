@@ -117,6 +117,27 @@ namespace Game.Utility
         {
             return (layerMask.value & (1 << layer)) != 0;
         }
+
+        public static T FindEnemyInParents<T>(Transform transform, 
+            int searchIterationLimit = 100) where T : MonoBehaviour
+
+        {
+            Transform currentParent = transform;
+            for (int i = 0; i < searchIterationLimit; i++)
+            {
+                if (currentParent.TryGetComponent(out T enemyBase))
+                {
+                    return enemyBase;
+                }
+
+                if (currentParent.parent == null)
+                    return null;
+
+                currentParent = currentParent.parent;
+            }
+
+            return null;
+        }
     }
 
     public static class Async

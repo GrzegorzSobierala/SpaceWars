@@ -13,8 +13,9 @@ namespace Game.Editor
         {
             DrawDefaultInspector();
 
-            GUILayoutOption[] options = new GUILayoutOption[0] ;
-            if(GUILayout.Toggle(isDrawGizmosOn, "DrawGizmos", options))
+            GUILayoutOption[] options = new GUILayoutOption[0];
+
+            if (GUILayout.Toggle(isDrawGizmosOn, "Draw Gizmos", options))
             {
                 isDrawGizmosOn = true;
                 EnemyFieldOfView enemyFieldOfView = (EnemyFieldOfView)target;
@@ -24,6 +25,12 @@ namespace Game.Editor
             else
             {
                 isDrawGizmosOn = false;
+            }
+
+            if (GUILayout.Button("Clear and Assign Colliders"))
+            {
+                EnemyFieldOfView enemyFieldOfView = (EnemyFieldOfView)target;
+                enemyFieldOfView.ClearAndAssignColliders();
             }
         }
 
