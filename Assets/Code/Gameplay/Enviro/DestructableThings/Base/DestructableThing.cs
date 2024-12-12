@@ -24,6 +24,8 @@ namespace Game
         private bool _isDestructed = false;
 
         public float CurrentHp => _currentHp;
+        public float MaxHp => _maxHp;
+        public float BaseHp => _baseHp;
 
         protected virtual void Awake()
         {

@@ -14,14 +14,13 @@ namespace Game
         public override void GetDamage(DamageData damage)
         {
             SubtractCurrentHp(damage);
+
+            _station.GetDamage(damage);
         }
 
         protected override void OnDestruct(DamageData lastHit)
         {
-            DamageData damageToStation = new DamageData(lastHit.DamageDealer, 
-                StationEnemy.SILOS_DAMAGE_TO_STATION, lastHit.HitPoint);
-
-            _station.GetDamage(damageToStation);
+            
         }
     }
 }

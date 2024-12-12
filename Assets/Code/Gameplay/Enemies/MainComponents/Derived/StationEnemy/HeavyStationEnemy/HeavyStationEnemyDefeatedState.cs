@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Zenject;
 
 namespace Game.Room.Enemy
 {
-    public class StationEnemyDefeatedState : EnemyDefeatedStateBase
+    public class HeavyStationEnemyDefeatedState : EnemyDefeatedStateBase
     {
         [Inject] private EnemyBase _enemyBase;
 
@@ -15,6 +13,5 @@ namespace Game.Room.Enemy
 
             Destroy(_enemyBase.gameObject);
         }
-
     }
 }

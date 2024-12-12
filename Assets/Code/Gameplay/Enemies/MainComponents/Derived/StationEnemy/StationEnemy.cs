@@ -9,35 +9,45 @@ namespace Game.Room.Enemy
 {
     public class StationEnemy : EnemyBase
     {
-        public const float SILOS_DAMAGE_TO_STATION = 1.0f;
-
         [Inject] private List<SilosHp> _silosList;
-
-        [SerializeField] private bool _useAmountOfSilosInstedForBaseHp = true;
 
         public override void GetDamage(DamageData damage)
         {
-            SubtractCurrentHp(damage);
+            float allSilosHp = GetAllSilosCurrentHP();
             
-            if (_stateMachine.CurrentState is not EnemyDefeatedStateBase 
-                && _currentHp < SILOS_DAMAGE_TO_STATION/2.0f)
-            {
-                Debug.LogError("Kurwa float");
-                ChangeCurrentHp(-999999.0f);
-            }
+            ChangeCurrentHpTo(allSilosHp);
         }
 
         protected override void SetStartHP()
         {
-            if(_useAmountOfSilosInstedForBaseHp)
+            float allSilosHp = GetAllSilosBaseHP();
+
+            _maxHp = allSilosHp;
+            _currentHp = allSilosHp;
+        }
+
+        private float GetAllSilosBaseHP()
+        {
+            float allSilosHp = 0;
+
+            foreach (var silos in _silosList)
             {
-                _maxHp = _silosList.Count;
-                _currentHp = _silosList.Count;
+                allSilosHp += silos.BaseHp;
             }
-            else
+
+            return allSilosHp;
+        }
+
+        private float GetAllSilosCurrentHP()
+        {
+            float allSilosHp = 0;
+
+            foreach (var silos in _silosList)
             {
-                base.SetStartHP();
+                allSilosHp += silos.CurrentHp;
             }
+
+            return allSilosHp;
         }
     }
 }

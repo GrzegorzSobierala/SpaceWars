@@ -62,7 +62,7 @@ namespace Game.Room.Enemy
             if (damage.BaseDamage == 0)
                 return;
 
-            ChangeCurrentHp(-damage.BaseDamage);
+            ChangeCurrentHpBy(-damage.BaseDamage);
         }
 
         protected void AddCurrentHp(float hp)
@@ -76,14 +76,24 @@ namespace Game.Room.Enemy
             if (hp == 0)
                 return;
 
-            ChangeCurrentHp(hp);
+            ChangeCurrentHpBy(hp);
         }
 
-        protected void ChangeCurrentHp(float hpChange)
+        protected void ChangeCurrentHpBy(float hpChange)
         {
             float newCurrentHp = _currentHp + hpChange;
-            
-            _currentHp = Mathf.Clamp(newCurrentHp, 0, _maxHp);
+
+            ChangeCurrentHpTo(newCurrentHp);
+        }
+
+        protected void ChangeCurrentHpTo(float newHp)
+        {
+            float newHpClamped = Mathf.Clamp(newHp, 0, _maxHp);
+
+            if (_currentHp == newHpClamped)
+                return;
+
+            _currentHp = newHpClamped;
 
             if (_currentHp == 0 && _stateMachine.CurrentState is not EnemyDefeatedStateBase)
             {
