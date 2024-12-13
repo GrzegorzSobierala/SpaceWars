@@ -1,6 +1,9 @@
 using Game.Testing;
+using Game.Utility;
 using Game.Utility.Globals;
+using NaughtyAttributes;
 using System;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
@@ -13,8 +16,11 @@ namespace Game.Room.Enemy
         [Inject] private TestingSettings testingSettings;
 
         [SerializeField] protected UnityEvent OnShoot;
+        [SerializeField, AutoFill, Required, AllowNesting] protected Transform _rotationTrans;
 
         protected Action OnAimTarget;
+
+        protected bool _isAimedAtPlayer = false;
 
         private AimType _currentAimType = AimType.Stop;
         private bool _isShooting = false;
@@ -22,11 +28,18 @@ namespace Game.Room.Enemy
         private Transform _aimTargetTransform;
         private Vector2 _aimTargetPos;
         private float _aimTargetRot;
-
         private float _lastTargetAimableTime = -100;
-        protected bool _isAimedAtPlayer = false;
+        private float _startAngle;
+
+        private Vector3 _startLocalUpDir;
+        private float _startLocalRot;
 
         protected bool IsAimedAtPlayer => _isAimedAtPlayer;
+
+        protected virtual void Awake()
+        {
+            Init();
+        }
 
         protected virtual void Update()
         {
@@ -136,11 +149,11 @@ namespace Game.Room.Enemy
             return false;
         }
 
-        protected bool IsKnowWherePlayerIs(Vector2 targetPos, Transform handle, float range, 
+        protected bool IsKnowWherePlayerIs(Vector2 targetPos, float range, 
             float noSeeKnowTime, ContactFilter2D contactFilter)
         {
-            Vector2 gunPos = handle.position;
-            Vector2 gunToTargetDir = targetPos - (Vector2)handle.position;
+            Vector2 gunPos = _rotationTrans.position;
+            Vector2 gunToTargetDir = targetPos - (Vector2)_rotationTrans.position;
             float distanceToTarget = Vector2.Distance(targetPos, gunPos);
             bool isInRange = distanceToTarget < range;
 
@@ -157,24 +170,38 @@ namespace Game.Room.Enemy
                 _lastTargetAimableTime = Time.time;
             }
 
-            return _lastTargetAimableTime + noSeeKnowTime < Time.time;
+            return _lastTargetAimableTime + noSeeKnowTime > Time.time;
         }
 
-        protected void Aim(Vector2 pos, Transform toRotate, float travers, float rotateSpeed, 
+        protected void Aim(Vector2 pos, float travers, float rotateSpeed, 
             float aimedAngle , bool isAimingPlayer)
         {
-            Vector2 vectorToTarget = pos - (Vector2)toRotate.position;
-            float angleToTarget = Vector2.SignedAngle(_body.transform.up, vectorToTarget);
+            float currentAngle = Mathf.MoveTowardsAngle(_rotationTrans.localEulerAngles.z,
+                _rotationTrans.localEulerAngles.z + _startLocalRot, float.MaxValue);
 
-            float currentAngle = toRotate.localEulerAngles.z;
-            float targetAngle = Mathf.Clamp(angleToTarget, -travers / 2, travers / 2);
+            Vector2 targetPosInLocal = _rotationTrans.InverseTransformPoint(pos);
+
+            targetPosInLocal = Utils.RotateVector(targetPosInLocal, _startLocalRot);
+
+            float angleToTarget = Vector2.SignedAngle(Vector2.up, targetPosInLocal.normalized);
+
+            float targetAngle = Mathf.MoveTowardsAngle(currentAngle, currentAngle + angleToTarget, float.MaxValue);
+
+            targetAngle = ConvertAngleToNegative180To180(targetAngle);
+
+            float targetAngleClamped = Mathf.Clamp(targetAngle, -(travers / 2), 
+                (travers / 2));
             float maxDelta = rotateSpeed * Time.deltaTime;
-            float newAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, maxDelta);
 
-            toRotate.localRotation = Quaternion.Euler(0, 0, newAngle);
 
-            Vector2 newVectorToTarget = pos - (Vector2)toRotate.position;
-            float newAngleToTarget = Vector2.SignedAngle(toRotate.up, newVectorToTarget);
+            float newAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngleClamped, maxDelta);
+
+            newAngle = Mathf.MoveTowardsAngle(newAngle, newAngle - _startLocalRot, float.MaxValue);
+
+            _rotationTrans.localRotation = Quaternion.Euler(0, 0, newAngle);
+
+            Vector2 newVectorToTarget = pos - (Vector2)_rotationTrans.position;
+            float newAngleToTarget = Vector2.SignedAngle(_rotationTrans.up, newVectorToTarget);
 
             if (newAngleToTarget >= -aimedAngle / 2 && newAngleToTarget <= aimedAngle / 2)
             {
@@ -187,6 +214,11 @@ namespace Game.Room.Enemy
             }
         }
 
+        float ConvertAngleToNegative180To180(float angle)
+        {
+            return (angle > 180) ? angle - 360 : angle;
+        }
+
         protected void VerticalRotate(Transform toRotate, Transform handle, Vector2 target)
         {
             float distance = Vector2.Distance(handle.position, target);
@@ -195,6 +227,12 @@ namespace Game.Room.Enemy
         }
 
         #endregion
+
+        private void Init()
+        {
+            _startLocalUpDir = _rotationTrans.localRotation * Vector3.up;
+            _startLocalRot = _rotationTrans.localEulerAngles.z;
+        }
 
         private void TryAimGun()
         {
