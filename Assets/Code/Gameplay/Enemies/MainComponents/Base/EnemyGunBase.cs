@@ -173,30 +173,21 @@ namespace Game.Room.Enemy
             return _lastTargetAimableTime + noSeeKnowTime > Time.time;
         }
 
-        protected void Aim(Vector2 pos, float travers, float rotateSpeed, 
-            float aimedAngle , bool isAimingPlayer)
+        protected void Aim(Vector2 pos, float travers, float rotateSpeed, float aimedAngle 
+            , bool isAimingPlayer)
         {
-            float currentAngle = Mathf.MoveTowardsAngle(_rotationTrans.localEulerAngles.z,
-                _rotationTrans.localEulerAngles.z + _startLocalRot, float.MaxValue);
+            float currentAngle = _rotationTrans.localEulerAngles.z - _startLocalRot;
+            currentAngle = Utils.GetAngleIn180Format(currentAngle);
 
             Vector2 targetPosInLocal = _rotationTrans.InverseTransformPoint(pos);
 
-            targetPosInLocal = Utils.RotateVector(targetPosInLocal, _startLocalRot);
+            float angleToTarget = Vector2.SignedAngle(Vector2.up, targetPosInLocal);
+            float targetAngle = Utils.GetAngleIn180Format(currentAngle + angleToTarget);
+            float targetAngleClamped = Mathf.Clamp(targetAngle, -travers / 2, travers / 2);
 
-            float angleToTarget = Vector2.SignedAngle(Vector2.up, targetPosInLocal.normalized);
-
-            float targetAngle = Mathf.MoveTowardsAngle(currentAngle, currentAngle + angleToTarget, float.MaxValue);
-
-            targetAngle = ConvertAngleToNegative180To180(targetAngle);
-
-            float targetAngleClamped = Mathf.Clamp(targetAngle, -(travers / 2), 
-                (travers / 2));
             float maxDelta = rotateSpeed * Time.deltaTime;
-
-
             float newAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngleClamped, maxDelta);
-
-            newAngle = Mathf.MoveTowardsAngle(newAngle, newAngle - _startLocalRot, float.MaxValue);
+            newAngle += _startLocalRot;
 
             _rotationTrans.localRotation = Quaternion.Euler(0, 0, newAngle);
 
@@ -212,11 +203,6 @@ namespace Game.Room.Enemy
             {
                 _isAimedAtPlayer = false;
             }
-        }
-
-        float ConvertAngleToNegative180To180(float angle)
-        {
-            return (angle > 180) ? angle - 360 : angle;
         }
 
         protected void VerticalRotate(Transform toRotate, Transform handle, Vector2 target)

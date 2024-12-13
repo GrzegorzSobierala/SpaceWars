@@ -15,14 +15,15 @@ namespace Game.Room.Enemy
         [SerializeField] private float _aimFallowTime = 2f;
         [Space]
         [SerializeField] private LaserBeam _laserBeam;
-        [SerializeField] private Transform _handleTrans;
         [SerializeField] private Transform _gunTrans;
         [SerializeField] private LayerMask _blockAimLayerMask;
 
         private ContactFilter2D _contactFilter;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             Initalize();
         }
 
@@ -35,18 +36,18 @@ namespace Game.Room.Enemy
         {
             base.OnAimingAt(target);
 
-            if(IsKnowWherePlayerIs(target.position, _handleTrans, _aimRange, _aimFallowTime, 
+            if(IsKnowWherePlayerIs(target.position, _aimRange, _aimFallowTime, 
                 _contactFilter))
             {
-                Vector2 lookForwardPoint = _enemy.transform.up + _enemy.transform.position;
-                Aim(lookForwardPoint, _handleTrans, 360, _rotationSpeed, _aimedAngle, false);
+                Aim(target.position, 360, _rotationSpeed, _aimedAngle, true);
             }
             else
             {
-                Aim(target.position, _handleTrans, 360, _rotationSpeed, _aimedAngle, true);
+                Vector2 lookForwardPoint = _enemy.transform.up + _enemy.transform.position;
+                Aim(lookForwardPoint, 360, _rotationSpeed, _aimedAngle, false);
             }
 
-            VerticalRotate(_gunTrans, _handleTrans, target.position);
+            VerticalRotate(_gunTrans, _rotationTrans, target.position);
         }
 
         protected override void OnShooting()

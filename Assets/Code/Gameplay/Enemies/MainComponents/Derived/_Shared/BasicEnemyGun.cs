@@ -17,7 +17,6 @@ namespace Game.Room.Enemy
 
         [Inject] private PlayerManager _playerManager;
 
-        [SerializeField, AutoFill] private Transform _gunTransform;
         [SerializeField, AutoFill] private Transform _gunShootPoint;
         [SerializeField] private ShootableObjectBase _bulletPrototype;
         [Space, Header("Aim")]
@@ -27,6 +26,7 @@ namespace Game.Room.Enemy
         [SerializeField] private float _aimedAngle = 4;
         [SerializeField] private float _aimRange = 500f;
         [SerializeField] private float _aimFollowTime = 2f;
+        [SerializeField] LostTargetMode _lostTargetMode;
         [Space, Header("Shoot")]
         [SerializeField] private float _shotInterval = 0.5f;
         [SerializeField] private int _magCapacity = 5;
@@ -43,9 +43,12 @@ namespace Game.Room.Enemy
         private int _currenaMagAmmo = 0;
         private bool _wasOnBeforeReloadedCalled = false;
         private ContactFilter2D _contactFilter;
+        private Vector3 _startForwardDir;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             _currenaMagAmmo = _magCapacity;
             Initalize();
         }
@@ -59,15 +62,14 @@ namespace Game.Room.Enemy
         {
             base.OnAimingAt(target);
 
-            if (IsKnowWherePlayerIs(target.position, _gunTransform, _aimRange,
-                _aimFollowTime, _contactFilter))
+            if (IsKnowWherePlayerIs(target.position, _aimRange, _aimFollowTime, _contactFilter))
             {
-                Vector2 lookForwardPoint = _gunTransform.transform.up + _gunTransform.transform.position;
-                Aim(lookForwardPoint, _gunTransform, _gunTraverse, _rotateSpeed, _aimedAngle, false);
+                Aim(target.position, _gunTraverse, _rotateSpeed, _aimedAngle, true);
             }
             else
             {
-                Aim(target.position, _gunTransform, _gunTraverse, _rotateSpeed, _aimedAngle, true);
+                Vector2 lookForwardPoint = _rotationTrans.transform.up + _rotationTrans.transform.position;
+                Aim(lookForwardPoint, _gunTraverse, _rotateSpeed, _aimedAngle, false);
             }
         }
 
@@ -98,6 +100,8 @@ namespace Game.Room.Enemy
                 layerMask = _blockAimLayerMask,
                 useLayerMask = true,
             };
+
+            _startForwardDir = transform.forward;
         }
 
         [Button]
@@ -178,6 +182,40 @@ namespace Game.Room.Enemy
             yield return new WaitUntil(TryReload);
 
             _reloadCoroutine = null;
+        }
+
+        protected void LostTargetAction(LostTargetMode lostTargetMode)
+        {
+            switch (lostTargetMode)
+            {
+                case LostTargetMode.Stay:
+                    LostTargetStay();
+                    break;
+                case LostTargetMode.Forward:
+                    LostTargetActionForward();
+                    break;
+                case LostTargetMode.Search:
+                    LostTargetActionSearch();
+                    break;
+                default:
+                    Debug.LogError("Switch error");
+                    break;
+            }
+        }
+
+        private void LostTargetStay()
+        {
+
+        }
+
+        private void LostTargetActionForward()
+        {
+            Aim(_startForwardDir, 360, _rotateSpeed, _aimedAngle, false);
+        }
+
+        private void LostTargetActionSearch()
+        {
+
         }
     }
 }

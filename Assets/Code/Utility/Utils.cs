@@ -138,6 +138,19 @@ namespace Game.Utility
 
             return null;
         }
+
+        /// <summary>
+        /// Convert angle to format from -180 to 180
+        /// </summary>
+        public static float GetAngleIn180Format(float angle)
+        {
+            angle = angle % 360; // First, reduce to the range -360 to 360
+            if (angle > 180)
+                angle -= 360; // If greater than 180, shift down
+            else if (angle < -180)
+                angle += 360; // If less than -180, shift up
+            return angle;
+        }
     }
 
     public static class Async

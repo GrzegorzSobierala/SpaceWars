@@ -39,8 +39,10 @@ namespace Game.Room.Enemy
         private bool _isAimingLeft = false;
         private bool _wasOnBeforeReloadedCalled = false;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             _currenaMagAmmo = _magCapasity;
         }
 
