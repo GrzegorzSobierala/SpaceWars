@@ -210,7 +210,7 @@ namespace Game.Room.Enemy
 
         private void LostTargetActionForward()
         {
-            Aim(_startForwardDir, 360, _rotateSpeed, _aimedAngle, false);
+            Aim(_rotationTrans.TransformDirection(_startForwardDir), 360, _rotateSpeed, _aimedAngle, false);
         }
 
         private void LostTargetActionSearch()
