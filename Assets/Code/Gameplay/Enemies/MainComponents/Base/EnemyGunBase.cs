@@ -184,9 +184,11 @@ namespace Game.Room.Enemy
             float angleToTarget = Vector2.SignedAngle(Vector2.up, targetPosInLocal);
             float targetAngle = Utils.GetAngleIn180Format(currentAngle + angleToTarget);
             float targetAngleClamped = Mathf.Clamp(targetAngle, -travers / 2, travers / 2);
+            float traversSaveTargetAngle = GetTargetAngleToAvoidTravers(currentAngle, targetAngleClamped
+                , travers);
 
             float maxDelta = rotateSpeed * Time.deltaTime;
-            float newAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngleClamped, maxDelta);
+            float newAngle = Mathf.MoveTowardsAngle(currentAngle, traversSaveTargetAngle, maxDelta);
             newAngle += _startLocalRot;
 
             _rotationTrans.localRotation = Quaternion.Euler(0, 0, newAngle);
@@ -203,6 +205,23 @@ namespace Game.Room.Enemy
             {
                 _isAimedAtPlayer = false;
             }
+        }
+
+        private float GetTargetAngleToAvoidTravers(float currentAngle, float targetAngleClamped, float travers)
+        {
+            if(travers >= 360)
+                return targetAngleClamped;
+
+            if(currentAngle >= 0 && targetAngleClamped >= 0)
+                return targetAngleClamped;
+
+            if (currentAngle < 0 && targetAngleClamped < 0)
+                return targetAngleClamped;
+
+            if (Mathf.Abs(currentAngle) + Mathf.Abs(targetAngleClamped) < 180)
+                return targetAngleClamped;
+
+            return 0;
         }
 
         protected void VerticalRotate(Transform toRotate, Transform handle, Vector2 target)
