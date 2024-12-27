@@ -178,63 +178,51 @@ namespace Game.Utility
         /// </summary>
         public static float TriangularFunction(float x, float amplitude, float halfPeriod, float moveY)
         {
+            x = ModNormalised(x, halfPeriod * 2);
+
             return amplitude / halfPeriod
-                * (halfPeriod - Mathf.Abs(mod(x,(2 * halfPeriod)) - halfPeriod)) - moveY;
+                * (halfPeriod - Mathf.Abs((x % (2 * halfPeriod)) - halfPeriod)) - moveY;
         }
 
-        private static float mod(float a, float b)
+        public static (float, float) CalculateS(float x, float y, float amplitude, float halfPeriod, 
+            float moveY)
         {
-            return a % b;
-        }
+            float period = halfPeriod * 2;
+            float modX = x % period;
 
-        public static (float, float) CalculateS(float y, float A, float P, float M, float x)
-        {
-            // Ensure x is within [0, 2P] range
-            float modX = mod(x, 2 * P);
+            float absValue = halfPeriod - halfPeriod * (y + moveY) / amplitude;
 
-            // Calculate the intermediate value absValue
-            float absValue = P - P * (y + M) / A;
-
-            // Validate absValue is within the range [0, P]
-            if (absValue < 0 || absValue > P)
+            if (absValue < 0 || absValue > halfPeriod)
             {
                 Debug.LogError("Invalid parameters: resulting absValue is out of bounds.");
-                return (float.NaN, float.NaN); // Return NaN if the parameters are invalid
+                return (float.NaN, float.NaN);
             }
 
-            // Compute S1 and S2
-            float S1 = mod(modX - (P + absValue), 2 * P);
-            float S2 = mod(modX - (P - absValue), 2 * P);
+            float S1 = ModNormalised(modX - (halfPeriod + absValue), period);
+            float S2 = ModNormalised(modX - (halfPeriod - absValue), period);
 
-            return (S1, S2);
+            float S1x = ModNormalised(x - S1, period);
+
+            Debug.Log($" |+| {S1.ToString("f3")} | {S2.ToString("f3")}|");
+
+
+            if(S1x < halfPeriod)
+            {
+                return (S1, S2);
+            }
+            else
+            {
+                return (S2, S1);
+            }
         }
 
+        public static float ModNormalised(float value, float period)
+        {
+            return (value % period + period) % period;
+        }
 
-
-
-
-        
-
-
-        //// Use normalized modulo to determine if the TriangularFunction at (x - S1) is increasing or decreasing
-        //float fullPeriod = 2 * P;
-        //float modValue = (S1 % fullPeriod + fullPeriod) % fullPeriod;
-        //Debug.Log(modValue);
-        //    bool isS1Decreasing = modValue < P;
-        //
-        //    // Return based on whether it's decreasing
-        //    if (isS1Decreasing)
-        //    {
-        //        return (S1, S2);
-        //    }
-        //    else
-        //    {
-        //        return (S2, S1);
-        //    }
-
-
-public static void Oscillate(this MonoBehaviour mono, float lowestAmplitude,
-            float highestAmplitude, float halfPeriod, float startValue, Action<float> onOscillate)
+        public static void Oscillate(this MonoBehaviour mono, float lowestAmplitude
+            , float highestAmplitude, float halfPeriod, float startValue, Action<float> onOscillate)
         {
             if(mono.IsInvoking(nameof(OscilateNextFrameInvokeMarker)))
             {
@@ -262,8 +250,8 @@ public static void Oscillate(this MonoBehaviour mono, float lowestAmplitude,
             float moveY = (highestY - lowestY) / 2f;
             float randomSideStart = /*UnityEngine.Random.Range(0, halfPeriod * 2) + */0;
             float previousRandomisedFrameTime = Time.time - Time.deltaTime + randomSideStart;
-            float moveX = Utils.CalculateS(startY
-                , amplitude, halfPeriod, moveY, previousRandomisedFrameTime).Item1;
+            float moveX = Utils.CalculateS(previousRandomisedFrameTime, startY
+                , amplitude, halfPeriod, moveY).Item2;
 
             do
             {
@@ -272,6 +260,7 @@ public static void Oscillate(this MonoBehaviour mono, float lowestAmplitude,
                 onOscillate.Invoke(currentY);
 
                 mono.CancelInvoke(nameof(OscilateNextFrameInvokeMarker));
+
                 yield return null;
             } 
             while (mono.IsInvoking(nameof(OscilateNextFrameInvokeMarker)));

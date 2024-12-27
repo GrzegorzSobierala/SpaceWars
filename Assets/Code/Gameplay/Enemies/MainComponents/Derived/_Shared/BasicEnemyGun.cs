@@ -264,7 +264,7 @@ namespace Game.Room.Enemy
             Aim(targetAngle, _gunTraverse, rotSpeed
                 , _aimedAngle, false);
 
-            //Debug.Log($" |+| {CurrentGunRot.ToString("f3")} | {targetAngle.ToString("f3")}|");
+            Debug.Log($" |+| {CurrentGunRot.ToString("f3")} | {targetAngle.ToString("f3")}|");
         }
 
         //private void LostTargetActionSearch()
