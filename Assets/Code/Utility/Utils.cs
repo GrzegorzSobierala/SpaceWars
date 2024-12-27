@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Zenject;
-using UnityEditor.ShaderGraph.Internal;
-using System.Runtime.CompilerServices;
-using UnityEngine.Timeline;
 
 namespace Game.Utility
 {
@@ -176,7 +173,7 @@ namespace Game.Utility
         /// https://stackoverflow.com/questions/1073606/is-there-a-one-line-function-that-generates-a-triangle-wave
         /// https://www.desmos.com/calculator/bjqsoeulqi
         /// </summary>
-        public static float TriangularFunction(float x, float amplitude, float halfPeriod, float moveY)
+        public static float TriangularFunc(float x, float amplitude, float halfPeriod, float moveY)
         {
             if(x < 0)
             {
@@ -187,11 +184,11 @@ namespace Game.Utility
                 * (halfPeriod - Mathf.Abs((x % (2 * halfPeriod)) - halfPeriod)) - moveY;
         }
 
-        public static (float, float) CalculateS(float x, float y, float amplitude, float halfPeriod, 
+        public static (float, float) GetXMoveTriangularFunc(float x, float y, float amplitude, float halfPeriod, 
             float moveY)
         {
             float period = halfPeriod * 2;
-            float modX = x % period;
+            float modX = x < 0 ? ModNormalised(x,period) : x % period;
 
             float absValue = halfPeriod - halfPeriod * (y + moveY) / amplitude;
 
@@ -223,56 +220,6 @@ namespace Game.Utility
         {
             return (value % period + period) % period;
         }
-
-        public static void Oscillate(this MonoBehaviour mono, float lowestAmplitude
-            , float highestAmplitude, float halfPeriod, float startValue, Action<float> onOscillate)
-        {
-            if(mono.IsInvoking(nameof(OscilateNextFrameInvokeMarker)))
-            {
-                Debug.LogWarning("Oscillate is already requested for this frame, returning...");
-                return;
-            }
-
-            if (mono.IsInvoking(nameof(OscilationInvokeMarker)))
-            {
-                mono.Invoke(nameof(OscilateNextFrameInvokeMarker), float.MaxValue);
-            }
-            else
-            {
-                mono.Invoke(nameof(OscilationInvokeMarker), float.MaxValue);
-                mono.Invoke(nameof(OscilateNextFrameInvokeMarker), float.MaxValue);
-                mono.StartCoroutine(OscillateCor(mono, lowestAmplitude, highestAmplitude,halfPeriod
-                    , startValue, onOscillate));
-            }
-        }
-
-        private static IEnumerator OscillateCor(MonoBehaviour mono, float lowestY,
-            float highestY, float halfPeriod, float startY, Action<float> onOscillate)
-        {
-            float amplitude = highestY - lowestY;
-            float moveY = (highestY - lowestY) / 2f;
-            float randomSideStart = /*UnityEngine.Random.Range(0, halfPeriod * 2) + */0;
-            float previousRandomisedFrameTime = Time.time - Time.deltaTime + randomSideStart;
-            float moveX = Utils.CalculateS(previousRandomisedFrameTime, startY
-                , amplitude, halfPeriod, moveY).Item2;
-
-            do
-            {
-                float targetX = Time.time - moveX + randomSideStart;
-                float currentY = TriangularFunction(targetX, amplitude, halfPeriod, moveY);
-                onOscillate.Invoke(currentY);
-
-                mono.CancelInvoke(nameof(OscilateNextFrameInvokeMarker));
-
-                yield return null;
-            } 
-            while (mono.IsInvoking(nameof(OscilateNextFrameInvokeMarker)));
-
-            mono.CancelInvoke(nameof(OscilationInvokeMarker));
-        }
-
-        private static void OscilateNextFrameInvokeMarker(){}
-        private static void OscilationInvokeMarker(){}
     }
 
     public static class Async
