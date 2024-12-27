@@ -178,7 +178,10 @@ namespace Game.Utility
         /// </summary>
         public static float TriangularFunction(float x, float amplitude, float halfPeriod, float moveY)
         {
-            x = ModNormalised(x, halfPeriod * 2);
+            if(x < 0)
+            {
+                x = ModNormalised(x, halfPeriod * 2);
+            }
 
             return amplitude / halfPeriod
                 * (halfPeriod - Mathf.Abs((x % (2 * halfPeriod)) - halfPeriod)) - moveY;
@@ -198,8 +201,8 @@ namespace Game.Utility
                 return (float.NaN, float.NaN);
             }
 
-            float S1 = ModNormalised(modX - (halfPeriod + absValue), period);
-            float S2 = ModNormalised(modX - (halfPeriod - absValue), period);
+            float S1 = modX - (halfPeriod + absValue);
+            float S2 = modX - (halfPeriod - absValue);
 
             float S1x = ModNormalised(x - S1, period);
 
