@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Zenject;
+using UnityEditor.ShaderGraph.Internal;
+using System.Runtime.CompilerServices;
+using UnityEngine.Timeline;
 
 namespace Game.Utility
 {
@@ -151,6 +154,133 @@ namespace Game.Utility
                 angle += 360; // If less than -180, shift up
             return angle;
         }
+
+
+        /// <summary>
+        /// Calculates the time required to perform a rotation.
+        /// </summary>
+        /// <param name="rotationSpeed">Rotation speed in degrees per second.</param>
+        /// <param name="rotationAngle">The angle of rotation in degrees.</param>
+        /// <returns>The time required to perform the rotation in seconds.</returns>
+        public static float CalculateRotationTime(float rotationSpeed, float rotationAngle)
+        {
+            if (rotationSpeed <= 0)
+            {
+                throw new ArgumentException("Rotation speed must be greater than zero.", nameof(rotationSpeed));
+            }
+
+            return Mathf.Abs(rotationAngle) / rotationSpeed;
+        }
+
+        /// <summary>
+        /// https://stackoverflow.com/questions/1073606/is-there-a-one-line-function-that-generates-a-triangle-wave
+        /// https://www.desmos.com/calculator/bjqsoeulqi
+        /// </summary>
+        public static float TriangularFunction(float x, float amplitude, float halfPeriod, float moveY)
+        {
+            return amplitude / halfPeriod
+                * (halfPeriod - Mathf.Abs(mod(x,(2 * halfPeriod)) - halfPeriod)) - moveY;
+        }
+
+        private static float mod(float a, float b)
+        {
+            return a % b;
+        }
+
+        public static (float, float) CalculateS(float y, float A, float P, float M, float x)
+        {
+            // Ensure x is within [0, 2P] range
+            float modX = mod(x, 2 * P);
+
+            // Calculate the intermediate value absValue
+            float absValue = P - P * (y + M) / A;
+
+            // Validate absValue is within the range [0, P]
+            if (absValue < 0 || absValue > P)
+            {
+                Debug.LogError("Invalid parameters: resulting absValue is out of bounds.");
+                return (float.NaN, float.NaN); // Return NaN if the parameters are invalid
+            }
+
+            // Compute S1 and S2
+            float S1 = mod(modX - (P + absValue), 2 * P);
+            float S2 = mod(modX - (P - absValue), 2 * P);
+
+            return (S1, S2);
+        }
+
+
+
+
+
+        
+
+
+        //// Use normalized modulo to determine if the TriangularFunction at (x - S1) is increasing or decreasing
+        //float fullPeriod = 2 * P;
+        //float modValue = (S1 % fullPeriod + fullPeriod) % fullPeriod;
+        //Debug.Log(modValue);
+        //    bool isS1Decreasing = modValue < P;
+        //
+        //    // Return based on whether it's decreasing
+        //    if (isS1Decreasing)
+        //    {
+        //        return (S1, S2);
+        //    }
+        //    else
+        //    {
+        //        return (S2, S1);
+        //    }
+
+
+public static void Oscillate(this MonoBehaviour mono, float lowestAmplitude,
+            float highestAmplitude, float halfPeriod, float startValue, Action<float> onOscillate)
+        {
+            if(mono.IsInvoking(nameof(OscilateNextFrameInvokeMarker)))
+            {
+                Debug.LogWarning("Oscillate is already requested for this frame, returning...");
+                return;
+            }
+
+            if (mono.IsInvoking(nameof(OscilationInvokeMarker)))
+            {
+                mono.Invoke(nameof(OscilateNextFrameInvokeMarker), float.MaxValue);
+            }
+            else
+            {
+                mono.Invoke(nameof(OscilationInvokeMarker), float.MaxValue);
+                mono.Invoke(nameof(OscilateNextFrameInvokeMarker), float.MaxValue);
+                mono.StartCoroutine(OscillateCor(mono, lowestAmplitude, highestAmplitude,halfPeriod
+                    , startValue, onOscillate));
+            }
+        }
+
+        private static IEnumerator OscillateCor(MonoBehaviour mono, float lowestY,
+            float highestY, float halfPeriod, float startY, Action<float> onOscillate)
+        {
+            float amplitude = highestY - lowestY;
+            float moveY = (highestY - lowestY) / 2f;
+            float randomSideStart = /*UnityEngine.Random.Range(0, halfPeriod * 2) + */0;
+            float previousRandomisedFrameTime = Time.time - Time.deltaTime + randomSideStart;
+            float moveX = Utils.CalculateS(startY
+                , amplitude, halfPeriod, moveY, previousRandomisedFrameTime).Item1;
+
+            do
+            {
+                float targetX = Time.time - moveX + randomSideStart;
+                float currentY = TriangularFunction(targetX, amplitude, halfPeriod, moveY);
+                onOscillate.Invoke(currentY);
+
+                mono.CancelInvoke(nameof(OscilateNextFrameInvokeMarker));
+                yield return null;
+            } 
+            while (mono.IsInvoking(nameof(OscilateNextFrameInvokeMarker)));
+
+            mono.CancelInvoke(nameof(OscilationInvokeMarker));
+        }
+
+        private static void OscilateNextFrameInvokeMarker(){}
+        private static void OscilationInvokeMarker(){}
     }
 
     public static class Async
@@ -683,3 +813,22 @@ namespace Game.Utility
         }
     }
 }
+
+
+//public static (float, float) CalculateS(float y, float A, float P, float M, float x)
+//{
+//    float temp = P - P * (y + M) / A;
+
+//    if (temp < 0 || temp > P)
+//    {
+//        Debug.LogError("Invalid parameters: resulting abs value is out of bounds.");
+//    }
+
+//    float absValue = temp;
+
+//    float S1 = x - (P + absValue);
+//    float S2 = x - (P - absValue);
+
+
+//    return (S1, S2);
+//}

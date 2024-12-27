@@ -32,6 +32,7 @@ namespace Game.Room.Enemy
         private float _startLocalRot;
 
         protected bool IsAimedAtPlayer => _isAimedAtPlayer;
+        protected float CurrentGunRot => Utils.GetAngleIn180Format(_rotationTrans.localEulerAngles.z - _startLocalRot);
 
         protected virtual void Awake()
         {
@@ -236,7 +237,7 @@ namespace Game.Room.Enemy
 
         private void Init()
         {
-            _startLocalRot = _rotationTrans.localEulerAngles.z;
+            _startLocalRot = _rotationTrans.localEulerAngles.z + 22.5f + 45.0f;
         }
 
         private void TryAimGun()
