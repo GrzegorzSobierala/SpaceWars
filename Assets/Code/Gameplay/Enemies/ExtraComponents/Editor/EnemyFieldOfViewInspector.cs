@@ -5,13 +5,13 @@ using Game.Room.Enemy;
 namespace Game.Editor
 {
     [CustomEditor(typeof(EnemyFieldOfView))]
-    public class EnemyFieldOfViewInspector : UnityEditor.Editor
+    public class EnemyFieldOfViewInspector : SpaceWarsInspector
     {
         private bool isDrawGizmosOn = false;
 
         public override void OnInspectorGUI()
         {
-            DrawDefaultInspector();
+            base.OnInspectorGUI();
 
             GUILayoutOption[] options = new GUILayoutOption[0];
 
