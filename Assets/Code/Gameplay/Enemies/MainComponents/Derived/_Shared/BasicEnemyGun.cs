@@ -37,16 +37,20 @@ namespace Game.Room.Enemy
         [SerializeField] private int _magCapacity = 5;
         [SerializeField] private float _reloadTime = 7f;
         [SerializeField] private float _shootAtMaxDistanceMutli = 0.7f;
-        [SerializeField] private float _beforeReloadEventTime = 0.5f;
         [Space]
+        [SerializeField] private float _beforeReloadEventTime = 0.5f;
         [SerializeField] private UnityEvent _onBeforeReloaded;
+        [SerializeField] private UnityEvent _onReloaded;
+        [SerializeField] private float _beforeShootEventTime = 0.5f;
+        [SerializeField] private UnityEvent _onBeforeShootGun;
         [SerializeField] private UnityEvent _onShootGun;
 
         private Coroutine _reloadCoroutine;
-        private float _lastShotTime = 0f;
+        private float _lastShootTime = 0f;
         private float _endReloadTime = 0f;
         private int _currenaMagAmmo = 0;
         private bool _wasOnBeforeReloadedCalled = false;
+        private bool _wasOnBeforeShootCalled = false;
         private ContactFilter2D _contactFilter;
         private OscillateController _oscillateCont = new();
         private float _randomSearchTarget;
@@ -61,7 +65,7 @@ namespace Game.Room.Enemy
 
         public override void Prepare()
         {
-            _lastShotTime = Time.time;
+            _lastShootTime = Time.time;
         }
 
         protected override void OnAimingAt(Transform target)
@@ -77,8 +81,6 @@ namespace Game.Room.Enemy
                 LostTargetAction(_lostTargetMode);
             }
         }
-
-        public bool _oscilateTest;
 
         protected override void OnStopAiming()
         {
@@ -112,7 +114,7 @@ namespace Game.Room.Enemy
         [Button]
         private void Shoot()
         {
-            _lastShotTime = Time.time;
+            _lastShootTime = Time.time;
 
             GameObject damageDealer = _body.gameObject;
             Transform parent = _playerManager.transform;
@@ -124,6 +126,7 @@ namespace Game.Room.Enemy
             _currenaMagAmmo--;
 
             OnShoot?.Invoke();
+            _wasOnBeforeShootCalled = true;
 
             if (_currenaMagAmmo == 0)
             {
@@ -133,7 +136,13 @@ namespace Game.Room.Enemy
 
         private void TryShoot()
         {
-            if (Time.time - _lastShotTime < _shotInterval || _currenaMagAmmo <= 0)
+            if (!_wasOnBeforeShootCalled && Time.time > _lastShootTime - _beforeShootEventTime)
+            {
+                _onBeforeShootGun?.Invoke();
+                _wasOnBeforeShootCalled = true;
+            }
+
+            if (Time.time - _lastShootTime < _shotInterval || _currenaMagAmmo <= 0)
                 return;
 
             if (!IsAimedAtPlayer)
@@ -166,6 +175,7 @@ namespace Game.Room.Enemy
         {
             _currenaMagAmmo = _magCapacity;
             OnStopReload?.Invoke();
+            _onReloaded?.Invoke();
             _wasOnBeforeReloadedCalled = true;
         }
 
