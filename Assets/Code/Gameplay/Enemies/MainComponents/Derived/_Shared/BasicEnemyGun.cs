@@ -1,6 +1,7 @@
 using Game.Combat;
 using Game.Management;
 using Game.Utility;
+using Game.Utility.Globals;
 using NaughtyAttributes;
 using System;
 using System.Collections;
@@ -21,7 +22,6 @@ namespace Game.Room.Enemy
         [SerializeField, AutoFill] private Transform _gunShootPoint;
         [SerializeField] private ShootableObjectBase _bulletPrototype;
         [Space, Header("Aim")]
-        [SerializeField] private LayerMask _blockAimLayerMask;
         [SerializeField] private float _gunTraverse = 45f;
         [SerializeField] private float _rotateSpeed = 100f;
         [SerializeField] private float _aimedAngle = 4;
@@ -38,8 +38,8 @@ namespace Game.Room.Enemy
         [SerializeField] private float _reloadTime = 7f;
         [SerializeField] private float _shootAtMaxDistanceMutli = 0.7f;
         [Space]
-        [SerializeField] private float _beforeReloadEventTime = 0.5f;
         [SerializeField] private UnityEvent _onStartReload;
+        [SerializeField] private float _beforeReloadEventTime = 0.5f;
         [SerializeField] private UnityEvent _onBeforeReloaded;
         [SerializeField] private UnityEvent _onReloaded;
         [SerializeField] private float _beforeShootEventTime = 0.5f;
@@ -107,7 +107,7 @@ namespace Game.Room.Enemy
             _contactFilter = new ContactFilter2D
             {
                 useTriggers = false,
-                layerMask = _blockAimLayerMask,
+                layerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle),
                 useLayerMask = true,
             };
         }
