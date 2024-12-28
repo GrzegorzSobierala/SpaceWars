@@ -5,5 +5,6 @@ namespace Game.Room.Enemy
         Stay = 0,
         Forward = 1,
         Search = 2,
+        SearchRandom = 3,
     }
 }

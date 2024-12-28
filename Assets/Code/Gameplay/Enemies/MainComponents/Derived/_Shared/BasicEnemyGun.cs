@@ -1,6 +1,5 @@
 using Game.Combat;
 using Game.Management;
-using Game.Universal;
 using Game.Utility;
 using NaughtyAttributes;
 using System;
@@ -32,6 +31,8 @@ namespace Game.Room.Enemy
         [SerializeField] LostTargetMode _lostTargetMode;
         [SerializeField, ShowIf(nameof(_lostTargetMode), LostTargetMode.Search)]
         private float _searchSpeedMulti = 0.25f;
+        [SerializeField, ShowIf(nameof(_lostTargetMode), LostTargetMode.SearchRandom)]
+        private float _searchRandomSpeedMulti = 0.25f;
         [Space, Header("Shoot")]
         [SerializeField] private float _shotInterval = 0.5f;
         [SerializeField] private int _magCapacity = 5;
@@ -50,6 +51,7 @@ namespace Game.Room.Enemy
         private ContactFilter2D _contactFilter;
         private Vector3 _startForwardDir;
         private OscillateController _oscillateCont = new();
+        private float _randomSearchTarget;
 
         protected override void Awake()
         {
@@ -204,6 +206,9 @@ namespace Game.Room.Enemy
                 case LostTargetMode.Search:
                     LostTargetActionSearch();
                     break;
+                case LostTargetMode.SearchRandom:
+                    LostTargetActionSearchRandom();
+                    break;
                 default:
                     Debug.LogError("Switch error");
                     break;
@@ -222,8 +227,6 @@ namespace Game.Room.Enemy
             Aim(0, _gunTraverse, _rotateSpeed, _aimedAngle, false);
         }
 
-        public bool _goLeftSearch = true;
-
         private void LostTargetActionSearch()
         {
             float searchRotSpeed = _rotateSpeed * _searchSpeedMulti;
@@ -233,17 +236,18 @@ namespace Game.Room.Enemy
             Aim(targetAngle, _gunTraverse, searchRotSpeed, _aimedAngle, false);
         }
 
-        private void AimOnOscillate(float targetAngle)
+        private void LostTargetActionSearchRandom()
         {
-            float rotSpeed = _rotateSpeed * 0.25f;
+            if (0.01f > Mathf.Abs(CurrentGunRot - _randomSearchTarget) || _randomSearchTarget == 0)
+            {
+                float side = Mathf.Sign(_randomSearchTarget * -1);
 
-            //Debug.Log($" |+| {CurrentGunRot.ToString("f3")} | {targetAngle.ToString("f3")}|");
-        }
-
-        private void OnEnable()
-        {
-            StartAimingAt(_playerManager.PlayerBody.transform);
-            StartShooting();
+                float min = _gunTraverse / 2 - Mathf.Abs(CurrentGunRot);
+                _randomSearchTarget = UnityEngine.Random.Range(min, _gunTraverse/2) * side;
+            }
+            
+            float searchRotSpeed = _rotateSpeed * _searchRandomSpeedMulti;
+            Aim(_randomSearchTarget, _gunTraverse, searchRotSpeed, _aimedAngle, false);
         }
     }
 }
