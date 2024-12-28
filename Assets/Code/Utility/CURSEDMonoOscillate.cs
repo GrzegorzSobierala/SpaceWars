@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using UnityEngine;
+
 namespace Game.Utility
 {
-    public static class MonoOscillateExtencions
+    public static class CURSEDMonoOscillate
     {
         public static void OscillateRot(this MonoBehaviour mono, float lowestAmplitude
             , float highestAmplitude, float rotSpeed, float startValue

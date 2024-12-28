@@ -1,5 +1,6 @@
 using Game.Combat;
 using Game.Management;
+using Game.Universal;
 using Game.Utility;
 using NaughtyAttributes;
 using System;
@@ -29,6 +30,8 @@ namespace Game.Room.Enemy
         [SerializeField] private float _aimRange = 500f;
         [SerializeField] private float _aimFollowTime = 2f;
         [SerializeField] LostTargetMode _lostTargetMode;
+        [SerializeField, ShowIf(nameof(_lostTargetMode), LostTargetMode.Search)]
+        private float _searchSpeedMulti = 0.25f;
         [Space, Header("Shoot")]
         [SerializeField] private float _shotInterval = 0.5f;
         [SerializeField] private int _magCapacity = 5;
@@ -46,6 +49,7 @@ namespace Game.Room.Enemy
         private bool _wasOnBeforeReloadedCalled = false;
         private ContactFilter2D _contactFilter;
         private Vector3 _startForwardDir;
+        private OscillateController _oscillateCont = new();
 
         protected override void Awake()
         {
@@ -212,22 +216,26 @@ namespace Game.Room.Enemy
 
         private void LostTargetActionForward()
         {
-            Aim(0, 360, _rotateSpeed, _aimedAngle, false);
+            if (CurrentGunRot == 0)
+                return;
+
+            Aim(0, _gunTraverse, _rotateSpeed, _aimedAngle, false);
         }
 
         public bool _goLeftSearch = true;
 
         private void LostTargetActionSearch()
         {
-            this.OscillateRot(-_gunTraverse / 2, _gunTraverse / 2, _rotateSpeed * 0.25f,
-                CurrentGunRot, AimOnOscillate, MonoOscillateExtencions.OscillateStart.Increasing);
+            float searchRotSpeed = _rotateSpeed * _searchSpeedMulti;
+            float targetAngle = _oscillateCont.OscillateRotThisThisFrame(_gunTraverse,
+                searchRotSpeed, CurrentGunRot);
+
+            Aim(targetAngle, _gunTraverse, searchRotSpeed, _aimedAngle, false);
         }
 
         private void AimOnOscillate(float targetAngle)
         {
             float rotSpeed = _rotateSpeed * 0.25f;
-            Aim(targetAngle, _gunTraverse, rotSpeed
-                , _aimedAngle, false);
 
             //Debug.Log($" |+| {CurrentGunRot.ToString("f3")} | {targetAngle.ToString("f3")}|");
         }

@@ -184,6 +184,10 @@ namespace Game.Utility
                 * (halfPeriod - Mathf.Abs((x % (2 * halfPeriod)) - halfPeriod)) - moveY;
         }
 
+        /// <summary>
+        /// Get the possible Xmoves for (x - XMove) in Triangular Function for provided y 
+        /// </summary>
+        /// <returns>(increasing,decreasing)</returns>
         public static (float, float) GetXMoveTriangularFunc(float x, float y, float amplitude, float halfPeriod, 
             float moveY)
         {
@@ -202,9 +206,6 @@ namespace Game.Utility
             float S2 = modX - (halfPeriod - absValue);
 
             float S1x = ModNormalised(x - S1, period);
-
-            Debug.Log($" |+| {S1.ToString("f3")} | {S2.ToString("f3")}|");
-
 
             if(S1x < halfPeriod)
             {
