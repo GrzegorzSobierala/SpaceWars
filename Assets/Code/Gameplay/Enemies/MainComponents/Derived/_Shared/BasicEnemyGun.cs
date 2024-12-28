@@ -17,7 +17,6 @@ namespace Game.Room.Enemy
         public event Action OnStopReload;
 
         [Inject] private PlayerManager _playerManager;
-        [Inject] private RandomManager _randomManager;
 
         [SerializeField, AutoFill] private Transform _gunShootPoint;
         [SerializeField] private ShootableObjectBase _bulletPrototype;
@@ -49,7 +48,6 @@ namespace Game.Room.Enemy
         private int _currenaMagAmmo = 0;
         private bool _wasOnBeforeReloadedCalled = false;
         private ContactFilter2D _contactFilter;
-        private Vector3 _startForwardDir;
         private OscillateController _oscillateCont = new();
         private float _randomSearchTarget;
 
@@ -109,8 +107,6 @@ namespace Game.Room.Enemy
                 layerMask = _blockAimLayerMask,
                 useLayerMask = true,
             };
-
-            _startForwardDir = transform.forward;
         }
 
         [Button]

@@ -11,7 +11,7 @@ namespace Game.Utility
             , Action<float> onOscillate, OscillateStart oscillateStart = OscillateStart.Random)
         {
 
-            Func<IEnumerator> coroutine = () => OscillateRotCor(mono, lowestAmplitude, highestAmplitude
+            IEnumerator coroutine() => OscillateRotCor(mono, lowestAmplitude, highestAmplitude
                 , rotSpeed, startValue, oscillateStart, onOscillate);
 
             TryStartCoroutine(mono, coroutine);
@@ -23,8 +23,8 @@ namespace Game.Utility
             , float highestAmplitude, float halfPeriod, float startValue
             , Action<float> onOscillate, OscillateStart oscillateStart = OscillateStart.Random)
         {
-            Func<IEnumerator> coroutine = () => OscillateCor(mono, lowestAmplitude, highestAmplitude
-                , halfPeriod , startValue, oscillateStart, onOscillate);
+            IEnumerator coroutine() => OscillateCor(mono, lowestAmplitude, highestAmplitude
+                , halfPeriod, startValue, oscillateStart, onOscillate);
 
             TryStartCoroutine(mono, coroutine);
         }
