@@ -39,6 +39,7 @@ namespace Game.Room.Enemy
         [SerializeField] private float _shootAtMaxDistanceMutli = 0.7f;
         [Space]
         [SerializeField] private float _beforeReloadEventTime = 0.5f;
+        [SerializeField] private UnityEvent _onStartReload;
         [SerializeField] private UnityEvent _onBeforeReloaded;
         [SerializeField] private UnityEvent _onReloaded;
         [SerializeField] private float _beforeShootEventTime = 0.5f;
@@ -194,6 +195,8 @@ namespace Game.Room.Enemy
 
         private IEnumerator ReloadingMag()
         {
+            _onStartReload?.Invoke();
+
             yield return new WaitUntil(TryReload);
 
             _reloadCoroutine = null;
