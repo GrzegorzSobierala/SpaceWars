@@ -221,6 +221,12 @@ namespace Game.Utility
         {
             return (value % period + period) % period;
         }
+
+        public static Quaternion ChangeRotationZ(Quaternion rot, float newZ)
+        {
+            Vector3 newRot = new Vector3(rot.eulerAngles.x, rot.eulerAngles.y, newZ);
+            return Quaternion.Euler(newRot);
+        }
     }
 
     public static class Async
@@ -444,7 +450,7 @@ namespace Game.Utility
             }
         }
 
-
+        
     }
 
     public static class Mathfs
@@ -753,22 +759,3 @@ namespace Game.Utility
         }
     }
 }
-
-
-//public static (float, float) CalculateS(float y, float A, float P, float M, float x)
-//{
-//    float temp = P - P * (y + M) / A;
-
-//    if (temp < 0 || temp > P)
-//    {
-//        Debug.LogError("Invalid parameters: resulting abs value is out of bounds.");
-//    }
-
-//    float absValue = temp;
-
-//    float S1 = x - (P + absValue);
-//    float S2 = x - (P - absValue);
-
-
-//    return (S1, S2);
-//}

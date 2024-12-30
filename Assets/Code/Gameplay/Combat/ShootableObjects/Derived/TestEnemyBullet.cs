@@ -1,4 +1,5 @@
 using Game.Combat;
+using Game.Utility;
 using System.Collections;
 using UnityEngine;
 
@@ -9,6 +10,10 @@ namespace Game.Combat
         public override void Shoot(Rigidbody2D creatorBody, Transform gunTransform)
         {
             gameObject.SetActive(true);
+
+            _body.transform.position = gunTransform.position;
+            _body.transform.rotation = Utils.ChangeRotationZ(_body.transform.rotation, 
+                gunTransform.rotation.eulerAngles.z);
 
             _body.position = gunTransform.position;
             _body.rotation = gunTransform.rotation.eulerAngles.z;

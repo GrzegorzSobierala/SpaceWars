@@ -18,6 +18,7 @@ namespace Game.Room.Enemy
         public event Action OnStopReload;
 
         [Inject] private PlayerManager _playerManager;
+        [Inject] private EnemyManager _enemyManager;
 
         [SerializeField, AutoFill] private Transform _gunShootPoint;
         [SerializeField] private ShootableObjectBase _bulletPrototype;
@@ -118,7 +119,7 @@ namespace Game.Room.Enemy
             _lastShootTime = Time.time;
 
             GameObject damageDealer = _body.gameObject;
-            Transform parent = _playerManager.transform;
+            Transform parent = _enemyManager.transform;
 
             _onShootGun?.Invoke();
 
