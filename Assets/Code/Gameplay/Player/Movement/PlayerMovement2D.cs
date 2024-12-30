@@ -120,10 +120,14 @@ namespace Game.Player.Ship
                 return;
 
             Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection(point);
-            float playerCursorAngle = Utils.AngleDirected(_body.position, intersectionPoint) - 90f;
+
+            float playerCursorAngle = Utils.AngleDirected(_body.worldCenterOfMass, intersectionPoint) - 90f;
 
             float rotSpeed = _rotationSpeed * Time.fixedDeltaTime;
             float newAngle = Mathf.MoveTowardsAngle(_body.rotation, playerCursorAngle, rotSpeed);
+
+            Debug.Log($"{(_body.rotation - newAngle).ToString("f3")} | {_body.worldCenterOfMass.ToString("f3")} " +
+                $"| {intersectionPoint.ToString("f3")}");
 
             _body.MoveRotation(newAngle);
 

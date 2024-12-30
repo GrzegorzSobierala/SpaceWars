@@ -15,7 +15,8 @@ namespace Game.Player.VirtualCamera
 
         private void Update()
         {
-            transform.position = _body.transform.position + _offset;
+            Vector2 worldCenterOfMassVector = _body.transform.TransformVector(_body.centerOfMass);
+            transform.position = _body.transform.position + (Vector3)worldCenterOfMassVector + _offset;
         }
     }
 }

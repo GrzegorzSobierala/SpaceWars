@@ -26,6 +26,22 @@ namespace Game.Utility
         /// <returns></returns>
         public static Vector2 ScreanPositionOn2DIntersection(Vector2 position)
         {
+            Ray ray = Camera.main.ViewportPointToRay(position, Camera.MonoOrStereoscopicEye.Mono);
+
+            Vector3Double dirDouble = new Vector3Double(ray.direction);
+            Vector3Double originDouble = new Vector3Double(ray.origin);
+
+            double cameraPozZDouble = (double)Camera.main.transform.position.z;
+
+            double t = -cameraPozZDouble / dirDouble.z;
+
+            Vector3Double result = (dirDouble * t) + originDouble;
+
+            return result.ToVector3();
+        }
+
+        public static Vector2 ScreanPositionOn2DIntersection2(Vector2 position)
+        {
             Ray ray = Camera.main.ScreenPointToRay(position);
             float t = -Camera.main.transform.position.z / ray.direction.z;
             return ray.origin + t * ray.direction;
