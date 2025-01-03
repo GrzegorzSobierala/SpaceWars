@@ -26,38 +26,28 @@ namespace Game.Utility
         /// <returns></returns>
         public static Vector2 ScreanPositionOn2DIntersection(Vector2 position)
         {
-            Ray ray = Camera.main.ViewportPointToRay(position, Camera.MonoOrStereoscopicEye.Mono);
+            Vector3 planePoint = Vector3.zero;
+            Vector3 planeNormal = Vector3.back;
 
-            Vector3Double dirDouble = new Vector3Double(ray.direction);
-            Vector3Double originDouble = new Vector3Double(ray.origin);
-
-            double cameraPozZDouble = (double)Camera.main.transform.position.z;
-
-            double t = -cameraPozZDouble / dirDouble.z;
-
-            Vector3Double result = (dirDouble * t) + originDouble;
-
-            return result.ToVector3();
-        }
-
-        public static Vector2 ScreanPositionOn2DIntersection2(Vector2 position)
-        {
             Ray ray = Camera.main.ScreenPointToRay(position);
-            float t = -Camera.main.transform.position.z / ray.direction.z;
-            return ray.origin + t * ray.direction;
+            Vector3 difference = planePoint - ray.origin;
+            float product1 = Vector3.Dot(difference, planeNormal); ;
+            float product2 = Vector3.Dot(ray.direction, planeNormal);
+            float distanceFromOriginToPlane = product1 / product2;
+            Vector3 intersection = ray.origin + distanceFromOriginToPlane * ray.direction;
+
+            return intersection;
         }
 
         /// <summary>
-        /// Get angle from vector(1,0), return value from left is negative, value on the right is positive
+        /// Get angle from vector(0,1), return value from left is negative, value on the right is positive
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
         public static float AngleDirected(Vector2 vector)
         {
-            float angle = Mathf.Atan2(vector.y, vector.x);
-            return angle * Mathf.Rad2Deg;
+            return Vector2.SignedAngle(Vector2.up, vector);
         }
-
 
         public static float AngleDirected(Vector2 startVectorPos, Vector2 endVectorPos)
         {

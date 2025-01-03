@@ -105,7 +105,7 @@ namespace Game.Player.Ship
             Vector2 aimPoint = Utils.ScreanPositionOn2DIntersection(mousePos);
 
             Vector2 specialGunPos = (Vector2)SpecialGun.transform.position;
-            float angleDegrees = Utils.AngleDirected(specialGunPos, aimPoint) - 90f;
+            float angleDegrees = Utils.AngleDirected(specialGunPos, aimPoint);
 
             Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
             SpecialGun.transform.rotation = rotation;

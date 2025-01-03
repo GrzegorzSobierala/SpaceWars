@@ -62,7 +62,7 @@ namespace Game.Player.Ship
             Vector2 mousePos = _Input.CursorPosition.ReadValue<Vector2>();
             Vector2 aimPoint = Utils.ScreanPositionOn2DIntersection(mousePos);
 
-            float angleDegrees = Utils.AngleDirected((Vector2)Gun.transform.position, aimPoint) - 90f;
+            float angleDegrees = Utils.AngleDirected((Vector2)Gun.transform.position, aimPoint);
 
             Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
             Gun.transform.rotation = rotation;

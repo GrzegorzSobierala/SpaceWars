@@ -69,7 +69,7 @@ namespace Game.Player.Ship
         {
 
             Vector2 gunPos = (Vector2)Gun.transform.position;
-            float angleDegrees = Utils.AngleDirected(gunPos, _aimMarker.position) - 90f;
+            float angleDegrees = Utils.AngleDirected(gunPos, _aimMarker.position);
 
             Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
             Gun.transform.rotation = rotation;

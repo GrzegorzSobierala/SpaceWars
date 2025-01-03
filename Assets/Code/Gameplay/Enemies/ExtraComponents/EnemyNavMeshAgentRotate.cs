@@ -28,7 +28,6 @@ namespace Game.Room.Enemy
 
         public void RotateToAngle(float angle)
         {
-            angle -= 90;
             float rotSpeed = _agent.angularSpeed * Time.fixedDeltaTime;
             float newAngle = Mathf.MoveTowardsAngle(_body.rotation, angle, rotSpeed);
 

@@ -35,7 +35,7 @@ namespace Game.Room.Enemy
             Vector2 gunPos = (Vector2)_gunTransform.position;
             float angleDegrees;
 
-            angleDegrees = Utils.AngleDirected(gunPos, target.position) - 90f;
+            angleDegrees = Utils.AngleDirected(gunPos, target.position);
             
             Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
             _gunTransform.rotation = rotation;
