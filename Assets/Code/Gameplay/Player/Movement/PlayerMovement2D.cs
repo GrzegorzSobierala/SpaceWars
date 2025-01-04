@@ -119,18 +119,21 @@ namespace Game.Player.Ship
             if (_movementQE)
                 return;
 
-            Vector2 refScreenPos = Camera.main.WorldToScreenPoint(_body.worldCenterOfMass);
+            Vector2 worldCenterOfMassVector = _body.transform.TransformVector(_body.centerOfMass);
+            Vector2 transCenterOfMass = _body.transform.position + (Vector3)worldCenterOfMassVector;
+
+            Vector2 refScreenPos = Camera.main.WorldToScreenPoint(transCenterOfMass);
             Vector2 targetScreenPos = (point - refScreenPos).normalized * 1000 + refScreenPos;
             Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection(targetScreenPos);
 
-            float playerCursorAngle = Utils.AngleDirected(_body.worldCenterOfMass,
+            float playerCursorAngle = Utils.AngleDirected(transCenterOfMass,
                 intersectionPoint);
 
             float rotSpeed = _rotationSpeed * Time.fixedDeltaTime;
             float newAngle = Mathf.MoveTowardsAngle(_body.rotation, playerCursorAngle, rotSpeed);
 
-            Debug.Log($"{(_body.rotation - newAngle).ToString("f3")} | {_body.worldCenterOfMass.ToString("f3")} " +
-               $"| {intersectionPoint.ToString("f3")}");
+            Debug.Log($"{(_body.rotation - newAngle).ToString("f3")} | {_body.position.ToString("f3")} " +
+               $"| {_body.transform.position.ToString("f3")}");
 
             _body.MoveRotation(newAngle);
             TransferVelocity(newAngle);
