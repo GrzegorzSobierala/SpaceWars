@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 using Zenject;
 
 namespace Game.Player.Ship
@@ -17,6 +18,7 @@ namespace Game.Player.Ship
         [Inject] private InputProvider _inputProvider;
         [Inject] private Rigidbody2D _body;
         [Inject] private GunManager _gunManager;
+        [Inject] private CenterOfMass _centerOfMass;
 
         [SerializeField, Range(0.0f, 600.0f)] private float _moveSpeed = 100;
         [SerializeField, Range(0.0f, 200.0f)] private float _forwardSpeedMulti = 100;
@@ -114,17 +116,26 @@ namespace Game.Player.Ship
             RotateToPoint(mousePos);
         }
 
+        public Camera cursorCamera;
+
         public void RotateToPoint(Vector2 point)
         {
             if (_movementQE)
                 return;
 
-            Vector2 worldCenterOfMassVector = _body.transform.TransformVector(_body.centerOfMass);
-            Vector2 transCenterOfMass = _body.transform.position + (Vector3)worldCenterOfMassVector;
+            //Vector2 worldCenterOfMassVector = _body.transform.TransformVector(_body.centerOfMass);
+            //Vector2 transCenterOfMass = _body.transform.position + (Vector3)worldCenterOfMassVector;
 
-            Vector2 refScreenPos = Camera.main.WorldToScreenPoint(transCenterOfMass);
-            Vector2 targetScreenPos = (point - refScreenPos).normalized * 1000 + refScreenPos;
-            Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection(targetScreenPos);
+            Vector2 transCenterOfMass = _centerOfMass.transform.position;
+
+            //Vector2 refScreenPos = Camera.main.WorldToScreenPoint(transCenterOfMass);
+            //Vector2 targetScreenPos = (point - refScreenPos).normalized * 1000 + refScreenPos;
+            //Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection(point);
+            Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection2(point, cursorCamera);
+
+
+            Ray ray = Camera.main.ScreenPointToRay(point);
+            intersectionPoint += (Vector2)ray.origin;
 
             float playerCursorAngle = Utils.AngleDirected(transCenterOfMass,
                 intersectionPoint);
@@ -132,11 +143,12 @@ namespace Game.Player.Ship
             float rotSpeed = _rotationSpeed * Time.fixedDeltaTime;
             float newAngle = Mathf.MoveTowardsAngle(_body.rotation, playerCursorAngle, rotSpeed);
 
-            Debug.Log($"{(_body.rotation - newAngle).ToString("f3")} | {_body.position.ToString("f3")} " +
-               $"| {_body.transform.position.ToString("f3")}");
+            Debug.Log($"{(Utils.GetAngleIn180Format(_body.rotation) - Utils.GetAngleIn180Format(newAngle)).ToString("f3")} | {Time.frameCount.ToString("f3")} " +
+               $"| {(intersectionPoint - transCenterOfMass).ToString("f7")}");
 
             _body.MoveRotation(newAngle);
-            TransferVelocity(newAngle);
+            //_body.SetRotation(newAngle);
+            //TransferVelocity(newAngle);
         }
 
         public void KeyRotate()
@@ -249,7 +261,7 @@ namespace Game.Player.Ship
                 oppositeSideMulti += -dot * _oppositeForce;
             }
 
-            Vector2 targetForce = direction * _moveSpeed * _body.mass * oppositeSideMulti;
+            Vector2 targetForce = direction * _moveSpeed * _body.mass/* * oppositeSideMulti*/;
             _body.AddRelativeForce(procentOfMaxSpeed * targetForce * Time.fixedDeltaTime);
         }
 

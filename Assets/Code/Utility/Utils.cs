@@ -19,6 +19,26 @@ namespace Game.Utility
             return screenPosition;
         }
 
+        public static Vector2 ScreanPositionOn2DIntersection2(Vector2 position, Camera camera)
+        {
+            Vector3 planePoint = Vector3.zero;
+            Vector3 planeNormal = Vector3.back;
+
+            Ray ray = camera.ScreenPointToRay(position);
+
+
+            Vector3 difference = planePoint - ray.origin;
+            float product1 = Vector3.Dot(difference, planeNormal); ;
+            float product2 = Vector3.Dot(ray.direction, planeNormal);
+            float distanceFromOriginToPlane = product1 / product2;
+            Vector3 intersection = ray.origin + distanceFromOriginToPlane * ray.direction;
+
+            //Debug.Log($"{ray.direction.ToString("f3")} ");
+
+            return intersection;
+        }
+
+
         /// <summary>
         /// Screan point to 2D physic plane intersection point 
         /// </summary>
@@ -30,14 +50,55 @@ namespace Game.Utility
             Vector3 planeNormal = Vector3.back;
 
             Ray ray = Camera.main.ScreenPointToRay(position);
-            Vector3 difference = planePoint - ray.origin;
+
+            Vector3 rayOrigin = Camera.main.transform.position;
+
+
+
+            Vector3 difference = planePoint - rayOrigin;
             float product1 = Vector3.Dot(difference, planeNormal); ;
             float product2 = Vector3.Dot(ray.direction, planeNormal);
             float distanceFromOriginToPlane = product1 / product2;
-            Vector3 intersection = ray.origin + distanceFromOriginToPlane * ray.direction;
+            Vector3 intersection = rayOrigin + distanceFromOriginToPlane * ray.direction;
+
+            Debug.Log($"{ray.direction.ToString("f3")} ");
+
+            //Debug.Log($"{ray.origin.ToString("f3")} | {(Camera.main.transform.position - ray.origin).ToString("f3")}");
 
             return intersection;
         }
+
+
+        public static Ray ScreenPointToRay(Camera camera, Vector2 screenPoint)
+        {
+            // Step 1: Generate the inverse matrix
+            Matrix4x4 inverseMatrix = (camera.projectionMatrix * camera.worldToCameraMatrix).inverse;
+
+            // Step 2: Convert screen space pixel to clip space
+            Vector2 clipPoint = new Vector2(
+                (screenPoint.x / camera.pixelWidth) * 2f - 1f,
+                (screenPoint.y / camera.pixelHeight) * 2f - 1f
+            );
+
+            // Clip space coordinates in 3D (near plane, z = -1 in clip space)
+            Vector4 clipSpacePoint = new Vector4(clipPoint.x, clipPoint.y, -1f, 1f);
+
+            // Step 3: Transform clip space point to world space
+            Vector4 worldSpacePoint = inverseMatrix.MultiplyPoint(clipSpacePoint);
+
+            // Homogeneous division to convert from 4D to 3D
+            if (Mathf.Abs(worldSpacePoint.w) > Mathf.Epsilon)
+            {
+                worldSpacePoint /= worldSpacePoint.w;
+            }
+
+            // Step 4: Calculate ray direction
+            Vector3 rayDirection = (new Vector3(worldSpacePoint.x, worldSpacePoint.y, worldSpacePoint.z) - camera.transform.position).normalized;
+
+            // Step 5: Construct and return the ray
+            return new Ray(camera.transform.position, rayDirection);
+        }
+
 
         /// <summary>
         /// Get angle from vector(0,1), return value from left is negative, value on the right is positive
