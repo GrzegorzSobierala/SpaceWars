@@ -133,10 +133,8 @@ namespace Game.Player.Ship
             float rotSpeed = _rotationSpeed * Time.fixedDeltaTime;
             float newAngle = Mathf.MoveTowardsAngle(_body.rotation, playerCursorAngle, rotSpeed);
 
-            Debug.Log($"{(Utils.GetAngleIn180Format(_body.rotation) - Utils.GetAngleIn180Format(newAngle)).ToString("f3")} | {Time.frameCount.ToString("f3")} " +
-               $"| {(intersectionPoint - transCenterOfMass).ToString("f7")}");
-
             _body.MoveRotation(newAngle);
+            TransferVelocity(newAngle);
         }
 
         public void KeyRotate()
@@ -249,7 +247,7 @@ namespace Game.Player.Ship
                 oppositeSideMulti += -dot * _oppositeForce;
             }
 
-            Vector2 targetForce = direction * _moveSpeed * _body.mass/* * oppositeSideMulti*/;
+            Vector2 targetForce = direction * _moveSpeed * _body.mass * oppositeSideMulti;
             _body.AddRelativeForce(procentOfMaxSpeed * targetForce * Time.fixedDeltaTime);
         }
 
