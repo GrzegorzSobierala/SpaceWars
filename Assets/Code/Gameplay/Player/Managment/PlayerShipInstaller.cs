@@ -12,6 +12,7 @@ namespace Game.Player.Ship
             Container.Bind<PlayerMovement2D>().FromComponentOn(gameObject).AsSingle();
             Utils.BindGetComponent<ModuleHandler>(Container, gameObject);
             Utils.BindGetComponent<ModuleFactory>(Container, gameObject);
+            Container.Bind<CenterOfMass>().FromComponentInChildren(false).AsSingle();
 
             SignalBusInstaller.Install(Container);
             Container.DeclareSignal<PlayerCollisionEnter2DSignal>().OptionalSubscriber();

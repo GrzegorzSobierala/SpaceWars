@@ -19,31 +19,47 @@ namespace Game.Utility
             return screenPosition;
         }
 
-        /// <summary>
-        /// Screan point to 2D physic plane intersection point 
-        /// </summary>
-        /// <param name="position"></param>
-        /// <returns></returns>
-        public static Vector2 ScreanPositionOn2DIntersection(Vector2 position) 
+        public static Ray ScreenPointToRay(Camera camera, Vector2 screenPoint)
         {
-            Ray ray = Camera.main.ScreenPointToRay(position);
-            float t = -Camera.main.transform.position.z / ray.direction.z;
-            return ray.origin + t * ray.direction;
+            // Step 1: Generate the inverse matrix
+            Matrix4x4 inverseMatrix = (camera.projectionMatrix * camera.worldToCameraMatrix).inverse;
+
+            // Step 2: Convert screen space pixel to clip space
+            Vector2 clipPoint = new Vector2(
+                (screenPoint.x / camera.pixelWidth) * 2f - 1f,
+                (screenPoint.y / camera.pixelHeight) * 2f - 1f
+            );
+
+            // Clip space coordinates in 3D (near plane, z = -1 in clip space)
+            Vector4 clipSpacePoint = new Vector4(clipPoint.x, clipPoint.y, -1f, 1f);
+
+            // Step 3: Transform clip space point to world space
+            Vector4 worldSpacePoint = inverseMatrix.MultiplyPoint(clipSpacePoint);
+
+            // Homogeneous division to convert from 4D to 3D
+            if (Mathf.Abs(worldSpacePoint.w) > Mathf.Epsilon)
+            {
+                worldSpacePoint /= worldSpacePoint.w;
+            }
+
+            // Step 4: Calculate ray direction
+            Vector3 rayDirection = (new Vector3(worldSpacePoint.x, worldSpacePoint.y, worldSpacePoint.z) - camera.transform.position).normalized;
+
+            // Step 5: Construct and return the ray
+            return new Ray(camera.transform.position, rayDirection);
         }
 
         /// <summary>
-        /// Get angle from vector(1,0), return value from left is negative, value on the right is positive
+        /// Get angle from vector(0,1), return value from left is negative, value on the right is positive
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
         public static float AngleDirected(Vector2 vector)
         {
-            float angle = Mathf.Atan2(vector.y, vector.x);
-            return angle * Mathf.Rad2Deg;
+            return Vector2.SignedAngle(Vector2.up, vector);
         }
 
-        
-        public static float AngleDirected(Vector2 startVectorPos , Vector2 endVectorPos)
+        public static float AngleDirected(Vector2 startVectorPos, Vector2 endVectorPos)
         {
             return AngleDirected(endVectorPos - startVectorPos);
         }
@@ -79,7 +95,7 @@ namespace Game.Utility
             return worldDirection;
         }
 
-        public static void BindGetComponent<T>(DiContainer container, GameObject gameObject, bool nonLazy = false) 
+        public static void BindGetComponent<T>(DiContainer container, GameObject gameObject, bool nonLazy = false)
             where T : Component
         {
             if (!gameObject.TryGetComponent(out T component))
@@ -89,7 +105,7 @@ namespace Game.Utility
                 throw new System.NullReferenceException(message);
             }
 
-            if(nonLazy)
+            if (nonLazy)
             {
                 container.Bind<T>().FromInstance(component).AsSingle().NonLazy();
             }
@@ -99,12 +115,12 @@ namespace Game.Utility
             }
         }
 
-        public static void BindComponentsInChildrens<T>(DiContainer container, GameObject gameObject, bool includeInactive = true)
-            where T : Component
+        public static void BindComponentsInChildrens<T>(DiContainer container, GameObject gameObject, 
+            bool includeInactive = true, bool enable0Count = false) where T : Component
         {
             List<T> enemyFieldOfViews = gameObject.GetComponentsInChildren<T>(includeInactive).ToList();
 
-            if (enemyFieldOfViews.Count == 0)
+            if (enable0Count && enemyFieldOfViews.Count == 0)
             {
                 string message = $"There is no {typeof(T)} on a GameObject: {gameObject}";
                 Debug.LogError(message, gameObject);
@@ -117,275 +133,410 @@ namespace Game.Utility
         {
             return (layerMask.value & (1 << layer)) != 0;
         }
+
+        public static T FindEnemyInParents<T>(Transform transform, 
+            int searchIterationLimit = 100) where T : MonoBehaviour
+
+        {
+            Transform currentParent = transform;
+            for (int i = 0; i < searchIterationLimit; i++)
+            {
+                if (currentParent.TryGetComponent(out T enemyBase))
+                {
+                    return enemyBase;
+                }
+
+                if (currentParent.parent == null)
+                    return null;
+
+                currentParent = currentParent.parent;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Convert angle to format from -180 to 180
+        /// </summary>
+        public static float GetAngleIn180Format(float angle)
+        {
+            angle = angle % 360; // First, reduce to the range -360 to 360
+            if (angle > 180)
+                angle -= 360; // If greater than 180, shift down
+            else if (angle < -180)
+                angle += 360; // If less than -180, shift up
+            return angle;
+        }
+
+
+        /// <summary>
+        /// Calculates the time required to perform a rotation.
+        /// </summary>
+        /// <param name="rotationSpeed">Rotation speed in degrees per second.</param>
+        /// <param name="rotationAngle">The angle of rotation in degrees.</param>
+        /// <returns>The time required to perform the rotation in seconds.</returns>
+        public static float CalculateRotationTime(float rotationSpeed, float rotationAngle)
+        {
+            if (rotationSpeed <= 0)
+            {
+                throw new ArgumentException("Rotation speed must be greater than zero.", nameof(rotationSpeed));
+            }
+
+            return Mathf.Abs(rotationAngle) / rotationSpeed;
+        }
+
+        /// <summary>
+        /// https://stackoverflow.com/questions/1073606/is-there-a-one-line-function-that-generates-a-triangle-wave
+        /// https://www.desmos.com/calculator/bjqsoeulqi
+        /// </summary>
+        public static float TriangularFunc(float x, float amplitude, float halfPeriod, float moveY)
+        {
+            if(x < 0)
+            {
+                x = ModNormalised(x, halfPeriod * 2);
+            }
+
+            return amplitude / halfPeriod
+                * (halfPeriod - Mathf.Abs((x % (2 * halfPeriod)) - halfPeriod)) - moveY;
+        }
+
+        /// <summary>
+        /// Get the possible Xmoves for (x - XMove) in Triangular Function for provided y 
+        /// </summary>
+        /// <returns>(increasing,decreasing)</returns>
+        public static (float, float) GetXMoveTriangularFunc(float x, float y, float amplitude, float halfPeriod, 
+            float moveY)
+        {
+            float period = halfPeriod * 2;
+            float modX = x < 0 ? ModNormalised(x,period) : x % period;
+
+            float absValue = halfPeriod - halfPeriod * (y + moveY) / amplitude;
+
+            if (absValue < 0 || absValue > halfPeriod)
+            {
+                Debug.LogError("Invalid parameters: resulting absValue is out of bounds.");
+                return (float.NaN, float.NaN);
+            }
+
+            float S1 = modX - (halfPeriod + absValue);
+            float S2 = modX - (halfPeriod - absValue);
+
+            float S1x = ModNormalised(x - S1, period);
+
+            if(S1x < halfPeriod)
+            {
+                return (S1, S2);
+            }
+            else
+            {
+                return (S2, S1);
+            }
+        }
+
+        public static float ModNormalised(float value, float period)
+        {
+            return (value % period + period) % period;
+        }
+
+        public static Quaternion ChangeRotationZ(Quaternion rot, float newZ)
+        {
+            Vector3 newRot = new Vector3(rot.eulerAngles.x, rot.eulerAngles.y, newZ);
+            return Quaternion.Euler(newRot);
+        }
+
+        public static Vector3 ChangeVector3X(Vector3 toChange, float value)
+        {
+            return new Vector3(value, toChange.y, toChange.z);
+        }
+
+        public static Vector3 ChangeVector3Y(Vector3 toChange, float value)
+        {
+            return new Vector3(toChange.x, value, toChange.z);
+        }
+
+        public static Vector3 ChangeVector3Z(Vector3 toChange, float value)
+        {
+            return new Vector3(toChange.x, toChange.y, value);
+        }
+
+        public static Vector2 ChangeVector2X(Vector2 toChange, float value)
+        {
+            return new Vector2(value, toChange.y);
+        }
+
+        public static Vector2 ChangeVector2Y(ref Vector2 toChange, float value)
+        {
+            return new Vector2(toChange.x, value);
+        }
     }
 
     public static class Async
-        {
-            public static async System.Threading.Tasks.Task Wait(float seconds) => await System.Threading.Tasks.Task.Delay((int)(seconds * 1000));
-            public static System.Runtime.CompilerServices.YieldAwaitable WaitAFrame => System.Threading.Tasks.Task.Yield();
-        }
+    {
+        public static async System.Threading.Tasks.Task Wait(float seconds) => await System.Threading.Tasks.Task.Delay((int)(seconds * 1000));
+        public static System.Runtime.CompilerServices.YieldAwaitable WaitAFrame => System.Threading.Tasks.Task.Yield();
+    }
 
     public static class Vectors
+    {
+        public static float SqrDistance(Vector3 a, Vector3 b)
         {
-            public static float SqrDistance(Vector3 a, Vector3 b)
-            {
-                return new Vector3(a.x - b.x, a.y - b.y, a.z - b.z).sqrMagnitude;
-            }
+            return new Vector3(a.x - b.x, a.y - b.y, a.z - b.z).sqrMagnitude;
         }
+    }
 
     public static class Lerp
+    {
+        public static IEnumerator SmoothFloat(float from, float to, float maxTime, Action<float> OnNewFloat, Action OnEnd = null, bool deltaTimeScaled = false)
         {
-            public static IEnumerator SmoothFloat(float from, float to, float maxTime, Action<float> OnNewFloat, Action OnEnd = null, bool deltaTimeScaled = false)
+            float timer = 0;
+            while (true)
             {
-                float timer = 0;
-                while (true)
+                yield return null;
+                float t = timer / maxTime;
+                OnNewFloat?.Invoke(Mathf.Lerp(from, to, t));
+                timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
+                if (timer >= maxTime)
                 {
-                    yield return null;
-                    float t = timer / maxTime;
-                    OnNewFloat?.Invoke(Mathf.Lerp(from, to, t));
-                    timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
-                    if (timer >= maxTime)
-                    {
-                        OnNewFloat?.Invoke(to);
-                        OnEnd?.Invoke();
-                        yield break;
-                    }
+                    OnNewFloat?.Invoke(to);
+                    OnEnd?.Invoke();
+                    yield break;
                 }
             }
-            public static IEnumerator SmoothFloat(float from, float to, float maxTime, LerpX.SmoothType smoothType, Action<float> OnNewFloat, Action OnEnd = null, bool deltaTimeScaled = false)
-            {
-                float timer = 0;
-                while (true)
-                {
-                    yield return null;
-                    float t = timer / maxTime;
-                    t.Smooth(smoothType);
-                    OnNewFloat?.Invoke(Mathf.Lerp(from, to, t));
-                    timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
-                    if (timer >= maxTime)
-                    {
-                        t = 1;
-                        t.Smooth(smoothType);
-                        OnNewFloat?.Invoke(Mathf.Lerp(from, to, t));
-                        OnEnd?.Invoke();
-                        yield break;
-                    }
-                }
-            }
-            public static IEnumerator SmoothFloatWithStartPause(float from, float to, float maxTime, float pauseSeconds, Action<float> OnNewFloat, Action OnEnd = null, bool deltaTimeScaled = false)
-            {
-                float timer = 0;
-                yield return new WaitForSecondsRealtime(pauseSeconds);
-                while (true)
-                {
-                    yield return null;
-                    float t = timer / maxTime;
-                    OnNewFloat?.Invoke(Mathf.Lerp(from, to, t));
-                    timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
-                    if (timer >= maxTime)
-                    {
-                        OnNewFloat?.Invoke(to);
-                        OnEnd?.Invoke();
-                        yield break;
-                    }
-                }
-            }
-            public static IEnumerator SmoothFloatWithStartPause(float from, float to, float maxTime, float pauseSeconds, LerpX.SmoothType smoothType, Action<float> OnNewFloat, Action OnEnd = null, bool deltaTimeScaled = false)
-            {
-                float timer = 0;
-                yield return new WaitForSecondsRealtime(pauseSeconds);
-                while (true)
-                {
-                    yield return null;
-                    float t = timer / maxTime;
-                    t.Smooth(smoothType);
-                    OnNewFloat?.Invoke(Mathf.Lerp(from, to, t));
-                    timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
-                    if (timer >= maxTime)
-                    {
-                        OnNewFloat?.Invoke(to);
-                        OnEnd?.Invoke();
-                        yield break;
-                    }
-                }
-            }
-            public static IEnumerator SmoothFloatWithStartEndPause(float from, float to, float maxTime, float pauseSecondsStart, int framesToPauseEnd, Action<float> OnNewFloat, Action OnEnd = null, bool deltaTimeScaled = false)
-            {
-                float timer = 0;
-                yield return new WaitForSecondsRealtime(pauseSecondsStart);
-                while (true)
-                {
-                    yield return null;
-                    float t = timer / maxTime;
-                    OnNewFloat?.Invoke(Mathf.Lerp(from, to, t));
-                    timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
-                    if (timer >= maxTime)
-                    {
-                        OnNewFloat?.Invoke(to);
-                        for (int i = 0; i < framesToPauseEnd; i++)
-                        {
-                            yield return null;
-                        }
-                        OnEnd?.Invoke();
-                        yield break;
-                    }
-                }
-            }
-
-            public static IEnumerator SmoothVector(Vector3 from, Vector3 to, float maxTime, LerpX.SmoothType smoothType, Action<Vector3> OnNewPosition, Action OnEnd = null, bool deltaTimeScaled = false)
-            {
-                float timer = 0;
-                while (true)
-                {
-                    yield return null;
-                    float t = timer / maxTime;
-                    t.Smooth(smoothType);
-                    OnNewPosition?.Invoke(Vector3.Lerp(from, to, t));
-                    timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
-                    if (timer >= maxTime)
-                    {
-                        OnNewPosition?.Invoke(to);
-                        OnEnd?.Invoke();
-                        yield break;
-                    }
-                }
-            }
-            public static IEnumerator SmoothVector(Vector3 from, Vector3 to, float maxTime, Action<Vector3> OnNewPosition, Action OnEnd = null, bool deltaTimeScaled = false)
-            {
-                float timer = 0;
-                while (true)
-                {
-                    yield return null;
-                    float t = timer / maxTime;
-                    OnNewPosition?.Invoke(Vector3.Lerp(from, to, t));
-                    timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
-                    if (timer >= maxTime)
-                    {
-                        OnNewPosition?.Invoke(to);
-                        OnEnd?.Invoke();
-                        yield break;
-                    }
-                }
-            }
-
-            public static IEnumerator SmoothVectorSlerp(Vector3 from, Vector3 to, float maxTime, LerpX.SmoothType smoothType, Action<Vector3> OnNewPosition, Action OnEnd = null, bool deltaTimeScaled = false)
-            {
-                float timer = 0;
-                while (true)
-                {
-                    yield return null;
-                    float t = timer / maxTime;
-                    t.Smooth(smoothType);
-                    OnNewPosition?.Invoke(Vector3.Slerp(from, to, t));
-                    timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
-                    if (timer >= maxTime)
-                    {
-                        OnNewPosition?.Invoke(to);
-                        OnEnd?.Invoke();
-                        yield break;
-                    }
-                }
-            }
-            public static IEnumerator SmoothVectorSlerp(Vector3 from, Vector3 to, float maxTime, Action<Vector3> OnNewPosition, Action OnEnd = null, bool deltaTimeScaled = false)
-            {
-                float timer = 0;
-                while (true)
-                {
-                    yield return null;
-                    float t = timer / maxTime;
-                    OnNewPosition?.Invoke(Vector3.Slerp(from, to, t));
-                    timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
-                    if (timer >= maxTime)
-                    {
-                        OnNewPosition?.Invoke(to);
-                        OnEnd?.Invoke();
-                        yield break;
-                    }
-                }
-            }
-
-            public static IEnumerator SmoothQuaternion(Quaternion from, Quaternion to, float maxTime, LerpX.SmoothType smoothType, Action<Quaternion> OnNewPosition, Action OnEnd = null, bool deltaTimeScaled = false)
-            {
-                float timer = 0;
-                while (true)
-                {
-                    yield return null;
-                    float t = timer / maxTime;
-                    t.Smooth(smoothType);
-                    OnNewPosition?.Invoke(Quaternion.Slerp(from, to, t));
-                    timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
-                    if (timer >= maxTime)
-                    {
-                        OnNewPosition?.Invoke(to);
-                        OnEnd?.Invoke();
-                        yield break;
-                    }
-                }
-            }
-            public static IEnumerator SmoothQuaternion(Quaternion from, Quaternion to, float maxTime, Action<Quaternion> OnNewPosition, Action OnEnd = null, bool deltaTimeScaled = false)
-            {
-                float timer = 0;
-                while (true)
-                {
-                    yield return null;
-                    float t = timer / maxTime;
-                    OnNewPosition?.Invoke(Quaternion.Slerp(from, to, t));
-                    timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
-                    if (timer >= maxTime)
-                    {
-                        OnNewPosition?.Invoke(to);
-                        OnEnd?.Invoke();
-                        yield break;
-                    }
-                }
-            }
-
-
         }
+        public static IEnumerator SmoothFloat(float from, float to, float maxTime, LerpX.SmoothType smoothType, Action<float> OnNewFloat, Action OnEnd = null, bool deltaTimeScaled = false)
+        {
+            float timer = 0;
+            while (true)
+            {
+                yield return null;
+                float t = timer / maxTime;
+                t.Smooth(smoothType);
+                OnNewFloat?.Invoke(Mathf.Lerp(from, to, t));
+                timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
+                if (timer >= maxTime)
+                {
+                    t = 1;
+                    t.Smooth(smoothType);
+                    OnNewFloat?.Invoke(Mathf.Lerp(from, to, t));
+                    OnEnd?.Invoke();
+                    yield break;
+                }
+            }
+        }
+        public static IEnumerator SmoothFloatWithStartPause(float from, float to, float maxTime, float pauseSeconds, Action<float> OnNewFloat, Action OnEnd = null, bool deltaTimeScaled = false)
+        {
+            float timer = 0;
+            yield return new WaitForSecondsRealtime(pauseSeconds);
+            while (true)
+            {
+                yield return null;
+                float t = timer / maxTime;
+                OnNewFloat?.Invoke(Mathf.Lerp(from, to, t));
+                timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
+                if (timer >= maxTime)
+                {
+                    OnNewFloat?.Invoke(to);
+                    OnEnd?.Invoke();
+                    yield break;
+                }
+            }
+        }
+        public static IEnumerator SmoothFloatWithStartPause(float from, float to, float maxTime, float pauseSeconds, LerpX.SmoothType smoothType, Action<float> OnNewFloat, Action OnEnd = null, bool deltaTimeScaled = false)
+        {
+            float timer = 0;
+            yield return new WaitForSecondsRealtime(pauseSeconds);
+            while (true)
+            {
+                yield return null;
+                float t = timer / maxTime;
+                t.Smooth(smoothType);
+                OnNewFloat?.Invoke(Mathf.Lerp(from, to, t));
+                timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
+                if (timer >= maxTime)
+                {
+                    OnNewFloat?.Invoke(to);
+                    OnEnd?.Invoke();
+                    yield break;
+                }
+            }
+        }
+        public static IEnumerator SmoothFloatWithStartEndPause(float from, float to, float maxTime, float pauseSecondsStart, int framesToPauseEnd, Action<float> OnNewFloat, Action OnEnd = null, bool deltaTimeScaled = false)
+        {
+            float timer = 0;
+            yield return new WaitForSecondsRealtime(pauseSecondsStart);
+            while (true)
+            {
+                yield return null;
+                float t = timer / maxTime;
+                OnNewFloat?.Invoke(Mathf.Lerp(from, to, t));
+                timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
+                if (timer >= maxTime)
+                {
+                    OnNewFloat?.Invoke(to);
+                    for (int i = 0; i < framesToPauseEnd; i++)
+                    {
+                        yield return null;
+                    }
+                    OnEnd?.Invoke();
+                    yield break;
+                }
+            }
+        }
+
+        public static IEnumerator SmoothVector(Vector3 from, Vector3 to, float maxTime, LerpX.SmoothType smoothType, Action<Vector3> OnNewPosition, Action OnEnd = null, bool deltaTimeScaled = false)
+        {
+            float timer = 0;
+            while (true)
+            {
+                yield return null;
+                float t = timer / maxTime;
+                t.Smooth(smoothType);
+                OnNewPosition?.Invoke(Vector3.Lerp(from, to, t));
+                timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
+                if (timer >= maxTime)
+                {
+                    OnNewPosition?.Invoke(to);
+                    OnEnd?.Invoke();
+                    yield break;
+                }
+            }
+        }
+        public static IEnumerator SmoothVector(Vector3 from, Vector3 to, float maxTime, Action<Vector3> OnNewPosition, Action OnEnd = null, bool deltaTimeScaled = false)
+        {
+            float timer = 0;
+            while (true)
+            {
+                yield return null;
+                float t = timer / maxTime;
+                OnNewPosition?.Invoke(Vector3.Lerp(from, to, t));
+                timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
+                if (timer >= maxTime)
+                {
+                    OnNewPosition?.Invoke(to);
+                    OnEnd?.Invoke();
+                    yield break;
+                }
+            }
+        }
+
+        public static IEnumerator SmoothVectorSlerp(Vector3 from, Vector3 to, float maxTime, LerpX.SmoothType smoothType, Action<Vector3> OnNewPosition, Action OnEnd = null, bool deltaTimeScaled = false)
+        {
+            float timer = 0;
+            while (true)
+            {
+                yield return null;
+                float t = timer / maxTime;
+                t.Smooth(smoothType);
+                OnNewPosition?.Invoke(Vector3.Slerp(from, to, t));
+                timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
+                if (timer >= maxTime)
+                {
+                    OnNewPosition?.Invoke(to);
+                    OnEnd?.Invoke();
+                    yield break;
+                }
+            }
+        }
+        public static IEnumerator SmoothVectorSlerp(Vector3 from, Vector3 to, float maxTime, Action<Vector3> OnNewPosition, Action OnEnd = null, bool deltaTimeScaled = false)
+        {
+            float timer = 0;
+            while (true)
+            {
+                yield return null;
+                float t = timer / maxTime;
+                OnNewPosition?.Invoke(Vector3.Slerp(from, to, t));
+                timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
+                if (timer >= maxTime)
+                {
+                    OnNewPosition?.Invoke(to);
+                    OnEnd?.Invoke();
+                    yield break;
+                }
+            }
+        }
+
+        public static IEnumerator SmoothQuaternion(Quaternion from, Quaternion to, float maxTime, LerpX.SmoothType smoothType, Action<Quaternion> OnNewPosition, Action OnEnd = null, bool deltaTimeScaled = false)
+        {
+            float timer = 0;
+            while (true)
+            {
+                yield return null;
+                float t = timer / maxTime;
+                t.Smooth(smoothType);
+                OnNewPosition?.Invoke(Quaternion.Slerp(from, to, t));
+                timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
+                if (timer >= maxTime)
+                {
+                    OnNewPosition?.Invoke(to);
+                    OnEnd?.Invoke();
+                    yield break;
+                }
+            }
+        }
+        public static IEnumerator SmoothQuaternion(Quaternion from, Quaternion to, float maxTime, Action<Quaternion> OnNewPosition, Action OnEnd = null, bool deltaTimeScaled = false)
+        {
+            float timer = 0;
+            while (true)
+            {
+                yield return null;
+                float t = timer / maxTime;
+                OnNewPosition?.Invoke(Quaternion.Slerp(from, to, t));
+                timer += deltaTimeScaled ? Time.deltaTime : Time.unscaledDeltaTime;
+                if (timer >= maxTime)
+                {
+                    OnNewPosition?.Invoke(to);
+                    OnEnd?.Invoke();
+                    yield break;
+                }
+            }
+        }
+
+        
+    }
 
     public static class Mathfs
+    {
+        /// <summary>
+        /// Clamped value, use RemapUnclamped for unclumped return values
+        /// </summary>
+        public static float Remap(float initialFrom, float initialTo, float targetFrom, float targetTo, float interpolator)
         {
-            /// <summary>
-            /// Clamped value, use RemapUnclamped for unclumped return values
-            /// </summary>
-            public static float Remap(float initialFrom, float initialTo, float targetFrom, float targetTo, float interpolator)
-            {
-                float t = Mathf.InverseLerp(initialFrom, initialTo, interpolator);
-                return Mathf.Lerp(targetFrom, targetTo, t);
-            }
-            public static float RemapUnclamped(float initialFrom, float initialTo, float targetFrom, float targetTo, float interpolator)
-            {
-                float t = InverseLerpUnclamped(initialFrom, initialTo, interpolator);
-                return Mathf.LerpUnclamped(targetFrom, targetTo, t);
-            }
-            public static float InverseLerpUnclamped(float a, float b, float value) => (value - a) / (b - a);
-
-            public static float Round(float value, float precision) => Mathf.Round(value / precision) * precision;
-
-
-            private static Vector3 firstLerpPosition;
-            private static Vector3 secondLerpPosition;
-            private static Vector3 thirdLerpPosition;
-            private static Vector3 fifthLerpPosition;
-            private static Vector3 sixthLerpPosition;
-            public static Vector3 QuadraticBezier(Vector3 A, Vector3 B, Vector3 C, float t)
-            {
-                firstLerpPosition = Vector3.Lerp(A, B, t);
-                secondLerpPosition = Vector3.Lerp(B, C, t);
-
-                return Vector3.Lerp(firstLerpPosition, secondLerpPosition, t);
-            }
-            public static Vector3 CubicBezier(Vector3 A, Vector3 B, Vector3 C, Vector3 D, float t)
-            {
-                firstLerpPosition = Vector3.Lerp(A, B, t);
-                secondLerpPosition = Vector3.Lerp(B, C, t);
-                thirdLerpPosition = Vector3.Lerp(C, D, t);
-                fifthLerpPosition = Vector3.Lerp(firstLerpPosition, secondLerpPosition, t);
-                sixthLerpPosition = Vector3.Lerp(secondLerpPosition, thirdLerpPosition, t);
-
-                return Vector3.Lerp(fifthLerpPosition, sixthLerpPosition, t);
-            }
+            float t = Mathf.InverseLerp(initialFrom, initialTo, interpolator);
+            return Mathf.Lerp(targetFrom, targetTo, t);
         }
+        public static float RemapUnclamped(float initialFrom, float initialTo, float targetFrom, float targetTo, float interpolator)
+        {
+            float t = InverseLerpUnclamped(initialFrom, initialTo, interpolator);
+            return Mathf.LerpUnclamped(targetFrom, targetTo, t);
+        }
+        public static float InverseLerpUnclamped(float a, float b, float value) => (value - a) / (b - a);
+
+        public static float Round(float value, float precision) => Mathf.Round(value / precision) * precision;
+
+
+        private static Vector3 firstLerpPosition;
+        private static Vector3 secondLerpPosition;
+        private static Vector3 thirdLerpPosition;
+        private static Vector3 fifthLerpPosition;
+        private static Vector3 sixthLerpPosition;
+        public static Vector3 QuadraticBezier(Vector3 A, Vector3 B, Vector3 C, float t)
+        {
+            firstLerpPosition = Vector3.Lerp(A, B, t);
+            secondLerpPosition = Vector3.Lerp(B, C, t);
+
+            return Vector3.Lerp(firstLerpPosition, secondLerpPosition, t);
+        }
+        public static Vector3 CubicBezier(Vector3 A, Vector3 B, Vector3 C, Vector3 D, float t)
+        {
+            firstLerpPosition = Vector3.Lerp(A, B, t);
+            secondLerpPosition = Vector3.Lerp(B, C, t);
+            thirdLerpPosition = Vector3.Lerp(C, D, t);
+            fifthLerpPosition = Vector3.Lerp(firstLerpPosition, secondLerpPosition, t);
+            sixthLerpPosition = Vector3.Lerp(secondLerpPosition, thirdLerpPosition, t);
+
+            return Vector3.Lerp(fifthLerpPosition, sixthLerpPosition, t);
+        }
+    }
 
     public static class UIX
     {

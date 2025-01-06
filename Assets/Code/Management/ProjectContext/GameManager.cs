@@ -5,6 +5,5 @@ namespace Game.Management
 {
     public class GameManager : MonoBehaviour
     {
-        
     }
 }

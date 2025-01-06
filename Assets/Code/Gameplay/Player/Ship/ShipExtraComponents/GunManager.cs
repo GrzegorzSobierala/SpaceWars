@@ -14,6 +14,7 @@ namespace Game.Player.Ship
         [Inject] private InputProvider _input;
         [Inject] private ModuleHandler _moduleHandler;
         [Inject] private PlayerMovement2D _movement2D;
+        [Inject] private CursorCamera _cursorCamera;
 
         private bool _isCurrentGunMainGun = true;
         private bool _isToggleAim = false;
@@ -102,10 +103,10 @@ namespace Game.Player.Ship
         private void AimSpecialGun()
         {
             Vector2 mousePos = GameplayActions.CursorPosition.ReadValue<Vector2>();
-            Vector2 aimPoint = Utils.ScreanPositionOn2DIntersection(mousePos);
+            Vector2 aimPoint = _cursorCamera.ScreanPositionOn2DIntersection(mousePos);
 
             Vector2 specialGunPos = (Vector2)SpecialGun.transform.position;
-            float angleDegrees = Utils.AngleDirected(specialGunPos, aimPoint) - 90f;
+            float angleDegrees = Utils.AngleDirected(specialGunPos, aimPoint);
 
             Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
             SpecialGun.transform.rotation = rotation;

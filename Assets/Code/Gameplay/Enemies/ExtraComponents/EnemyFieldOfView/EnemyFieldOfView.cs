@@ -1,3 +1,4 @@
+using AYellowpaper.SerializedCollections;
 using CodeMonkey.Utils;
 using Game.Management;
 using Game.Utility;
@@ -22,6 +23,9 @@ namespace Game.Room.Enemy
         [SerializeField] private float _fov = 90;
         [SerializeField] private int _rayCount = 2;
         [SerializeField] private float _viewDistance = 500f;
+        [SerializeField] private SerializedDictionary<Collider2D,OneEnum> _ignoreColliders;
+
+        private static HashSet<Collider2D> _DEBUG_wrongLayerColliders = new();
 
         private float AngleIncrease => _fov / _rayCount;
         private const float PlayerCameraMaxViewDistance = 500f;
@@ -59,9 +63,14 @@ namespace Game.Room.Enemy
             _meshFilter = GetComponent<MeshFilter>();
             _meshFilter.mesh = _mesh;
             _targetLayerMask = LayerMask.GetMask(Layers.Player);
-            _allLayerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle, Layers.Enemy);
+            _allLayerMask = GetAllLayerMask();
             _enemyLayerMask = LayerMask.GetMask(Layers.Enemy);
             randomVertexZ = UnityEngine.Random.Range(-1.0f, 0);
+        }
+
+        private LayerMask GetAllLayerMask()
+        {
+            return LayerMask.GetMask(Layers.Player, Layers.Obstacle, Layers.Enemy);
         }
 
         private void UpdateView(bool debugMode = false)
@@ -90,20 +99,37 @@ namespace Game.Room.Enemy
                 useTriggers = false,
                 layerMask = _allLayerMask,
                 useLayerMask = true,
+
             };
 
             for (int i = 0; i <= _rayCount; i++)
             {
-                Vector3 vertex;
                 Vector3 rayDirection = UtilsClass.GetVectorFromAngle(currentAngle + worldAngleAdd);
                 Vector3 origin = transform.position;
 
-                RaycastHit2D[] raycastHits = new RaycastHit2D[1];
+                RaycastHit2D[] raycastHits = new RaycastHit2D[_ignoreColliders.Count + 1];
 
-                int count = Physics2D.Raycast(origin, rayDirection, contactFilter,
-                    raycastHits, _viewDistance);
+                int hitsCount;
 
-                if (count == 0)
+
+                hitsCount = Physics2D.Raycast(origin, rayDirection, contactFilter,
+                raycastHits, _viewDistance);
+
+                RaycastHit2D? firstHit = null;
+
+                for (int j = 0; j < hitsCount; j++)
+                {
+                    if (_ignoreColliders.ContainsKey(raycastHits[j].collider))
+                    {
+                        continue;
+                    }
+
+                    firstHit = raycastHits[j];
+                    break;
+                }
+
+                Vector3 vertex;
+                if (firstHit == null)
                 {
                     Vector3 direction = UtilsClass.GetVectorFromAngle(currentAngle);
                     vertex = direction * _viewDistance;
@@ -117,12 +143,12 @@ namespace Game.Room.Enemy
                 }
                 else
                 {
-                    vertex = raycastHits[0].point - (Vector2)transform.position;
+                    vertex = firstHit.Value.point - (Vector2)transform.position;
                     vertex = Utils.RotateVector(vertex, -worldAngleAdd);
 
-                    if (IsTargetFound(raycastHits[0]))
+                    if (IsTargetFound(firstHit.Value))
                     {
-                        OnTargetFound?.Invoke(raycastHits[0].collider.gameObject);
+                        OnTargetFound?.Invoke(firstHit.Value.collider.gameObject);
                     }
                 }
 
@@ -166,13 +192,17 @@ namespace Game.Room.Enemy
                 return false;
             }
 
-            if (hit.collider.TryGetComponent(out EnemyDamageHandler damageHandler))
+            if (hit.collider.TryGetComponent(out IGuardStateDetectable EnemyStateDetectable))
             {
-                return !damageHandler.IsEnemyInGuardState;
+                return !EnemyStateDetectable.IsEnemyInGuardState;
             }
             else
             {
-                Debug.LogError($"Collider on {Layers.Enemy} layer hasn't EnemyDamageHandler", hit.collider.gameObject);
+                if(_DEBUG_wrongLayerColliders.Contains(hit.collider))
+                    return false;
+
+                Debug.LogError($"Collider on {Layers.Enemy} layer hasn't IGuardStateDetectable", hit.collider);
+                _DEBUG_wrongLayerColliders.Add(hit.collider);
                 return false;
             }
         }
@@ -203,6 +233,31 @@ namespace Game.Room.Enemy
             }
 
             return false;
+        }
+
+        public void ClearAndAssignColliders()
+        {
+            EnemyBase enemy = Utils.FindEnemyInParents<EnemyBase>(transform);
+
+            if(enemy == null)
+            {
+                Debug.LogError($"Can't find {nameof(EnemyBase)} in parents");
+                return;
+            }
+
+            _ignoreColliders.Clear();
+
+            foreach (var collider in enemy.GetComponentsInChildren<Collider2D>())
+            {
+                if (!Utils.ContainsLayer(GetAllLayerMask(), collider.gameObject.layer))
+                    continue;
+
+                _ignoreColliders.Add(collider, OneEnum.OneEnum);
+            }
+
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
     }
 }

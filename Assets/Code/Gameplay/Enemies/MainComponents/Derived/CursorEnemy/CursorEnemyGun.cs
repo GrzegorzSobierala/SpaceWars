@@ -1,21 +1,16 @@
 using Game.Combat;
 using Game.Management;
-using Game.Room.Enemy;
-using Game.Utility;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
 
-namespace Game
+namespace Game.Room.Enemy
 {
     public class CursorEnemyGun : EnemyGunBase
     {
         [Inject] private PlayerManager _playerManager;
-        [Inject] private EnemyManager _enemyManager;
-        [Inject] private Rigidbody2D _body;
 
         [SerializeField] private Transform _leftGunTransform;
         [SerializeField] private Transform _leftGunShootPoint;
@@ -44,8 +39,10 @@ namespace Game
         private bool _isAimingLeft = false;
         private bool _wasOnBeforeReloadedCalled = false;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             _currenaMagAmmo = _magCapasity;
         }
 

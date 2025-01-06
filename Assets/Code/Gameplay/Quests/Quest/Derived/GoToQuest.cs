@@ -6,14 +6,17 @@ namespace Game.Objectives
 {
     public class GoToQuest : Quest
     {
+        [Space]
+        [SerializeField] GoToTarget _goToTarget;
+
         protected override void OnStartQuest()
         {
-            Debug.LogError("No failure implemented");
+            _goToTarget.OnPlayerReachedTarget += Success;
+            _goToTarget.gameObject.SetActive(true);
         }
 
         protected override void OnSuccess()
         {
-            Debug.LogError("No failure implemented");
         }
 
         protected override void OnFailure()
@@ -23,7 +26,8 @@ namespace Game.Objectives
 
         protected override void OnEnd()
         {
-            Debug.LogError("No failure implemented");
+            _goToTarget.OnPlayerReachedTarget -= Success;
+            _goToTarget.gameObject.SetActive(false);
         }
     }
 }

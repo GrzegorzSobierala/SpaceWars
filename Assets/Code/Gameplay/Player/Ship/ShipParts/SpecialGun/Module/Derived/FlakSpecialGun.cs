@@ -1,11 +1,14 @@
 using Game.Combat;
 using Game.Utility;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Player.Ship
 {
     public class FlakSpecialGun : SpecialGunModuleBase
     {
+        [Inject] private CursorCamera _cursorCamera;
+
         public override bool IsGunReadyToShoot => Time.time - _lastShotTime >= _cooldown;
 
         protected override bool OnTryShoot()
@@ -21,7 +24,7 @@ namespace Game.Player.Ship
             if(bullet is FlakBullet flakBullet)
             {
                 Vector2 mousePos = Input.CursorPosition.ReadValue<Vector2>();
-                Vector2 targetPos = Utils.ScreanPositionOn2DIntersection(mousePos);
+                Vector2 targetPos = _cursorCamera.ScreanPositionOn2DIntersection(mousePos);
 
                 flakBullet.SetTarget(targetPos);
             }

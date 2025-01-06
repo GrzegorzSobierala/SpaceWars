@@ -39292,6 +39292,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  _rotationTrans: {fileID: 4343659715963904913}
   _gunTransform: {fileID: 4343659715963904913}
   _enemyBulletPrototype: {fileID: 2180587305258738579}
   _shotInterval: 1.5
@@ -39545,6 +39546,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9adc0f394dd14fc449f63592059b9e94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enable0CountEnemyDamageHandlers: 1
+  enable0CountFOVs: 1
 --- !u!50 &5825693408723387028
 Rigidbody2D:
   serializedVersion: 4

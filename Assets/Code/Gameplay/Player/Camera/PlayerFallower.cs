@@ -1,3 +1,4 @@
+using Game.Player.Ship;
 using UnityEngine;
 using Zenject;
 
@@ -5,7 +6,7 @@ namespace Game.Player.VirtualCamera
 {
     public class PlayerFallower : MonoBehaviour
     {
-        [Inject] private readonly Rigidbody2D _body;
+        [Inject] private readonly CenterOfMass _centerOfMass;
         private Vector3 _offset;
 
         private void Awake()
@@ -15,7 +16,7 @@ namespace Game.Player.VirtualCamera
 
         private void Update()
         {
-            transform.position = _body.transform.position + _offset;
+            transform.position = _centerOfMass.transform.position + _offset;
         }
     }
 }

@@ -2,11 +2,14 @@ using Game.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Player.Ship
 {
     public class AimAtPointBridge : BridgeModuleBase
     {
+        [Inject] private CursorCamera _cursorCamera;
+
         [SerializeField] private Transform _aimMarker;
 
         private Quaternion _startAimingGunRot;
@@ -47,7 +50,7 @@ namespace Game.Player.Ship
             _startAimingGunRot = Gun.transform.localRotation;
 
             Vector2 mousePos = _Input.CursorPosition.ReadValue<Vector2>();
-            Vector2 aimPoint = Utils.ScreanPositionOn2DIntersection(mousePos);
+            Vector2 aimPoint = _cursorCamera.ScreanPositionOn2DIntersection(mousePos);
 
             _aimMarker.SetParent(_playerModuleHandler.transform.parent);
             _aimMarker.gameObject.SetActive(true);
@@ -69,7 +72,7 @@ namespace Game.Player.Ship
         {
 
             Vector2 gunPos = (Vector2)Gun.transform.position;
-            float angleDegrees = Utils.AngleDirected(gunPos, _aimMarker.position) - 90f;
+            float angleDegrees = Utils.AngleDirected(gunPos, _aimMarker.position);
 
             Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
             Gun.transform.rotation = rotation;

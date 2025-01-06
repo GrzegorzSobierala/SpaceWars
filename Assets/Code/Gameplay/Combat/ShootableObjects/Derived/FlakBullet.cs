@@ -100,7 +100,7 @@ namespace Game.Combat
 
         private void RotateToPoint(Vector2 point)
         {
-            float playerCursorAngle = Utils.AngleDirected(_body.position, point) - 90f;
+            float playerCursorAngle = Utils.AngleDirected(_body.position, point);
 
             float rotSpeed = _rotationSpeed * Time.fixedDeltaTime;
             float newAngle = Mathf.MoveTowardsAngle(_body.rotation, playerCursorAngle, rotSpeed);

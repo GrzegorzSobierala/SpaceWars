@@ -68,20 +68,20 @@ namespace Game.Objectives
             {
                 foreach (var nextQuest in quest.NextQuestsOnSuccess)
                 {
-                    nextQuest.StartQuest();
+                    StartQuest(nextQuest);
                 }
             }
             else
             {
                 foreach (var nextQuest in quest.NextQuestsOnFailure)
                 {
-                    nextQuest.StartQuest();
+                    StartQuest(nextQuest);
                 }
             }
 
             foreach (var nextQuest in quest.NextQuestsOnEnd)
             {
-                nextQuest.StartQuest();
+                StartQuest(nextQuest);
             }
 
             if (quest.IsMain)

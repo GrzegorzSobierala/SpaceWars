@@ -467,7 +467,7 @@ Transform:
   - {fileID: 1118028276941448935}
   - {fileID: 6894365123022125336}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2389869331323452437
 MonoBehaviour:
@@ -499,6 +499,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a643330c778ef441b0ee0b185930efe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enable0CountEnemyDamageHandlers: 1
+  enable0CountFOVs: 1
 --- !u!50 &6377648032862797323
 Rigidbody2D:
   serializedVersion: 4

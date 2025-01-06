@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 using Zenject;
 
 namespace Game.Player.Ship
@@ -17,6 +18,8 @@ namespace Game.Player.Ship
         [Inject] private InputProvider _inputProvider;
         [Inject] private Rigidbody2D _body;
         [Inject] private GunManager _gunManager;
+        [Inject] private CenterOfMass _centerOfMass;
+        [Inject] private CursorCamera _cursorCamera;
 
         [SerializeField, Range(0.0f, 600.0f)] private float _moveSpeed = 100;
         [SerializeField, Range(0.0f, 200.0f)] private float _forwardSpeedMulti = 100;
@@ -114,19 +117,23 @@ namespace Game.Player.Ship
             RotateToPoint(mousePos);
         }
 
+        public Camera cursorCamera;
+
         public void RotateToPoint(Vector2 point)
         {
             if (_movementQE)
                 return;
 
-            Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection(point);
-            float playerCursorAngle = Utils.AngleDirected(_body.position, intersectionPoint) - 90f;
+            Vector2 transCenterOfMass = _centerOfMass.transform.position;
+
+            Vector2 intersectionPoint = _cursorCamera.ScreanPositionOn2DIntersection(point);
+
+            float playerCursorAngle = Utils.AngleDirected(transCenterOfMass, intersectionPoint);
 
             float rotSpeed = _rotationSpeed * Time.fixedDeltaTime;
             float newAngle = Mathf.MoveTowardsAngle(_body.rotation, playerCursorAngle, rotSpeed);
 
             _body.MoveRotation(newAngle);
-
             TransferVelocity(newAngle);
         }
 

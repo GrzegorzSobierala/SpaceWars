@@ -8,6 +8,7 @@ namespace Game.Player.Ship
     public class RotateToPointBridge : BridgeModuleBase
     {
         [Inject] private PlayerFallower _playerFallower;
+        [Inject] private CursorCamera _cursorCamera;
 
         [SerializeField] private Transform _rotateMarker;
         [SerializeField] private bool _localMarkerParent;
@@ -59,7 +60,7 @@ namespace Game.Player.Ship
             _startAimingGunRot = Gun.transform.localRotation;
 
             Vector2 mousePos = _Input.CursorPosition.ReadValue<Vector2>();
-            Vector2 aimPoint = Utils.ScreanPositionOn2DIntersection(mousePos);
+            Vector2 aimPoint = _cursorCamera.ScreanPositionOn2DIntersection(mousePos);
 
             if (_localMarkerParent)
             {
@@ -90,10 +91,10 @@ namespace Game.Player.Ship
         private void AimGun()
         {
             Vector2 mousePos = _Input.CursorPosition.ReadValue<Vector2>();
-            Vector2 aimPoint = Utils.ScreanPositionOn2DIntersection(mousePos);
+            Vector2 aimPoint = _cursorCamera.ScreanPositionOn2DIntersection(mousePos);
 
             Vector2 gunPos = (Vector2)Gun.transform.position;
-            float angleDegrees = Utils.AngleDirected(gunPos, aimPoint) - 90f;
+            float angleDegrees = Utils.AngleDirected(gunPos, aimPoint);
 
             Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
             Gun.transform.rotation = rotation;

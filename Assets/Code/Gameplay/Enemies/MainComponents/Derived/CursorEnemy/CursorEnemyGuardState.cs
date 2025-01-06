@@ -16,7 +16,7 @@ namespace Game.Room.Enemy
         protected override void OnEnterState()
         {
             base.OnEnterState();
-            Subscribe();
+            SubscribeToFOVs(_views);
             _movement.SetSpeedModifier(_movementSpeedMulti);
             _movement.SetAngularSpeedModifier(_movementSpeedMulti);
             _patrolController.StartPatroling();
@@ -25,29 +25,8 @@ namespace Game.Room.Enemy
         protected override void OnExitState()
         {
             base.OnExitState();
-            Unubscribe();
+            UnubscribeToFOVs(_views);
             _enemyGun.Prepare();
-        }
-
-        private void Subscribe()
-        {
-            foreach (var view in _views)
-            {
-                view.OnTargetFound += OnPlayerFind;
-            }
-        }
-
-        private void Unubscribe()
-        {
-            foreach (var view in _views)
-            {
-                view.OnTargetFound -= OnPlayerFind;
-            }
-        }
-
-        private void OnPlayerFind(GameObject foundTarget)
-        {
-            _stateMachine.SwitchToCombatState();
         }
     }
 }

@@ -1,10 +1,13 @@
 using UnityEngine;
 using Game.Utility;
+using Zenject;
 
 namespace Game.Player.Ship
 {
     public class HoldDirectionBridge : BridgeModuleBase
     {
+        [Inject] private CursorCamera _cursorCamera;
+
         [SerializeField] private Transform _dierctionMarker;
 
         private Quaternion _startAimingGunRot;
@@ -60,9 +63,9 @@ namespace Game.Player.Ship
         private void AimGun()
         {
             Vector2 mousePos = _Input.CursorPosition.ReadValue<Vector2>();
-            Vector2 aimPoint = Utils.ScreanPositionOn2DIntersection(mousePos);
+            Vector2 aimPoint = _cursorCamera.ScreanPositionOn2DIntersection(mousePos);
 
-            float angleDegrees = Utils.AngleDirected((Vector2)Gun.transform.position, aimPoint) - 90f;
+            float angleDegrees = Utils.AngleDirected((Vector2)Gun.transform.position, aimPoint);
 
             Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
             Gun.transform.rotation = rotation;
