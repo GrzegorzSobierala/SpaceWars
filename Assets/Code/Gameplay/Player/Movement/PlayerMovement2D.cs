@@ -19,6 +19,7 @@ namespace Game.Player.Ship
         [Inject] private Rigidbody2D _body;
         [Inject] private GunManager _gunManager;
         [Inject] private CenterOfMass _centerOfMass;
+        [Inject] private CursorCamera _cursorCamera;
 
         [SerializeField, Range(0.0f, 600.0f)] private float _moveSpeed = 100;
         [SerializeField, Range(0.0f, 200.0f)] private float _forwardSpeedMulti = 100;
@@ -123,28 +124,11 @@ namespace Game.Player.Ship
             if (_movementQE)
                 return;
 
-            //Vector2 worldCenterOfMassVector = _body.transform.TransformVector(_body.centerOfMass);
-            //Vector2 transCenterOfMass = _body.transform.position + (Vector3)worldCenterOfMassVector;
-
             Vector2 transCenterOfMass = _centerOfMass.transform.position;
 
-            //Vector2 refScreenPos = Camera.main.WorldToScreenPoint(transCenterOfMass);
-            //Vector2 targetScreenPos = (point - refScreenPos).normalized * 1000 + refScreenPos;
-            //Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection(point);
+            Vector2 intersectionPoint = _cursorCamera.ScreanPositionOn2DIntersection(point);
 
-            cursorCamera.transform.position = Utils.ChangeVector3Z(cursorCamera.transform.position, 
-                Camera.main.transform.position.z);
-
-
-            Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection2(point, cursorCamera);
-
-
-            Ray ray = Camera.main.ScreenPointToRay(point);
-            //intersectionPoint += (Vector2)ray.origin;
-            intersectionPoint += (Vector2)Camera.main.transform.position;
-
-            float playerCursorAngle = Utils.AngleDirected(transCenterOfMass,
-                intersectionPoint);
+            float playerCursorAngle = Utils.AngleDirected(transCenterOfMass, intersectionPoint);
 
             float rotSpeed = _rotationSpeed * Time.fixedDeltaTime;
             float newAngle = Mathf.MoveTowardsAngle(_body.rotation, playerCursorAngle, rotSpeed);
@@ -153,8 +137,6 @@ namespace Game.Player.Ship
                $"| {(intersectionPoint - transCenterOfMass).ToString("f7")}");
 
             _body.MoveRotation(newAngle);
-            //_body.SetRotation(newAngle);
-            //TransferVelocity(newAngle);
         }
 
         public void KeyRotate()

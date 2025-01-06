@@ -19,57 +19,6 @@ namespace Game.Utility
             return screenPosition;
         }
 
-        public static Vector2 ScreanPositionOn2DIntersection2(Vector2 position, Camera camera)
-        {
-            Vector3 planePoint = Vector3.zero;
-            Vector3 planeNormal = Vector3.back;
-
-            //Ray ray = camera.ScreenPointToRay(position);
-            Ray ray = ScreenPointToRay(camera, position);
-
-
-            Vector3 difference = planePoint - ray.origin;
-            float product1 = Vector3.Dot(difference, planeNormal); ;
-            float product2 = Vector3.Dot(ray.direction, planeNormal);
-            float distanceFromOriginToPlane = product1 / product2;
-            Vector3 intersection = ray.origin + distanceFromOriginToPlane * ray.direction;
-
-            //Debug.Log($"{ray.direction.ToString("f3")} ");
-
-            return intersection;
-        }
-
-
-        /// <summary>
-        /// Screan point to 2D physic plane intersection point 
-        /// </summary>
-        /// <param name="position"></param>
-        /// <returns></returns>
-        public static Vector2 ScreanPositionOn2DIntersection(Vector2 position)
-        {
-            Vector3 planePoint = Vector3.zero;
-            Vector3 planeNormal = Vector3.back;
-
-            Ray ray = Camera.main.ScreenPointToRay(position);
-
-            Vector3 rayOrigin = Camera.main.transform.position;
-
-
-
-            Vector3 difference = planePoint - rayOrigin;
-            float product1 = Vector3.Dot(difference, planeNormal); ;
-            float product2 = Vector3.Dot(ray.direction, planeNormal);
-            float distanceFromOriginToPlane = product1 / product2;
-            Vector3 intersection = rayOrigin + distanceFromOriginToPlane * ray.direction;
-
-            Debug.Log($"{ray.direction.ToString("f3")} ");
-
-            //Debug.Log($"{ray.origin.ToString("f3")} | {(Camera.main.transform.position - ray.origin).ToString("f3")}");
-
-            return intersection;
-        }
-
-
         public static Ray ScreenPointToRay(Camera camera, Vector2 screenPoint)
         {
             // Step 1: Generate the inverse matrix
@@ -99,7 +48,6 @@ namespace Game.Utility
             // Step 5: Construct and return the ray
             return new Ray(camera.transform.position, rayDirection);
         }
-
 
         /// <summary>
         /// Get angle from vector(0,1), return value from left is negative, value on the right is positive

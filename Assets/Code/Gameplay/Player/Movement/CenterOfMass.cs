@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Game
+namespace Game.Player.Ship
 {
     public class CenterOfMass : MonoBehaviour
     {
