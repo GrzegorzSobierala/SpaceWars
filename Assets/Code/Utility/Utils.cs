@@ -24,7 +24,8 @@ namespace Game.Utility
             Vector3 planePoint = Vector3.zero;
             Vector3 planeNormal = Vector3.back;
 
-            Ray ray = camera.ScreenPointToRay(position);
+            //Ray ray = camera.ScreenPointToRay(position);
+            Ray ray = ScreenPointToRay(camera, position);
 
 
             Vector3 difference = planePoint - ray.origin;
@@ -293,6 +294,31 @@ namespace Game.Utility
         {
             Vector3 newRot = new Vector3(rot.eulerAngles.x, rot.eulerAngles.y, newZ);
             return Quaternion.Euler(newRot);
+        }
+
+        public static Vector3 ChangeVector3X(Vector3 toChange, float value)
+        {
+            return new Vector3(value, toChange.y, toChange.z);
+        }
+
+        public static Vector3 ChangeVector3Y(Vector3 toChange, float value)
+        {
+            return new Vector3(toChange.x, value, toChange.z);
+        }
+
+        public static Vector3 ChangeVector3Z(Vector3 toChange, float value)
+        {
+            return new Vector3(toChange.x, toChange.y, value);
+        }
+
+        public static Vector2 ChangeVector2X(Vector2 toChange, float value)
+        {
+            return new Vector2(value, toChange.y);
+        }
+
+        public static Vector2 ChangeVector2Y(ref Vector2 toChange, float value)
+        {
+            return new Vector2(toChange.x, value);
         }
     }
 

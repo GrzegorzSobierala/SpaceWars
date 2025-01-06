@@ -131,11 +131,17 @@ namespace Game.Player.Ship
             //Vector2 refScreenPos = Camera.main.WorldToScreenPoint(transCenterOfMass);
             //Vector2 targetScreenPos = (point - refScreenPos).normalized * 1000 + refScreenPos;
             //Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection(point);
+
+            cursorCamera.transform.position = Utils.ChangeVector3Z(cursorCamera.transform.position, 
+                Camera.main.transform.position.z);
+
+
             Vector2 intersectionPoint = Utils.ScreanPositionOn2DIntersection2(point, cursorCamera);
 
 
             Ray ray = Camera.main.ScreenPointToRay(point);
-            intersectionPoint += (Vector2)ray.origin;
+            //intersectionPoint += (Vector2)ray.origin;
+            intersectionPoint += (Vector2)Camera.main.transform.position;
 
             float playerCursorAngle = Utils.AngleDirected(transCenterOfMass,
                 intersectionPoint);
