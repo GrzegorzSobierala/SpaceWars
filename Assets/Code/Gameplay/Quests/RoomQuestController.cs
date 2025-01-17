@@ -15,9 +15,9 @@ namespace Game.Objectives
 
         [SerializeField] private List<Quest> _startQuests;
 
-        private List<Quest> _allQuests = new(); 
-        private List<Quest> _mainQuests = new();
-        private List<Quest> _sideQuests = new();
+        private readonly List<Quest> _allQuests = new(); 
+        private readonly List<Quest> _mainQuests = new();
+        private readonly List<Quest> _sideQuests = new();
 
         private void Awake()
         {
@@ -32,6 +32,11 @@ namespace Game.Objectives
             {
                 StartQuest(quest);
             }
+        }
+
+        private void OnDestroy()
+        {
+            _uiController.ClearAllQuests();
         }
 
         private void Init()

@@ -10,7 +10,7 @@ namespace Game.Objectives
         [SerializeField] private Transform _mainQuestsTextTransform;
         [SerializeField] private Transform _sideQuestsTextTransform;
 
-        private Dictionary<Quest, QuestUi> _questAndUiDict = new();
+        private readonly Dictionary<Quest, QuestUi> _questAndUiDict = new();
 
         public Dictionary<Quest, QuestUi> QuestAndUiDict => _questAndUiDict;
 
@@ -44,6 +44,16 @@ namespace Game.Objectives
             instance.SetNameText(quest.Name);
 
             _questAndUiDict.Add(quest, instance);
+        }
+
+        public void ClearAllQuests()
+        {
+            foreach (var quest in _questAndUiDict)
+            {
+                quest.Value.DestroyQuest();
+            }
+
+            _questAndUiDict.Clear();
         }
     }
 }

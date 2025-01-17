@@ -12,7 +12,7 @@ namespace Game.Room.Enemy
     public abstract class EnemyGunBase : MonoBehaviour
     {
         [Inject] protected Rigidbody2D _body;
-        [Inject] private TestingSettings testingSettings;
+        [Inject] private TestingSettings _testingSettings;
 
         [SerializeField] protected UnityEvent OnShoot;
         [SerializeField, AutoFill, Required, AllowNesting] protected Transform _rotationTrans;
@@ -262,7 +262,7 @@ namespace Game.Room.Enemy
 
         private void TryShoot()
         {
-            if (!testingSettings.EnableEnemyShooting)
+            if (!_testingSettings.EnableEnemyShooting)
                 return;
 
             if (_isShooting)
