@@ -1,11 +1,8 @@
 using Game.Combat;
-using Game.Room.Enemy;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Game.Room.Shared;
 using Zenject;
 
-namespace Game
+namespace Game.Room.Enemy
 {
     public class SilosHp : DestructableThing
     {

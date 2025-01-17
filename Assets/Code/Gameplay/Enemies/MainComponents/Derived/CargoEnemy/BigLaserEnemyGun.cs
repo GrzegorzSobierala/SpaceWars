@@ -1,5 +1,3 @@
-using Game.Utility;
-using Game.Utility.Globals;
 using UnityEngine;
 using Zenject;
 

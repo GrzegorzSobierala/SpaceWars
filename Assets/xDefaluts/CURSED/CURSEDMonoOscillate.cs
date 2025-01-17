@@ -1,8 +1,9 @@
+using Game.Utility;
 using System;
 using System.Collections;
 using UnityEngine;
 
-namespace Game.Utility
+namespace Game.CURSEDBECARFULE
 {
     public static class CURSEDMonoOscillate
     {
@@ -87,7 +88,6 @@ namespace Game.Utility
                 moveX = Utils.GetXMoveTriangularFunc(previousFrameTime, startY, 
                     amplitude, halfPeriod, moveY).Item2;
             }
-
 
             do
             {

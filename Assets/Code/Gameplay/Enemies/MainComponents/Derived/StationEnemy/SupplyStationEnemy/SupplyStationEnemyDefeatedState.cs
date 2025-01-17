@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game
+namespace Game.Room.Combat
 {
     public class SupplyStationEnemyDefeatedState : MonoBehaviour
     {

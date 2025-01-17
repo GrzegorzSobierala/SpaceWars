@@ -7,6 +7,6 @@ namespace Game.Objectives
 {
     public interface IDefeatedCallback
     {
-        public event Action onDefeated;
+        public event Action OnDefeated;
     }
 }
