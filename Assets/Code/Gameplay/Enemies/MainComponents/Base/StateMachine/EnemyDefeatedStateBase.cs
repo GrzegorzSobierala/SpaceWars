@@ -7,13 +7,13 @@ namespace Game.Room.Enemy
 {
     public abstract class EnemyDefeatedStateBase : EnemyStateBase, IDefeatedCallback
     {
-        public event Action onDefeated;
+        public event Action OnDefeated;
 
         [SerializeField] protected UnityEvent OnDestroyEvent;
 
         protected override void OnEnterState()
         {
-            onDefeated?.Invoke();
+            OnDefeated?.Invoke();
         }
 
         protected override void OnExitState()

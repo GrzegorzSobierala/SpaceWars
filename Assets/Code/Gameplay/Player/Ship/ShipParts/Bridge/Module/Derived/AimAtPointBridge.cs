@@ -1,6 +1,5 @@
+using Game.Player.Control;
 using Game.Utility;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 

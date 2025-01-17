@@ -1,14 +1,12 @@
 using Game.Combat;
 using Game.Room.Enviro;
 using NaughtyAttributes;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Rendering;
 using Zenject;
 
-namespace Game
+namespace Game.Room.Shared
 {
     public abstract class DestructableThing : MonoBehaviour
     {

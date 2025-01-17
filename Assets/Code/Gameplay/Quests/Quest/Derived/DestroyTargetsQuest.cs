@@ -47,7 +47,7 @@ namespace Game.Objectives
             {
                 Action action = () => RemoveTarget(target.Value);
                 currentTargets.Add(target.Value, action);
-                target.Value.onDefeated += action;
+                target.Value.OnDefeated += action;
             }
         }
 
@@ -55,7 +55,7 @@ namespace Game.Objectives
         {
             foreach(var target in currentTargets)
             {
-                target.Key.onDefeated -= target.Value;
+                target.Key.OnDefeated -= target.Value;
             }
         }
 
@@ -65,7 +65,7 @@ namespace Game.Objectives
 
             if (currentTargets.ContainsKey(removeTarget))
             {
-                removeTarget.onDefeated -= currentTargets[removeTarget];
+                removeTarget.OnDefeated -= currentTargets[removeTarget];
                 currentTargets.Remove(removeTarget);
             }
 

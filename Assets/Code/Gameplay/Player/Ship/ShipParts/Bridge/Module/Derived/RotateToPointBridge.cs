@@ -1,6 +1,6 @@
 using UnityEngine;
 using Zenject;
-using Game.Player.VirtualCamera;
+using Game.Player.Control;
 using Game.Utility;
 
 namespace Game.Player.Ship

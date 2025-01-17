@@ -1,8 +1,5 @@
 using Game.Room.Enviro;
 using Game.Utility;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Zenject;
 
 namespace Game
@@ -11,7 +8,7 @@ namespace Game
     {
         public override void InstallBindings()
         {
-            Utils.BindComponentsInChildrens<DestroyableThingDamageHandler>(Container,gameObject);
+            Utils.BindComponentsInChildrens<DestroyableThingDamageHandler>(Container, gameObject);
         }
     }
 }

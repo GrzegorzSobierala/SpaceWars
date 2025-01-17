@@ -1,9 +1,10 @@
+using Game.Utility;
 using NaughtyAttributes;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-namespace Game.Utility
+namespace Game.Player.Control
 {
     public class CursorCamera : MonoBehaviour
     {

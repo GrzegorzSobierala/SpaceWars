@@ -1,5 +1,6 @@
 using Game.Input.System;
 using Game.Utility;
+using Game.Player.Control;
 using System;
 using UnityEngine;
 using Zenject;

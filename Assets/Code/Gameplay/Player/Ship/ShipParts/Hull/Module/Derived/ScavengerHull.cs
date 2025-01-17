@@ -1,5 +1,5 @@
 using Game.Combat;
-using Game.Player.VirtualCamera;
+using Game.Player.Control;
 using UnityEngine;
 using Zenject;
 

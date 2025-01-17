@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace Game.Player.VirtualCamera
+namespace Game.Player.Control
 {
     public class VirtualCameraController : MonoBehaviour
     {

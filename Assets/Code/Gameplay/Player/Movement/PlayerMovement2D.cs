@@ -1,10 +1,10 @@
 using Game.Input.System;
+using Game.Player.Control;
 using Game.Utility;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 using Zenject;
 
 namespace Game.Player.Ship
@@ -35,11 +35,11 @@ namespace Game.Player.Ship
         private Option _lastVerdical = Option.Default;
         private Option _lastHorizontal = Option.Default;
         
-        private float lastBoostTime = -100;
+        private float _lastBoostTime = -100;
         private bool _inverseRotWithVerMove = false;
 
-        private List<Collider2D> lastColldersStucked = new List<Collider2D>();
-        private bool wasUnstuckCalledThisFrame = false;
+        private List<Collider2D> _lastColldersStucked = new List<Collider2D>();
+        private bool _wasUnstuckCalledThisFrame = false;
 
         private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
 
@@ -184,10 +184,10 @@ namespace Game.Player.Ship
             if (boostVector == Vector2.zero)
                 return;
 
-            if (lastBoostTime + _boostCooldown > Time.time)
+            if (_lastBoostTime + _boostCooldown > Time.time)
                 return;
 
-            lastBoostTime = Time.time;
+            _lastBoostTime = Time.time;
 
             TryMovePlayerBoost(boostVector.normalized);
         }
@@ -226,13 +226,13 @@ namespace Game.Player.Ship
             HorizontalMove();
             TryBoost();
 
-            if(wasUnstuckCalledThisFrame)
+            if(_wasUnstuckCalledThisFrame)
             {
-                wasUnstuckCalledThisFrame = false;
+                _wasUnstuckCalledThisFrame = false;
             }    
             else
             {
-                lastColldersStucked.Clear();
+                _lastColldersStucked.Clear();
             }
         }
 
@@ -297,11 +297,11 @@ namespace Game.Player.Ship
             Vector2 collderToPlayerDir = (_body.position - (Vector2)collider.bounds.center);
             collderToPlayerDir = collderToPlayerDir.normalized;
             float moveDistance = collider.bounds.extents.magnitude;
-            float unStackForce = 0.5f + (lastColldersStucked.Count * 0.1f);
+            float unStackForce = 0.5f + (_lastColldersStucked.Count * 0.1f);
             moveDistance *= unStackForce;
             Vector2 targetPos = _body.position + collderToPlayerDir * moveDistance;
 
-            if(lastColldersStucked.Count < 2)
+            if(_lastColldersStucked.Count < 2)
             {
                 _body.MovePosition(targetPos);
                 Debug.Log($"Unstucking player force {unStackForce}", this);
@@ -311,8 +311,8 @@ namespace Game.Player.Ship
                 _body.position = targetPos;
                 Debug.Log($"HARD unstucking player force {unStackForce}", this);
             }
-            lastColldersStucked.Add(collider);
-            wasUnstuckCalledThisFrame = true;
+            _lastColldersStucked.Add(collider);
+            _wasUnstuckCalledThisFrame = true;
         }
     }
 }
