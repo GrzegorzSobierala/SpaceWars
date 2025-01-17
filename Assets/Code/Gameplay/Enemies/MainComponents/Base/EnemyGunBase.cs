@@ -237,7 +237,7 @@ namespace Game.Room.Enemy
 
         private void Init()
         {
-            _startLocalRot = _rotationTrans.localEulerAngles.z/* + 22.5f + 45.0f*/;
+            _startLocalRot = _rotationTrans.localEulerAngles.z;
         }
 
         private void TryAimGun()

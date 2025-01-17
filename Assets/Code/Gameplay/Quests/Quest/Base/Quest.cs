@@ -8,7 +8,7 @@ namespace Game.Objectives
         public event Action OnStartQuestEvent;
         public event Action OnSuccessEvent;
         public event Action OnFailureEvent;
-        public event Action</*isSuccess*/ bool> OnEndEvent;
+        public event Action<bool> OnEndEvent;
 
         [field: SerializeField] public string Name { get; private set; }
         [field: SerializeField] public string Description { get; private set; }
@@ -36,6 +36,11 @@ namespace Game.Objectives
             OnFailure();
             OnFailureEvent?.Invoke();
             End(false);
+        }
+
+        public void InitByQuestController()
+        {
+            gameObject.SetActive(false);
         }
 
         private void End(bool isSuccess)

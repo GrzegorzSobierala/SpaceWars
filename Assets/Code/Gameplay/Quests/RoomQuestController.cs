@@ -13,9 +13,11 @@ namespace Game.Objectives
         [Inject] private PlayerQuestsUiController _uiController;
         [Inject] private PlayerSceneManager _testSceneManager;
 
-        private List<Quest> allQuests = new(); 
-        private List<Quest> mainQuests = new();
-        private List<Quest> sideQuests = new();
+        [SerializeField] private List<Quest> _startQuests;
+
+        private List<Quest> _allQuests = new(); 
+        private List<Quest> _mainQuests = new();
+        private List<Quest> _sideQuests = new();
 
         private void Awake()
         {
@@ -25,7 +27,11 @@ namespace Game.Objectives
         private void Start()
         {
             CreateQuests();
-            StartQuest(mainQuests[0]);
+
+            foreach (Quest quest in _startQuests)
+            {
+                StartQuest(quest);
+            }
         }
 
         private void Init()
@@ -38,22 +44,24 @@ namespace Game.Objectives
                     continue;
                 }
 
-                allQuests.Add(quest);
+                _allQuests.Add(quest);
 
                 if(quest.IsMain)
                 {
-                    mainQuests.Add(quest);
+                    _mainQuests.Add(quest);
                 }
                 else
                 {
-                    sideQuests.Add(quest);
+                    _sideQuests.Add(quest);
                 }
+
+                quest.InitByQuestController();
             }
         }
 
         private void CreateQuests()
         {
-            _uiController.CreateQuests(allQuests);
+            _uiController.CreateQuests(_allQuests);
         }
 
         private void StartQuest(Quest quest)
