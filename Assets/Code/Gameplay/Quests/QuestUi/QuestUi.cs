@@ -56,5 +56,10 @@ namespace Game
             _text.name = name + "UiQuest";
             _text.text = name;
         }
+
+        public void DestroyQuest()
+        {
+            Destroy(gameObject);
+        }
     }
 }
