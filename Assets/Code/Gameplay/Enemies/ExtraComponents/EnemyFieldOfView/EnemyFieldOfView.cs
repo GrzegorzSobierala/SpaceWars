@@ -99,18 +99,19 @@ namespace Game.Room.Enemy
                 useTriggers = false,
                 layerMask = _allLayerMask,
                 useLayerMask = true,
-
             };
+
+            bool saveQueriesStartInColliders = Physics2D.queriesStartInColliders;
+            Physics2D.queriesStartInColliders = false;
+
+            RaycastHit2D[] raycastHits = new RaycastHit2D[_ignoreColliders.Count + 1];
+            Vector3 origin = transform.position;
 
             for (int i = 0; i <= _rayCount; i++)
             {
                 Vector3 rayDirection = UtilsClass.GetVectorFromAngle(currentAngle + worldAngleAdd);
-                Vector3 origin = transform.position;
-
-                RaycastHit2D[] raycastHits = new RaycastHit2D[_ignoreColliders.Count + 1];
 
                 int hitsCount;
-
 
                 hitsCount = Physics2D.Raycast(origin, rayDirection, contactFilter,
                 raycastHits, _viewDistance);
@@ -178,6 +179,8 @@ namespace Game.Room.Enemy
                     handler.Collider.enabled = true;
                 }
             }
+
+            Physics2D.queriesStartInColliders = saveQueriesStartInColliders;
         }
 
         private bool IsTargetFound(RaycastHit2D hit)
