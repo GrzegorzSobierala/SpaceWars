@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: S_BlurLocal
-  m_Shader: {fileID: -6465566751694194690, guid: d45aad7fb3d7af24c8d4570654323e3f, type: 3}
+  m_Name: Shader Graphs_BlurVErtex
+  m_Shader: {fileID: -6465566751694194690, guid: 2bcf9946ef8f7644f9e0b0f3e61b99ec, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
@@ -17,12 +17,12 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: -1
   stringTagMap:
     RenderType: Transparent
   disabledShaderPasses:
-  - SHADOWCASTER
   - DepthOnly
+  - SHADOWCASTER
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -44,20 +44,23 @@ Material:
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
-    - _Blur: 0.00517
+    - _Blur: 0
     - _CastShadows: 0
     - _Cull: 2
+    - _Depth: 0
     - _DstBlend: 10
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Scale: 0.43
     - _SrcBlend: 5
     - _Surface: 1
-    - _ZTest: 5
+    - _ZTest: 2
     - _ZWrite: 0
     - _ZWriteControl: 0
-    m_Colors: []
+    m_Colors:
+    - _Color: {r: 1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &2673821510140575666
+--- !u!114 &4620125251374689191
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

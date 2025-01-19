@@ -21,23 +21,61 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: S_BlurLocal_1
-  m_Shader: {fileID: -6465566751694194690, guid: 0d22ab1cf7e81544ab0ececff14faa3f, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 68f80743a7ad1be4e96368bc52d4a95b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _SURFACE_TYPE_TRANSPARENT
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
-  stringTagMap:
-    RenderType: Transparent
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BlurSceneDephBranch_24fdbad2b2cd426e8b9fb64f6b406e4f_Texture2D_3519519364_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BlurSceneDephBranch_2d8b759ed3634425a34d9074f5ca6a82_CameraDepthTexture_3399229949_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BlurSceneDephBranch_2d8b759ed3634425a34d9074f5ca6a82_Texture2D_3519519364_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BlurSceneDephBranch_65cba4ad8a0b47cfaa2d5b3b39bd12b0_CameraDepthTexture_3399229949_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BlurSceneDephBranch_65cba4ad8a0b47cfaa2d5b3b39bd12b0_Texture2D_3519519364_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BlurSceneDephBranch_71701930cf3b40d1b3b4086b10326298_CameraDepthTexture_3399229949_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BlurSceneDephBranch_71701930cf3b40d1b3b4086b10326298_Texture2D_3519519364_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BlurSceneDephBranch_8b83bb6f6ecb41379897581527a95220_CameraDepthTexture_3399229949_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BlurSceneDephBranch_8b83bb6f6ecb41379897581527a95220_Texture2D_3519519364_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CameraDepthTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -55,18 +93,23 @@ Material:
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
-    - _Blur: 0.0056
-    - _CastShadows: 1
+    - _BlendModePreserveSpecular: 1
+    - _Blur: 0.02
+    - _CastShadows: 0
     - _Cull: 2
+    - _Depth: 94.1
     - _DstBlend: 10
+    - _MinDistance: 900
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Scale: 1.97
+    - _ReceiveShadows: 1
+    - _Scale: 20.1
     - _SrcBlend: 5
     - _Surface: 1
+    - _WorkflowMode: 1
     - _ZTest: 4
-    - _ZWrite: 1
-    - _ZWriteControl: 1
+    - _ZWrite: 0
+    - _ZWriteControl: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Color: {r: 0.5660378, g: 0.024029896, b: 0.024029896, a: 0}
   m_BuildTextureStacks: []
