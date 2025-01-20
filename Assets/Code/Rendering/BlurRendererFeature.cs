@@ -34,6 +34,8 @@ namespace Game.Rendering
                 var drawingSettings = CreateDrawingSettings(shaderTag, ref renderingData, SortingCriteria.CommonOpaque);
                 var filteringSettings = new FilteringSettings(RenderQueueRange.opaque, blurLayerMask);
 
+                cmd.SetGlobalTexture("_CameraDepthTexture", tempRenderTarget.Identifier());
+
                 context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref filteringSettings);
                 context.ExecuteCommandBuffer(cmd);
 
