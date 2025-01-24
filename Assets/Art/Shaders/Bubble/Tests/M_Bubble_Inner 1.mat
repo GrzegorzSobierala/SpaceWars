@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Bubble_Inner
-  m_Shader: {fileID: -6465566751694194690, guid: 519c4f68526099d45bed9f8f36d60ed2, type: 3}
+  m_Name: M_Bubble_Inner 1
+  m_Shader: {fileID: -6465566751694194690, guid: c120077fa80dd284cb24ff8f9e1bddc0, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
@@ -66,12 +66,12 @@ Material:
     - _CastShadows: 0
     - _Cull: 2
     - _DstBlend: 1
-    - _FADE: 3
+    - _FADE: 4
     - _FadeStrength: 22.3
     - _Fill: 0.17
-    - _InnerFadePower: 2
-    - _InnerSize: 0.782
-    - _Offset: 38.35
+    - _InnerFadePower: 6
+    - _InnerSize: 0.234
+    - _Offset: -75.33
     - _OutlineStrength: 2.33
     - _Outline_Strength: 0.81
     - _PulseSpeed: 0.2
@@ -81,20 +81,20 @@ Material:
     - _ScrollSpeed: 0.01
     - _SrcBlend: 5
     - _Surface: 1
-    - _WaveScale: 78
+    - _WaveScale: 40
     - _WaveSpeed: 10
     - _WorkflowMode: 1
-    - _ZTest: 4
+    - _ZTest: 2
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _ColorBack: {r: 0.8630656, g: 2.0805562, b: 2.1031024, a: 1}
-    - _ColorFront: {r: 1.5850691, g: 3.1871405, b: 3.9533489, a: 0}
+    - _ColorBack: {r: 0.1509434, g: 0.042007834, b: 0.05148049, a: 0.19215687}
+    - _ColorFront: {r: 0.3168791, g: 0.10612461, b: 0.11193857, a: 0}
     - _EffectScrollSpeed: {r: 0, g: 0.02, b: 0, a: 0}
     - _Emission: {r: 0.6792453, g: 0.39118838, b: 0, a: 0}
     - _FaceOffset: {r: 0.5, g: 0.5, b: 0.5, a: 0}
     - _FadeTillingScale: {r: 2, g: 2, b: 0, a: 0}
-    - _FillColor: {r: 0, g: 0, b: 0, a: 0}
+    - _FillColor: {r: 0.18867922, g: 0.09127821, b: 0, a: 0}
     - _InnerScrollSpeed: {r: 0, g: 0.02, b: 0, a: 0}
     - _PulseOffset: {r: 1, g: 1, b: 1, a: 0}
     - _ScrollSpeed: {r: 0, g: 0.02, b: 0, a: 0}
