@@ -59,7 +59,7 @@ namespace Game
 
         public void DestroyQuest()
         {
-            if(gameObject)
+            if(gameObject != null)
             {
                 Destroy(gameObject);
             }
