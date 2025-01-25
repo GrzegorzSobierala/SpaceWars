@@ -105,10 +105,13 @@ MonoBehaviour:
   m_Name: BlurRendererFeature
   m_EditorClassIdentifier: 
   m_Active: 1
-  blurLayer:
+  _blurLayer:
     serializedVersion: 2
     m_Bits: 2147483648
-  renderPassEvent: 250
+  _renderPassEvent: 250
+  _blurRenderTextureaaa: {fileID: 8400000, guid: 306d920f1267ef048ac4293eb0bcd1b1, type: 2}
+  _graphicFormat: 8
+  _depthStencilFormat: 0
 --- !u!114 &6670411866098872482
 MonoBehaviour:
   m_ObjectHideFlags: 0
