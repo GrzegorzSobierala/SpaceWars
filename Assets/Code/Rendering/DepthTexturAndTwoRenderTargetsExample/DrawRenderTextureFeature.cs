@@ -1,21 +1,21 @@
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
-using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 
 namespace Game.Rendering
 {
-    public class BlurRendererFeature : ScriptableRendererFeature
+    public class DrawRenderTextureFeature : ScriptableRendererFeature
     {
-        class BlurLayerRenderPass : ScriptableRenderPass
+        class DrawRenderTexturePass : ScriptableRenderPass
         {
             private readonly ShaderTagId _shaderTag = new ShaderTagId("UniversalForward");
             private readonly int _blurLayerMask;
             private string _profilerTag;
-            private BlurRendererFeature _feature;
+            private DrawRenderTextureFeature _feature;
             private RTHandle _rtHandle;
 
-            public BlurLayerRenderPass(string profilerTag, int layerMask, BlurRendererFeature feature)
+            public DrawRenderTexturePass(string profilerTag, int layerMask, DrawRenderTextureFeature feature)
             {
                 this._profilerTag = profilerTag;
                 this._blurLayerMask = layerMask;
@@ -62,6 +62,7 @@ namespace Game.Rendering
                 descriptor.depthStencilFormat = _feature._depthStencilFormat;
                 _rtHandle.rt.descriptor = descriptor;
                 _rtHandle.rt.Create();
+                //
                 ConfigureTarget(_rtHandle, _rtHandle);
                 ConfigureClear(ClearFlag.All, Color.clear);
             }
@@ -78,10 +79,25 @@ namespace Game.Rendering
                 }
 
                 var drawingSettings = CreateDrawingSettings(_shaderTag, ref renderingData, renderingData.cameraData.defaultOpaqueSortFlags);
+
                 var filteringSettings = new FilteringSettings(RenderQueueRange.opaque, _blurLayerMask);
 
                 context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref filteringSettings);
+
+
+                cmd.Clear();
+                cmd.SetRenderTarget(_feature._depthTexture, _feature._depthTexture);
+                cmd.ClearRenderTarget(true, true, Color.clear);
                 context.ExecuteCommandBuffer(cmd);
+                cmd.Clear();
+
+                var drawingSettingsDepth = CreateDrawingSettings(_shaderTag, ref renderingData, renderingData.cameraData.defaultOpaqueSortFlags);
+                drawingSettingsDepth.overrideMaterial = _feature._DepthToChannelRMaterial;
+
+                context.DrawRenderers(renderingData.cullResults, ref drawingSettingsDepth, ref filteringSettings);
+
+                context.ExecuteCommandBuffer(cmd);
+
                 CommandBufferPool.Release(cmd);
             }
 
@@ -103,12 +119,15 @@ namespace Game.Rendering
         [SerializeField] private GraphicsFormat _graphicFormat = GraphicsFormat.R8G8B8A8_UNorm;
         [SerializeField] private GraphicsFormat _depthStencilFormat = GraphicsFormat.None;
 
-        private BlurLayerRenderPass _blurLayerRenderPass;
-        
+        [SerializeField] private RenderTexture _depthTexture;
+        [SerializeField] private Material _DepthToChannelRMaterial;
+
+        private DrawRenderTexturePass _blurLayerRenderPass;
+
 
         public override void Create()
         {
-            _blurLayerRenderPass = new BlurLayerRenderPass("Render Blur Layer", _blurLayer.value, this)
+            _blurLayerRenderPass = new DrawRenderTexturePass("Render Blur Layer", _blurLayer.value, this)
             {
                 renderPassEvent = this._renderPassEvent,
             };
@@ -118,5 +137,6 @@ namespace Game.Rendering
         {
             renderer.EnqueuePass(_blurLayerRenderPass);
         }
+
     }
 }
