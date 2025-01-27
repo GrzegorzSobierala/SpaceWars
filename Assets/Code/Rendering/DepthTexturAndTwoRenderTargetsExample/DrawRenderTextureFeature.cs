@@ -117,7 +117,7 @@ namespace Game.Rendering
         [SerializeField] private RenderPassEvent _renderPassEvent = RenderPassEvent.BeforeRenderingOpaques;
         [SerializeField] private RenderTexture _blurRenderTexture;
         [SerializeField] private GraphicsFormat _graphicFormat = GraphicsFormat.R8G8B8A8_UNorm;
-        [SerializeField] private GraphicsFormat _depthStencilFormat = GraphicsFormat.None;
+        [SerializeField] private GraphicsFormat _depthStencilFormat = GraphicsFormat.D16_UNorm;
 
         [SerializeField] private RenderTexture _depthTexture;
         [SerializeField] private Material _DepthToChannelRMaterial;
