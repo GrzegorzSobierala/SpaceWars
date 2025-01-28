@@ -1,3 +1,4 @@
+using Game.Management;
 using Game.Room;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,11 @@ namespace Game.Objectives
 
         private void OnDestroy()
         {
+            if (GameManager.IsGameQuiting)
+            {
+                return;
+            }
+
             _uiController.ClearAllQuests();
         }
 
