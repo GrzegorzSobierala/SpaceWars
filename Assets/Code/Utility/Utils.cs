@@ -268,6 +268,16 @@ namespace Game.Utility
         {
             return new Vector2(toChange.x, value);
         }
+
+        public static Vector2 GetVector(Vector2 startPos, Vector2 endPos)
+        {
+            return endPos - startPos;
+        }
+
+        public static Vector3 GetVector(Vector3 startPos, Vector3 endPos)
+        {
+            return endPos - startPos;
+        }
     }
 
     public static class Async

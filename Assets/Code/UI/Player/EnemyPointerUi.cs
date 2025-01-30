@@ -4,6 +4,7 @@ using Zenject;
 using Game.Management;
 using Game.Room;
 using Game.Room.Enemy;
+using Game.Utility;
 
 namespace Game.Player.Ui
 {
@@ -49,36 +50,68 @@ namespace Game.Player.Ui
 
         Transform GetNearestEnemy()
         {
-            // Clear the list of visible enemies
-            List<Transform> visibleEnemies = new List<Transform>();
-
             if(enemyPositions == null)
             {
                 return null;
             }
 
-            // Find visible enemies
-            foreach (EnemyBase enemy in enemyPositions)
+            EnemyBase targetEnemy = null;
+            float targetEnemyMagnitude = float.MaxValue;
+
+            Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+            Plane[] neededPlanes = {frustumPlanes[0], frustumPlanes[1],
+                frustumPlanes[2], frustumPlanes[3]};
+
+            Vector3 cameraPos = Camera.main.transform.position;
+            Vector2 playerPos = _playerManager.PlayerBody.transform.position;
+
+            int planeIndexMove = 4;
+
+            for (int enemyIndex = 0; enemyIndex < enemyPositions.Count; enemyIndex++)
             {
+                EnemyBase enemy = enemyPositions[enemyIndex];
                 if (!enemy)
+                {
+                    continue;
+                }
+
+                Vector3 enemyPos = enemy.transform.position;
+                Vector3 targetPos = Utils.GetVector(cameraPos, enemyPos);
+                bool isInside = true;
+
+                for (int i = 0; i < neededPlanes.Length; i++)
+                {
+                    if (planeIndexMove == 4)
+                    {
+                        planeIndexMove = 0;
+                    }
+                    else
+                    {
+                        planeIndexMove++;
+                    }
+
+                    if (Vector3.Dot(neededPlanes[i].normal, targetPos) >= 0)
+                    {
+                        isInside = false;
+                        break;
+                    }
+                }
+
+                if (isInside)
                     continue;
 
-                Vector3 screenPoint = Camera.main.WorldToViewportPoint(enemy.transform.position);
-                bool isVisible = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 &&
-                    screenPoint.y > 0 && screenPoint.y < 1;
+                float magnitude = new Vector2(
+                    playerPos.x - enemy.transform.position.x,
+                    playerPos.y - enemy.transform.position.y).sqrMagnitude;
 
-                if (!isVisible || screenPoint.z > visibilityThreshold)
-                {
-                    visibleEnemies.Add(enemy.transform);
-                }
+                if (targetEnemyMagnitude < magnitude)
+                    continue;
+
+                targetEnemy = enemy;
+                targetEnemyMagnitude = magnitude;
             }
 
-            // Sort the remaining enemies based on their distances from the player
-            visibleEnemies.Sort((a, b) => Vector3.Distance(a.position,
-                _playerManager.PlayerBody.transform.position)
-                .CompareTo(Vector3.Distance(b.position, _playerManager.PlayerBody.transform.position)));
-
-            return visibleEnemies.Count > 0 ? visibleEnemies[0] : null;
+            return targetEnemy.transform;
         }
 
         bool IsEnemyOnScreen(Vector3 screenPos)
