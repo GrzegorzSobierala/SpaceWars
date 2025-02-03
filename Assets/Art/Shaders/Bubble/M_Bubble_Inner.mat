@@ -25,6 +25,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _ALPHAPREMULTIPLY_ON
   - _RECEIVE_SHADOWS_OFF
   - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
@@ -67,40 +68,45 @@ Material:
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 2
-    - _BlendModePreserveSpecular: 0
+    - _BlendModePreserveSpecular: 1
     - _CastShadows: 0
     - _Cull: 2
+    - _DistortionSpeed: 0.1
+    - _DistortionStrength: 200
     - _DstBlend: 1
-    - _FADE: 3
+    - _FADE: 4.9
     - _FadeStrength: 22.3
     - _Fill: 0.17
-    - _InnerFadePower: 2
-    - _InnerSize: 0.764
+    - _InnerFadePower: 0.6
+    - _InnerSize: 0.637
     - _Offset: 38.35
     - _OutlineStrength: 2.33
     - _Outline_Strength: 0.81
     - _PatternPulseFullness: 0
     - _PatternPulseSpeed: 1
-    - _PatternScale: 1
+    - _PatternScale: 67
     - _PulseSpeed: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 0
     - _ScrollSpeed: 0.01
-    - _SrcBlend: 5
+    - _SrcBlend: 1
     - _Surface: 1
     - _WaveBrightness: 0
     - _WaveFullness: 0
+    - _WaveHeight: 1.9
     - _WavePulseFullness: 1
     - _WavePulseSpeed: 1
+    - _WaveRoughness: 50
     - _WaveScale: 1
-    - _WaveSpeed: 10
+    - _WaveSmoothness: 0.2
+    - _WaveSpeed: 0.015
     - _WorkflowMode: 1
     - _ZTest: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _Color: {r: 1.6715896, g: 0.65667236, b: 0.37058827, a: 1}
+    - _Color: {r: 1.79952, g: 1.9766746, b: 1.9766746, a: 0}
     - _ColorBack: {r: 0.42250562, g: 0.23818614, b: 0.18933034, a: 0}
     - _ColorFront: {r: 6.262368, g: 3.5279331, b: 2.8062499, a: 0}
     - _EffectScrollSpeed: {r: 0, g: 0.02, b: 0, a: 0}
@@ -109,7 +115,7 @@ Material:
     - _FadeTillingScale: {r: 2, g: 2, b: 0, a: 0}
     - _FillColor: {r: 0, g: 0, b: 0, a: 0}
     - _InnerScrollSpeed: {r: 0, g: 0.02, b: 0, a: 0}
-    - _PatternScrollSpeed: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _PatternScrollSpeed: {r: 114, g: 0, b: 0, a: 0}
     - _PulseOffset: {r: 1, g: 1, b: 1, a: 0}
     - _ScrollSpeed: {r: 0, g: 0.02, b: 0, a: 0}
     - _ScrollSpeed_1: {r: 0, g: 2, b: 0, a: 0}
