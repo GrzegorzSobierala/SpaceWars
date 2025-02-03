@@ -10,7 +10,6 @@ namespace Game.Room.Enemy
     {
         [Inject] EnemyBase _EnemyBase;
 
-        [SerializeField] private float _chargingTime = 0.3f;
         [SerializeField] private float _shootTime = 5f;
         [SerializeField] private float _reloadTime = 5f;
         [SerializeField] private float _range = 300f;
@@ -35,6 +34,7 @@ namespace Game.Room.Enemy
         private float _startReloadingTime = -100;
         private float _lastDamageDealtTime = -100;
         private bool _isReloading = false;
+        private float _chargingTime = 0.3f;
 
         private void Awake()
         {
@@ -46,18 +46,18 @@ namespace Game.Room.Enemy
             TryFire();
         }
 
-        public bool TryStartFire()
+        public bool IsReadyToFire()
         {
-            if (_isFiring || _startReloadingTime + _reloadTime > Time.time)
-                return false;
+            return !_isFiring && _startReloadingTime + _reloadTime < Time.time;
+        }
 
+        public void StartFire(float chargingTime)
+        {
             _isFiring = true;
             _lineRenderer.enabled = true;
 
             _startChargingTime = Time.time;
-            _startShootingTime = Time.time + _chargingTime;
-
-            return true;
+            _startShootingTime = Time.time + chargingTime;
         }
 
         public void StopFire()
@@ -88,7 +88,6 @@ namespace Game.Room.Enemy
             {
                 OnIdle();
             }
-
             
             SetReloadMarker(_startReloadingTime + _reloadTime > Time.time);
         }

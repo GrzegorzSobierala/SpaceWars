@@ -3,19 +3,29 @@ using Game.Utility;
 using Game.Utility.Globals;
 using NaughtyAttributes;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using Zenject;
+using Game.Management;
 
 namespace Game.Room.Enemy
 {
     public abstract class EnemyGunBase : MonoBehaviour
     {
+        public event Func<bool> CanShoot;
+
         [Inject] protected Rigidbody2D _body;
         [Inject] private TestingSettings _testingSettings;
+        [Inject] private GlobalAssets _globalAssets;
 
-        [SerializeField] protected UnityEvent OnShoot;
         [SerializeField, AutoFill, Required, AllowNesting] protected Transform _rotationTrans;
+
+
+        [SerializeField] protected float _beforeShootIndicateTime = 0.25f;
+        [SerializeField] private UnityEvent _onBeforeShootGun;
+        [SerializeField, FormerlySerializedAs("OnShoot")] protected UnityEvent _onShoot;
 
         protected Action OnAimTarget;
 
@@ -41,9 +51,9 @@ namespace Game.Room.Enemy
 
         protected virtual void Update()
         {
-            TryAimGun();
+            TryUpdateAiming();
 
-            TryShoot();
+            TryUpdateShooting();
         }
 
         public abstract void Prepare();
@@ -106,6 +116,32 @@ namespace Game.Room.Enemy
             OnAimTarget -= onAimTarget;
         }
 
+        public void DefaultBeforeShootAction()
+        {
+            foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
+            {
+                List<Material> materials = new();
+                renderer.GetSharedMaterials(materials);
+                materials.Insert(0, _globalAssets.TestMaterial);
+                renderer.SetSharedMaterials(materials);
+            }
+
+            Invoke(nameof(RestoreMaterial), _beforeShootIndicateTime / 2);
+        }
+
+        private void RestoreMaterial()
+        {
+            foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
+            {
+                List<Material> materials = new();
+                renderer.GetSharedMaterials(materials);
+                materials.RemoveAt(0);
+                renderer.SetSharedMaterials(materials);
+            }
+        }
+
+        protected abstract void OnShoot();
+
         protected virtual void OnStartShooting() { }
 
         protected virtual void OnStopShooting() { }
@@ -128,6 +164,31 @@ namespace Game.Room.Enemy
         protected virtual void OnAimingAt(Vector2 worldPosition) { }
 
         protected virtual void OnAimingAt(float localRotation) { }
+
+        [Button]
+        protected bool TryShoot()
+        {
+            if (CanShoot?.Invoke() == false)
+                return false;
+
+            if(_onBeforeShootGun.GetPersistentEventCount() == 0)
+            {
+                DefaultBeforeShootAction();
+            }
+            else
+            {
+                _onBeforeShootGun.Invoke();
+            }
+
+            Invoke(nameof(InvokeShootEvents), _beforeShootIndicateTime);
+            return true;
+        }
+
+        private void InvokeShootEvents()
+        {
+            OnShoot();
+            _onShoot?.Invoke();
+        }
 
         #region HelperMethods
 
@@ -240,7 +301,7 @@ namespace Game.Room.Enemy
             _startLocalRot = _rotationTrans.localEulerAngles.z;
         }
 
-        private void TryAimGun()
+        private void TryUpdateAiming()
         {
             if (_currentAimType == AimType.Transform)
             {
@@ -260,7 +321,7 @@ namespace Game.Room.Enemy
             }
         }
 
-        private void TryShoot()
+        private void TryUpdateShooting()
         {
             if (!_testingSettings.EnableEnemyShooting)
                 return;
@@ -296,6 +357,5 @@ namespace Game.Room.Enemy
 
             return 0;
         }
-
     }
 }

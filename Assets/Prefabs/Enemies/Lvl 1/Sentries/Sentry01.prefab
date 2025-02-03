@@ -39277,7 +39277,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501b81e40066af144a6244e9a403ae55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnShoot:
+  _rotationTrans: {fileID: 4343659715963904913}
+  _beforeShootEventTime: 0.1
+  _onBeforeShootGun:
+    m_PersistentCalls:
+      m_Calls: []
+  _onShoot:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6128915563978144159}
@@ -39292,11 +39297,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _rotationTrans: {fileID: 4343659715963904913}
   _gunTransform: {fileID: 4343659715963904913}
   _enemyBulletPrototype: {fileID: 2180587305258738579}
   _shotInterval: 1.5
-  _beforeShootEventTime: 0.5
   OnBeforeShoot:
     m_PersistentCalls:
       m_Calls: []
@@ -39546,8 +39549,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9adc0f394dd14fc449f63592059b9e94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enable0CountEnemyDamageHandlers: 1
-  enable0CountFOVs: 1
+  _bindEnemyDamageHandlers: 1
+  _bindFOVs: 1
 --- !u!50 &5825693408723387028
 Rigidbody2D:
   serializedVersion: 4

@@ -4,7 +4,6 @@ using Game.Management;
 using UnityEngine;
 using Zenject;
 using UnityEngine.Events;
-using System;
 
 namespace Game.Room.Enemy
 {
@@ -18,12 +17,10 @@ namespace Game.Room.Enemy
         [SerializeField] private Transform _gunTransform;
         [SerializeField] private TestEnemyBullet _enemyBulletPrototype;
         [SerializeField] private float _shotInterval = 2f;
-        [SerializeField] private float _beforeShootEventTime = 0.5f;
 
         [SerializeField] private UnityEvent OnBeforeShoot;
 
         private float _lastShotTime = 0f;
-        private bool _wasOnBeforeShootCalled = false;
 
         public override void Prepare()
         {
@@ -49,30 +46,30 @@ namespace Game.Room.Enemy
                 return;
 
             float nextShootTime = _lastShotTime + _shotInterval;
-            if (!_wasOnBeforeShootCalled && Time.time > nextShootTime - _beforeShootEventTime)
-            {
-                OnBeforeShoot?.Invoke();
-                _wasOnBeforeShootCalled = true;
-            }
 
             if (Time.time < nextShootTime)
             {
                 return;
             }
 
+            if(TryShoot())
+            {
+                _lastShotTime = Time.time;
+            }
+        }
+
+        protected override void OnShoot()
+        {
             Shoot();
         }
 
         private void Shoot()
         {
-            _lastShotTime = Time.time;
-
             GameObject damageDealer = _body.gameObject;
             Transform parent = _enemyManager.transform;
             _enemyBulletPrototype.CreateCopy(damageDealer, parent).Shoot(null, _gunTransform);
-            _wasOnBeforeShootCalled = false;
 
-            OnShoot?.Invoke();
+            _onShoot?.Invoke();
         }
     }
 }

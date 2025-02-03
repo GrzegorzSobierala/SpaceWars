@@ -53,10 +53,18 @@ namespace Game.Room.Enemy
             if (!IsAimedAtPlayer)
                 return;
 
-            if(_laserBeam.TryStartFire())
+            if(_laserBeam.IsReadyToFire())
             {
-                OnShoot?.Invoke();
+                if (!TryShoot())
+                    return;
+
+                _laserBeam.StartFire(_beforeShootIndicateTime);
             }
+        }
+
+        protected override void OnShoot()
+        {
+                _onShoot?.Invoke();
         }
 
         private void Initalize()
