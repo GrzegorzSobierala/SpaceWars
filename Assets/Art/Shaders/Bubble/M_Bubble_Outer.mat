@@ -85,6 +85,7 @@ Material:
     - _ScrollSpeed: 0.01
     - _SrcBlend: 5
     - _Surface: 1
+    - _WaveHeight: 2
     - _WaveScale: 200
     - _WaveSpeed: 10
     - _WorkflowMode: 1
@@ -92,6 +93,8 @@ Material:
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
+    - _BorderTexScale: {r: 2, g: 2, b: 0, a: 0}
+    - _BorderTexScrollSpeed: {r: 0, g: 0.02, b: 0, a: 0}
     - _Color: {r: 23.96863, g: 9.937399, b: 6.218277, a: 0}
     - _ColorBack: {r: 0.13968495, g: 0.3980612, b: 0.4056604, a: 1}
     - _ColorFront: {r: 6.7270417, g: 11.98431, b: 11.629525, a: 0}
@@ -99,7 +102,7 @@ Material:
     - _Emission: {r: 0.6792453, g: 0.39118838, b: 0, a: 0}
     - _FaceOffset: {r: 0.5, g: 0.5, b: 0.5, a: 0}
     - _FadeTillingScale: {r: 5, g: 4, b: 0, a: 0}
-    - _FillColor: {r: 0, g: 0, b: 0, a: 0}
+    - _FillColor: {r: 0.19624422, g: 0.5607822, b: 0.6603774, a: 0}
     - _InnerScrollSpeed: {r: 0, g: 0.02, b: 0, a: 0}
     - _PulseOffset: {r: 1, g: 1, b: 1, a: 0}
     - _ScrollSpeed: {r: 0, g: 0.02, b: 0, a: 0}
