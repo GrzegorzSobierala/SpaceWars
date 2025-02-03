@@ -45,6 +45,18 @@ Material:
         m_Texture: {fileID: 2800000, guid: b76fca1f4fb8915409f42a649beeaed2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_2502fe42940e43ca8c35ebe19ffd243b_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: b76fca1f4fb8915409f42a649beeaed2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_2e683335e0fc487eb2d2f5aa3928f286_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: fed6bf8658bd9954bb960069a9f85009, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaveTexture:
+        m_Texture: {fileID: 2800000, guid: b76fca1f4fb8915409f42a649beeaed2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -85,9 +97,9 @@ Material:
     - _ScrollSpeed: 0.01
     - _SrcBlend: 5
     - _Surface: 1
-    - _WaveHeight: 2
-    - _WaveScale: 200
-    - _WaveSpeed: 10
+    - _WaveHeight: 0
+    - _WaveScale: 20
+    - _WaveSpeed: 0.5
     - _WorkflowMode: 1
     - _ZTest: 4
     - _ZWrite: 0
@@ -102,13 +114,16 @@ Material:
     - _Emission: {r: 0.6792453, g: 0.39118838, b: 0, a: 0}
     - _FaceOffset: {r: 0.5, g: 0.5, b: 0.5, a: 0}
     - _FadeTillingScale: {r: 5, g: 4, b: 0, a: 0}
-    - _FillColor: {r: 0.19624422, g: 0.5607822, b: 0.6603774, a: 0}
+    - _FillColor: {r: 0.09189214, g: 0.27970213, b: 0.3301887, a: 0}
     - _InnerScrollSpeed: {r: 0, g: 0.02, b: 0, a: 0}
     - _PulseOffset: {r: 1, g: 1, b: 1, a: 0}
     - _ScrollSpeed: {r: 0, g: 0.02, b: 0, a: 0}
     - _ScrollSpeed_1: {r: 0, g: 2, b: 0, a: 0}
+    - _SecondaryWaveColor: {r: 0, g: 0, b: 0, a: 0}
     - _TillingScale: {r: 2, g: 3, b: 0, a: 0}
+    - _WaveColor: {r: 9.926178, g: 5.8404613, b: 1.0768969, a: 0}
     - _WaveScale: {r: 100, g: 100, b: 0, a: 0}
     - _WaveScrollSpeed: {r: 0.002, g: 0.002, b: 0, a: 0}
     - _WaveScrolling: {r: 0.001, g: 0.002, b: 0, a: 0}
+    - _WaveTextureScale: {r: 20, g: 20, b: 0, a: 0}
   m_BuildTextureStacks: []
