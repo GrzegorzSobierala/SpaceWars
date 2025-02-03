@@ -123,7 +123,8 @@ namespace Game.Room.Enemy
                 List<Material> materials = new();
                 renderer.GetSharedMaterials(materials);
                 materials.Insert(0, _globalAssets.TestMaterial);
-                renderer.SetSharedMaterials(materials);
+                renderer.sharedMaterials = materials.ToArray();
+                Debug.Log(renderer.materials.Length + " | " + renderer.sharedMaterials.Length);
             }
 
             Invoke(nameof(RestoreMaterial), _beforeShootIndicateTime / 2);
@@ -136,7 +137,7 @@ namespace Game.Room.Enemy
                 List<Material> materials = new();
                 renderer.GetSharedMaterials(materials);
                 materials.RemoveAt(0);
-                renderer.SetSharedMaterials(materials);
+                renderer.sharedMaterials = materials.ToArray();
             }
         }
 
