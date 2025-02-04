@@ -68,6 +68,9 @@
         },
         {
             "m_Id": "1e776a77c6844b4494001e7d486f7d6e"
+        },
+        {
+            "m_Id": "d4b4f9b381064564a2d72a3bc600e72f"
         }
     ],
     "m_Keywords": [],
@@ -4305,7 +4308,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Smoothness",
     "m_StageCapability": 2,
-    "m_Value": 1.0,
+    "m_Value": 0.0,
     "m_DefaultValue": 0.5,
     "m_Labels": []
 }
@@ -4905,7 +4908,7 @@
     "m_FloatType": 1,
     "m_RangeValues": {
         "x": 0.0,
-        "y": 1.0
+        "y": 5.0
     }
 }
 
@@ -5569,9 +5572,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -2284.0,
-            "y": 2517.0,
-            "width": 208.000244140625,
+            "x": -2288.0,
+            "y": 2428.0,
+            "width": 208.0,
             "height": 326.0
         }
     },
@@ -7209,8 +7212,8 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -2250.0,
-            "y": 2739.0,
+            "x": -2276.0,
+            "y": 2781.0,
             "width": 128.0,
             "height": 101.0
         }
@@ -14858,6 +14861,9 @@
     "m_Name": "BorderFade",
     "m_ChildObjectList": [
         {
+            "m_Id": "d4b4f9b381064564a2d72a3bc600e72f"
+        },
+        {
             "m_Id": "d30c495f75464f82b125077890cac8d6"
         },
         {
@@ -19349,6 +19355,34 @@
 }
 
 {
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
+    "m_ObjectId": "d4b4f9b381064564a2d72a3bc600e72f",
+    "m_Guid": {
+        "m_GuidSerialized": "5ec42786-9cb5-45a6-93b1-db7814d38581"
+    },
+    "m_Name": "Float",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "Float",
+    "m_DefaultReferenceName": "_Float",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": -0.12999999523162843,
+    "m_FloatType": 1,
+    "m_RangeValues": {
+        "x": -1.0,
+        "y": 1.0
+    }
+}
+
+{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "d4d2cf5cda2a4e13a211d76ab264d2cd",
@@ -20417,10 +20451,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -79.00003814697266,
-            "y": 644.0,
-            "width": 158.00006103515626,
-            "height": 34.0
+            "x": -79.00001525878906,
+            "y": 643.0000610351563,
+            "width": 158.0000762939453,
+            "height": 33.99993896484375
         }
     },
     "m_Slots": [
