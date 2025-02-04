@@ -10,7 +10,7 @@ namespace Game.Room.Enemy
         {
             base.InstallBindings();
 
-
+            Container.Bind<AmmoDepot>().FromComponentInHierarchy().AsSingle();
         }
     }
 }

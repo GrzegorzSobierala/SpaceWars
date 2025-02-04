@@ -11,12 +11,6 @@ namespace Game.Room.Enemy
         protected override void OnEnterState()
         {
             base.OnEnterState();
-
-            foreach (var gun in _enemyBase.GetComponentsInChildren<BasicEnemyGun>())
-            {
-                gun.StartAimingAt(_playerManager.PlayerBody.transform);
-                gun.StartShooting();
-            }
         }
 
         protected override void OnExitState()

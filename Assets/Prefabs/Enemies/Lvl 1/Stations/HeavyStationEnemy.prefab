@@ -5109,6 +5109,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4665536967199212350}
+  - component: {fileID: 4615524573465755805}
   m_Layer: 0
   m_Name: Weapons
   m_TagString: Untagged
@@ -5128,8 +5129,55 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4644363865203405351}
+  - {fileID: 2059439825846870872}
+  - {fileID: 7021628153589187855}
   m_Father: {fileID: 1957714025817231218}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4615524573465755805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 622994474166404911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b58fea200838d754d9484a7df3492cbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ammoWeaponsParent: {fileID: 2059439825846870872}
+  _noAmmoWeaponsParent: {fileID: 7021628153589187855}
+  _isAmmo: 0
+--- !u!1 &770724817540349789
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7021628153589187855}
+  m_Layer: 0
+  m_Name: NoAmmoWeapons
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7021628153589187855
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770724817540349789}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4665536967199212350}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &772408427409600640
@@ -25386,6 +25434,38 @@ Transform:
   m_Father: {fileID: 7388160381002476750}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3621445378547930268
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2059439825846870872}
+  m_Layer: 0
+  m_Name: AmmoWeapons
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2059439825846870872
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3621445378547930268}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4644363865203405351}
+  m_Father: {fileID: 4665536967199212350}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3704677663817372291
 GameObject:
   m_ObjectHideFlags: 0
@@ -35568,7 +35648,7 @@ Transform:
   - {fileID: 1151238071919728244}
   - {fileID: 4845046282826661732}
   - {fileID: 3300842191095436670}
-  m_Father: {fileID: 4665536967199212350}
+  m_Father: {fileID: 2059439825846870872}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3388787713639919756
@@ -35583,10 +35663,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1d39981b7fa89743b4918c6a4b8f6b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnShoot:
+  _rotationTrans: {fileID: 4644363865203405351}
+  _beforeShootIndicateTime: 0.25
+  _onBeforeShootGun:
     m_PersistentCalls:
       m_Calls: []
-  _rotationTrans: {fileID: 4644363865203405351}
+  _onShoot:
+    m_PersistentCalls:
+      m_Calls: []
   _gunShootPoint: {fileID: 4644363865203405351}
   _bulletPrototype: {fileID: 9180492232876094468}
   _gunTraverse: 360
@@ -35609,13 +35693,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _onReloaded:
-    m_PersistentCalls:
-      m_Calls: []
-  _beforeShootEventTime: 0.5
-  _onBeforeShootGun:
-    m_PersistentCalls:
-      m_Calls: []
-  _onShootGun:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &5186548571761063500
@@ -53919,7 +53996,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6904206026529616327, guid: 5322917044a751c4db7ac248c4e8d050, type: 3}
       propertyPath: _viewDistance
-      value: 150
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 6904206026529616327, guid: 5322917044a751c4db7ac248c4e8d050, type: 3}
       propertyPath: _ignoreColliders._serializedList.Array.size

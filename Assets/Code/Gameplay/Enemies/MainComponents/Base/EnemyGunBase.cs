@@ -14,7 +14,7 @@ namespace Game.Room.Enemy
 {
     public abstract class EnemyGunBase : MonoBehaviour
     {
-        public event Func<bool> CanShoot;
+        public event Func<EnemyGunBase, bool> CanShoot;
 
         [Inject] protected Rigidbody2D _body;
         [Inject] private TestingSettings _testingSettings;
@@ -124,7 +124,6 @@ namespace Game.Room.Enemy
                 renderer.GetSharedMaterials(materials);
                 materials.Insert(0, _globalAssets.TestMaterial);
                 renderer.sharedMaterials = materials.ToArray();
-                Debug.Log(renderer.materials.Length + " | " + renderer.sharedMaterials.Length);
             }
 
             Invoke(nameof(RestoreMaterial), _beforeShootIndicateTime / 2);
@@ -169,7 +168,7 @@ namespace Game.Room.Enemy
         [Button]
         protected bool TryShoot()
         {
-            if (CanShoot?.Invoke() == false)
+            if (CanShoot?.Invoke(this) == false)
                 return false;
 
             if(_onBeforeShootGun.GetPersistentEventCount() == 0)
