@@ -1,19 +1,14 @@
 using UnityEngine;
 
-namespace Game.Room.Combat
+namespace Game.Room.Enemy
 {
-    public class SupplyStationEnemyInstaller : MonoBehaviour
+    public class SupplyStationEnemyInstaller : StationEnemyInstaller
     {
-        // Start is called before the first frame update
-        void Start()
+        public override void InstallBindings()
         {
-        
-        }
+            base.InstallBindings();
 
-        // Update is called once per frame
-        void Update()
-        {
-        
+
         }
     }
 }

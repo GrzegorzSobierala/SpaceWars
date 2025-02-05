@@ -1,19 +1,9 @@
 using UnityEngine;
 
-namespace Game.Room.Combat
+namespace Game.Room.Enemy
 {
-    public class SupplyStationEnemyGuardState : MonoBehaviour
+    public class SupplyStationEnemyGuardState : EnemyGuardStateBase
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
 
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
     }
 }
