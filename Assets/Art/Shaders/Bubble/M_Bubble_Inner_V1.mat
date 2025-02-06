@@ -31,11 +31,19 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
+    - _FADE: 4.8
     - _FillScale: 630.5
     - _FillSpeed: 5
+    - _InnerFadePower: 7.04
+    - _InnerSize: 0.514
+    - _WaveScaleandRoughness: 20
     m_Colors:
-    - _FillColor: {r: 0.066037714, g: 0.03145062, b: 0.01588643, a: 0}
+    - _Color: {r: 9.082409, g: 3.1803017, b: 1.5851375, a: 0}
+    - _FillColor: {r: 0.13207543, g: 0.06290124, b: 0.03177286, a: 0}
     - _InnerLinesColor: {r: 0, g: 0, b: 0, a: 0}
+    - _SecondaryColor: {r: 9.082409, g: 3.1803017, b: 1.5851375, a: 0}
+    - _SecondaryWaveTextureScale: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _WaveTextureScale: {r: 0.5, g: 0.5, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &6679955728495470378
 MonoBehaviour:
