@@ -75,7 +75,7 @@ MonoBehaviour:
   m_AssetVersion: 2
   m_OpaqueLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8055
   m_TransparentLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -105,10 +105,13 @@ MonoBehaviour:
   m_Name: BlurRendererFeature
   m_EditorClassIdentifier: 
   m_Active: 1
-  blurLayer:
+  _blurLayer:
     serializedVersion: 2
     m_Bits: 2147483648
-  renderPassEvent: 250
+  _renderPassEvent: 250
+  _blurRenderTexture: {fileID: 8400000, guid: 306d920f1267ef048ac4293eb0bcd1b1, type: 2}
+  _graphicFormat: 8
+  _depthStencilFormat: 90
 --- !u!114 &6670411866098872482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,14 +134,14 @@ MonoBehaviour:
         serializedVersion: 2
         m_Bits: 2147483648
       PassNames: []
-    overrideMaterial: {fileID: 2100000, guid: a468a703eed3567409b30d4579ccd7dc, type: 2}
+    overrideMaterial: {fileID: 2100000, guid: ba2faaa35286c19469f45bb124b3414c, type: 2}
     overrideMaterialPassIndex: 0
     overrideShader: {fileID: 0}
     overrideShaderPassIndex: 0
     overrideMode: 1
     overrideDepthState: 0
     depthCompareFunction: 4
-    enableWrite: 1
+    enableWrite: 0
     stencilSettings:
       overrideStencilState: 0
       stencilReference: 0
