@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-3805506605582752440
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -20,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Bubble_Inner Variant
+  m_Name: M_Bubble_Inner_V1
   m_Shader: {fileID: -6465566751694194690, guid: 519c4f68526099d45bed9f8f36d60ed2, type: 3}
   m_Parent: {fileID: 2100000, guid: a8a54da39492ac6439cfed3e31728301, type: 2}
   m_ModifiedSerializedProperties: 0
@@ -44,12 +31,22 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _FADE: 46
-    - _InnerFadePower: 8
-    - _InnerSize: 0.07
-    - _PatternScale: 1
+    - _FillScale: 630.5
+    - _FillSpeed: 5
     m_Colors:
-    - _Color: {r: 14.754423, g: 3.8643765, b: 0.20878863, a: 1}
-    - _FillColor: {r: 0, g: 0, b: 0, a: 0}
-    - _PatternScrollSpeed: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _FillColor: {r: 0.066037714, g: 0.03145062, b: 0.01588643, a: 0}
+    - _InnerLinesColor: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
+--- !u!114 &6679955728495470378
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
