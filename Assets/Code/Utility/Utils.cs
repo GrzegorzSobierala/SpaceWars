@@ -278,6 +278,31 @@ namespace Game.Utility
         {
             return endPos - startPos;
         }
+
+        /// <summary>
+        /// Evaluates all subscribed methods in the given multicast delegate.
+        /// </summary>
+        /// <param name="combined">The multicast delegate of type Func&lt;bool&gt; containing methods to evaluate.</param>
+        /// <returns>
+        /// True if no methods are attached or false if any method returns false or true only if all subscribed methods return true.
+        /// </returns>
+        public static bool EvaluateCombinedFunc(Func<bool> combined)
+        {
+            if (combined == null)
+                return true; // If no methods are attached, return false.
+
+            // Get all subscribed methods and execute them in order.
+            foreach (Func<bool> func in combined.GetInvocationList())
+            {
+                if (!func())
+                {
+                    // Short-circuit: if any method returns false, return false.
+                    return false;
+                }
+            }
+            // All methods returned true.
+            return true;
+        }
     }
 
     public static class Async

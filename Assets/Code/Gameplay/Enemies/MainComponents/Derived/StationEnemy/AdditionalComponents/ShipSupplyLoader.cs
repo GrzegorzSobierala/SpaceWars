@@ -30,6 +30,7 @@ namespace Game.Room.Enemy
                 return;
             }
 
+            ship.CanUndock += shipCargoSpace.IsCargoSpaceFull;
 
             StartLoadingSupply(shipCargoSpace);
         }

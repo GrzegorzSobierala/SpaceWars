@@ -1,3 +1,5 @@
+using Game.Utility;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +10,8 @@ namespace Game.Room.Enemy
 {
     public class CargoEnemyStateMachine : EnemyStateMachineBase , IDocking
     {
+        public event Func<bool> CanUndock;
+
         [Inject] private NavMeshAgent _agent;
         [Inject] private Rigidbody2D _body;
         [Inject] private EnemyMovementBase _movement;
@@ -30,7 +34,7 @@ namespace Game.Room.Enemy
         {
             base.Start();
 
-            _targetDock = _mainDock;
+            _targetDock = _suplayDock;
             GoToTargetStation();
             _movement.SubscribeOnAchivedTarget(() => _targetDock.StartDocking(this));
         }
@@ -53,6 +57,7 @@ namespace Game.Room.Enemy
 
         public void OnStartUnDocking()
         {
+            CanUndock = null;
         }
 
         public void OnEndUnDocking()
@@ -72,6 +77,8 @@ namespace Game.Room.Enemy
         private IEnumerator WaitAndUndock()
         {
             yield return new WaitForSeconds(_inDockTime);
+
+            yield return new WaitUntil(() => Utils.EvaluateCombinedFunc(CanUndock));
 
             _targetDock.StartUnDocking(this);
         }

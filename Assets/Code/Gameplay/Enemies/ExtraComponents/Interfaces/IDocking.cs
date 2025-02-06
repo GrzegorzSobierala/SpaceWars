@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ namespace Game.Room.Enemy
 {   
     public interface IDocking 
     {
+        public abstract event Func<bool> CanUndock;
+
         public abstract Rigidbody2D Body { get; }
 
         public abstract float DistanceBeforeDock { get; }

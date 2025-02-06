@@ -120,7 +120,7 @@ namespace Game.Room.Enemy
         {
             EndCurrentOperation();
             _occupand.OnEndDocking();
-            OnDock.Invoke(_occupand);
+            OnDock?.Invoke(_occupand);
         }
 
         private void Undock()
