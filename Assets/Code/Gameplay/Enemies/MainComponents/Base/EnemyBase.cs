@@ -21,6 +21,7 @@ namespace Game.Room.Enemy
 
         public EnemyStateMachineBase StateMachine => _stateMachine;
         public float CurrentHp => _currentHp;
+        public float MaxHp => _maxHp;
 
         protected virtual void Awake()
         {
@@ -44,6 +45,11 @@ namespace Game.Room.Enemy
         }
 
         public abstract void GetDamage(DamageData damage);
+
+        public void GetHeal(float hp)
+        {
+            AddCurrentHp(hp);
+        }
 
         protected virtual void SetStartHP()
         {

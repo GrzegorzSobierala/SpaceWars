@@ -40,7 +40,6 @@ namespace Game.Room.Enemy
             Transform targetSlot = shipCargoSpace.GetFreeSlot();
             if (targetSlot == null)
             {
-
                 return;
             }
 
