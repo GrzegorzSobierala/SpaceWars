@@ -1,32 +1,43 @@
-using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 namespace Game.Room.Enemy
 {
     public class ShipCargoSpace : MonoBehaviour
     {
-        [SerializeField] private List<Transform> _cargoSlotPositions;
+        [SerializeField] private SerializedDictionary<Transform, AmmoSupply> _cargoSlots;
 
-        private Dictionary<Transform, AmmoSupply> _cargoSlots = new();
+        private AmmoSupply _supplyFromTop = null;
+        private int _fullSlotsCount = 0;
+
+        public AmmoSupply SupplyFromTop => _supplyFromTop;
+        public int FullSlotsCount => _fullSlotsCount;
 
         private void Awake()
         {
-            foreach (var slot in _cargoSlotPositions)
-            {
-                _cargoSlots.Add(slot, null);
-            }
+            InitFullSlotsCount();
         }
 
         public void LoadCargo(AmmoSupply supply)
         {
-            foreach (var slot in _cargoSlotPositions)
+            foreach (var slot in _cargoSlots)
             {
-                if (_cargoSlots[slot] == null)
+                if (slot.Value == null)
                 {
-                    _cargoSlots[slot] = supply;
-                    supply.transform.SetParent(slot);
+                    _cargoSlots[slot.Key] = supply;
+                    supply.transform.SetParent(slot.Key);
                     supply.transform.localPosition = Vector3.zero;
                     supply.transform.localRotation = Quaternion.identity;
+                    
+                    _fullSlotsCount++;
+                    _supplyFromTop = supply;
+
+                    if (_fullSlotsCount > _cargoSlots.Count)
+                    {
+                        Debug.LogError("_fullSlotsCount error too much");
+                        _fullSlotsCount = Mathf.Clamp(_fullSlotsCount,0, _cargoSlots.Count);
+                    }
+
                     return;
                 }
             }
@@ -36,15 +47,48 @@ namespace Game.Room.Enemy
 
         public AmmoSupply UnloadCargo(Transform newParent)
         {
-            foreach (var slot in _cargoSlotPositions)
+            int index = 0;
+            Transform lastCheckSlot = null;
+            Transform prevLastCheckSlot = null;
+
+
+            foreach (var slot in _cargoSlots)
             {
-                if (_cargoSlots[slot] != null)
+                if (slot.Value == null || index + 1 == _cargoSlots.Count)
                 {
-                    AmmoSupply unloadedSupply = _cargoSlots[slot];
-                    _cargoSlots[slot] = null;
+                    if(index + 1 == _cargoSlots.Count && slot.Value != null)
+                    {
+                        prevLastCheckSlot = lastCheckSlot;
+                        lastCheckSlot = slot.Key;
+                    }
+
+                    AmmoSupply unloadedSupply = _cargoSlots[lastCheckSlot];
+                    _cargoSlots[lastCheckSlot] = null;
                     unloadedSupply.transform.SetParent(newParent);
+
+                    _fullSlotsCount--;
+
+                    if(prevLastCheckSlot == null)
+                    {
+                        _supplyFromTop = null;
+                    }
+                    else
+                    {
+                        _supplyFromTop = _cargoSlots[prevLastCheckSlot];
+                    }
+
+                    if (_fullSlotsCount < 0)
+                    {
+                        Debug.LogError("_fullSlotsCount error too few");
+                        _fullSlotsCount = Mathf.Clamp(_fullSlotsCount, 0, _cargoSlots.Count);
+                    }
+
                     return unloadedSupply;
                 }
+
+                prevLastCheckSlot = lastCheckSlot;
+                lastCheckSlot = slot.Key;
+                index++;
             }
 
             Debug.LogError("Cargo space empty");
@@ -53,24 +97,28 @@ namespace Game.Room.Enemy
 
         public bool IsCargoSpaceFull()
         {
-            foreach (var slot in _cargoSlots)
-            {
-                if (slot.Value == null)
-                    return false;
-            }
+            return _fullSlotsCount == _cargoSlots.Count;
 
-            return true;
+            //foreach (var slot in _cargoSlots)
+            //{
+            //    if (slot.Value == null)
+            //        return false;
+            //}
+
+            //return true;
         }
 
         public bool IsCargoSpaceEmpty()
         {
-            foreach (var slot in _cargoSlots)
-            {
-                if (slot.Value != null)
-                    return false;
-            }
+            return _fullSlotsCount == 0;
 
-            return true;
+            //foreach (var slot in _cargoSlots)
+            //{
+            //    if (slot.Value != null)
+            //        return false;
+            //}
+
+            //return true;
         }
 
         public Transform GetFreeSlot()
@@ -82,6 +130,23 @@ namespace Game.Room.Enemy
             }
 
             return null;
+        }
+
+        private void InitFullSlotsCount()
+        {
+            int fullSlotsCount = 0;
+            AmmoSupply lastChckedSupply = null;
+            foreach (var slot in _cargoSlots)
+            {
+                if (slot.Value != null)
+                {
+                    fullSlotsCount++;
+                    lastChckedSupply = slot.Value;
+                }
+            }
+
+            _fullSlotsCount = fullSlotsCount;
+            _supplyFromTop = lastChckedSupply;
         }
     }
 }

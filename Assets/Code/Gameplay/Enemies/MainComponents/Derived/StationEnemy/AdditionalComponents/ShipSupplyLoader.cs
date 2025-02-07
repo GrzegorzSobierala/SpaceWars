@@ -43,7 +43,7 @@ namespace Game.Room.Enemy
                 return;
             }
 
-            _currentSupply = Instantiate(_supplyPrototype, _supplaySpawnParent,false);
+            _currentSupply = Instantiate(_supplyPrototype, _supplaySpawnParent, false);
             _currentSupply.gameObject.SetActive(true);
 
             _loadingCoroutine = StartCoroutine(Loading(shipCargoSpace));

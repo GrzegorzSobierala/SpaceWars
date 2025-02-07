@@ -16,8 +16,6 @@ namespace Game.Room.Enemy
         private Dictionary<EnemyGunBase, GunAmmoUsage> _ammoWeapons = new();
         private EnemyGunBase[] _noAmmoWeapons;
 
-        [SerializeField] private bool _isAmmo;
-
         private void Awake()
         {
             Init();
