@@ -7,7 +7,7 @@ namespace Game.Room.Enemy
     public class AmmoDepot : MonoBehaviour
     {
         [Inject] private DockPlace _dockPlace;
-        [Inject] private ShipCargoSpace _cargoSpace;
+        [Inject] private CargoSpace _cargoSpace;
 
         [SerializeField] private float _unloadTime = 3f;
 
@@ -64,11 +64,11 @@ namespace Game.Room.Enemy
 
         private void StartUnloading(IDocking ship)
         {
-            ShipCargoSpace shipCargoSpace = ship.Body.transform.GetComponentInChildren<ShipCargoSpace>();
+            CargoSpace shipCargoSpace = ship.Body.transform.GetComponentInChildren<CargoSpace>();
 
             if (shipCargoSpace == null)
             {
-                Debug.LogError("No " + nameof(ShipCargoSpace));
+                Debug.LogError("No " + nameof(CargoSpace));
                 return;
             }
 
@@ -77,7 +77,7 @@ namespace Game.Room.Enemy
             StartUnloadingSupply(shipCargoSpace);
         }
 
-        private void StartUnloadingSupply(ShipCargoSpace shipCargoSpace)
+        private void StartUnloadingSupply(CargoSpace shipCargoSpace)
         {
             if (_cargoSpace.IsCargoSpaceFull())
                 return;
@@ -88,18 +88,19 @@ namespace Game.Room.Enemy
             _unloadingCoroutine = StartCoroutine(Unloading(shipCargoSpace));
         }
 
-        private IEnumerator Unloading(ShipCargoSpace shipCargoSpace)
+        private IEnumerator Unloading(CargoSpace shipCargoSpace)
         {
             yield return new WaitForSeconds(_unloadTime);
 
             AmmoSupply ammoSupply = shipCargoSpace.UnloadCargo(transform);
             _cargoSpace.LoadCargo(ammoSupply);
+            ammoSupply.EnableCollider(true);
 
             _unloadingCoroutine = null;
             StartUnloadingSupply(shipCargoSpace);
         }
 
-        private bool IsUnloadingEnd(ShipCargoSpace shipCargoSpace)
+        private bool IsUnloadingEnd(CargoSpace shipCargoSpace)
         {
             return shipCargoSpace.IsCargoSpaceEmpty() || _cargoSpace.IsCargoSpaceFull();
         }

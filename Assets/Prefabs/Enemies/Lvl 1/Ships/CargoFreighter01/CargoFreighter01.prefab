@@ -541,7 +541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 263c716a88951f8498b94fa38165a420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseHp: 40
+  _baseHp: 50
   _emisiveColor: {r: 1, g: 0, b: 0, a: 1}
   _emisiveIntesvity: 50
   _shipMeshRenderer: {fileID: 3468256321605477082}
@@ -574,7 +574,7 @@ NavMeshAgent:
   m_Acceleration: 100
   avoidancePriority: 10
   m_AngularSpeed: 50
-  m_StoppingDistance: 50
+  m_StoppingDistance: 60
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
   m_AutoRepath: 1
@@ -54339,11 +54339,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 754f7be9c8f3b5f43a5669be1c3f8f41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cargoSlotPositions:
-  - {fileID: 191641461454219913}
-  - {fileID: 7442959954791046991}
-  - {fileID: 8574429614345279986}
-  - {fileID: 7762483036092544622}
+  _cargoSlots:
+    _serializedList:
+    - Key: {fileID: 191641461454219913}
+      Value: {fileID: 0}
+    - Key: {fileID: 7442959954791046991}
+      Value: {fileID: 0}
+    - Key: {fileID: 8574429614345279986}
+      Value: {fileID: 0}
+    - Key: {fileID: 7762483036092544622}
+      Value: {fileID: 0}
 --- !u!1 &5398397971444874471
 GameObject:
   m_ObjectHideFlags: 0

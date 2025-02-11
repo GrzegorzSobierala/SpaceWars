@@ -3,6 +3,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using Game.Utility;
 using System;
+using Game.Management;
 
 namespace Game.Room.Enemy
 {
@@ -23,6 +24,17 @@ namespace Game.Room.Enemy
         private void Awake()
         {
             Initialize();
+        }
+
+        private void OnDestroy()
+        {
+            if (GameManager.IsGameQuiting)
+                return;
+
+            if(_occupand != null)
+            {
+                _occupand.OnDockDestroy();
+            }
         }
 
         public void StartDocking(IDocking dockingObject)

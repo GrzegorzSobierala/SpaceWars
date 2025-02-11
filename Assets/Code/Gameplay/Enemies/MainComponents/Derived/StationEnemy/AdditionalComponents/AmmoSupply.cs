@@ -3,10 +3,12 @@ using UnityEngine;
 
 namespace Game.Room.Enemy
 {
+    [RequireComponent(typeof(Collider2D))]
     public class AmmoSupply : MonoBehaviour
     {
         [SerializeField] private int _maxAmmoCapasity = 100;
 
+        private Collider2D _collider;
         private int _currentAmmo;
 
         public int CurrentAmmo => _currentAmmo;
@@ -14,6 +16,7 @@ namespace Game.Room.Enemy
         private void Awake()
         {
             _currentAmmo = _maxAmmoCapasity;
+            _collider = GetComponent<Collider2D>();
         }
 
         public int TakeAmmo(int amount)
@@ -34,6 +37,11 @@ namespace Game.Room.Enemy
         public void DestroySupply()
         {
             Destroy(gameObject);
+        }
+
+        public void EnableCollider(bool enable)
+        {
+            _collider.enabled = enable;
         }
     }
 }

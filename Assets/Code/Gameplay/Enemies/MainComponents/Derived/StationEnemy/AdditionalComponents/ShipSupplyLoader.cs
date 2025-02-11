@@ -22,11 +22,11 @@ namespace Game.Room.Enemy
 
         private void StartLoading(IDocking ship)
         {
-            ShipCargoSpace shipCargoSpace = ship.Body.transform.GetComponentInChildren<ShipCargoSpace>();
+            CargoSpace shipCargoSpace = ship.Body.transform.GetComponentInChildren<CargoSpace>();
 
             if (shipCargoSpace == null)
             {
-                Debug.LogError("No " + nameof(ShipCargoSpace));
+                Debug.LogError("No " + nameof(CargoSpace));
                 return;
             }
 
@@ -35,7 +35,7 @@ namespace Game.Room.Enemy
             StartLoadingSupply(shipCargoSpace);
         }
 
-        private void StartLoadingSupply(ShipCargoSpace shipCargoSpace)
+        private void StartLoadingSupply(CargoSpace shipCargoSpace)
         {
             Transform targetSlot = shipCargoSpace.GetFreeSlot();
             if (targetSlot == null)
@@ -47,10 +47,9 @@ namespace Game.Room.Enemy
             _currentSupply.gameObject.SetActive(true);
 
             _loadingCoroutine = StartCoroutine(Loading(shipCargoSpace));
-            
         }
 
-        private IEnumerator Loading(ShipCargoSpace shipCargoSpace)
+        private IEnumerator Loading(CargoSpace shipCargoSpace)
         {
             yield return new WaitForSeconds(_loadSupplyTime);
 

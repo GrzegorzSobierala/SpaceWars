@@ -21,5 +21,7 @@ namespace Game.Room.Enemy
         public abstract void OnStartUnDocking();
 
         public abstract void OnEndUnDocking();
+
+        public abstract void OnDockDestroy();
     }
 }

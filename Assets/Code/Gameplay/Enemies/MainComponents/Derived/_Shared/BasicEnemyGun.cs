@@ -7,7 +7,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
 using Zenject;
 
 namespace Game.Room.Enemy
@@ -119,9 +118,17 @@ namespace Game.Room.Enemy
             GameObject damageDealer = _body.gameObject;
             Transform parent = _enemyManager.transform;
 
-            _bulletPrototype.CreateCopy(damageDealer, parent).Shoot(_body, _gunShootPoint);
+            ShootableObjectBase bulletInstance = _bulletPrototype.CreateCopy(damageDealer, parent);
+            bulletInstance.Shoot(_body, _gunShootPoint);
+
+            if(bulletInstance is FlakBullet flakBullet)
+            {
+                flakBullet.SetTarget(_playerManager.PlayerBody.position);
+            }
+
 
             _onShoot?.Invoke();
+
 
             if (_currenaMagAmmo == 0)
             {

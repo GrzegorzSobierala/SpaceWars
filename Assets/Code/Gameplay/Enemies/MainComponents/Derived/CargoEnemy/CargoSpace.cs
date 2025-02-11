@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Room.Enemy
 {
-    public class ShipCargoSpace : MonoBehaviour
+    public class CargoSpace : MonoBehaviour
     {
         [SerializeField] private SerializedDictionary<Transform, AmmoSupply> _cargoSlots;
 
@@ -98,27 +98,11 @@ namespace Game.Room.Enemy
         public bool IsCargoSpaceFull()
         {
             return _fullSlotsCount == _cargoSlots.Count;
-
-            //foreach (var slot in _cargoSlots)
-            //{
-            //    if (slot.Value == null)
-            //        return false;
-            //}
-
-            //return true;
         }
 
         public bool IsCargoSpaceEmpty()
         {
             return _fullSlotsCount == 0;
-
-            //foreach (var slot in _cargoSlots)
-            //{
-            //    if (slot.Value != null)
-            //        return false;
-            //}
-
-            //return true;
         }
 
         public Transform GetFreeSlot()
