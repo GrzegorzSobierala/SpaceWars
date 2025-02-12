@@ -29504,7 +29504,7 @@ MonoBehaviour:
   _bulletPrototype: {fileID: 5055209661296373795}
   _gunTraverse: 360
   _rotateSpeed: 100
-  _aimedAngle: 4
+  _aimedAngle: 2
   _aimRange: 500
   _aimFollowTime: 2
   _lostTargetMode: 0
@@ -49310,6 +49310,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 405864246989137584, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}
       propertyPath: _speed
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 405864246989137584, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}
+      propertyPath: _maxDistance
       value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 405864246989137584, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}

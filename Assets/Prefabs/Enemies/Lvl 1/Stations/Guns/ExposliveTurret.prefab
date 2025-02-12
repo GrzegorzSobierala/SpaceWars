@@ -14750,10 +14750,10 @@ MonoBehaviour:
   _bulletPrototype: {fileID: 8950523030855128641}
   _gunTraverse: 360
   _rotateSpeed: 100
-  _aimedAngle: 4
+  _aimedAngle: 6
   _aimRange: 500
   _aimFollowTime: 2
-  _lostTargetMode: 0
+  _lostTargetMode: 2
   _searchSpeedMulti: 0.25
   _searchRandomSpeedMulti: 0.25
   _shotInterval: 2.5
@@ -19794,6 +19794,14 @@ PrefabInstance:
     - target: {fileID: 6381566758080698325, guid: 52e477ba0288f064dbc444c8848defed, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7155998313951575025, guid: 52e477ba0288f064dbc444c8848defed, type: 3}
+      propertyPath: _speed
+      value: 275
+      objectReference: {fileID: 0}
+    - target: {fileID: 7155998313951575025, guid: 52e477ba0288f064dbc444c8848defed, type: 3}
+      propertyPath: _maxDistance
+      value: 275
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
