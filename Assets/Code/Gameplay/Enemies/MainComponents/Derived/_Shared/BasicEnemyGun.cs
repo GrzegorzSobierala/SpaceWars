@@ -52,6 +52,8 @@ namespace Game.Room.Enemy
         private OscillateController _oscillateCont = new();
         private float _randomSearchTarget;
 
+        public float GunTraverse => _gunTraverse;
+
         protected override void Awake()
         {
             base.Awake();
