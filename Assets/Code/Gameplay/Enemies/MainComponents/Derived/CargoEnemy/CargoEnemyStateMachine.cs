@@ -30,7 +30,7 @@ namespace Game.Room.Enemy
         private Vector2 _lastSupplyDockPos;
         private bool _knowMainStationDestroyed = false;
         private bool _knowSupplyStationDestroyed = false;
-        private bool _isMainDockTarget = true;
+        private bool _isMainDockTarget = false;
 
         public Rigidbody2D Body => _body;
 

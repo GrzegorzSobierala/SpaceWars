@@ -229,6 +229,13 @@ namespace Game.Room.Enemy
                 _lastTargetAimableTime = Time.time;
             }
 
+            bool result = _lastTargetAimableTime + noSeeKnowTime > Time.time;
+
+            if(!result)
+            {
+                _isAimedAtPlayer = false;
+            }
+
             return _lastTargetAimableTime + noSeeKnowTime > Time.time;
         }
 

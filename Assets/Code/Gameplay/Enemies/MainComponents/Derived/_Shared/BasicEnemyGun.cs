@@ -108,7 +108,7 @@ namespace Game.Room.Enemy
             _contactFilter = new ContactFilter2D
             {
                 useTriggers = false,
-                layerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle),
+                layerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle, Layers.SmallObstacle),
                 useLayerMask = true,
             };
         }
