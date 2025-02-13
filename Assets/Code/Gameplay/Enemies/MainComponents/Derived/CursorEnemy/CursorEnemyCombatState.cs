@@ -20,11 +20,26 @@ namespace Game.Room.Enemy
         [SerializeField] private float _stopOnRunDistanceToRayHit = 100;
         [SerializeField] private float _runSpeedMulti = 1.5f;
         [SerializeField] private float _spotPlayerRange = 750;
+        [SerializeField] private float _maxSpotPlayerRange = float.PositiveInfinity;
+        [SerializeField] private float _spotRangeIncreasePerSec = 5;
+
+        private float _enterStateTime;
+
+        public float CurrentSpotRange
+        {
+            get
+            {
+                float activeStateTime = Time.time - _enterStateTime;
+                float range = _spotPlayerRange + (activeStateTime * _spotRangeIncreasePerSec);
+                return Mathf.Clamp(range, 0, _maxSpotPlayerRange);
+            }
+        }
 
         protected override void OnEnterState()
         {
             base.OnEnterState();
 
+            _enterStateTime = Time.time;
             _gun.StartShooting();
             _movement.SetAngularSpeedModifier(1.0f);
 
@@ -114,7 +129,7 @@ namespace Game.Room.Enemy
         private bool IsPlayerInSpotRange()
         {
             Vector2 playerPos = _playerManager.PlayerBody.position;
-            return Vector2.Distance(transform.position, playerPos) < _spotPlayerRange;
+            return Vector2.Distance(transform.position, playerPos) < CurrentSpotRange;
         }
     }
 }
