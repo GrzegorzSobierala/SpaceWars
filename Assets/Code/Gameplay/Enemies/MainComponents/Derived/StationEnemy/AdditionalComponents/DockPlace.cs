@@ -28,7 +28,7 @@ namespace Game.Room.Enemy
 
         private void OnDestroy()
         {
-            if (GameManager.IsGameQuiting)
+            if (GameManager.IsGameQuitungOrSceneUnloading(gameObject))
                 return;
 
             if(_occupand != null)

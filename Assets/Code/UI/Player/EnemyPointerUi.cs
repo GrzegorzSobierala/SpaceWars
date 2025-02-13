@@ -111,7 +111,7 @@ namespace Game.Player.Ui
                 targetEnemyMagnitude = magnitude;
             }
 
-            return targetEnemy.transform;
+            return targetEnemy == null ? null : targetEnemy.transform;
         }
 
         bool IsEnemyOnScreen(Vector3 screenPos)

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Zenject;
+using UnityEngine.SceneManagement;
+using System.Reflection;
 
 namespace Game.Utility
 {
@@ -316,6 +318,42 @@ namespace Game.Utility
 
             mono.StopCoroutine(coroutine);
             coroutine = null;
+        }
+
+        public enum SceneLoadingState
+        {
+            NotLoaded,
+            Loading,
+            Loaded,
+            Unloading
+        }
+
+        public static SceneLoadingState? GetLoadingState(Scene scene)
+        {
+            Type sceneType = typeof(Scene);
+            PropertyInfo loadingStateProp = sceneType.GetProperty("loadingState", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            SceneLoadingState? sceneLoadingState;
+            if (loadingStateProp != null)
+            {
+                if(Enum.TryParse(loadingStateProp.GetValue(scene, null).ToString(),
+                    out SceneLoadingState loadingState))
+                {
+                    sceneLoadingState = loadingState;
+                }
+                else
+                {
+                    Debug.LogError("loadingState is null.");
+                    return null;
+                }
+            }
+            else
+            {
+                Debug.LogError("loadingStateProp is null.");
+                return null;
+            }
+
+            return sceneLoadingState;
         }
     }
 
