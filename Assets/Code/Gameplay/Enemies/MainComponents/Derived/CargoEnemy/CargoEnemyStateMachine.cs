@@ -84,6 +84,7 @@ namespace Game.Room.Enemy
 
             ChangeTargetAndMove();
             StopAllCoroutines();
+            CanUndock = null;
         }
 
         private void StartMoveToNextTarget()
@@ -122,14 +123,14 @@ namespace Game.Room.Enemy
 
             if(_isMainDockTarget)
             {
-                if(!_knowMainStationDestroyed)
+                if(!_knowSupplyStationDestroyed)
                 {
                     GetCurrentTargetDock().StartUnDocking(this);
                 }
             }
             else
             {
-                if (!_knowSupplyStationDestroyed)
+                if (!_knowMainStationDestroyed)
                 {
                     GetCurrentTargetDock().StartUnDocking(this);
                 }
