@@ -64,7 +64,6 @@ namespace Game.Room.Enemy
 
         protected override void OnShoot()
         {
-                _onShoot?.Invoke();
         }
 
         private void Initalize()

@@ -139,8 +139,6 @@ namespace Game.Room.Enemy
 
             _bulletPrototype.CreateCopy(damageDealer, parent).Shoot(_body, shootTransform);
 
-            _onShoot?.Invoke();
-
             if (_currenaMagAmmo == 0)
             {
                 StartReloading();

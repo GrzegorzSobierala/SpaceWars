@@ -128,10 +128,6 @@ namespace Game.Room.Enemy
                 flakBullet.SetTarget(_playerManager.PlayerBody.position);
             }
 
-
-            _onShoot?.Invoke();
-
-
             if (_currenaMagAmmo == 0)
             {
                 StartReloading();

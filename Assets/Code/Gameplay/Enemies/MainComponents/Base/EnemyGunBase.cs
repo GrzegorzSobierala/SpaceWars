@@ -22,10 +22,9 @@ namespace Game.Room.Enemy
 
         [SerializeField, AutoFill, Required, AllowNesting] protected Transform _rotationTrans;
 
-
         [SerializeField] protected float _beforeShootIndicateTime = 0.25f;
         [SerializeField] private UnityEvent _onBeforeShootGun;
-        [SerializeField, FormerlySerializedAs("OnShoot")] protected UnityEvent _onShoot;
+        [SerializeField, FormerlySerializedAs("OnShoot")] private UnityEvent _onShoot;
 
         protected Action OnAimTarget;
 
