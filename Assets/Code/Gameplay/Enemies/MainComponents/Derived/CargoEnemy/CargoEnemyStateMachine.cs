@@ -51,7 +51,7 @@ namespace Game.Room.Enemy
             if (GameManager.IsGameQuitungOrSceneUnloading(gameObject))
                 return;
 
-            OnObjectDestroy.Invoke();
+            OnObjectDestroy?.Invoke();
         }
 
         public void OnStartDocking()
