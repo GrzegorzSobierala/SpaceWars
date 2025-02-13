@@ -10,7 +10,7 @@ namespace Game.Room.Enemy
     public class DockPlace : MonoBehaviour
     {
         public event Action<IDocking> OnDock;
-        //public event Action<IDocking> OnUndock;
+        public event Action<IDocking> OnUndock;
 
         [SerializeField] private Transform _dockingPoint;
         [SerializeField] private float _dockingTime = 4;
@@ -43,6 +43,7 @@ namespace Game.Room.Enemy
                 return;
 
             _occupand = dockingObject;
+            _occupand.OnObjectDestroy += OnOccupodndDestroyed;
             StartMovingOperation(Docking());
             _occupand.OnStartDocking();
         }
@@ -142,7 +143,7 @@ namespace Game.Room.Enemy
             _occupand.OnEndUnDocking();
             IDocking leaver = _occupand;
             _occupand = null;
-            //OnUndock.Invoke(leaver);
+            OnUndock.Invoke(leaver);
         }
 
         private bool CanDock()
@@ -174,6 +175,13 @@ namespace Game.Room.Enemy
 
             StopCoroutine( _currentCoroutine );
             _currentCoroutine = null;
+        }
+
+        private void OnOccupodndDestroyed()
+        {
+            EndCurrentOperation() ;
+            OnUndock.Invoke(_occupand);
+            _occupand = null;
         }
     }
 }

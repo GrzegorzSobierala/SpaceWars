@@ -1,3 +1,4 @@
+using Game.Utility;
 using System.Collections;
 using UnityEngine;
 using Zenject;
@@ -18,6 +19,7 @@ namespace Game.Room.Enemy
         private void Start()
         {
             _dockPlace.OnDock += StartLoading;
+            _dockPlace.OnUndock += EndLoading;
         }
 
         private void StartLoading(IDocking ship)
@@ -30,7 +32,7 @@ namespace Game.Room.Enemy
                 return;
             }
 
-            ship.CanUndock += shipCargoSpace.IsCargoSpaceFull;
+            ship.CanUndock += () => IsLoadingDone(shipCargoSpace);
 
             StartLoadingSupply(shipCargoSpace);
         }
@@ -57,6 +59,16 @@ namespace Game.Room.Enemy
             _currentSupply = null;
             _loadingCoroutine = null;
             StartLoadingSupply(shipCargoSpace);
+        }
+
+        private bool IsLoadingDone(CargoSpace shipCargoSpace)
+        {
+            return shipCargoSpace.IsCargoSpaceFull();
+        }
+
+        private void EndLoading(IDocking _)
+        {
+            this.StopAndClearCoroutine(ref _loadingCoroutine);
         }
     }
 }

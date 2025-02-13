@@ -1,3 +1,4 @@
+using Game.Utility;
 using System.Collections;
 using UnityEngine;
 using Zenject;
@@ -9,12 +10,16 @@ namespace Game.Room.Enemy
         [Inject] private DockPlace _dockPlace;
 
         [SerializeField] private float _healPerSec = 1.5f;
+        [SerializeField] private float _maxHealPerDock = 50;
 
-        Coroutine _fixingCoroutine;
+        private Coroutine _fixingCoroutine;
+
+        private float _thisDockHealAmount = 0;
 
         private void Start()
         {
             _dockPlace.OnDock += StartFixing;
+            _dockPlace.OnUndock += EndFixing;
         }
 
         private void StartFixing(IDocking ship)
@@ -27,25 +32,37 @@ namespace Game.Room.Enemy
                 return;
             }
 
-            ship.CanUndock += () => IsEnemyFixed(enemy);
+            _thisDockHealAmount = 0;
+            ship.CanUndock += () => IsFixingDone(enemy);
 
             _fixingCoroutine = StartCoroutine(Fixing(enemy));
         }
 
         private IEnumerator Fixing(EnemyBase enemy)
         {
-            while(!IsEnemyFixed(enemy))
+            while (true)
             {
-                enemy.GetHeal(_healPerSec * Time.deltaTime);
+                if(!IsFixingDone(enemy))
+                {
+                    float heal = _healPerSec * Time.deltaTime;
+                    enemy.GetHeal(heal);
+                    _thisDockHealAmount += heal;
+                }
+
                 yield return null;
             }
-
-            _fixingCoroutine = null;
         }
 
-        private bool IsEnemyFixed(EnemyBase enemy)
+        private bool IsFixingDone(EnemyBase enemy)
         {
-            return enemy.CurrentHp >= enemy.MaxHp;
+            bool isFullHp = enemy.CurrentHp >= enemy.MaxHp;
+            bool maxHealDone = _thisDockHealAmount >= _maxHealPerDock;
+            return isFullHp || maxHealDone;
+        }
+
+        private void EndFixing(IDocking _)
+        {
+            this.StopAndClearCoroutine(ref _fixingCoroutine);
         }
     }
 }

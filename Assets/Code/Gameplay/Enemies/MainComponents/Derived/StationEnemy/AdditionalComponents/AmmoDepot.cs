@@ -1,3 +1,4 @@
+using Game.Utility;
 using System.Collections;
 using UnityEngine;
 using Zenject;
@@ -16,6 +17,7 @@ namespace Game.Room.Enemy
         private void Start()
         {
             _dockPlace.OnDock += StartUnloading;
+            _dockPlace.OnUndock += EndUnloading;
         }
 
         public bool TryUseAmmo(int amount)
@@ -74,35 +76,37 @@ namespace Game.Room.Enemy
 
             ship.CanUndock += () => IsUnloadingEnd(shipCargoSpace);
 
-            StartUnloadingSupply(shipCargoSpace);
-        }
-
-        private void StartUnloadingSupply(CargoSpace shipCargoSpace)
-        {
-            if (_cargoSpace.IsCargoSpaceFull())
-                return;
-
-            if (shipCargoSpace.IsCargoSpaceEmpty())
-                return;
-
             _unloadingCoroutine = StartCoroutine(Unloading(shipCargoSpace));
         }
 
         private IEnumerator Unloading(CargoSpace shipCargoSpace)
         {
-            yield return new WaitForSeconds(_unloadTime);
+            while (true)
+            {
+                if(_cargoSpace.IsCargoSpaceFull())
+                {
+                    yield return null;
+                }
+                else
+                {
+                    yield return new WaitForSeconds(_unloadTime);
 
-            AmmoSupply ammoSupply = shipCargoSpace.UnloadCargo(transform);
-            _cargoSpace.LoadCargo(ammoSupply);
-            ammoSupply.EnableCollider(true);
-
-            _unloadingCoroutine = null;
-            StartUnloadingSupply(shipCargoSpace);
+                    AmmoSupply ammoSupply = shipCargoSpace.UnloadCargo(transform);
+                    _cargoSpace.LoadCargo(ammoSupply);
+                    ammoSupply.EnableCollider(true);
+                    yield return null;
+                }
+            }
         }
 
         private bool IsUnloadingEnd(CargoSpace shipCargoSpace)
         {
             return shipCargoSpace.IsCargoSpaceEmpty() || _cargoSpace.IsCargoSpaceFull();
+        }
+
+        private void EndUnloading(IDocking _)
+        {
+            this.StopAndClearCoroutine(ref _unloadingCoroutine);
         }
     }
 }

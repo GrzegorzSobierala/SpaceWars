@@ -303,6 +303,20 @@ namespace Game.Utility
             // All methods returned true.
             return true;
         }
+
+        /// <summary>
+        /// Stops the given coroutine if it is running and sets the reference to null.
+        /// </summary>
+        /// <param name="mono">The MonoBehaviour instance that is running the coroutine.</param>
+        /// <param name="coroutine">The reference to the coroutine to stop and clear.</param>
+        public static void StopAndClearCoroutine(this MonoBehaviour mono, ref Coroutine coroutine)
+        {
+            if (coroutine == null)
+                return;
+
+            mono.StopCoroutine(coroutine);
+            coroutine = null;
+        }
     }
 
     public static class Async

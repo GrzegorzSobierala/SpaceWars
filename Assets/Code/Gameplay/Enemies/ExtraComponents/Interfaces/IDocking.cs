@@ -10,6 +10,8 @@ namespace Game.Room.Enemy
     {
         public abstract event Func<bool> CanUndock;
 
+        public abstract event Action OnObjectDestroy;
+
         public abstract Rigidbody2D Body { get; }
 
         public abstract float DistanceBeforeDock { get; }

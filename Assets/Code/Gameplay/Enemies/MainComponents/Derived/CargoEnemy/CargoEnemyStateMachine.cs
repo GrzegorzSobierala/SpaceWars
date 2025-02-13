@@ -12,6 +12,7 @@ namespace Game.Room.Enemy
     public class CargoEnemyStateMachine : EnemyStateMachineBase , IDocking
     {
         public event Func<bool> CanUndock;
+        public event Action OnObjectDestroy;
 
         [Inject] private NavMeshAgent _agent;
         [Inject] private Rigidbody2D _body;
@@ -45,6 +46,14 @@ namespace Game.Room.Enemy
             UpdateLastDockPositions();
         }
 
+        private void OnDestroy()
+        {
+            if(GameManager.IsGameQuiting)
+                return;
+
+            OnObjectDestroy.Invoke();
+        }
+
         public void OnStartDocking()
         {
             _agent.enabled = false;
@@ -63,7 +72,7 @@ namespace Game.Room.Enemy
 
         public void OnStartUnDocking()
         {
-            CanUndock = null;
+            ClearSubscribers();
         }
 
         public void OnEndUnDocking()
@@ -84,7 +93,7 @@ namespace Game.Room.Enemy
 
             ChangeTargetAndMove();
             StopAllCoroutines();
-            CanUndock = null;
+            ClearSubscribers();
         }
 
         private void StartMoveToNextTarget()
@@ -207,6 +216,12 @@ namespace Game.Room.Enemy
             _isMainDockTarget = !_isMainDockTarget;
             StartMoveToNextTarget();
             _engineParticles.SetActive(true);
+        }
+
+        private void ClearSubscribers()
+        {
+            CanUndock = null;
+            OnObjectDestroy = null;
         }
     }
 }
