@@ -145,6 +145,15 @@ namespace Game.Input.System
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pasue"",
+                    ""type"": ""Button"",
+                    ""id"": ""39351e43-e0b8-40b7-be65-ed563a75bca9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -290,6 +299,17 @@ namespace Game.Input.System
                     ""action"": ""ToggleSwapSteeringOnAim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""df58a943-1355-47e1-92e9-05e7e576884b"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pasue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -389,6 +409,7 @@ namespace Game.Input.System
             m_Gameplay_SwapSteering = m_Gameplay.FindAction("SwapSteering", throwIfNotFound: true);
             m_Gameplay_ToggleAim = m_Gameplay.FindAction("ToggleAim", throwIfNotFound: true);
             m_Gameplay_ToggleSwapSteeringOnAim = m_Gameplay.FindAction("ToggleSwapSteeringOnAim", throwIfNotFound: true);
+            m_Gameplay_Pasue = m_Gameplay.FindAction("Pasue", throwIfNotFound: true);
             // Ui
             m_Ui = asset.FindActionMap("Ui", throwIfNotFound: true);
             m_Ui_Back = m_Ui.FindAction("Back", throwIfNotFound: true);
@@ -469,6 +490,7 @@ namespace Game.Input.System
         private readonly InputAction m_Gameplay_SwapSteering;
         private readonly InputAction m_Gameplay_ToggleAim;
         private readonly InputAction m_Gameplay_ToggleSwapSteeringOnAim;
+        private readonly InputAction m_Gameplay_Pasue;
         public struct GameplayActions
         {
             private @PlayerControls m_Wrapper;
@@ -486,6 +508,7 @@ namespace Game.Input.System
             public InputAction @SwapSteering => m_Wrapper.m_Gameplay_SwapSteering;
             public InputAction @ToggleAim => m_Wrapper.m_Gameplay_ToggleAim;
             public InputAction @ToggleSwapSteeringOnAim => m_Wrapper.m_Gameplay_ToggleSwapSteeringOnAim;
+            public InputAction @Pasue => m_Wrapper.m_Gameplay_Pasue;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -534,6 +557,9 @@ namespace Game.Input.System
                 @ToggleSwapSteeringOnAim.started += instance.OnToggleSwapSteeringOnAim;
                 @ToggleSwapSteeringOnAim.performed += instance.OnToggleSwapSteeringOnAim;
                 @ToggleSwapSteeringOnAim.canceled += instance.OnToggleSwapSteeringOnAim;
+                @Pasue.started += instance.OnPasue;
+                @Pasue.performed += instance.OnPasue;
+                @Pasue.canceled += instance.OnPasue;
             }
 
             private void UnregisterCallbacks(IGameplayActions instance)
@@ -577,6 +603,9 @@ namespace Game.Input.System
                 @ToggleSwapSteeringOnAim.started -= instance.OnToggleSwapSteeringOnAim;
                 @ToggleSwapSteeringOnAim.performed -= instance.OnToggleSwapSteeringOnAim;
                 @ToggleSwapSteeringOnAim.canceled -= instance.OnToggleSwapSteeringOnAim;
+                @Pasue.started -= instance.OnPasue;
+                @Pasue.performed -= instance.OnPasue;
+                @Pasue.canceled -= instance.OnPasue;
             }
 
             public void RemoveCallbacks(IGameplayActions instance)
@@ -701,6 +730,7 @@ namespace Game.Input.System
             void OnSwapSteering(InputAction.CallbackContext context);
             void OnToggleAim(InputAction.CallbackContext context);
             void OnToggleSwapSteeringOnAim(InputAction.CallbackContext context);
+            void OnPasue(InputAction.CallbackContext context);
         }
         public interface IUiActions
         {
