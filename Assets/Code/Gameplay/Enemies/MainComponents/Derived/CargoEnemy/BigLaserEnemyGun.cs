@@ -74,6 +74,8 @@ namespace Game.Room.Enemy
                 layerMask = _blockAimLayerMask,
                 useLayerMask = true,
             };
+
+            _laserBeam.GetChargingTime += () => _beforeShootIndicateTime;
         }
     }
 }

@@ -1,4 +1,5 @@
 using Game.Combat;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
@@ -8,6 +9,8 @@ namespace Game.Room.Enemy
     [RequireComponent(typeof(LineRenderer))]
     public class LaserBeam : MonoBehaviour
     {
+        public Func<float> GetChargingTime;
+
         [Inject] EnemyBase _EnemyBase;
 
         [SerializeField] private float _shootTime = 5f;
@@ -18,8 +21,8 @@ namespace Game.Room.Enemy
         [SerializeField] private float _damage = 1;
         [SerializeField] private float _dealDamageInterval = 0.3f;
         [Space]
-        public UnityEvent OnStartReload;
-        public UnityEvent OnEndReload;
+        [SerializeField] private UnityEvent OnStartReload;
+        [SerializeField] private UnityEvent OnEndReload;
         [Space]
         [SerializeField] private LayerMask _blockAimLayerMask;
         [SerializeField] private GameObject _shootParticles;
@@ -34,7 +37,17 @@ namespace Game.Room.Enemy
         private float _startReloadingTime = -100;
         private float _lastDamageDealtTime = -100;
         private bool _isReloading = false;
-        private float _chargingTime = 0.3f;
+        private float _defaultChargingTime = 0.3f;
+
+        private float ChargingTime 
+        { get
+            {
+                if(GetChargingTime == null)
+                    return _defaultChargingTime;
+
+                return GetChargingTime.Invoke();
+            } 
+        }
 
         private void Awake()
         {
@@ -76,7 +89,7 @@ namespace Game.Room.Enemy
             {
                 OnReloading();
             }
-            if (_startChargingTime + _chargingTime > Time.time)
+            if (_startChargingTime + ChargingTime > Time.time)
             {
                 OnCharging();
             }
