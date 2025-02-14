@@ -117,8 +117,6 @@ namespace Game.Player.Ship
             RotateToPoint(mousePos);
         }
 
-        public Camera cursorCamera;
-
         public void RotateToPoint(Vector2 point)
         {
             if (_movementQE)
