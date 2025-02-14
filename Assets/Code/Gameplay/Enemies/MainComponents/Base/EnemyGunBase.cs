@@ -164,6 +164,8 @@ namespace Game.Room.Enemy
 
         protected virtual void OnAimingAt(float localRotation) { }
 
+        protected virtual void OnAimingIdle() { }
+
         [Button]
         protected bool TryShoot()
         {
@@ -309,21 +311,22 @@ namespace Game.Room.Enemy
 
         private void TryUpdateAiming()
         {
-            if (_currentAimType == AimType.Transform)
+            switch (_currentAimType)
             {
-                OnAimingAt(_aimTargetTransform);
-            }
-            else if (_currentAimType == AimType.Position)
-            {
-                OnAimingAt(_aimTargetPos);
-            }
-            else if (_currentAimType == AimType.Angle)
-            {
-                OnAimingAt(_aimTargetRot);
-            }
-            else
-            {
-                return;
+                case AimType.Stop:
+                    OnAimingIdle();
+                    break;
+                case AimType.Transform:
+                    OnAimingAt(_aimTargetTransform);
+                    break;
+                case AimType.Position:
+                    OnAimingAt(_aimTargetPos);
+                    break;
+                case AimType.Angle:
+                    OnAimingAt(_aimTargetRot);
+                    break;
+                default:
+                    return;
             }
         }
 

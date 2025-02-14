@@ -21,11 +21,6 @@ namespace Game.Room.Enemy
             Init();
         }
 
-        private void Start()
-        {
-            StartShooting();
-        }
-
         public void StartShooting()
         {
             foreach (var gun in _ammoWeapons)
@@ -39,6 +34,22 @@ namespace Game.Room.Enemy
             {
                 gun.StartAimingAt(_playerManager.PlayerBody.transform);
                 gun.StartShooting();
+            }
+        }
+
+        public void StopShooting()
+        {
+            foreach (var gun in _ammoWeapons)
+            {
+                gun.Key.StopAiming();
+                gun.Key.StopShooting();
+                gun.Key.CanShoot -= TryGiveAmmoToGun;
+            }
+
+            foreach (var gun in _noAmmoWeapons)
+            {
+                gun.StopAiming();
+                gun.StopShooting();
             }
         }
 

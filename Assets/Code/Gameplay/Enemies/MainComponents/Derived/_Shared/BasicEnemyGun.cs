@@ -81,6 +81,13 @@ namespace Game.Room.Enemy
             }
         }
 
+        protected override void OnAimingIdle()
+        {
+            base.OnAimingIdle();
+
+            LostTargetAction(_lostTargetMode);
+        }
+
         protected override void OnStopAiming()
         {
             base.OnStopAiming();
