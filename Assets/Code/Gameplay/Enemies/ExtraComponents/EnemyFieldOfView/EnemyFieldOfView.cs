@@ -105,7 +105,6 @@ namespace Game.Room.Enemy
             bool saveQueriesStartInColliders = Physics2D.queriesStartInColliders;
             Physics2D.queriesStartInColliders = _queriesStartInColliders;
 
-            //RaycastHit2D[] raycastHits = new RaycastHit2D[_ignoreColliders.Count + 1];
             List<RaycastHit2D> raycastHits = new();
             List<RaycastHit2D> raycastEnemyHits = new();
             Vector3 origin = transform.position;

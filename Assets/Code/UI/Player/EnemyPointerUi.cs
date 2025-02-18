@@ -19,7 +19,7 @@ namespace Game.Player.Ui
 
         private Transform nearestEnemy;
 
-        private List<EnemyBase> enemyPositions => _sceneManager.RoomEnemies;
+        private List<EnemyBase> EnemyPositions => _sceneManager.RoomEnemies;
 
         private void Update()
         {
@@ -50,7 +50,7 @@ namespace Game.Player.Ui
 
         Transform GetNearestEnemy()
         {
-            if(enemyPositions == null)
+            if(EnemyPositions == null)
             {
                 return null;
             }
@@ -67,9 +67,9 @@ namespace Game.Player.Ui
 
             int planeIndexMove = 4;
 
-            for (int enemyIndex = 0; enemyIndex < enemyPositions.Count; enemyIndex++)
+            for (int enemyIndex = 0; enemyIndex < EnemyPositions.Count; enemyIndex++)
             {
-                EnemyBase enemy = enemyPositions[enemyIndex];
+                EnemyBase enemy = EnemyPositions[enemyIndex];
                 if (!enemy)
                 {
                     continue;

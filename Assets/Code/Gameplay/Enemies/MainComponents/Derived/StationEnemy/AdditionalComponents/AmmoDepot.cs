@@ -53,7 +53,6 @@ namespace Game.Room.Enemy
                 }
             }
 
-
             if (takenAmmoFromAll != 0)
             {
                 return true;

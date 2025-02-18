@@ -15,7 +15,6 @@ namespace Game.Editor
             base.OnInspectorGUI();
 
             GUILayoutOption[] options = new GUILayoutOption[0];
-            BasicEnemyGun gun = (BasicEnemyGun)target;
 
             if (GUILayout.Toggle(isDrawGizmosOn, "Draw travers gizmos", options))
             {

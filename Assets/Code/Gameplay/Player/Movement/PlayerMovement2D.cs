@@ -38,7 +38,7 @@ namespace Game.Player.Ship
         private float _lastBoostTime = -100;
         private bool _inverseRotWithVerMove = false;
 
-        private List<Collider2D> _lastColldersStucked = new List<Collider2D>();
+        private List<Collider2D> _lastColldersStucked = new();
         private bool _wasUnstuckCalledThisFrame = false;
 
         private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
@@ -245,8 +245,8 @@ namespace Game.Player.Ship
                 oppositeSideMulti += -dot * _oppositeForce;
             }
 
-            Vector2 targetForce = direction * _moveSpeed * _body.mass * oppositeSideMulti;
-            _body.AddRelativeForce(procentOfMaxSpeed * targetForce * Time.fixedDeltaTime);
+            Vector2 targetForce = _body.mass * _moveSpeed * oppositeSideMulti * direction;
+            _body.AddRelativeForce(procentOfMaxSpeed * Time.fixedDeltaTime * targetForce);
         }
 
         private void TransferVelocity(float angle)
@@ -258,7 +258,7 @@ namespace Game.Player.Ship
 
         private void TryMovePlayerBoost(Vector2 direction)
         {
-            Vector2 targetForce = direction * _boostSpeed * _body.mass;
+            Vector2 targetForce = _body.mass * _boostSpeed * direction;
             Vector2 targetForceRel = _body.GetRelativeVector(targetForce);
 
             float dotProduct = Vector2.Dot(_body.velocity.normalized, targetForceRel.normalized);

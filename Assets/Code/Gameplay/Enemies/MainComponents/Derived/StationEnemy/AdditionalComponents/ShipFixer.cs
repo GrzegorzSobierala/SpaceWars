@@ -24,9 +24,7 @@ namespace Game.Room.Enemy
 
         private void StartFixing(IDocking ship)
         {
-            EnemyBase enemy = ship.Body.transform.GetComponent<EnemyBase>();
-
-            if (enemy == null)
+            if (!ship.Body.transform.TryGetComponent(out EnemyBase enemy))
             {
                 Debug.LogError("No " + nameof(EnemyBase));
                 return;
