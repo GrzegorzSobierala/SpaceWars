@@ -1,19 +1,35 @@
+using Game.Management;
+using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Room.Enemy
 {
-    public class SupplyStationEnemyCombatState : MonoBehaviour
+    public class SupplyStationEnemyCombatState : EnemyCombatStateBase
     {
-        // Start is called before the first frame update
-        void Start()
+        [Inject] private List<EnemyGunBase> _guns;
+        [Inject] private PlayerManager _playerManager;
+
+        protected override void OnEnterState()
         {
-        
+            base.OnEnterState();
+
+            foreach (var gun in _guns)
+            {
+                gun.StartAimingAt(_playerManager.PlayerBody.transform);
+                gun.StartShooting();
+            }
         }
 
-        // Update is called once per frame
-        void Update()
+        protected override void OnExitState()
         {
-        
+            base.OnExitState();
+
+            foreach (var gun in _guns)
+            {
+                gun.StopAiming();
+                gun.StopShooting();
+            }
         }
     }
 }

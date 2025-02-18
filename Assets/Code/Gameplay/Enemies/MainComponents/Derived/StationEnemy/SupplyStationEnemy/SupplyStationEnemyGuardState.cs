@@ -1,19 +1,22 @@
-using UnityEngine;
+using System.Collections.Generic;
+using Zenject;
 
-namespace Game.Room.Combat
+namespace Game.Room.Enemy
 {
-    public class SupplyStationEnemyGuardState : MonoBehaviour
+    public class SupplyStationEnemyGuardState : EnemyGuardStateBase
     {
-        // Start is called before the first frame update
-        void Start()
+        [Inject] private List<EnemyFieldOfView> _views;
+
+        protected override void OnEnterState()
         {
-        
+            base.OnEnterState();
+            SubscribeToFOVs(_views);
         }
 
-        // Update is called once per frame
-        void Update()
+        protected override void OnExitState()
         {
-        
+            base.OnExitState();
+            UnubscribeToFOVs(_views);
         }
     }
 }

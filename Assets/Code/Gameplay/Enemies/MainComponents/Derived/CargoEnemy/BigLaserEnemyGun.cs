@@ -53,10 +53,17 @@ namespace Game.Room.Enemy
             if (!IsAimedAtPlayer)
                 return;
 
-            if(_laserBeam.TryStartFire())
+            if(_laserBeam.IsReadyToFire())
             {
-                OnShoot?.Invoke();
+                if (!TryShoot())
+                    return;
+
+                _laserBeam.StartFire(_beforeShootIndicateTime);
             }
+        }
+
+        protected override void OnShoot()
+        {
         }
 
         private void Initalize()
@@ -67,6 +74,8 @@ namespace Game.Room.Enemy
                 layerMask = _blockAimLayerMask,
                 useLayerMask = true,
             };
+
+            _laserBeam.GetChargingTime += () => _beforeShootIndicateTime;
         }
     }
 }

@@ -149,21 +149,20 @@ namespace Game.Room.Enemy
 
         private void UpdateMovement()
         {
-            if(_currentMovementType == MovementType.GoingToTransform)
+            switch (_currentMovementType)
             {
-                OnGoingTo(_currentTargetTransform);
-            }
-            else if (_currentMovementType == MovementType.GoingToPosition)
-            {
-                OnGoingTo(_currentTargetPosition);
-            }
-            else if (_currentMovementType == MovementType.RotatingTowardsTransform)
-            {
-                OnRotatingTowards(_currentTargetTransform);
-            }
-            else if (_currentMovementType == MovementType.RotatingTowardsPosition)
-            {
-                OnRotatingTowards(_currentTargetPosition);
+                case MovementType.GoingToTransform:
+                    OnGoingTo(_currentTargetTransform);
+                    break;
+                case MovementType.GoingToPosition:
+                    OnGoingTo(_currentTargetPosition);
+                    break;
+                case MovementType.RotatingTowardsTransform:
+                    OnRotatingTowards(_currentTargetTransform);
+                    break;
+                case MovementType.RotatingTowardsPosition:
+                    OnRotatingTowards(_currentTargetPosition);
+                    break;
             }
         }
 

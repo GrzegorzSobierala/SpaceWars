@@ -6,7 +6,7 @@ public class TestingInstaller : MonoInstaller
 {
     [SerializeField] private TestingSettingsInstaller testingSettingsInstaller;
     [SerializeField] private bool _runInBackgroundEditor = true;
-
+    
     private void Awake()
     {
         Init();

@@ -106,7 +106,7 @@ namespace Game.Room.Enemy
         {
             base.OnShooting();
 
-            TryShoot();
+            TryShootOne();
         }
 
         protected override void OnStopShooting()
@@ -116,10 +116,13 @@ namespace Game.Room.Enemy
             StartReloading();
         }
 
+        protected override void OnShoot()
+        {
+            Shoot();
+        }
+
         private void Shoot()
         {
-            _lastShotTime = Time.time;
-
             GameObject damageDealer = _body.gameObject;
             Transform parent = _playerManager.transform;
 
@@ -136,17 +139,13 @@ namespace Game.Room.Enemy
 
             _bulletPrototype.CreateCopy(damageDealer, parent).Shoot(_body, shootTransform);
 
-            _currenaMagAmmo--;
-
-            OnShoot?.Invoke();
-
             if (_currenaMagAmmo == 0)
             {
                 StartReloading();
             }
         }
 
-        private void TryShoot()
+        private void TryShootOne()
         {
             if (Time.time - _lastShotTime < _shotInterval || _currenaMagAmmo <= 0)
                 return;
@@ -158,7 +157,11 @@ namespace Game.Room.Enemy
             if (targetDistance > _bulletPrototype.MaxDistance * _shootAtMaxDistanceMutli)
                 return;
 
-            Shoot();
+            if(TryShoot())
+            {
+                _lastShotTime = Time.time;
+                _currenaMagAmmo--;
+            }
         }
 
         private bool TryReload()

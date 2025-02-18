@@ -8,9 +8,10 @@ namespace Game.Room.Enemy
         {
             base.InstallBindings();
 
-            Container.Bind<BasicEnemyGun>().FromComponentInHierarchy().AsSingle();
-
             Utils.BindComponentsInChildrens<SilosHp>(Container, gameObject, false);
+            Utils.BindComponentsInChildrens<EnemyGunBase>(Container, gameObject, false);
+
+            Container.Bind<DockPlace>().FromComponentInHierarchy().AsSingle();
         }
     }
 }

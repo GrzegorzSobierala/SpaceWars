@@ -11,7 +11,7 @@ namespace Game.Utility
         private float _moveY;
         private float _moveX;
         private float _halfPeriod;
-        private int _lastOscillateFrame = 0;
+        private int _lastOscillateFrame = -100;
 
         public float OscillateThisFrame(float lowestY, float highestY, float halfPeriod, float startY, 
             OscillateStart oscillateStart = OscillateStart.Random)

@@ -2,11 +2,16 @@ using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using Game.Utility;
+using System;
+using Game.Management;
 
 namespace Game.Room.Enemy
 {
     public class DockPlace : MonoBehaviour
     {
+        public event Action<IDocking> OnDock;
+        public event Action<IDocking> OnUndock;
+
         [SerializeField] private Transform _dockingPoint;
         [SerializeField] private float _dockingTime = 4;
         [SerializeField] private float _rotSpeedMulti = 1.3f;
@@ -21,19 +26,31 @@ namespace Game.Room.Enemy
             Initialize();
         }
 
+        private void OnDestroy()
+        {
+            if (GameManager.IsGameQuitungOrSceneUnloading(gameObject))
+                return;
+
+            if(_occupand != null)
+            {
+                _occupand.OnDockDestroy();
+            }
+        }
+
         public void StartDocking(IDocking dockingObject)
         {
             if(!CanDock())
                 return;
 
             _occupand = dockingObject;
+            _occupand.OnObjectDestroy += OnOccupodndDestroyed;
             StartMovingOperation(Docking());
             _occupand.OnStartDocking();
         }
 
         public void StartUnDocking(IDocking dockingObject)
         {
-            if(!CanUnDock(dockingObject))
+            if(!CanUndock(dockingObject))
                 return;
 
             StartMovingOperation(UnDocking());
@@ -76,7 +93,7 @@ namespace Game.Room.Enemy
 
             _occupand.Body.MovePosition(endPos);
             _occupand.Body.MoveRotation(endRot);
-            UnDock();
+            Undock();
         }
 
         private IEnumerator MovingOperation(Vector2 startPos, float startRot,
@@ -116,14 +133,17 @@ namespace Game.Room.Enemy
         {
             EndCurrentOperation();
             _occupand.OnEndDocking();
+            OnDock?.Invoke(_occupand);
         }
 
-        private void UnDock()
+        private void Undock()
         {
             EndCurrentOperation();
 
             _occupand.OnEndUnDocking();
+            IDocking leaver = _occupand;
             _occupand = null;
+            OnUndock.Invoke(leaver);
         }
 
         private bool CanDock()
@@ -131,7 +151,7 @@ namespace Game.Room.Enemy
             return _occupand == null;
         }
 
-        private bool CanUnDock(IDocking objectToCheck)
+        private bool CanUndock(IDocking objectToCheck)
         {
             if(_occupand == null)
             {
@@ -155,6 +175,13 @@ namespace Game.Room.Enemy
 
             StopCoroutine( _currentCoroutine );
             _currentCoroutine = null;
+        }
+
+        private void OnOccupodndDestroyed()
+        {
+            EndCurrentOperation() ;
+            OnUndock.Invoke(_occupand);
+            _occupand = null;
         }
     }
 }

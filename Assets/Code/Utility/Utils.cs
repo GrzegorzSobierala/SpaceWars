@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Zenject;
+using UnityEngine.SceneManagement;
+using System.Reflection;
 
 namespace Game.Utility
 {
@@ -168,7 +170,6 @@ namespace Game.Utility
             return angle;
         }
 
-
         /// <summary>
         /// Calculates the time required to perform a rotation.
         /// </summary>
@@ -277,6 +278,81 @@ namespace Game.Utility
         public static Vector3 GetVector(Vector3 startPos, Vector3 endPos)
         {
             return endPos - startPos;
+        }
+
+        /// <summary>
+        /// Evaluates all subscribed methods in the given multicast delegate.
+        /// </summary>
+        /// <param name="combined">The multicast delegate of type Func&lt;bool&gt; containing methods to evaluate.</param>
+        /// <returns>
+        /// True if no methods are attached or false if any method returns false or true only if all subscribed methods return true.
+        /// </returns>
+        public static bool EvaluateCombinedFunc(Func<bool> combined)
+        {
+            if (combined == null)
+                return true; // If no methods are attached, return false.
+
+            // Get all subscribed methods and execute them in order.
+            foreach (Func<bool> func in combined.GetInvocationList())
+            {
+                if (!func())
+                {
+                    // Short-circuit: if any method returns false, return false.
+                    return false;
+                }
+            }
+            // All methods returned true.
+            return true;
+        }
+
+        /// <summary>
+        /// Stops the given coroutine if it is running and sets the reference to null.
+        /// </summary>
+        /// <param name="mono">The MonoBehaviour instance that is running the coroutine.</param>
+        /// <param name="coroutine">The reference to the coroutine to stop and clear.</param>
+        public static void StopAndClearCoroutine(this MonoBehaviour mono, ref Coroutine coroutine)
+        {
+            if (coroutine == null)
+                return;
+
+            mono.StopCoroutine(coroutine);
+            coroutine = null;
+        }
+
+        public enum SceneLoadingState
+        {
+            NotLoaded,
+            Loading,
+            Loaded,
+            Unloading
+        }
+
+        public static SceneLoadingState? GetLoadingState(Scene scene)
+        {
+            Type sceneType = typeof(Scene);
+            PropertyInfo loadingStateProp = sceneType.GetProperty("loadingState", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            SceneLoadingState? sceneLoadingState;
+            if (loadingStateProp != null)
+            {
+                if(Enum.TryParse(loadingStateProp.GetValue(scene, null).ToString(),
+                    out SceneLoadingState loadingState))
+                {
+                    sceneLoadingState = loadingState;
+                }
+                else
+                {
+                    Debug.LogError("loadingState is null.");
+                    return null;
+                }
+            }
+            else
+            {
+                Debug.LogError("loadingStateProp is null.");
+                return null;
+            }
+
+            return sceneLoadingState;
         }
     }
 

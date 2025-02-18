@@ -466,8 +466,9 @@ Transform:
   - {fileID: 1648544550142439340}
   - {fileID: 1118028276941448935}
   - {fileID: 6894365123022125336}
+  - {fileID: 8251572335025074886}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2389869331323452437
 MonoBehaviour:
@@ -499,8 +500,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a643330c778ef441b0ee0b185930efe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enable0CountEnemyDamageHandlers: 1
-  enable0CountFOVs: 1
+  _bindEnemyDamageHandlers: 1
+  _bindFOVs: 1
 --- !u!50 &6377648032862797323
 Rigidbody2D:
   serializedVersion: 4
@@ -540,7 +541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 263c716a88951f8498b94fa38165a420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseHp: 40
+  _baseHp: 125
   _emisiveColor: {r: 1, g: 0, b: 0, a: 1}
   _emisiveIntesvity: 50
   _shipMeshRenderer: {fileID: 3468256321605477082}
@@ -573,14 +574,14 @@ NavMeshAgent:
   m_Acceleration: 100
   avoidancePriority: 10
   m_AngularSpeed: 50
-  m_StoppingDistance: 50
+  m_StoppingDistance: 60
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 30
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 3
+  m_ObstacleAvoidanceType: 4
 --- !u!114 &223531885114056726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44444,6 +44445,37 @@ Transform:
   m_Father: {fileID: 6114305214545224824}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3633444524625531181
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7762483036092544622}
+  m_Layer: 8
+  m_Name: CargoSlot (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7762483036092544622
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3633444524625531181}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 14.3, y: -4.1, z: 19.08}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8251572335025074886}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3769712515099298584
 GameObject:
   m_ObjectHideFlags: 0
@@ -54259,6 +54291,64 @@ Transform:
   m_Father: {fileID: 8402439550119535024}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5370387514309122241
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8251572335025074886}
+  - component: {fileID: 7947339311968555149}
+  m_Layer: 8
+  m_Name: CargoSpace
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8251572335025074886
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5370387514309122241}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 191641461454219913}
+  - {fileID: 7442959954791046991}
+  - {fileID: 8574429614345279986}
+  - {fileID: 7762483036092544622}
+  m_Father: {fileID: 6114305214545224824}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7947339311968555149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5370387514309122241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754f7be9c8f3b5f43a5669be1c3f8f41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cargoSlots:
+    _serializedList:
+    - Key: {fileID: 191641461454219913}
+      Value: {fileID: 0}
+    - Key: {fileID: 7442959954791046991}
+      Value: {fileID: 0}
+    - Key: {fileID: 8574429614345279986}
+      Value: {fileID: 0}
+    - Key: {fileID: 7762483036092544622}
+      Value: {fileID: 0}
 --- !u!1 &5398397971444874471
 GameObject:
   m_ObjectHideFlags: 0
@@ -59119,6 +59209,37 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &5794673080723976280
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8574429614345279986}
+  m_Layer: 8
+  m_Name: CargoSlot (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8574429614345279986
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5794673080723976280}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 14.26, y: -27.86, z: 19.08}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8251572335025074886}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5811049940076816806
 GameObject:
   m_ObjectHideFlags: 0
@@ -63947,6 +64068,37 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &5930270949693922507
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7442959954791046991}
+  m_Layer: 8
+  m_Name: CargoSlot (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7442959954791046991
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5930270949693922507}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -14.22, y: -27.1, z: 19.56}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8251572335025074886}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6365123679875329870
 GameObject:
   m_ObjectHideFlags: 0
@@ -78556,6 +78708,37 @@ MonoBehaviour:
   _mainDock: {fileID: 0}
   _suplayDock: {fileID: 0}
   _engineParticles: {fileID: 419035554829174224}
+--- !u!1 &9108939434778260409
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 191641461454219913}
+  m_Layer: 8
+  m_Name: CargoSlot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &191641461454219913
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9108939434778260409}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -14.27, y: -3.8, z: 19.33}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8251572335025074886}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9115649457334601228
 GameObject:
   m_ObjectHideFlags: 0

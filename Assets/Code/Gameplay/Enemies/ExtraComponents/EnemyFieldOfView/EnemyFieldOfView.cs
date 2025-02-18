@@ -23,6 +23,7 @@ namespace Game.Room.Enemy
         [SerializeField] private float _fov = 90;
         [SerializeField] private int _rayCount = 2;
         [SerializeField] private float _viewDistance = 500f;
+        [SerializeField] private bool _queriesStartInColliders = false;
         [SerializeField] private SerializedDictionary<Collider2D,OneEnum> _ignoreColliders;
 
         private static HashSet<Collider2D> _DEBUG_wrongLayerColliders = new();
@@ -102,9 +103,10 @@ namespace Game.Room.Enemy
             };
 
             bool saveQueriesStartInColliders = Physics2D.queriesStartInColliders;
-            Physics2D.queriesStartInColliders = false;
+            Physics2D.queriesStartInColliders = _queriesStartInColliders;
 
-            RaycastHit2D[] raycastHits = new RaycastHit2D[_ignoreColliders.Count + 1];
+            List<RaycastHit2D> raycastHits = new();
+            List<RaycastHit2D> raycastEnemyHits = new();
             Vector3 origin = transform.position;
 
             for (int i = 0; i <= _rayCount; i++)
@@ -122,6 +124,12 @@ namespace Game.Room.Enemy
                 {
                     if (_ignoreColliders.ContainsKey(raycastHits[j].collider))
                     {
+                        continue;
+                    }
+
+                    if ((_enemyLayerMask & (1 << raycastHits[j].collider.gameObject.layer)) != 0)
+                    {
+                        raycastEnemyHits.Add(raycastHits[j]);
                         continue;
                     }
 
@@ -147,7 +155,7 @@ namespace Game.Room.Enemy
                     vertex = firstHit.Value.point - (Vector2)transform.position;
                     vertex = Utils.RotateVector(vertex, -worldAngleAdd);
 
-                    if (IsTargetFound(firstHit.Value))
+                    if (IsTargetFound(firstHit.Value, raycastEnemyHits))
                     {
                         OnTargetFound?.Invoke(firstHit.Value.collider.gameObject);
                     }
@@ -183,31 +191,42 @@ namespace Game.Room.Enemy
             Physics2D.queriesStartInColliders = saveQueriesStartInColliders;
         }
 
-        private bool IsTargetFound(RaycastHit2D hit)
+        private bool IsTargetFound(RaycastHit2D hit, List<RaycastHit2D> raycastEnemyHits)
         {
             if ((_targetLayerMask & (1 << hit.collider.gameObject.layer)) != 0)
             {
                 return true;
             }
 
-            if ((_enemyLayerMask & (1 << hit.collider.gameObject.layer)) == 0)
+            if(raycastEnemyHits.Count == 0)
             {
                 return false;
             }
 
-            if (hit.collider.TryGetComponent(out IGuardStateDetectable EnemyStateDetectable))
+            for (int i = 0; i < raycastEnemyHits.Count; i++)
             {
-                return !EnemyStateDetectable.IsEnemyInGuardState;
-            }
-            else
-            {
-                if(_DEBUG_wrongLayerColliders.Contains(hit.collider))
+                if (raycastEnemyHits[i].collider.
+                    TryGetComponent(out IGuardStateDetectable EnemyStateDetectable))
+                {
+                    if(EnemyStateDetectable.IsEnemyInGuardState)
+                    {
+                        continue;
+                    }
+
+                    return true;
+                }
+                else
+                {
+                    if (_DEBUG_wrongLayerColliders.Contains(hit.collider))
+                        return false;
+
+                    Debug.LogError($"Collider on {Layers.Enemy} layer hasn't IGuardStateDetectable", hit.collider);
+                    _DEBUG_wrongLayerColliders.Add(hit.collider);
                     return false;
-
-                Debug.LogError($"Collider on {Layers.Enemy} layer hasn't IGuardStateDetectable", hit.collider);
-                _DEBUG_wrongLayerColliders.Add(hit.collider);
-                return false;
+                }
             }
+
+            return false;
         }
 
         private bool IsPlayerInRange()

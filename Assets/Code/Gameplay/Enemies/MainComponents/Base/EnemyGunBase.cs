@@ -3,19 +3,28 @@ using Game.Utility;
 using Game.Utility.Globals;
 using NaughtyAttributes;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using Zenject;
+using Game.Management;
 
 namespace Game.Room.Enemy
 {
     public abstract class EnemyGunBase : MonoBehaviour
     {
+        public event Func<EnemyGunBase, bool> CanShoot;
+
         [Inject] protected Rigidbody2D _body;
         [Inject] private TestingSettings _testingSettings;
+        [Inject] private GlobalAssets _globalAssets;
 
-        [SerializeField] protected UnityEvent OnShoot;
         [SerializeField, AutoFill, Required, AllowNesting] protected Transform _rotationTrans;
+
+        [SerializeField] protected float _beforeShootIndicateTime = 0.25f;
+        [SerializeField] private UnityEvent _onBeforeShootGun;
+        [SerializeField, FormerlySerializedAs("OnShoot")] private UnityEvent _onShoot;
 
         protected Action OnAimTarget;
 
@@ -41,9 +50,9 @@ namespace Game.Room.Enemy
 
         protected virtual void Update()
         {
-            TryAimGun();
+            TryUpdateAiming();
 
-            TryShoot();
+            TryUpdateShooting();
         }
 
         public abstract void Prepare();
@@ -106,6 +115,32 @@ namespace Game.Room.Enemy
             OnAimTarget -= onAimTarget;
         }
 
+        public void DefaultBeforeShootAction()
+        {
+            foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
+            {
+                List<Material> materials = new();
+                renderer.GetSharedMaterials(materials);
+                materials.Insert(0, _globalAssets.TestMaterial);
+                renderer.sharedMaterials = materials.ToArray();
+            }
+
+            Invoke(nameof(RestoreMaterial), _beforeShootIndicateTime / 2);
+        }
+
+        private void RestoreMaterial()
+        {
+            foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
+            {
+                List<Material> materials = new();
+                renderer.GetSharedMaterials(materials);
+                materials.RemoveAt(0);
+                renderer.sharedMaterials = materials.ToArray();
+            }
+        }
+
+        protected abstract void OnShoot();
+
         protected virtual void OnStartShooting() { }
 
         protected virtual void OnStopShooting() { }
@@ -128,6 +163,33 @@ namespace Game.Room.Enemy
         protected virtual void OnAimingAt(Vector2 worldPosition) { }
 
         protected virtual void OnAimingAt(float localRotation) { }
+
+        protected virtual void OnAimingIdle() { }
+
+        [Button]
+        protected bool TryShoot()
+        {
+            if (CanShoot?.Invoke(this) == false)
+                return false;
+
+            if(_onBeforeShootGun.GetPersistentEventCount() == 0)
+            {
+                DefaultBeforeShootAction();
+            }
+            else
+            {
+                _onBeforeShootGun.Invoke();
+            }
+
+            Invoke(nameof(InvokeShootEvents), _beforeShootIndicateTime);
+            return true;
+        }
+
+        private void InvokeShootEvents()
+        {
+            OnShoot();
+            _onShoot?.Invoke();
+        }
 
         #region HelperMethods
 
@@ -166,6 +228,13 @@ namespace Game.Room.Enemy
             if (isVisable)
             {
                 _lastTargetAimableTime = Time.time;
+            }
+
+            bool result = _lastTargetAimableTime + noSeeKnowTime > Time.time;
+
+            if(!result)
+            {
+                _isAimedAtPlayer = false;
             }
 
             return _lastTargetAimableTime + noSeeKnowTime > Time.time;
@@ -240,27 +309,28 @@ namespace Game.Room.Enemy
             _startLocalRot = _rotationTrans.localEulerAngles.z;
         }
 
-        private void TryAimGun()
+        private void TryUpdateAiming()
         {
-            if (_currentAimType == AimType.Transform)
+            switch (_currentAimType)
             {
-                OnAimingAt(_aimTargetTransform);
-            }
-            else if (_currentAimType == AimType.Position)
-            {
-                OnAimingAt(_aimTargetPos);
-            }
-            else if (_currentAimType == AimType.Angle)
-            {
-                OnAimingAt(_aimTargetRot);
-            }
-            else
-            {
-                return;
+                case AimType.Stop:
+                    OnAimingIdle();
+                    break;
+                case AimType.Transform:
+                    OnAimingAt(_aimTargetTransform);
+                    break;
+                case AimType.Position:
+                    OnAimingAt(_aimTargetPos);
+                    break;
+                case AimType.Angle:
+                    OnAimingAt(_aimTargetRot);
+                    break;
+                default:
+                    return;
             }
         }
 
-        private void TryShoot()
+        private void TryUpdateShooting()
         {
             if (!_testingSettings.EnableEnemyShooting)
                 return;
@@ -296,6 +366,5 @@ namespace Game.Room.Enemy
 
             return 0;
         }
-
     }
 }

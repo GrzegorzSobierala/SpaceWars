@@ -1,19 +1,18 @@
 using UnityEngine;
+using Zenject;
 
-namespace Game.Room.Combat
+namespace Game.Room.Enemy
 {
-    public class SupplyStationEnemyDefeatedState : MonoBehaviour
-    {
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
 
-        // Update is called once per frame
-        void Update()
+    public class SupplyStationEnemyDefeatedState : EnemyDefeatedStateBase
+    {
+        [Inject] private EnemyBase _enemy;
+
+        protected override void OnEnterState()
         {
-        
+            base.OnEnterState();
+
+            Destroy(_enemy.gameObject);
         }
     }
 }

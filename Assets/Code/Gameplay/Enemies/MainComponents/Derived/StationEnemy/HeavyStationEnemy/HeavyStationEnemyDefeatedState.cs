@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Zenject;
 
 namespace Game.Room.Enemy

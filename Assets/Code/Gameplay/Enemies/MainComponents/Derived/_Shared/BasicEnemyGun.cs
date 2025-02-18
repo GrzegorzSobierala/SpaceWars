@@ -7,7 +7,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
 using Zenject;
 
 namespace Game.Room.Enemy
@@ -43,19 +42,17 @@ namespace Game.Room.Enemy
         [SerializeField] private float _beforeReloadEventTime = 0.5f;
         [SerializeField] private UnityEvent _onBeforeReloaded;
         [SerializeField] private UnityEvent _onReloaded;
-        [SerializeField] private float _beforeShootEventTime = 0.5f;
-        [SerializeField] private UnityEvent _onBeforeShootGun;
-        [SerializeField] private UnityEvent _onShootGun;
 
         private Coroutine _reloadCoroutine;
         private float _lastShootTime = 0f;
         private float _endReloadTime = 0f;
         private int _currenaMagAmmo = 0;
         private bool _wasOnBeforeReloadedCalled = false;
-        private bool _wasOnBeforeShootCalled = false;
         private ContactFilter2D _contactFilter;
         private OscillateController _oscillateCont = new();
         private float _randomSearchTarget;
+
+        public float GunTraverse => _gunTraverse;
 
         protected override void Awake()
         {
@@ -84,6 +81,13 @@ namespace Game.Room.Enemy
             }
         }
 
+        protected override void OnAimingIdle()
+        {
+            base.OnAimingIdle();
+
+            LostTargetAction(_lostTargetMode);
+        }
+
         protected override void OnStopAiming()
         {
             base.OnStopAiming();
@@ -93,7 +97,7 @@ namespace Game.Room.Enemy
         {
             base.OnShooting();
 
-            TryShoot();
+            TryShootOne();
         }
 
         protected override void OnStopShooting()
@@ -103,32 +107,33 @@ namespace Game.Room.Enemy
             StartReloading();
         }
 
+        protected override void OnShoot()
+        {
+            FireProjectile();
+        }
+
         private void Initalize()
         {
             _contactFilter = new ContactFilter2D
             {
                 useTriggers = false,
-                layerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle),
+                layerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle, Layers.SmallObstacle),
                 useLayerMask = true,
             };
         }
 
-        [Button]
-        private void Shoot()
+        private void FireProjectile()
         {
-            _lastShootTime = Time.time;
-
             GameObject damageDealer = _body.gameObject;
             Transform parent = _enemyManager.transform;
 
-            _onShootGun?.Invoke();
+            ShootableObjectBase bulletInstance = _bulletPrototype.CreateCopy(damageDealer, parent);
+            bulletInstance.Shoot(_body, _gunShootPoint);
 
-            _bulletPrototype.CreateCopy(damageDealer, parent).Shoot(_body, _gunShootPoint);
-
-            _currenaMagAmmo--;
-
-            OnShoot?.Invoke();
-            _wasOnBeforeShootCalled = true;
+            if(bulletInstance is FlakBullet flakBullet)
+            {
+                flakBullet.SetTarget(_playerManager.PlayerBody.position);
+            }
 
             if (_currenaMagAmmo == 0)
             {
@@ -136,14 +141,8 @@ namespace Game.Room.Enemy
             }
         }
 
-        private void TryShoot()
+        private void TryShootOne()
         {
-            if (!_wasOnBeforeShootCalled && Time.time > _lastShootTime - _beforeShootEventTime)
-            {
-                _onBeforeShootGun?.Invoke();
-                _wasOnBeforeShootCalled = true;
-            }
-
             if (Time.time - _lastShootTime < _shotInterval || _currenaMagAmmo <= 0)
                 return;
 
@@ -155,7 +154,11 @@ namespace Game.Room.Enemy
             if (targetDistance > _bulletPrototype.MaxDistance * _shootAtMaxDistanceMutli)
                 return;
 
-            Shoot();
+            if (!TryShoot())
+                return;
+
+            _lastShootTime = Time.time;
+            _currenaMagAmmo--;
         }
 
         private bool TryReload()

@@ -7,6 +7,7 @@ using Game.Input.System;
 using Game.Testing;
 using Game.Management;
 using Game.Room;
+using UnityEngine.InputSystem;
 
 namespace Game.Player.Ui
 {
@@ -67,6 +68,8 @@ namespace Game.Player.Ui
             _exitButton.onClick.AddListener(ExitGame);
             _playerManager.OnPlayerDied += OnDeadPlayer;
             _playerSceneManager.OnEndRoom += OnEndRoom;
+            _input.PlayerControls.Gameplay.Pasue.performed += OnOffPanelForInput;
+            _input.PlayerControls.Ui.Back.performed += OnOffPanelForInput;
         }
 
         private void Unsubscribe()
@@ -76,6 +79,8 @@ namespace Game.Player.Ui
             _exitButton.onClick.RemoveListener(ExitGame);
             _playerManager.OnPlayerDied -= OnDeadPlayer;
             _playerSceneManager.OnEndRoom -= OnEndRoom;
+            _input.PlayerControls.Gameplay.Pasue.performed -= OnOffPanelForInput;
+            _input.PlayerControls.Ui.Back.performed -= OnOffPanelForInput;
         }
 
         private void OnOffPanel()
@@ -88,6 +93,11 @@ namespace Game.Player.Ui
             {
                 OnPanel();
             }
+        }
+
+        private void OnOffPanelForInput(InputAction.CallbackContext _)
+        {
+            OnOffPanel();
         }
 
         private void OffPanel()
