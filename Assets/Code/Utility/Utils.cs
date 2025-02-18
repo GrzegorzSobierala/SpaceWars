@@ -170,7 +170,6 @@ namespace Game.Utility
             return angle;
         }
 
-
         /// <summary>
         /// Calculates the time required to perform a rotation.
         /// </summary>
