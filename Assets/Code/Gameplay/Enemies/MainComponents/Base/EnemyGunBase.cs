@@ -15,6 +15,8 @@ namespace Game.Room.Enemy
     public abstract class EnemyGunBase : MonoBehaviour
     {
         public event Func<EnemyGunBase, bool> CanShoot;
+        public event Action OnShootEvent;
+        public event Action OnBeforeShootEvent;
 
         [Inject] protected Rigidbody2D _body;
         [Inject] private TestingSettings _testingSettings;
@@ -172,7 +174,8 @@ namespace Game.Room.Enemy
             if (CanShoot?.Invoke(this) == false)
                 return false;
 
-            if(_onBeforeShootGun.GetPersistentEventCount() == 0)
+            OnBeforeShootEvent?.Invoke();
+            if (_onBeforeShootGun.GetPersistentEventCount() == 0)
             {
                 DefaultBeforeShootAction();
             }
@@ -188,6 +191,7 @@ namespace Game.Room.Enemy
         private void InvokeShootEvents()
         {
             OnShoot();
+            OnShootEvent?.Invoke();
             _onShoot?.Invoke();
         }
 
