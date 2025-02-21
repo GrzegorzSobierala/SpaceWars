@@ -6,6 +6,7 @@ using UnityEngine;
 using Zenject;
 using UnityEngine.SceneManagement;
 using System.Reflection;
+using Unity.Mathematics;
 
 namespace Game.Utility
 {
@@ -353,6 +354,21 @@ namespace Game.Utility
             }
 
             return sceneLoadingState;
+        }
+
+        /// <summary>
+        /// Remaps a value from one range to another.
+        /// </summary>
+        /// <param name="value">The value to remap.</param>
+        /// <param name="sourceMin">The minimum value of the source range.</param>
+        /// <param name="sourceMax">The maximum value of the source range.</param>
+        /// <param name="destinationMin">The minimum value of the destination range.</param>
+        /// <param name="destinationMax">The maximum value of the destination range.</param>
+        /// <returns>The remapped value in the destination range.</returns>
+        public static float Remap(float value, float sourceMin, float sourceMax,
+            float destinationMin, float destinationMax)
+        {
+            return math.remap(sourceMin, sourceMax, destinationMin, destinationMax, value);
         }
     }
 
