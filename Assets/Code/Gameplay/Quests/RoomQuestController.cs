@@ -37,7 +37,7 @@ namespace Game.Objectives
 
         private void OnDestroy()
         {
-            if (GameManager.IsGameQuitungOrSceneUnloading(gameObject))
+            if (GameManager.IsGameQuiting)
             {
                 return;
             }

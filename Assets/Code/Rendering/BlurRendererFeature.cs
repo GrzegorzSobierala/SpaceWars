@@ -181,36 +181,36 @@ namespace Game.Rendering
                 // Create the new folder inside the parent folder.
                 UnityEditor.AssetDatabase.CreateFolder(parentFolder, newFolderName);
             }
-#endif
-        }
 
-        /// <summary>
-        /// Replaces an existing RenderTexture asset with a new one while preserving its GUID.
-        /// </summary>
-        public static void CreateNewRenderTextureAsset()
-        {
-            string fullPath = System.IO.Path.Combine(Application.dataPath, 
-                RT_ASSET_PATH.Substring("Assets/".Length));
-            string toCopyFullPath = System.IO.Path.Combine(Application.dataPath, 
-                RT_ASSET_PATH_TO_COPY.Substring("Assets/".Length));
-            string metaFullFilePath = fullPath + ".meta";
-
-            if (!System.IO.File.Exists(toCopyFullPath))
+            /// <summary>
+            /// Replaces an existing RenderTexture asset with a new one while preserving its GUID.
+            /// </summary>
+            void CreateNewRenderTextureAsset()
             {
-                Debug.LogError("Asset to copy not found at: " + fullPath);
-                return;
+                string fullPath = System.IO.Path.Combine(Application.dataPath,
+                    RT_ASSET_PATH.Substring("Assets/".Length));
+                string toCopyFullPath = System.IO.Path.Combine(Application.dataPath,
+                    RT_ASSET_PATH_TO_COPY.Substring("Assets/".Length));
+                string metaFullFilePath = fullPath + ".meta";
+
+                if (!System.IO.File.Exists(toCopyFullPath))
+                {
+                    Debug.LogError("Asset to copy not found at: " + fullPath);
+                    return;
+                }
+
+                System.IO.File.Copy(toCopyFullPath, fullPath, true);
+
+                System.IO.File.WriteAllText(metaFullFilePath,
+                    System.IO.File.ReadAllText(toCopyFullPath + ".meta.txt"));
+
+                UnityEditor.AssetDatabase.ImportAsset(RT_ASSET_PATH,
+                    UnityEditor.ImportAssetOptions.ForceUpdate);
+                UnityEditor.AssetDatabase.Refresh();
+
+                Debug.Log("RenderTexture asset replaced successfully while preserving its meta with GUID.");
             }
-            
-            System.IO.File.Copy(toCopyFullPath, fullPath, true);
-
-            System.IO.File.WriteAllText(metaFullFilePath, 
-                System.IO.File.ReadAllText(toCopyFullPath + ".meta.txt"));
-
-            UnityEditor.AssetDatabase.ImportAsset(RT_ASSET_PATH,
-                UnityEditor.ImportAssetOptions.ForceUpdate);
-            UnityEditor.AssetDatabase.Refresh();
-            
-            Debug.Log("RenderTexture asset replaced successfully while preserving its meta with GUID.");
+#endif
         }
     }
 }
