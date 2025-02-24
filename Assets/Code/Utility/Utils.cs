@@ -266,7 +266,7 @@ namespace Game.Utility
             return new Vector2(value, toChange.y);
         }
 
-        public static Vector2 ChangeVector2Y(ref Vector2 toChange, float value)
+        public static Vector2 ChangeVector2Y(Vector2 toChange, float value)
         {
             return new Vector2(toChange.x, value);
         }

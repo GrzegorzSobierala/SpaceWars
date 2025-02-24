@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using Zenject;
 
 namespace Game.Player.Ship
@@ -40,6 +41,9 @@ namespace Game.Player.Ship
 
         private List<Collider2D> _lastColldersStucked = new();
         private bool _wasUnstuckCalledThisFrame = false;
+        private Vector2 _enginesPower;
+
+        public Vector2 EnginesPower => _enginesPower;
 
         private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
 
@@ -70,16 +74,19 @@ namespace Game.Player.Ship
             {
                 MovePlayer(Vector2.up, _forwardSpeedMulti);
                 OnVerdicalMove?.Invoke(1);
+                _enginesPower = Utils.ChangeVector2Y(_enginesPower, 1);
                 return;
             }
             else if (newestSide == Option.Option2)
             {
                 MovePlayer(Vector2.down, _backSpeedMulti);
                 OnVerdicalMove?.Invoke(-1);
+                _enginesPower = Utils.ChangeVector2Y(_enginesPower, -1);
                 return;
             }
 
             OnVerdicalMove?.Invoke(0);
+            _enginesPower = Utils.ChangeVector2Y(_enginesPower, 0);
         }
 
         public void HorizontalMove()
@@ -97,15 +104,19 @@ namespace Game.Player.Ship
             {
                 MovePlayer(Vector2.right, _horizontalSpeedMutli);
                 OnHorizontalMove?.Invoke(1);
+                _enginesPower = Utils.ChangeVector2X(_enginesPower, 1);
                 return;
             }
             else if (newestSide == Option.Option2)
             {
                 MovePlayer(Vector2.left, _horizontalSpeedMutli);
                 OnHorizontalMove?.Invoke(-1);
+                _enginesPower = Utils.ChangeVector2X(_enginesPower, -1);
                 return;
             }
+
             OnHorizontalMove?.Invoke(0);
+            _enginesPower = Utils.ChangeVector2X(_enginesPower, 0);
         }
 
         public void RotateToCursor()
@@ -248,7 +259,7 @@ namespace Game.Player.Ship
             Vector2 targetForce = _body.mass * _moveSpeed * oppositeSideMulti * direction;
             _body.AddRelativeForce(procentOfMaxSpeed * Time.fixedDeltaTime * targetForce);
         }
-
+        
         private void TransferVelocity(float angle)
         {
             float relativeAngle = Mathf.DeltaAngle(_body.rotation, angle);
