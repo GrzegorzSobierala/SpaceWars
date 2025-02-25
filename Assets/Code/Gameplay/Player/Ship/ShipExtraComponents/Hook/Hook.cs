@@ -1,9 +1,9 @@
 using Game.Utility;
 using Game.Utility.Globals;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using Zenject;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 namespace Game.Player.Ship
 {
@@ -13,13 +13,12 @@ namespace Game.Player.Ship
         [Inject] SpringJoint2D _joint;
         [Inject] private CenterOfMass _centerOfMass;
 
-        [SerializeField] private float _maxDistance = 150.0f;
+        [SerializeField] private float _maxDistance = 200.0f;
         [SerializeField] private float _dampingRatio = 0.6f;
         [SerializeField] private float _frequency = 0.8f;
         [SerializeField] private float _dampingRatioNoForce = 0;
         [SerializeField] private float _frequencyNoForce = 0.01f;
         [SerializeField] private float _colorMulti = 0.7f;
-
         [SerializeField] private float _anchorOffset = 5f;
         [SerializeField] private float _anchorOffsetSidesY = -2.5f;
         [SerializeField] private float _connectDistanceOffset = -5f;
@@ -123,34 +122,44 @@ namespace Game.Player.Ship
         private void UpdateJointDistance(Rigidbody2D connectedBody)
         {
             Vector2 connectedPos = Utils.CalculateWorldCenterOfMass(connectedBody);
-
-            //connectedBody.GetAttachedColliders
-            float distanceToCenter = Vector2.Distance(connectedPos,
-                AnchorPointWorld);
+            float distanceToCenter = Vector2.Distance(connectedPos, AnchorPointWorld);
 
             Vector2 dir = (connectedPos - AnchorPointWorld).normalized;
 
-            RaycastHit2D[] result = new RaycastHit2D[1];
-            int isHit = Physics2D.Raycast(AnchorPointWorld, dir, _rayFilter, result,
-                distanceToCenter);
+            List<RaycastHit2D> hits = new List<RaycastHit2D>();
+            int isHit = Physics2D.Raycast(AnchorPointWorld, dir, _rayFilter, hits, distanceToCenter);
 
-            if (isHit == 0)
+            float minDist = float.MaxValue;
+            Vector2 minPoint = Vector2.zero;
+            bool minDistFound = false;
+            foreach (var hit in hits)
+            {
+                if(hit.rigidbody != connectedBody)
+                {
+                    continue;
+                }
+
+                if(hit.distance < minDist)
+                {
+                    minDistFound = true;
+                    minDist = hit.distance < minDist ? hit.distance : minDist;
+                    minPoint = hit.point;
+                }
+            }
+
+            if(!minDistFound)
             {
                 Debug.LogError("No body hit", gameObject);
                 return;
             }
 
-            if (result[0].rigidbody != connectedBody)
-            {
-                Debug.LogError("Wrong body hit", result[0].collider);
-                return;
-            }
-
-            float edgeCenterDist = Vector2.Distance(connectedPos, result[0].point);
+            float edgeCenterDist = Vector2.Distance(connectedPos, minPoint);
             Vector2 targetDir = (AnchorPointWorld - connectedPos).normalized;
 
             Vector2 targetPoint = connectedPos + (targetDir * (edgeCenterDist + _distanceToEdge));
-            _joint.distance = Vector2.Distance(ConnectedAnchorPointWorld, targetPoint);
+            float distance = Vector2.Distance(ConnectedAnchorPointWorld, targetPoint);
+            distance = math.clamp(distance + _connectDistanceOffset, 1, _maxDistance);
+            _joint.distance = distance;
         }
 
         public void Disconnect()
@@ -173,18 +182,12 @@ namespace Game.Player.Ship
             {
                 _joint.dampingRatio = _dampingRatio;
                 _joint.frequency = _frequency;
-
-                //Debug.Log($"Force: {_joint.reactionForce.ToString("f2")} | {_joint.reactionTorque.ToString("f2")}");
             }
             else
             {
                 _joint.dampingRatio = _dampingRatioNoForce;
                 _joint.frequency = _frequencyNoForce;
             }
-            //Vector2 dirToConnect = ConnectedAnchorPointWorld - AnchorPointWorld;
-            //Vector2 dirToConnectLocal = transform.InverseTransformDirection(dirToConnect).normalized;
-
-            //_joint.anchor = dirToConnectLocal * _anchorOffset;
         }
 
         private void UpdateRenderer()

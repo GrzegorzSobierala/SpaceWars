@@ -68,7 +68,7 @@ namespace Game.Player.Ship
                 Vector2 aimDirLocal;
                 if (_playerMovement.EnginesPower.x == 0)
                 {
-                    aimDirLocal = Vector2.down;
+                    aimDirLocal = Vector2.up;
                 }
                 else
                 {
