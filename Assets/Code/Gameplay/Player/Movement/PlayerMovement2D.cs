@@ -3,6 +3,7 @@ using Game.Player.Control;
 using Game.Utility;
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
@@ -71,16 +72,16 @@ namespace Game.Player.Ship
 
             if (newestSide == Option.Option1)
             {
-                MovePlayer(Vector2.up, _forwardSpeedMulti);
+                //MovePlayer(Vector2.up, _forwardSpeedMulti);
                 OnVerdicalMove?.Invoke(1);
-                _enginesPower = Utils.ChangeVector2Y(_enginesPower, 1);
+                _enginesPower = Utils.ChangeVector2Y(_enginesPower, 1 * _forwardSpeedMulti);
                 return;
             }
             else if (newestSide == Option.Option2)
             {
-                MovePlayer(Vector2.down, _backSpeedMulti);
+                //MovePlayer(Vector2.down, _backSpeedMulti);
                 OnVerdicalMove?.Invoke(-1);
-                _enginesPower = Utils.ChangeVector2Y(_enginesPower, -1);
+                _enginesPower = Utils.ChangeVector2Y(_enginesPower, -1 * _backSpeedMulti);
                 return;
             }
 
@@ -101,16 +102,16 @@ namespace Game.Player.Ship
 
             if (newestSide == Option.Option1)
             {
-                MovePlayer(Vector2.right, _horizontalSpeedMutli);
+                //MovePlayer(Vector2.right, _horizontalSpeedMutli);
                 OnHorizontalMove?.Invoke(1);
-                _enginesPower = Utils.ChangeVector2X(_enginesPower, 1);
+                _enginesPower = Utils.ChangeVector2X(_enginesPower, 1 * _horizontalSpeedMutli);
                 return;
             }
             else if (newestSide == Option.Option2)
             {
-                MovePlayer(Vector2.left, _horizontalSpeedMutli);
+                //MovePlayer(Vector2.left, _horizontalSpeedMutli);
                 OnHorizontalMove?.Invoke(-1);
-                _enginesPower = Utils.ChangeVector2X(_enginesPower, -1);
+                _enginesPower = Utils.ChangeVector2X(_enginesPower, -1 * _horizontalSpeedMutli);
                 return;
             }
 
@@ -232,6 +233,9 @@ namespace Game.Player.Ship
 
             VerdicalMove();
             HorizontalMove();
+
+            MovePlayer(_enginesPower);
+
             TryBoost();
 
             if(_wasUnstuckCalledThisFrame)
@@ -244,9 +248,9 @@ namespace Game.Player.Ship
             }
         }
 
-        private void MovePlayer(Vector2 direction, float procentOfMaxSpeed)
+        private void MovePlayer(Vector2 engineProcentPowers)
         {
-            Vector2 worldDirection = Utils.LocalToWorldDirection(direction, _body.transform);
+            Vector2 worldDirection = Utils.LocalToWorldDirection(engineProcentPowers, _body.transform);
 
             float dot = Vector2.Dot(worldDirection.normalized, _body.velocity.normalized);
             float oppositeSideMulti = 1;
@@ -255,10 +259,18 @@ namespace Game.Player.Ship
                 oppositeSideMulti += -dot * _oppositeForce;
             }
 
-            Vector2 targetForce = _body.mass * _moveSpeed * oppositeSideMulti * direction;
-            _body.AddRelativeForce(procentOfMaxSpeed * Time.fixedDeltaTime * targetForce);
+            Vector2 enginePowers = engineProcentPowers;
+            if (engineProcentPowers.sqrMagnitude > 100 * 100)
+            {
+                enginePowers = engineProcentPowers.normalized * 100;
+            }
+
+            Vector2 targetForce = _body.mass * _moveSpeed * oppositeSideMulti * enginePowers;
+            _body.AddRelativeForce(Time.fixedDeltaTime * targetForce);
+
+            print($"{enginePowers.magnitude.ToString("f2")} , {_body.velocity.magnitude.ToString("f2")}");
         }
-        
+
         private void TransferVelocity(float angle)
         {
             float relativeAngle = Mathf.DeltaAngle(_body.rotation, angle);

@@ -121,7 +121,17 @@ namespace Game.Player.Ship
 
         private void UpdateJointDistance(Rigidbody2D connectedBody)
         {
-            Vector2 connectedPos = Utils.CalculateWorldCenterOfMass(connectedBody);
+            Vector2 connectedPos;
+
+            if(connectedBody.bodyType == RigidbodyType2D.Static)
+            {
+                connectedPos = Utils.CalculateWorldCenterOfMass(connectedBody);
+            }
+            else
+            {
+                connectedPos = connectedBody.worldCenterOfMass;
+            }
+
             float distanceToCenter = Vector2.Distance(connectedPos, AnchorPointWorld);
 
             Vector2 dir = (connectedPos - AnchorPointWorld).normalized;
