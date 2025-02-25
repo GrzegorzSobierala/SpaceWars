@@ -370,6 +370,140 @@ namespace Game.Utility
         {
             return math.remap(sourceMin, sourceMax, destinationMin, destinationMax, value);
         }
+
+        /// <summary>
+        /// Calculates the world-space center of mass based on area-weighted centroids of all colliders attached to the Rigidbody2D.
+        /// Supports CircleCollider2D, BoxCollider2D, and PolygonCollider2D.
+        /// </summary>
+        /// <param name="rb2D">The Rigidbody2D whose attached colliders will be used.</param>
+        /// <returns>The calculated world center of mass. Returns Vector2.zero if no valid colliders are found.</returns>
+        public static Vector2 CalculateWorldCenterOfMass(Rigidbody2D rb2D)
+        {
+            if (rb2D == null)
+            {
+                Debug.LogError("Rigidbody2D parameter is null.");
+                return Vector2.zero;
+            }
+
+            // Gather attached colliders into a list.
+            List<Collider2D> colliders = new List<Collider2D>();
+            rb2D.GetAttachedColliders(colliders);
+
+            if (colliders.Count == 0)
+            {
+                Debug.LogError("No colliders attached to the Rigidbody2D.");
+                return Vector2.zero;
+            }
+
+            float totalArea = 0f;
+            Vector2 weightedCentroidSum = Vector2.zero;
+
+            foreach (Collider2D col in colliders)
+            {
+                if (col == null)
+                    continue;
+
+                if (TryCalculateAreaAndCentroid(col, out float area, out Vector2 centroid))
+                {
+                    totalArea += area;
+                    weightedCentroidSum += centroid * area;
+                }
+                else
+                {
+                    Debug.LogWarning("Unsupported Collider2D type: " + col.GetType());
+                }
+            }
+
+            if (totalArea > 0f)
+            {
+                return weightedCentroidSum / totalArea;
+            }
+            else
+            {
+                Debug.LogError("Total area of colliders is zero. Cannot compute center of mass.");
+                return Vector2.zero;
+            }
+        }
+
+        /// <summary>
+        /// Attempts to compute the area and world-space centroid of a given Collider2D.
+        /// Supports CircleCollider2D, BoxCollider2D, and PolygonCollider2D.
+        /// </summary>
+        private static bool TryCalculateAreaAndCentroid(Collider2D col, out float area, out Vector2 centroid)
+        {
+            area = 0f;
+            centroid = Vector2.zero;
+            Transform t = col.transform;
+
+            if (col is CircleCollider2D circle)
+            {
+                // Calculate world radius (assumes uniform scaling).
+                float worldRadius = circle.radius * Mathf.Abs(t.lossyScale.x);
+                area = Mathf.PI * worldRadius * worldRadius;
+                centroid = (Vector2)t.TransformPoint(circle.offset);
+                return true;
+            }
+            else if (col is BoxCollider2D box)
+            {
+                // Compute the world size by accounting for the lossy scale.
+                Vector2 worldSize = new Vector2(box.size.x * Mathf.Abs(t.lossyScale.x), box.size.y * Mathf.Abs(t.lossyScale.y));
+                area = worldSize.x * worldSize.y;
+                centroid = (Vector2)t.TransformPoint(box.offset);
+                return true;
+            }
+            else if (col is PolygonCollider2D poly)
+            {
+                float totalPolyArea = 0f;
+                Vector2 weightedPolyCentroid = Vector2.zero;
+
+                // A PolygonCollider2D can contain multiple paths.
+                for (int p = 0; p < poly.pathCount; p++)
+                {
+                    Vector2[] points = poly.GetPath(p);
+                    float polyArea = 0f;
+                    Vector2 polyCentroid = Vector2.zero;
+                    int numPoints = points.Length;
+
+                    // Use the shoelace formula to compute area and centroid in local space.
+                    for (int i = 0; i < numPoints; i++)
+                    {
+                        Vector2 current = points[i];
+                        Vector2 next = points[(i + 1) % numPoints];
+                        float cross = current.x * next.y - next.x * current.y;
+                        polyArea += cross;
+                        polyCentroid += (current + next) * cross;
+                    }
+
+                    polyArea *= 0.5f;
+
+                    // Skip path if area is nearly zero.
+                    if (Mathf.Approximately(polyArea, 0f))
+                        continue;
+
+                    polyCentroid /= (6f * polyArea);
+
+                    // Use absolute area in case vertices are wound clockwise.
+                    float absArea = Mathf.Abs(polyArea);
+                    totalPolyArea += absArea;
+                    weightedPolyCentroid += polyCentroid * absArea;
+                }
+
+                if (totalPolyArea > 0f)
+                {
+                    // Scale the area based on the transform's lossy scale.
+                    float scaleFactor = Mathf.Abs(t.lossyScale.x * t.lossyScale.y);
+                    area = totalPolyArea * scaleFactor;
+
+                    // Calculate the weighted average centroid in local space and transform it.
+                    Vector2 localCentroid = weightedPolyCentroid / totalPolyArea;
+                    centroid = (Vector2)t.TransformPoint(localCentroid);
+                    return true;
+                }
+                return false;
+            }
+            // Other collider types are not supported.
+            return false;
+        }
     }
 
     public static class Async

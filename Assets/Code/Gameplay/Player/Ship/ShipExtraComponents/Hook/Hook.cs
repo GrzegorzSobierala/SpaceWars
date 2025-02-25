@@ -1,7 +1,9 @@
 using Game.Utility;
+using Game.Utility.Globals;
 using Unity.Mathematics;
 using UnityEngine;
 using Zenject;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 namespace Game.Player.Ship
 {
@@ -25,6 +27,8 @@ namespace Game.Player.Ship
         private LineRenderer _lineRenderer;
         private Transform _connectedAnchorTransform;
         private Material _lineMaterial;
+        private ContactFilter2D _rayFilter;
+        private float _distanceToEdge;
 
         public float MaxDistance => _maxDistance;
         public bool IsConnected => _joint.enabled;
@@ -36,6 +40,14 @@ namespace Game.Player.Ship
         private void Awake()
         {
             _lineRenderer = GetComponent<LineRenderer>();
+
+            _rayFilter = new ContactFilter2D
+            {
+                useTriggers = false,
+                useLayerMask = true,
+                layerMask = LayerMask.GetMask(Layers.Enemy, Layers.Obstacle, Layers.ObstacleShootAbove,
+                Layers.SmallObstacle)
+            };
         }
 
         private void Start()
@@ -68,7 +80,6 @@ namespace Game.Player.Ship
         public void Connect(Rigidbody2D connectedBody, Vector2 hitPoint)
         {
             _connectedAnchorTransform = connectedBody.transform;
-
            
             _joint.connectedBody = connectedBody;
             _joint.connectedAnchor = connectedBody.transform.InverseTransformPoint(hitPoint);
@@ -101,13 +112,45 @@ namespace Game.Player.Ship
                 Debug.LogError("Angle is out of range");
             }
 
-            float distance = Vector2.Distance(AnchorPointWorld, ConnectedAnchorPointWorld);
-            distance = math.clamp(distance + _connectDistanceOffset, 0, _maxDistance);
-            _joint.distance = distance;
+            _distanceToEdge = Vector2.Distance(AnchorPointWorld, ConnectedAnchorPointWorld);
+            _joint.distance = math.clamp(_distanceToEdge, 1, _maxDistance);
 
             _joint.enabled = true;
 
             TryUpdateHook();
+        }
+
+        private void UpdateJointDistance(Rigidbody2D connectedBody)
+        {
+            Vector2 connectedPos = Utils.CalculateWorldCenterOfMass(connectedBody);
+
+            //connectedBody.GetAttachedColliders
+            float distanceToCenter = Vector2.Distance(connectedPos,
+                AnchorPointWorld);
+
+            Vector2 dir = (connectedPos - AnchorPointWorld).normalized;
+
+            RaycastHit2D[] result = new RaycastHit2D[1];
+            int isHit = Physics2D.Raycast(AnchorPointWorld, dir, _rayFilter, result,
+                distanceToCenter);
+
+            if (isHit == 0)
+            {
+                Debug.LogError("No body hit", gameObject);
+                return;
+            }
+
+            if (result[0].rigidbody != connectedBody)
+            {
+                Debug.LogError("Wrong body hit", result[0].collider);
+                return;
+            }
+
+            float edgeCenterDist = Vector2.Distance(connectedPos, result[0].point);
+            Vector2 targetDir = (AnchorPointWorld - connectedPos).normalized;
+
+            Vector2 targetPoint = connectedPos + (targetDir * (edgeCenterDist + _distanceToEdge));
+            _joint.distance = Vector2.Distance(ConnectedAnchorPointWorld, targetPoint);
         }
 
         public void Disconnect()
@@ -124,19 +167,20 @@ namespace Game.Player.Ship
 
         private void UpdateJoint()
         {
+            UpdateJointDistance(_joint.connectedBody);
+
             if (Vector2.Distance(AnchorPointWorld, ConnectedAnchorPointWorld) > _joint.distance)
             {
                 _joint.dampingRatio = _dampingRatio;
                 _joint.frequency = _frequency;
 
-                Debug.Log($"Force: {_joint.reactionForce.ToString("f2")} | {_joint.reactionTorque.ToString("f2")}");
+                //Debug.Log($"Force: {_joint.reactionForce.ToString("f2")} | {_joint.reactionTorque.ToString("f2")}");
             }
             else
             {
                 _joint.dampingRatio = _dampingRatioNoForce;
                 _joint.frequency = _frequencyNoForce;
             }
-
             //Vector2 dirToConnect = ConnectedAnchorPointWorld - AnchorPointWorld;
             //Vector2 dirToConnectLocal = transform.InverseTransformDirection(dirToConnect).normalized;
 
