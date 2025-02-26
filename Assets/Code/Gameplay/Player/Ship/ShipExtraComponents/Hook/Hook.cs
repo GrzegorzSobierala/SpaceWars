@@ -1,9 +1,11 @@
 using Game.Utility;
 using Game.Utility.Globals;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using Zenject;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace Game.Player.Ship
 {
@@ -26,6 +28,9 @@ namespace Game.Player.Ship
         [SerializeField] private float _maxSpeedBoostMulti = 1.5f;
         [SerializeField] private float _minDistanceToBust = -5;
         [SerializeField] private float _maxDistanceToBust = 10;
+        [SerializeField] private float _minSpeedForBoost = 5;
+        [SerializeField] private float _maxSpeedForBoost = 15;
+        [SerializeField] private int _fixedFramesCountSpeed = 5;
 
         private LineRenderer _lineRenderer;
         private Transform _connectedAnchorTransform;
@@ -33,6 +38,7 @@ namespace Game.Player.Ship
         private ContactFilter2D _rayFilter;
         private float _distanceToEdge;
         private float _speedBoostValue = 1;
+        private Queue<float> _lastFixedFrames = new();
 
         public float MaxDistance => _maxDistance;
         public bool IsConnected => _joint.enabled;
@@ -198,8 +204,8 @@ namespace Game.Player.Ship
 
         private void UpdateBoost(Vector2 targetDir)
         {
-            float dot = Vector2.Dot(targetDir, _body.transform.up);
-
+            float dot = Vector2.Dot(_body.velocity.normalized, _body.transform.right);
+            
             float minRemaped = 1;
             float maxRemaped = _maxSpeedBoostMulti;
 
@@ -214,6 +220,21 @@ namespace Game.Player.Ship
             _speedBoostValue = Utils.Remap(distance, minDistance, maxDistance, minRemaped, 
                 _speedBoostValue);
             _speedBoostValue = math.clamp(_speedBoostValue, minRemaped, maxRemaped);
+
+            float speed = _body.velocity.magnitude;
+
+            _lastFixedFrames.Enqueue(speed);
+            while (_lastFixedFrames.Count > _fixedFramesCountSpeed)
+            {
+                _lastFixedFrames.Dequeue();
+            }
+
+            float avgSpeed = _lastFixedFrames.Average();
+
+            print(avgSpeed);
+            float boostMulti = Utils.Remap(avgSpeed, _minSpeedForBoost, _maxSpeedForBoost, 1, 0);
+            boostMulti = math.clamp(boostMulti, 0, 1);
+            _speedBoostValue -= (_speedBoostValue - 1) * boostMulti;
         }
 
         public void Disconnect()
@@ -257,7 +278,14 @@ namespace Game.Player.Ship
                 _joint.distance * (2 - _colorMulti), 0, 2);
             redColor = math.clamp(redColor, 0, 1);
 
-            _lineMaterial.color = Color.Lerp(Color.white, Color.red, redColor);
+            float x = Mathf.Clamp01(redColor);
+            float y = Mathf.Clamp01(_speedBoostValue - 1);
+
+            float red = (1 - y) + x * y;
+            float green = (1 - x) + x * y;
+            float blue = (1 - x) * (1 - y);
+
+            _lineMaterial.color = new Color(red, green, blue);
         }
 
         private void CheckConnection()
