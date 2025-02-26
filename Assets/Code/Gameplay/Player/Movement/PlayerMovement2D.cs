@@ -3,7 +3,6 @@ using Game.Player.Control;
 using Game.Utility;
 using System;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
@@ -21,6 +20,7 @@ namespace Game.Player.Ship
         [Inject] private GunManager _gunManager;
         [Inject] private CenterOfMass _centerOfMass;
         [Inject] private CursorCamera _cursorCamera;
+        [Inject] private Hook _hook;
 
         [SerializeField, Range(0.0f, 600.0f)] private float _moveSpeed = 100;
         [SerializeField, Range(0.0f, 200.0f)] private float _forwardSpeedMulti = 100;
@@ -265,10 +265,10 @@ namespace Game.Player.Ship
                 enginePowers = engineProcentPowers.normalized * 100;
             }
 
-            Vector2 targetForce = _body.mass * _moveSpeed * oppositeSideMulti * enginePowers;
-            _body.AddRelativeForce(Time.fixedDeltaTime * targetForce);
+            Vector2 targetForce = _body.mass * _moveSpeed * oppositeSideMulti * enginePowers
+                * _hook.CurrentSpeedBoostMulti;
 
-            print($"{enginePowers.magnitude.ToString("f2")} , {_body.velocity.magnitude.ToString("f2")}");
+            _body.AddRelativeForce(Time.fixedDeltaTime * targetForce);
         }
 
         private void TransferVelocity(float angle)

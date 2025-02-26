@@ -12,6 +12,7 @@ namespace Game.Player.Ship
     {
         [Inject] SpringJoint2D _joint;
         [Inject] private CenterOfMass _centerOfMass;
+        [Inject] private Rigidbody2D _body;
 
         [SerializeField] private float _maxDistance = 200.0f;
         [SerializeField] private float _dampingRatio = 0.6f;
@@ -22,15 +23,21 @@ namespace Game.Player.Ship
         [SerializeField] private float _anchorOffset = 5f;
         [SerializeField] private float _anchorOffsetSidesY = -2.5f;
         [SerializeField] private float _connectDistanceOffset = -5f;
+        [SerializeField] private float _maxSpeedBoostMulti = 1.5f;
+        [SerializeField] private float _minDistanceToBust = -5;
+        [SerializeField] private float _maxDistanceToBust = 10;
 
         private LineRenderer _lineRenderer;
         private Transform _connectedAnchorTransform;
         private Material _lineMaterial;
         private ContactFilter2D _rayFilter;
         private float _distanceToEdge;
+        private float _speedBoostValue = 1;
 
         public float MaxDistance => _maxDistance;
         public bool IsConnected => _joint.enabled;
+
+        public float CurrentSpeedBoostMulti => _joint.isActiveAndEnabled ? _speedBoostValue : 1;
 
         private Vector2 AnchorPointWorld => transform.TransformPoint(_joint.anchor);
         private Vector2 ConnectedAnchorPointWorld => _connectedAnchorTransform.
@@ -57,6 +64,8 @@ namespace Game.Player.Ship
 
         private void Update()
         {
+            CheckConnection();
+
             if (!IsConnected)
                 return;
 
@@ -65,6 +74,8 @@ namespace Game.Player.Ship
 
         private void FixedUpdate()
         {
+            CheckConnection();
+
             if (!IsConnected)
                 return;
 
@@ -112,9 +123,19 @@ namespace Game.Player.Ship
             }
 
             _distanceToEdge = Vector2.Distance(AnchorPointWorld, ConnectedAnchorPointWorld);
-            _joint.distance = math.clamp(_distanceToEdge, 1, _maxDistance);
+            _joint.distance = math.clamp(_distanceToEdge - _connectDistanceOffset, 1, _maxDistance);
 
             _joint.enabled = true;
+
+            foreach (var iHooked in connectedBody.GetComponents<IHookedCallBack>())
+            {
+                iHooked.OnHooked();
+            }
+            foreach (var iHooked in connectedBody.GetComponentsInChildren<IHookedCallBack>())
+            {
+                iHooked.OnHooked();
+            }
+
 
             TryUpdateHook();
         }
@@ -169,7 +190,30 @@ namespace Game.Player.Ship
             Vector2 targetPoint = connectedPos + (targetDir * (edgeCenterDist + _distanceToEdge));
             float distance = Vector2.Distance(ConnectedAnchorPointWorld, targetPoint);
             distance = math.clamp(distance + _connectDistanceOffset, 1, _maxDistance);
+
+            UpdateBoost(targetDir);
+
             _joint.distance = distance;
+        }
+
+        private void UpdateBoost(Vector2 targetDir)
+        {
+            float dot = Vector2.Dot(targetDir, _body.transform.up);
+
+            float minRemaped = 1;
+            float maxRemaped = _maxSpeedBoostMulti;
+
+            _speedBoostValue = Utils.Remap(math.abs(dot), 0.7071f, 0, minRemaped, _maxSpeedBoostMulti);
+            _speedBoostValue = math.clamp(_speedBoostValue, minRemaped, maxRemaped);
+
+            float distance = Vector2.Distance(AnchorPointWorld, ConnectedAnchorPointWorld);
+
+            float minDistance = _joint.distance + _minDistanceToBust;
+            float maxDistance = _joint.distance + _maxDistanceToBust;
+
+            _speedBoostValue = Utils.Remap(distance, minDistance, maxDistance, minRemaped, 
+                _speedBoostValue);
+            _speedBoostValue = math.clamp(_speedBoostValue, minRemaped, maxRemaped);
         }
 
         public void Disconnect()
@@ -177,6 +221,7 @@ namespace Game.Player.Ship
             _joint.connectedBody = null;
             _joint.enabled = false;
             _lineRenderer.enabled = false;
+            _speedBoostValue = 1;
         }
 
         private void TryUpdateHook()
@@ -186,8 +231,6 @@ namespace Game.Player.Ship
 
         private void UpdateJoint()
         {
-            UpdateJointDistance(_joint.connectedBody);
-
             if (Vector2.Distance(AnchorPointWorld, ConnectedAnchorPointWorld) > _joint.distance)
             {
                 _joint.dampingRatio = _dampingRatio;
@@ -198,6 +241,8 @@ namespace Game.Player.Ship
                 _joint.dampingRatio = _dampingRatioNoForce;
                 _joint.frequency = _frequencyNoForce;
             }
+
+            UpdateJointDistance(_joint.connectedBody);
         }
 
         private void UpdateRenderer()
@@ -213,6 +258,14 @@ namespace Game.Player.Ship
             redColor = math.clamp(redColor, 0, 1);
 
             _lineMaterial.color = Color.Lerp(Color.white, Color.red, redColor);
+        }
+
+        private void CheckConnection()
+        {
+            if (IsConnected && _joint.connectedBody == null)
+            {
+                Disconnect();
+            }
         }
     }
 }

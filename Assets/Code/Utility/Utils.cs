@@ -98,8 +98,9 @@ namespace Game.Utility
             return worldDirection;
         }
 
-        public static void BindGetComponent<T>(DiContainer container, GameObject gameObject, bool nonLazy = false)
-            where T : Component
+        public static void BindGetComponent<T>(DiContainer container, GameObject gameObject, 
+            bool nonLazy = false)
+            
         {
             if (!gameObject.TryGetComponent(out T component))
             {
@@ -119,7 +120,7 @@ namespace Game.Utility
         }
 
         public static void BindComponentsInChildrens<T>(DiContainer container, GameObject gameObject, 
-            bool includeInactive = true, bool enable0Count = false) where T : Component
+            bool includeInactive = true, bool enable0Count = false)
         {
             List<T> enemyFieldOfViews = gameObject.GetComponentsInChildren<T>(includeInactive).ToList();
 
