@@ -8,11 +8,14 @@ namespace Game.Player.Ship
     {
         public override void InstallBindings()
         {
-            Container.Bind<Rigidbody2D>().FromComponentOn(gameObject).AsSingle();
-            Container.Bind<PlayerMovement2D>().FromComponentOn(gameObject).AsSingle();
+            Utils.BindGetComponent<Rigidbody2D>(Container, gameObject);
+            Utils.BindGetComponent<PlayerMovement2D>(Container, gameObject);
+            Utils.BindGetComponent<SpringJoint2D>(Container, gameObject);
             Utils.BindGetComponent<ModuleHandler>(Container, gameObject);
             Utils.BindGetComponent<ModuleFactory>(Container, gameObject);
             Container.Bind<CenterOfMass>().FromComponentInChildren(false).AsSingle();
+            Container.Bind<HookCannon>().FromComponentInChildren(false).AsSingle();
+            Container.Bind<Hook>().FromComponentInChildren(false).AsSingle();
 
             SignalBusInstaller.Install(Container);
             Container.DeclareSignal<PlayerCollisionEnter2DSignal>().OptionalSubscriber();

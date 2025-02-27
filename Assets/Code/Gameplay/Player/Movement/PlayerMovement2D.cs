@@ -20,6 +20,7 @@ namespace Game.Player.Ship
         [Inject] private GunManager _gunManager;
         [Inject] private CenterOfMass _centerOfMass;
         [Inject] private CursorCamera _cursorCamera;
+        [Inject] private Hook _hook;
 
         [SerializeField, Range(0.0f, 600.0f)] private float _moveSpeed = 100;
         [SerializeField, Range(0.0f, 200.0f)] private float _forwardSpeedMulti = 100;
@@ -40,6 +41,9 @@ namespace Game.Player.Ship
 
         private List<Collider2D> _lastColldersStucked = new();
         private bool _wasUnstuckCalledThisFrame = false;
+        private Vector2 _enginesPower;
+
+        public Vector2 EnginesPower => _enginesPower;
 
         private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
 
@@ -58,7 +62,7 @@ namespace Game.Player.Ship
             MoveOutOfCollider(collision);
         }
 
-        public void VerdicalMove()
+        public void SetVerdicalEnginesPower()
         {
             bool moveForward = Input.MoveForward.ReadValue<float>() == 1.0f;
             bool moveBack = Input.MoveBack.ReadValue<float>() == 1.0f;
@@ -68,21 +72,19 @@ namespace Game.Player.Ship
 
             if (newestSide == Option.Option1)
             {
-                MovePlayer(Vector2.up, _forwardSpeedMulti);
-                OnVerdicalMove?.Invoke(1);
+                _enginesPower = Utils.ChangeVector2Y(_enginesPower, 1 * _forwardSpeedMulti);
                 return;
             }
             else if (newestSide == Option.Option2)
             {
-                MovePlayer(Vector2.down, _backSpeedMulti);
-                OnVerdicalMove?.Invoke(-1);
+                _enginesPower = Utils.ChangeVector2Y(_enginesPower, -1 * _backSpeedMulti);
                 return;
             }
 
-            OnVerdicalMove?.Invoke(0);
+            _enginesPower = Utils.ChangeVector2Y(_enginesPower, 0);
         }
 
-        public void HorizontalMove()
+        public void SetHorizontalEnginesPower()
         {
             bool moveRight;
             bool moveLeft;
@@ -95,17 +97,16 @@ namespace Game.Player.Ship
 
             if (newestSide == Option.Option1)
             {
-                MovePlayer(Vector2.right, _horizontalSpeedMutli);
-                OnHorizontalMove?.Invoke(1);
+                _enginesPower = Utils.ChangeVector2X(_enginesPower, 1 * _horizontalSpeedMutli);
                 return;
             }
             else if (newestSide == Option.Option2)
             {
-                MovePlayer(Vector2.left, _horizontalSpeedMutli);
-                OnHorizontalMove?.Invoke(-1);
+                _enginesPower = Utils.ChangeVector2X(_enginesPower, -1 * _horizontalSpeedMutli);
                 return;
             }
-            OnHorizontalMove?.Invoke(0);
+
+            _enginesPower = Utils.ChangeVector2X(_enginesPower, 0);
         }
 
         public void RotateToCursor()
@@ -220,8 +221,10 @@ namespace Game.Player.Ship
                 RotateToCursor();
             }
 
-            VerdicalMove();
-            HorizontalMove();
+            SetVerdicalEnginesPower();
+            SetHorizontalEnginesPower();
+            MovePlayer(_enginesPower);
+
             TryBoost();
 
             if(_wasUnstuckCalledThisFrame)
@@ -234,9 +237,9 @@ namespace Game.Player.Ship
             }
         }
 
-        private void MovePlayer(Vector2 direction, float procentOfMaxSpeed)
+        private void MovePlayer(Vector2 engineProcentPowers)
         {
-            Vector2 worldDirection = Utils.LocalToWorldDirection(direction, _body.transform);
+            Vector2 worldDirection = Utils.LocalToWorldDirection(engineProcentPowers, _body.transform);
 
             float dot = Vector2.Dot(worldDirection.normalized, _body.velocity.normalized);
             float oppositeSideMulti = 1;
@@ -245,8 +248,18 @@ namespace Game.Player.Ship
                 oppositeSideMulti += -dot * _oppositeForce;
             }
 
-            Vector2 targetForce = _body.mass * _moveSpeed * oppositeSideMulti * direction;
-            _body.AddRelativeForce(procentOfMaxSpeed * Time.fixedDeltaTime * targetForce);
+            Vector2 enginePowers = engineProcentPowers;
+            if (engineProcentPowers.sqrMagnitude > 100 * 100)
+            {
+                enginePowers = engineProcentPowers.normalized * 100;
+            }
+
+            Vector2 targetForce = _body.mass * _moveSpeed * oppositeSideMulti * enginePowers
+                * _hook.CurrentSpeedBoostMulti;
+
+            _body.AddRelativeForce(Time.fixedDeltaTime * targetForce);
+            OnHorizontalMove?.Invoke((int)targetForce.x);
+            OnVerdicalMove?.Invoke((int)targetForce.y);
         }
 
         private void TransferVelocity(float angle)

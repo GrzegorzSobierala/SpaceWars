@@ -1,24 +1,30 @@
 using Game.Combat;
 using Game.Management;
+using Game.Player.Ship;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
 namespace Game.Room.Enemy
 {
-    public abstract class EnemyGuardStateBase : EnemyStateBase
+    public abstract class EnemyGuardStateBase : EnemyStateBase, IHookedCallBack
     {
         [Inject] protected List<DamageHandlerBase> _damageHandlers;
         [Inject] protected PlayerManager _playerManager;
         [Inject] protected EnemyStateMachineBase _stateMachine;
         [Inject] protected AlarmActivatorTimer _alarmActivatorTimer;
 
-        public virtual void OnDestroy()
+        protected virtual void OnDestroy()
         {
             foreach (var handler in _damageHandlers)
             {
                 handler.Unsubscribe(TrySwitchToCombatState);
             }
+        }
+
+        public void OnHooked()
+        {
+            _stateMachine.SwitchToCombatState();
         }
 
         protected override void OnEnterState()

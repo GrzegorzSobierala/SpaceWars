@@ -154,6 +154,15 @@ namespace Game.Input.System
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Hook"",
+                    ""type"": ""Button"",
+                    ""id"": ""77dba0ec-0722-4975-918f-c7350aa7f9ea"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -310,6 +319,28 @@ namespace Game.Input.System
                     ""action"": ""Pasue"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""22a0eee9-bb63-43f8-8f4d-dfcca5e39c2a"",
+                    ""path"": ""<Keyboard>/leftAlt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6858597b-f194-4e38-9da8-de0997fc072d"",
+                    ""path"": ""<Mouse>/backButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -410,6 +441,7 @@ namespace Game.Input.System
             m_Gameplay_ToggleAim = m_Gameplay.FindAction("ToggleAim", throwIfNotFound: true);
             m_Gameplay_ToggleSwapSteeringOnAim = m_Gameplay.FindAction("ToggleSwapSteeringOnAim", throwIfNotFound: true);
             m_Gameplay_Pasue = m_Gameplay.FindAction("Pasue", throwIfNotFound: true);
+            m_Gameplay_Hook = m_Gameplay.FindAction("Hook", throwIfNotFound: true);
             // Ui
             m_Ui = asset.FindActionMap("Ui", throwIfNotFound: true);
             m_Ui_Back = m_Ui.FindAction("Back", throwIfNotFound: true);
@@ -491,6 +523,7 @@ namespace Game.Input.System
         private readonly InputAction m_Gameplay_ToggleAim;
         private readonly InputAction m_Gameplay_ToggleSwapSteeringOnAim;
         private readonly InputAction m_Gameplay_Pasue;
+        private readonly InputAction m_Gameplay_Hook;
         public struct GameplayActions
         {
             private @PlayerControls m_Wrapper;
@@ -509,6 +542,7 @@ namespace Game.Input.System
             public InputAction @ToggleAim => m_Wrapper.m_Gameplay_ToggleAim;
             public InputAction @ToggleSwapSteeringOnAim => m_Wrapper.m_Gameplay_ToggleSwapSteeringOnAim;
             public InputAction @Pasue => m_Wrapper.m_Gameplay_Pasue;
+            public InputAction @Hook => m_Wrapper.m_Gameplay_Hook;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -560,6 +594,9 @@ namespace Game.Input.System
                 @Pasue.started += instance.OnPasue;
                 @Pasue.performed += instance.OnPasue;
                 @Pasue.canceled += instance.OnPasue;
+                @Hook.started += instance.OnHook;
+                @Hook.performed += instance.OnHook;
+                @Hook.canceled += instance.OnHook;
             }
 
             private void UnregisterCallbacks(IGameplayActions instance)
@@ -606,6 +643,9 @@ namespace Game.Input.System
                 @Pasue.started -= instance.OnPasue;
                 @Pasue.performed -= instance.OnPasue;
                 @Pasue.canceled -= instance.OnPasue;
+                @Hook.started -= instance.OnHook;
+                @Hook.performed -= instance.OnHook;
+                @Hook.canceled -= instance.OnHook;
             }
 
             public void RemoveCallbacks(IGameplayActions instance)
@@ -731,6 +771,7 @@ namespace Game.Input.System
             void OnToggleAim(InputAction.CallbackContext context);
             void OnToggleSwapSteeringOnAim(InputAction.CallbackContext context);
             void OnPasue(InputAction.CallbackContext context);
+            void OnHook(InputAction.CallbackContext context);
         }
         public interface IUiActions
         {

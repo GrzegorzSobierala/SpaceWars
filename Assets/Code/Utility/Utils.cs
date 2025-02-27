@@ -6,6 +6,7 @@ using UnityEngine;
 using Zenject;
 using UnityEngine.SceneManagement;
 using System.Reflection;
+using Unity.Mathematics;
 
 namespace Game.Utility
 {
@@ -97,8 +98,9 @@ namespace Game.Utility
             return worldDirection;
         }
 
-        public static void BindGetComponent<T>(DiContainer container, GameObject gameObject, bool nonLazy = false)
-            where T : Component
+        public static void BindGetComponent<T>(DiContainer container, GameObject gameObject, 
+            bool nonLazy = false)
+            
         {
             if (!gameObject.TryGetComponent(out T component))
             {
@@ -118,7 +120,7 @@ namespace Game.Utility
         }
 
         public static void BindComponentsInChildrens<T>(DiContainer container, GameObject gameObject, 
-            bool includeInactive = true, bool enable0Count = false) where T : Component
+            bool includeInactive = true, bool enable0Count = false)
         {
             List<T> enemyFieldOfViews = gameObject.GetComponentsInChildren<T>(includeInactive).ToList();
 
@@ -265,7 +267,7 @@ namespace Game.Utility
             return new Vector2(value, toChange.y);
         }
 
-        public static Vector2 ChangeVector2Y(ref Vector2 toChange, float value)
+        public static Vector2 ChangeVector2Y(Vector2 toChange, float value)
         {
             return new Vector2(toChange.x, value);
         }
@@ -354,6 +356,252 @@ namespace Game.Utility
 
             return sceneLoadingState;
         }
+
+        /// <summary>
+        /// Remaps a value from one range to another.
+        /// </summary>
+        /// <param name="value">The value to remap.</param>
+        /// <param name="sourceMin">The minimum value of the source range.</param>
+        /// <param name="sourceMax">The maximum value of the source range.</param>
+        /// <param name="destinationMin">The minimum value of the destination range.</param>
+        /// <param name="destinationMax">The maximum value of the destination range.</param>
+        /// <returns>The remapped value in the destination range.</returns>
+        public static float Remap(float value, float sourceMin, float sourceMax,
+            float destinationMin, float destinationMax)
+        {
+            return math.remap(sourceMin, sourceMax, destinationMin, destinationMax, value);
+        }
+
+        /// <summary>
+        /// Calculates the world-space center of mass based on weighted centroids of all colliders attached to the Rigidbody2D.
+        /// For area-based colliders, the weight is the computed area.
+        /// For EdgeCollider2D, the weight is its total length.
+        /// Supports: Circle, Box, Polygon, Edge, Capsule, and Composite Collider2D types.
+        /// </summary>
+        /// <param name="rb2D">The Rigidbody2D whose attached colliders will be used.</param>
+        /// <returns>
+        /// The calculated world center of mass. Returns Vector2.zero if no valid colliders are found.
+        /// </returns>
+        public static Vector2 CalculateWorldCenterOfMass(Rigidbody2D rb2D)
+        {
+            if (rb2D == null)
+            {
+                Debug.LogError("Rigidbody2D parameter is null.");
+                return Vector2.zero;
+            }
+
+            // Gather all attached Collider2D components.
+            List<Collider2D> colliders = new List<Collider2D>();
+            rb2D.GetAttachedColliders(colliders);
+
+            if (colliders.Count == 0)
+            {
+                Debug.LogError("No colliders attached to the Rigidbody2D.");
+                return Vector2.zero;
+            }
+
+            float totalWeight = 0f;
+            Vector2 weightedCentroidSum = Vector2.zero;
+
+            foreach (Collider2D col in colliders)
+            {
+                if (col == null)
+                    continue;
+
+                if (TryCalculateWeightAndCentroid(col, out float weight, out Vector2 centroid))
+                {
+                    totalWeight += weight;
+                    weightedCentroidSum += centroid * weight;
+                }
+                else
+                {
+                    Debug.LogWarning("Unsupported Collider2D type: " + col.GetType());
+                }
+            }
+
+            if (totalWeight > 0f)
+                return weightedCentroidSum / totalWeight;
+            else
+            {
+                Debug.LogError("Total weight of colliders is zero. Cannot compute center of mass.");
+                return Vector2.zero;
+            }
+        }
+
+        /// <summary>
+        /// Attempts to compute the weight (area or length) and world-space centroid for a given Collider2D.
+        /// For area-based colliders, weight is the area.
+        /// For an EdgeCollider2D, weight is its total length.
+        /// </summary>
+        private static bool TryCalculateWeightAndCentroid(Collider2D col, out float weight, out Vector2 centroid)
+        {
+            weight = 0f;
+            centroid = Vector2.zero;
+            Transform t = col.transform;
+
+            // --- CircleCollider2D ---
+            if (col is CircleCollider2D circle)
+            {
+                // Assume uniform scaling; using the x component.
+                float worldRadius = circle.radius * Mathf.Abs(t.lossyScale.x);
+                weight = Mathf.PI * worldRadius * worldRadius;
+                centroid = (Vector2)t.TransformPoint(circle.offset);
+                return true;
+            }
+            // --- BoxCollider2D ---
+            else if (col is BoxCollider2D box)
+            {
+                Vector2 worldSize = new Vector2(
+                    box.size.x * Mathf.Abs(t.lossyScale.x),
+                    box.size.y * Mathf.Abs(t.lossyScale.y));
+                weight = worldSize.x * worldSize.y;
+                centroid = (Vector2)t.TransformPoint(box.offset);
+                return true;
+            }
+            // --- PolygonCollider2D ---
+            else if (col is PolygonCollider2D poly)
+            {
+                float totalPolyArea = 0f;
+                Vector2 weightedPolyCentroid = Vector2.zero;
+
+                for (int p = 0; p < poly.pathCount; p++)
+                {
+                    Vector2[] points = poly.GetPath(p);
+                    float polyArea = 0f;
+                    Vector2 polyCentroid = Vector2.zero;
+                    int numPoints = points.Length;
+
+                    // Calculate area and centroid in local space via the shoelace formula.
+                    for (int i = 0; i < numPoints; i++)
+                    {
+                        Vector2 current = points[i];
+                        Vector2 next = points[(i + 1) % numPoints];
+                        float cross = current.x * next.y - next.x * current.y;
+                        polyArea += cross;
+                        polyCentroid += (current + next) * cross;
+                    }
+                    polyArea *= 0.5f;
+                    if (Mathf.Approximately(polyArea, 0f))
+                        continue;
+                    polyCentroid /= (6f * polyArea);
+
+                    float absArea = Mathf.Abs(polyArea);
+                    totalPolyArea += absArea;
+                    // Transform local centroid to world space.
+                    Vector2 worldPolyCentroid = (Vector2)t.TransformPoint(polyCentroid);
+                    weightedPolyCentroid += worldPolyCentroid * absArea;
+                }
+
+                if (totalPolyArea > 0f)
+                {
+                    weight = totalPolyArea;
+                    centroid = weightedPolyCentroid / totalPolyArea;
+                    return true;
+                }
+                return false;
+            }
+            // --- EdgeCollider2D ---
+            else if (col is EdgeCollider2D edge)
+            {
+                Vector2[] points = edge.points;
+                if (points.Length < 2)
+                    return false;
+                float totalLength = 0f;
+                Vector2 weightedCentroid = Vector2.zero;
+                // EdgeCollider2D points are defined in local space relative to the collider's offset.
+                for (int i = 0; i < points.Length - 1; i++)
+                {
+                    Vector2 p0 = (Vector2)t.TransformPoint(points[i] + edge.offset);
+                    Vector2 p1 = (Vector2)t.TransformPoint(points[i + 1] + edge.offset);
+                    float segmentLength = Vector2.Distance(p0, p1);
+                    totalLength += segmentLength;
+                    weightedCentroid += ((p0 + p1) * 0.5f) * segmentLength;
+                }
+                if (totalLength > 0f)
+                {
+                    // Using length as the weight.
+                    weight = totalLength;
+                    centroid = weightedCentroid / totalLength;
+                    return true;
+                }
+                return false;
+            }
+            // --- CapsuleCollider2D ---
+            else if (col is CapsuleCollider2D capsule)
+            {
+                Vector2 size = capsule.size;
+                Vector2 worldSize = new Vector2(
+                    size.x * Mathf.Abs(t.lossyScale.x),
+                    size.y * Mathf.Abs(t.lossyScale.y));
+                // The capsule is symmetric; its centroid is the transformed offset.
+                centroid = (Vector2)t.TransformPoint(capsule.offset);
+
+                float capsuleArea = 0f;
+                if (capsule.direction == CapsuleDirection2D.Vertical)
+                {
+                    float r = worldSize.x / 2f;
+                    float rectHeight = Mathf.Max(0, worldSize.y - 2 * r);
+                    float rectArea = worldSize.x * rectHeight;
+                    float circleArea = Mathf.PI * r * r;
+                    capsuleArea = rectArea + circleArea;
+                }
+                else // Horizontal
+                {
+                    float r = worldSize.y / 2f;
+                    float rectWidth = Mathf.Max(0, worldSize.x - 2 * r);
+                    float rectArea = worldSize.y * rectWidth;
+                    float circleArea = Mathf.PI * r * r;
+                    capsuleArea = rectArea + circleArea;
+                }
+                weight = capsuleArea;
+                return true;
+            }
+            // --- CompositeCollider2D ---
+            else if (col is CompositeCollider2D composite)
+            {
+                int pathCount = composite.pathCount;
+                float totalCompositeArea = 0f;
+                Vector2 weightedCompositeCentroid = Vector2.zero;
+                List<Vector2> points = new List<Vector2>();
+                for (int i = 0; i < pathCount; i++)
+                {
+                    points.Clear();
+                    composite.GetPath(i, points);
+                    if (points.Count < 3)
+                        continue;
+                    float polyArea = 0f;
+                    Vector2 polyCentroid = Vector2.zero;
+                    int numPoints = points.Count;
+                    for (int j = 0; j < numPoints; j++)
+                    {
+                        Vector2 current = points[j];
+                        Vector2 next = points[(j + 1) % numPoints];
+                        float cross = current.x * next.y - next.x * current.y;
+                        polyArea += cross;
+                        polyCentroid += (current + next) * cross;
+                    }
+                    polyArea *= 0.5f;
+                    if (Mathf.Approximately(polyArea, 0f))
+                        continue;
+                    polyCentroid /= (6f * polyArea);
+                    float absArea = Mathf.Abs(polyArea);
+                    totalCompositeArea += absArea;
+                    Vector2 worldPolyCentroid = (Vector2)t.TransformPoint(polyCentroid);
+                    weightedCompositeCentroid += worldPolyCentroid * absArea;
+                }
+                if (totalCompositeArea > 0f)
+                {
+                    weight = totalCompositeArea;
+                    centroid = weightedCompositeCentroid / totalCompositeArea;
+                    return true;
+                }
+                return false;
+            }
+
+            // Collider type not supported.
+            return false;
+        }
+        
     }
 
     public static class Async

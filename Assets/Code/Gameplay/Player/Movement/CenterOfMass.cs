@@ -7,6 +7,9 @@ namespace Game.Player.Ship
     {
         [Inject] private Rigidbody2D _body;
 
+        public Vector2 Position => transform.position;
+        public Vector2 PhysicsPosition => _body.worldCenterOfMass;
+
         private void Start()
         {
             SetInCenterOfMassPosition();
