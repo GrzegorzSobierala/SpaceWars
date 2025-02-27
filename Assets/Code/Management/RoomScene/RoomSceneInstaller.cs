@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Game.Room
 {
-    public class TestRoomInstaller : MonoInstaller
+    public class RoomSceneInstaller : MonoInstaller
     {
         public override void InstallBindings()
         {
