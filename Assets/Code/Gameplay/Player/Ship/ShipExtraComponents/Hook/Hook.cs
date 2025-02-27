@@ -232,7 +232,6 @@ namespace Game.Player.Ship
 
             float avgSpeed = _lastFixedFrames.Average();
 
-            print(avgSpeed);
             float boostMulti = Utils.Remap(avgSpeed, _minSpeedForBoost, _maxSpeedForBoost, 1, 0);
             boostMulti = math.clamp(boostMulti, 0, 1);
             _speedBoostValue -= (_speedBoostValue - 1) * boostMulti;
