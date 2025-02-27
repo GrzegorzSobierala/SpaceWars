@@ -30,7 +30,7 @@ namespace Game.Player.Ship
         [SerializeField] private float _maxDistanceToBust = 10;
         [SerializeField] private float _minSpeedForBoost = 5;
         [SerializeField] private float _maxSpeedForBoost = 15;
-        [SerializeField] private int _fixedFramesCountSpeed = 5;
+        [SerializeField] private int _fixedFramesCountSpeed = 35;
 
         private LineRenderer _lineRenderer;
         private Transform _connectedAnchorTransform;
