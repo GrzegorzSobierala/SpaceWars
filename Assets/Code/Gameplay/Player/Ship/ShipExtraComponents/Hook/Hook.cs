@@ -5,7 +5,6 @@ using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using Zenject;
-using static UnityEngine.Rendering.DebugUI;
 
 namespace Game.Player.Ship
 {
@@ -16,18 +15,21 @@ namespace Game.Player.Ship
         [Inject] private CenterOfMass _centerOfMass;
         [Inject] private Rigidbody2D _body;
 
+        [Header("Line")]
         [SerializeField] private float _maxDistance = 200.0f;
         [SerializeField] private float _dampingRatio = 0.6f;
         [SerializeField] private float _frequency = 0.8f;
         [SerializeField] private float _dampingRatioNoForce = 0;
         [SerializeField] private float _frequencyNoForce = 0.01f;
         [SerializeField] private float _colorMulti = 0.7f;
+        [Header("Anchor")]
         [SerializeField] private float _anchorOffset = 5f;
         [SerializeField] private float _anchorOffsetSidesY = -2.5f;
         [SerializeField] private float _connectDistanceOffset = -5f;
+        [Header("Speed Boost")]
         [SerializeField] private float _maxSpeedBoostMulti = 1.5f;
-        [SerializeField] private float _minDistanceToBust = -5;
-        [SerializeField] private float _maxDistanceToBust = 10;
+        [SerializeField] private float _minDistanceToBoost = -5;
+        [SerializeField] private float _maxDistanceToBoost = 10;
         [SerializeField] private float _minSpeedForBoost = 5;
         [SerializeField] private float _maxSpeedForBoost = 15;
         [SerializeField] private int _fixedFramesCountSpeed = 35;
@@ -142,7 +144,6 @@ namespace Game.Player.Ship
                 iHooked.OnHooked();
             }
 
-
             TryUpdateHook();
         }
 
@@ -214,8 +215,8 @@ namespace Game.Player.Ship
 
             float distance = Vector2.Distance(AnchorPointWorld, ConnectedAnchorPointWorld);
 
-            float minDistance = _joint.distance + _minDistanceToBust;
-            float maxDistance = _joint.distance + _maxDistanceToBust;
+            float minDistance = _joint.distance + _minDistanceToBoost;
+            float maxDistance = _joint.distance + _maxDistanceToBoost;
 
             _speedBoostValue = Utils.Remap(distance, minDistance, maxDistance, minRemaped, 
                 _speedBoostValue);

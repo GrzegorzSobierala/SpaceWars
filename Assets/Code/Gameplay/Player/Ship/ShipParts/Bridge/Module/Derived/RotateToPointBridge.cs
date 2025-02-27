@@ -42,8 +42,8 @@ namespace Game.Player.Ship
                 _playerMovement.RotateToCursor();
             }
 
-            _playerMovement.VerdicalMove();
-            _playerMovement.HorizontalMove();
+            _playerMovement.SetVerdicalEnginesPower();
+            _playerMovement.SetHorizontalEnginesPower();
             _playerMovement.TryBoost();
         }
 

@@ -43,12 +43,12 @@ namespace Game.Player.Ship
                 _rightParticles.SetActive(false);
                 _lefttParticles.SetActive(false);
             }
-            else if (value == 1)
+            else if (value > 0)
             {
                 _rightParticles.SetActive(false);
                 _lefttParticles.SetActive(true);
             }
-            else if (value == -1)
+            else if (value < 0)
             {
                 _rightParticles.SetActive(true);
                 _lefttParticles.SetActive(false);
@@ -66,12 +66,12 @@ namespace Game.Player.Ship
                 _frontParticles.SetActive(false);
                 _backParticles.SetActive(false);
             }
-            else if (value == 1)
+            else if (value > 0)
             {
                 _frontParticles.SetActive(false);
                 _backParticles.SetActive(true);
             }
-            else if (value == -1)
+            else if (value < 0)
             {
                 _frontParticles.SetActive(true);
                 _backParticles.SetActive(false);

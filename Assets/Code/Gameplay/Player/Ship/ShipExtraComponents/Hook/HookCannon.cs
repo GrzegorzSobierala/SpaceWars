@@ -204,6 +204,7 @@ namespace Game.Player.Ship
                 return null;
             }
 
-            return result[0];        }
+            return result[0];        
+        }
     }
 }

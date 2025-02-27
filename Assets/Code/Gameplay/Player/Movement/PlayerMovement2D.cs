@@ -62,7 +62,7 @@ namespace Game.Player.Ship
             MoveOutOfCollider(collision);
         }
 
-        public void VerdicalMove()
+        public void SetVerdicalEnginesPower()
         {
             bool moveForward = Input.MoveForward.ReadValue<float>() == 1.0f;
             bool moveBack = Input.MoveBack.ReadValue<float>() == 1.0f;
@@ -72,24 +72,19 @@ namespace Game.Player.Ship
 
             if (newestSide == Option.Option1)
             {
-                //MovePlayer(Vector2.up, _forwardSpeedMulti);
-                OnVerdicalMove?.Invoke(1);
                 _enginesPower = Utils.ChangeVector2Y(_enginesPower, 1 * _forwardSpeedMulti);
                 return;
             }
             else if (newestSide == Option.Option2)
             {
-                //MovePlayer(Vector2.down, _backSpeedMulti);
-                OnVerdicalMove?.Invoke(-1);
                 _enginesPower = Utils.ChangeVector2Y(_enginesPower, -1 * _backSpeedMulti);
                 return;
             }
 
-            OnVerdicalMove?.Invoke(0);
             _enginesPower = Utils.ChangeVector2Y(_enginesPower, 0);
         }
 
-        public void HorizontalMove()
+        public void SetHorizontalEnginesPower()
         {
             bool moveRight;
             bool moveLeft;
@@ -102,20 +97,15 @@ namespace Game.Player.Ship
 
             if (newestSide == Option.Option1)
             {
-                //MovePlayer(Vector2.right, _horizontalSpeedMutli);
-                OnHorizontalMove?.Invoke(1);
                 _enginesPower = Utils.ChangeVector2X(_enginesPower, 1 * _horizontalSpeedMutli);
                 return;
             }
             else if (newestSide == Option.Option2)
             {
-                //MovePlayer(Vector2.left, _horizontalSpeedMutli);
-                OnHorizontalMove?.Invoke(-1);
                 _enginesPower = Utils.ChangeVector2X(_enginesPower, -1 * _horizontalSpeedMutli);
                 return;
             }
 
-            OnHorizontalMove?.Invoke(0);
             _enginesPower = Utils.ChangeVector2X(_enginesPower, 0);
         }
 
@@ -231,9 +221,8 @@ namespace Game.Player.Ship
                 RotateToCursor();
             }
 
-            VerdicalMove();
-            HorizontalMove();
-
+            SetVerdicalEnginesPower();
+            SetHorizontalEnginesPower();
             MovePlayer(_enginesPower);
 
             TryBoost();
@@ -269,6 +258,8 @@ namespace Game.Player.Ship
                 * _hook.CurrentSpeedBoostMulti;
 
             _body.AddRelativeForce(Time.fixedDeltaTime * targetForce);
+            OnHorizontalMove?.Invoke((int)targetForce.x);
+            OnVerdicalMove?.Invoke((int)targetForce.y);
         }
 
         private void TransferVelocity(float angle)
