@@ -139,58 +139,39 @@ namespace Game.Player.Ship
 
         private void TryConnect()
         {
-            Vector2 aimDir;
+            RaycastHit2D? hit = ConnectRaycast();
 
-            if(_gunManager.IsCurrentGunMainGun)
-            {
-                Vector2 aimDirLocal;
-                if (_playerMovement.EnginesPower.x == 0)
-                {
-                    aimDirLocal = Vector2.up;
-                }
-                else
-                {
-                    aimDirLocal = Utils.ChangeVector2Y(_playerMovement.EnginesPower, 0);
-                }
-                
-                aimDir = _body.transform.TransformDirection(aimDirLocal).normalized;
-            }
-            else
-            {
-                Vector2 mousePos = Input.CursorPosition.ReadValue<Vector2>();
-                Vector2 aimPoint = _cursorCamera.ScreanPositionOn2DIntersection(mousePos);
-                aimDir = (aimPoint - _centerOfMass.Position).normalized;
-            }
-
-            RaycastHit2D[] result = new RaycastHit2D[1];
-            int isHit = Physics2D.Raycast(_centerOfMass.Position, aimDir, _rayFilter, result,
-                _hook.MaxDistance);
-
-            if(isHit == 0)
-            {
+            if(hit == null)
                 return;
-            }
 
-            if(!result[0].rigidbody)
+            if (!hit.Value.rigidbody)
             {
-                Rigidbody2D addedBody = result[0].collider.gameObject.AddComponent<Rigidbody2D>();
+                Rigidbody2D addedBody = hit.Value.collider.gameObject.AddComponent<Rigidbody2D>();
                 addedBody.bodyType = RigidbodyType2D.Static;
-                _hook.Connect(addedBody, result[0].point);
-                Debug.LogError("No body on collider, added statid body", result[0].collider);
+                Debug.LogError("No body on collider, added statid body", hit.Value.collider);
+                _hook.Connect(addedBody, hit.Value.point);
                 return;
             }
 
-            _hook.Connect(result[0].rigidbody, result[0].point);
+            _hook.Connect(hit.Value.rigidbody, hit.Value.point);
         }
 
         private void UpdateHookTargetVisual()
         {
-            if(_connectState != ConnectState.WaitForConnectInput)
+            RaycastHit2D? hit = ConnectRaycast();
+
+            if (hit == null)
             {
                 _hookTargetVisual.gameObject.SetActive(false);
                 return;
             }
 
+            _hookTargetVisual.gameObject.SetActive(true);
+            _hookTargetVisual.position = hit.Value.point;
+        }
+
+        private RaycastHit2D? ConnectRaycast()
+        {
             Vector2 aimDir;
 
             if (_gunManager.IsCurrentGunMainGun)
@@ -220,19 +201,9 @@ namespace Game.Player.Ship
 
             if (isHit == 0)
             {
-                _hookTargetVisual.gameObject.SetActive(false);
-                return;
+                return null;
             }
 
-            if (!result[0].rigidbody)
-            {
-                _hookTargetVisual.gameObject.SetActive(false);
-                Debug.LogError("No body on collider", result[0].collider);
-                return;
-            }
-
-            _hookTargetVisual.gameObject.SetActive(true);
-            _hookTargetVisual.position = result[0].point;
-        }
+            return result[0];        }
     }
 }
