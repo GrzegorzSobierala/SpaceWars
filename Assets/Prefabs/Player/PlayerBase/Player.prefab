@@ -430,6 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 001617e894581934d8879bcdf95426d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _directionUtil: {fileID: 0}
   _maxDistance: 200
   _dampingRatio: 0.2
   _frequency: 0.8
@@ -440,11 +441,12 @@ MonoBehaviour:
   _anchorOffsetSidesY: 5
   _connectDistanceOffset: -3
   _maxSpeedBoostMulti: 2
+  _minDotForBoost: 0.5736
+  _maxDotForBoost: 0.25882
   _minDistanceToBoost: -10
   _maxDistanceToBoost: 10
   _minSpeedForBoost: 50
   _maxSpeedForBoost: 100
-  _fixedFramesCountSpeed: 30
 --- !u!120 &3114857319815883143
 LineRenderer:
   serializedVersion: 2

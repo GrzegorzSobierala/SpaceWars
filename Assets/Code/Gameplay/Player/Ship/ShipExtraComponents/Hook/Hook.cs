@@ -1,7 +1,6 @@
 using Game.Utility;
 using Game.Utility.Globals;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using Zenject;
@@ -14,6 +13,7 @@ namespace Game.Player.Ship
         [Inject] SpringJoint2D _joint;
         [Inject] private CenterOfMass _centerOfMass;
         [Inject] private Rigidbody2D _body;
+        [Inject] private PlayerMovement2D _movement;
 
         [Header("Line")]
         [SerializeField] private float _maxDistance = 200.0f;
@@ -28,11 +28,12 @@ namespace Game.Player.Ship
         [SerializeField] private float _connectDistanceOffset = -5f;
         [Header("Speed Boost")]
         [SerializeField] private float _maxSpeedBoostMulti = 1.5f;
+        [SerializeField] private float _minDotForBoost = 0.5f;
+        [SerializeField] private float _maxDotForBoost = 0.25882f;
         [SerializeField] private float _minDistanceToBoost = -5;
         [SerializeField] private float _maxDistanceToBoost = 10;
         [SerializeField] private float _minSpeedForBoost = 5;
         [SerializeField] private float _maxSpeedForBoost = 15;
-        [SerializeField] private int _fixedFramesCountSpeed = 35;
 
         private LineRenderer _lineRenderer;
         private Transform _connectedAnchorTransform;
@@ -205,34 +206,34 @@ namespace Game.Player.Ship
 
         private void UpdateBoost(Vector2 targetDir)
         {
-            float dot = Vector2.Dot(_body.velocity.normalized, _body.transform.right);
-            
+            float dot;
+            if (_movement.EnginesPower.normalized == Vector2.zero)
+            {
+                dot = 1;
+            }
+            else
+            {
+                dot = Vector2.Dot(targetDir,
+                _body.GetRelativeVector(_movement.EnginesPower.normalized));
+            }
             float minRemaped = 1;
             float maxRemaped = _maxSpeedBoostMulti;
-
-            _speedBoostValue = Utils.Remap(math.abs(dot), 0.7071f, 0, minRemaped, _maxSpeedBoostMulti);
+            _speedBoostValue = Utils.Remap(math.abs(dot), _minDotForBoost, _maxDotForBoost, 
+                minRemaped, _maxSpeedBoostMulti);
             _speedBoostValue = math.clamp(_speedBoostValue, minRemaped, maxRemaped);
 
             float distance = Vector2.Distance(AnchorPointWorld, ConnectedAnchorPointWorld);
-
             float minDistance = _joint.distance + _minDistanceToBoost;
             float maxDistance = _joint.distance + _maxDistanceToBoost;
-
             _speedBoostValue = Utils.Remap(distance, minDistance, maxDistance, minRemaped, 
                 _speedBoostValue);
             _speedBoostValue = math.clamp(_speedBoostValue, minRemaped, maxRemaped);
 
-            float speed = _body.velocity.magnitude;
-
-            _lastFixedFrames.Enqueue(speed);
-            while (_lastFixedFrames.Count > _fixedFramesCountSpeed)
-            {
-                _lastFixedFrames.Dequeue();
-            }
-
-            float avgSpeed = _lastFixedFrames.Average();
-
-            float boostMulti = Utils.Remap(avgSpeed, _minSpeedForBoost, _maxSpeedForBoost, 1, 0);
+            Vector2 relativeHorizontalVelocity = Quaternion.Inverse(Quaternion.LookRotation(
+                Vector3.forward, targetDir)) * _body.velocity;
+            float relativeHorizontalSpeed = math.abs(relativeHorizontalVelocity.x);
+            float boostMulti = Utils.Remap(relativeHorizontalSpeed, _minSpeedForBoost, 
+                _maxSpeedForBoost, 1, 0);
             boostMulti = math.clamp(boostMulti, 0, 1);
             _speedBoostValue -= (_speedBoostValue - 1) * boostMulti;
         }
