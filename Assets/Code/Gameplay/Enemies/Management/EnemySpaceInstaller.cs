@@ -7,7 +7,7 @@ namespace Game.Room.Enemy
     {
         public override void InstallBindings()
         {
-            Utils.BindComponentsInChildrens<EnemyBase>(Container, gameObject, false);
+            Utils.BindComponentsInChildrensHash<EnemyBase>(Container, gameObject, true);
             Utils.BindGetComponent<EnemyManager>(Container, gameObject);
             Utils.BindGetComponent<EnemyRoomAlarm>(Container, gameObject);
         }

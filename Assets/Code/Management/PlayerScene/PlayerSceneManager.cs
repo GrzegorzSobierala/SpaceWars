@@ -13,13 +13,13 @@ namespace Game.Room
 
         [Inject] private GameSceneManager _gameSceneManager;
 
-        private List<EnemyBase> _roomEnemies;
+        private HashSet<EnemyBase> _roomEnemies;
         private RoomManager _currentRoomManager;
 
-        public List<EnemyBase> RoomEnemies => _roomEnemies;
+        public HashSet<EnemyBase> RoomEnemies => _roomEnemies;
         public RoomManager CurrentRoomManager => _currentRoomManager;
 
-        public void SetListOfRoomEnemies(List<EnemyBase> enemies)
+        public void SetRoomEnemies(HashSet<EnemyBase> enemies)
         {
             _roomEnemies = enemies;
         }

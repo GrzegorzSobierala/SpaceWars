@@ -14,6 +14,7 @@ namespace Game.Room
             Utils.BindGetComponent<RoomManager>(Container, gameObject);
             Container.Bind<PlayerObjectsParent>().FromComponentInHierarchy().AsSingle();
             Container.Bind<RoomQuestController>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<EnemyManager>().FromComponentInHierarchy().AsSingle();
         }
     }
 }
