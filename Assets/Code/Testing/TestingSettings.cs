@@ -12,5 +12,6 @@ namespace Game.Testing
         public bool EnableEnemyShooting = false;
         public float EnemySpeedMulti = 1;
         public int RoomSceneIndex = 0;
+        public bool ShowEnemyGuardPoints = false;
     }
 }
