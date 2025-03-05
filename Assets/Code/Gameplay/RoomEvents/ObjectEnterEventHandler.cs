@@ -12,7 +12,7 @@ namespace Game.Room.Events
 
         [Header("If null set target to player")]
         [SerializeField] private Rigidbody2D _target;
-        [SerializeField] private UnityEvent OnBodyEnter;
+        [SerializeField] private UnityEvent _onBodyEnter;
 
         private bool _wasTriggered = false;
 
@@ -39,7 +39,7 @@ namespace Game.Room.Events
             if (_target != trigger.attachedRigidbody)
                 return;
 
-            OnBodyEnter.Invoke();
+            _onBodyEnter.Invoke();
             _wasTriggered = true;
             gameObject.SetActive(false);
         }
