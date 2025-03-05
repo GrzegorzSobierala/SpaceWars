@@ -15,6 +15,5 @@ namespace Game.Room.Enemy
         {
             _enemyManager.SpawnEnemy(test, transform.position, transform.eulerAngles.z);
         }
-
     }
 }
