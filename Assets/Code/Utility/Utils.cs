@@ -122,15 +122,29 @@ namespace Game.Utility
         public static void BindComponentsInChildrens<T>(DiContainer container, GameObject gameObject, 
             bool includeInactive = true, bool enable0Count = false)
         {
-            List<T> enemyFieldOfViews = gameObject.GetComponentsInChildren<T>(includeInactive).ToList();
+            List<T> components = gameObject.GetComponentsInChildren<T>(includeInactive).ToList();
 
-            if (enable0Count && enemyFieldOfViews.Count == 0)
+            if (!enable0Count && components.Count == 0)
             {
                 string message = $"There is no {typeof(T)} on a GameObject: {gameObject}";
                 Debug.LogError(message, gameObject);
             }
 
-            container.Bind<List<T>>().FromInstance(enemyFieldOfViews).AsSingle();
+            container.Bind<List<T>>().FromInstance(components).AsSingle();
+        }
+
+        public static void BindComponentsInChildrensHash<T>(DiContainer container, GameObject gameObject,
+           bool includeInactive = true, bool enable0Count = false)
+        {
+            var components = new HashSet<T>(gameObject.GetComponentsInChildren<T>(true));
+
+            if (!enable0Count && components.Count == 0)
+            {
+                string message = $"There is no {typeof(T)} on a GameObject: {gameObject}";
+                Debug.LogError(message, gameObject);
+            }
+
+            container.Bind<HashSet<T>>().FromInstance(components).AsSingle();
         }
 
         public static bool ContainsLayer(this LayerMask layerMask, int layer)
@@ -601,7 +615,6 @@ namespace Game.Utility
             // Collider type not supported.
             return false;
         }
-        
     }
 
     public static class Async

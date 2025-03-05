@@ -19,7 +19,7 @@ namespace Game.Player.Ui
 
         private Transform nearestEnemy;
 
-        private List<EnemyBase> EnemyPositions => _sceneManager.RoomEnemies;
+        private HashSet<EnemyBase> EnemyPositions => _sceneManager.RoomEnemies;
 
         private void Update()
         {
@@ -67,10 +67,9 @@ namespace Game.Player.Ui
 
             int planeIndexMove = 4;
 
-            for (int enemyIndex = 0; enemyIndex < EnemyPositions.Count; enemyIndex++)
+            foreach (var enemy in EnemyPositions)
             {
-                EnemyBase enemy = EnemyPositions[enemyIndex];
-                if (!enemy)
+                if (!enemy || !enemy.isActiveAndEnabled)
                 {
                     continue;
                 }

@@ -83,6 +83,7 @@ namespace Game.Editor
             GUILayout.Label("EDIT MODE PROPERTIES", EditorStyles.boldLabel);
             SceneButtons();
             ShowSelectedFovToogle();
+            ShowEnemyGuardPointsToggle();
         }
 
         private void OnGuiAlways()
@@ -105,6 +106,7 @@ namespace Game.Editor
         private void OnSceneGUI(SceneView sceneView)
         {
             TryShowFovs();
+            TryShowEnemyGuardPoints();
         }
 
         private void SceneButtons()
@@ -296,6 +298,94 @@ namespace Game.Editor
                 foreach (var fov in fovs)
                 {
                     fov.DrawViewGizmos();
+                }
+            }
+        }
+
+        private void ShowEnemyGuardPointsToggle()
+        {
+            bool newShowEnemiesFov = GUILayout.Toggle(_settings.ShowEnemyGuardPoints, "Show enemy guard points");
+
+            if (newShowEnemiesFov != _settings.ShowEnemyGuardPoints)
+            {
+                _settings.ShowEnemyGuardPoints = newShowEnemiesFov;
+                _settingsInstaller.MarkDirty();
+            }
+        }
+
+        private void TryShowEnemyGuardPoints()
+        {
+            if (!_settings.ShowEnemyGuardPoints)
+                return;
+
+            List<(EnemyBase, PatrolController)> enemiesWithPatrol = new();
+            if (Selection.gameObjects.Length == 0)
+            {
+                foreach (var enemy in FindObjectsOfType<EnemyBase>())
+                {
+                    PatrolController patrol = enemy.GetComponentInChildren<PatrolController>();
+                    if (patrol == null)
+                        continue;
+
+                    enemiesWithPatrol.Add((enemy, patrol));
+                }
+            }
+            else
+            {
+                foreach (var go in Selection.gameObjects)
+                {
+                    PatrolController patrol;
+
+                    if (go.TryGetComponent(out patrol))
+                    {
+                        EnemyBase enemy = go.GetComponentInParent<EnemyBase>();
+
+                        if (!enemy)
+                        {
+                            Debug.LogError($"PatrolController should be a child of {nameof(EnemyBase)}");
+                            continue;
+                        }
+
+                        enemiesWithPatrol.Add((enemy, patrol));
+                        continue;
+                    }
+
+                    foreach (var enemy in go.GetComponentsInChildren<EnemyBase>())
+                    {
+                        patrol = enemy.GetComponentInChildren<PatrolController>();
+                        if (patrol == null)
+                            continue;
+
+                        enemiesWithPatrol.Add((enemy, patrol));
+                    }
+                }
+            }
+
+            foreach (var (enemy, patrol) in enemiesWithPatrol)
+            {
+                if (patrol.GuardPoints.Count < 2)
+                {
+                    Debug.LogError("There need to be at least 2 guard points");
+                    continue;
+                }
+                for (int i = 0; i < patrol.GuardPoints.Count; ++i)
+                {
+                    Vector3 from = patrol.GuardPoints[i].position;
+                    Vector3 to = patrol.GuardPoints[(i + 1) % patrol.GuardPoints.Count].position;
+                    if(i == 0)
+                    {
+                        Debug.DrawLine(from, to, new Color(0.1f, 0.1f, 1, 1), 0);
+                    }
+                    else
+                    {
+                        Debug.DrawLine(from, to, new Color(1f, 1f, 1, 1), 0);
+                    }
+                }
+
+                {
+                    Vector3 from = enemy.transform.position;
+                    Vector3 to = patrol.GuardPoints[0].position;
+                    Debug.DrawLine(from, to, new Color(0, 0, 1, 1), 0);
                 }
             }
         }

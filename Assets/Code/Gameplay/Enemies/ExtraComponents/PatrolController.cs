@@ -18,6 +18,8 @@ namespace Game.Room.Enemy
         private bool _blockStop = false;
         private bool _isGoingUpList = false;
 
+        public List<Transform> GuardPoints => _guardPoints;
+
         private void Awake()
         {
             Initialize();

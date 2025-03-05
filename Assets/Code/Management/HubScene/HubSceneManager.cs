@@ -21,6 +21,7 @@ namespace Game.Management
             _input.SwitchActionMap(_input.PlayerControls.Ui);
             _playerUiController.SetActive(false);
             _playerManager.SetShipHubMode();
+            Time.timeScale = 1;
         }
     }
 }
