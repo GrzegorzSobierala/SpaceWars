@@ -15,12 +15,12 @@ namespace Game.Room.Enemy
 
         protected override void OnEnterState()
         {
-            TryStartTurningOnAlarm();
+            //TryStartTurningOnAlarm();
         }
 
         protected override void OnExitState()
         {
-            StopTurningOnAlarm();
+            //StopTurningOnAlarm();
         }
 
         private void TryStartTurningOnAlarm()
