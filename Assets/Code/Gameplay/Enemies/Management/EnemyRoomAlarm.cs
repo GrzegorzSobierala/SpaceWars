@@ -9,7 +9,7 @@ namespace Game.Room.Enemy
     {
         public bool IsActivated => _isActivated;
 
-        [Inject] private List<EnemyBase> _enemies;
+        [Inject] private HashSet<EnemyBase> _enemies;
         [Inject] private AlarmUi _alarmUi;
 
         private bool _isActivated = false;
