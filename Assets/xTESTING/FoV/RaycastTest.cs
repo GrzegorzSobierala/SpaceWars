@@ -4,6 +4,8 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Profiling;
+using Game.Utility;
 
 namespace Game
 {
@@ -15,17 +17,52 @@ namespace Game
         Polygon = 3,   // closed polygon (PolygonCollider2D)
         Edge = 4,      // open polyline (EdgeCollider2D)
         Composite = 5, // treated as a closed set of edges
+        Unsuported = 6,
     }
 
     // This structure holds the minimal data needed for our raycast tests.
     // For simple colliders (box, circle, capsule) we use dedicated fields.
     // For polygon, edge, and composite colliders we record the start index/count into a vertex array.
-    public struct ColliderData
+    public struct ColliderDataUnprepared
+    {
+        ///public int type;
+        public ColliderType typeEnum;
+        // For BoxCollider2D and CircleCollider2D:
+        ///public float2 center;
+        public Vector3 posWorld;
+        public Vector2 offsetLoc;
+
+        ///public float rotationRad; // in radians (for box)
+        public float rotWorld;
+
+        ///public float2 size;    // for box (width, height)
+        public Vector3 lossyScale;
+        public Vector2 sizeLoc;
+
+        ///public float radius;   // for circle
+        public float radiusLoc;
+
+        // For CapsuleCollider2D:
+        ///public float2 capsuleA; // one end point in world space
+        ///public float2 capsuleB; // other end point in world space
+        ///public float capsuleRadius;
+        public CapsuleDirection2D capsuleDirEnum;
+        public Vector3 capsuleTransUp;
+        public Vector3 capsuleTransRight;
+
+        // For PolygonCollider2D, EdgeCollider2D, and CompositeCollider2D:
+        public int vertexStartIndex;
+        public int vertexCount;
+        ///public int isClosed; // 1 if the shape is closed (polygon, composite), 0 if open (edge)
+        public bool isClosedBool;
+    }
+
+    public struct ColliderDataReady
     {
         public int type;
         // For BoxCollider2D and CircleCollider2D:
         public float2 center;
-        public float rotation; // in radians (for box)
+        public float rotationRad; // in radians (for box)
         public float2 size;    // for box (width, height)
         public float radius;   // for circle
 
@@ -45,6 +82,9 @@ namespace Game
         public float _rayDistance = 10f;
         public Transform debugHitPoint;
 
+        private Collider2D[] colliders;
+        private Vector2[] points;
+
         private void Update()
         {
             Raycast2D();
@@ -52,165 +92,272 @@ namespace Game
 
         private void Raycast2D()
         {
+                    Profiler.BeginSample("amigus over");
             // Get colliders overlapping an area.
-            Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, transform.lossyScale, transform.eulerAngles.z);
+            colliders = Physics2D.OverlapCircleAll(transform.position, transform.lossyScale.x/2);
+            Profiler.EndSample();
 
+                    Profiler.BeginSample("amigus list1");
             // We accumulate collider data in a list (since some colliders—Composite—may produce multiple shape entries).
-            List<ColliderData> colliderDataList = new List<ColliderData>();
+            NativeList<ColliderDataUnprepared> colliderDatasUnprepared = new NativeList<ColliderDataUnprepared>(colliders.Length, Allocator.TempJob);
+            Profiler.EndSample();
+
+                    Profiler.BeginSample("amigus list2");
             // For colliders that use per-vertex data (polygons, edges, composites), we accumulate vertices here.
-            List<float2> vertexList = new List<float2>();
+            NativeList<Vector2> verticesUnprepared = new NativeList<Vector2>(colliders.Length * 5, Allocator.TempJob);
+            Profiler.EndSample();
 
             foreach (var col in colliders)
             {
                 // BOX
                 if (col is BoxCollider2D box)
                 {
-                    ColliderData data = new ColliderData();
-                    data.type = (int)ColliderType.Box;
+                    Profiler.BeginSample("amigus box");
+                    ColliderDataUnprepared data = new();
+                    data.typeEnum = ColliderType.Box;
+
                     // Compute world center using the collider’s offset.
-                    Vector2 offset = box.offset;
-                    Vector2 worldCenter = (Vector2)box.transform.position +
-                        (Vector2)(Quaternion.Euler(0, 0, box.transform.eulerAngles.z) * offset);
-                    data.center = worldCenter;
-                    data.rotation = math.radians(box.transform.eulerAngles.z);
+                    ///Vector2 offset = box.offset;
+                    ///Vector2 worldCenter = (Vector2)box.transform.position +
+                    ///    (Vector2)(Quaternion.Euler(0, 0, box.transform.eulerAngles.z) * offset);
+                    ///data.
+                    ///data.center = worldCenter;
+                    data.posWorld = box.transform.position;
+                    data.rotWorld = box.transform.eulerAngles.z;
+                    data.offsetLoc = box.offset;
+
+                    ///data.rotationRad = math.radians(box.transform.eulerAngles.z);
+
                     // Adjust size by lossyScale.
-                    Vector2 lossyScale = box.transform.lossyScale;
-                    data.size = new float2(box.size.x * lossyScale.x, box.size.y * lossyScale.y);
-                    data.radius = 0f;
-                    colliderDataList.Add(data);
+                    ///Vector2 lossyScale = box.transform.lossyScale;
+                    data.lossyScale = box.transform.lossyScale;
+
+                    ///data.size = new float2(box.size.x * lossyScale.x, box.size.y * lossyScale.y);
+                    data.sizeLoc = box.size;
+
+                    ///data.radius = 0f;
+
+                    colliderDatasUnprepared.Add(data);
+                    Profiler.EndSample();
                 }
                 // CIRCLE
                 else if (col is CircleCollider2D circle)
                 {
-                    ColliderData data = new ColliderData();
-                    data.type = (int)ColliderType.Circle;
-                    Vector2 offset = circle.offset;
-                    Vector2 worldCenter = (Vector2)circle.transform.position +
-                        (Vector2)(Quaternion.Euler(0, 0, circle.transform.eulerAngles.z) * offset);
-                    data.center = worldCenter;
-                    data.rotation = 0f;
-                    data.size = float2.zero;
+                    Profiler.BeginSample("amigus circle");
+                    ColliderDataUnprepared data = new();
+                    data.typeEnum = ColliderType.Circle;
+
+                    ///Vector2 offset = circle.offset;
+                    ///Vector2 worldCenter = (Vector2)circle.transform.position +
+                    ///    (Vector2)(Quaternion.Euler(0, 0, circle.transform.eulerAngles.z) * offset);
+                    ///data.center = worldCenter;
+                    data.posWorld = circle.transform.position;
+                    data.rotWorld = circle.transform.eulerAngles.z;
+                    data.offsetLoc = circle.offset;
+
+
+                    ///data.size = float2.zero;
+
                     // Assume uniform scale (using the x component).
-                    data.radius = circle.radius * circle.transform.lossyScale.x;
-                    colliderDataList.Add(data);
+                    ///data.radius = circle.radius * circle.transform.lossyScale.x;
+                    data.lossyScale = circle.transform.localScale;
+                    data.radiusLoc = circle.radius;
+
+                    colliderDatasUnprepared.Add(data);
+                    Profiler.EndSample();
                 }
                 // CAPSULE
                 else if (col is CapsuleCollider2D capsule)
                 {
-                    ColliderData data = new ColliderData();
-                    data.type = (int)ColliderType.Capsule;
+                    Profiler.BeginSample("amigus capsule");
+                    ColliderDataUnprepared data = new();
+                    data.typeEnum = ColliderType.Capsule;
+
                     // Compute world center.
-                    Vector2 offset = capsule.offset;
-                    Vector2 worldCenter = (Vector2)capsule.transform.position +
-                        (Vector2)(Quaternion.Euler(0, 0, capsule.transform.eulerAngles.z) * offset);
+                    ///Vector2 offset = capsule.offset;
+                    data.offsetLoc = capsule.offset;
+
+                    ///Vector2 worldCenter = (Vector2)capsule.transform.position +
+                    ///    (Vector2)(Quaternion.Euler(0, 0, capsule.transform.eulerAngles.z) * offset);
+                    data.posWorld = capsule.transform.position;
+                    data.rotWorld = capsule.transform.eulerAngles.z;
+
                     // Get lossy scale.
-                    Vector2 lossyScale = capsule.transform.lossyScale;
-                    float width = capsule.size.x * lossyScale.x;
-                    float height = capsule.size.y * lossyScale.y;
+                    ///Vector2 lossyScale = capsule.transform.lossyScale;
+                    ///float width = capsule.size.x * lossyScale.x;
+                    ///float height = capsule.size.y * lossyScale.y;
+                    data.lossyScale = capsule.transform.lossyScale;
+                    data.sizeLoc = capsule.size;
+
                     // CapsuleCollider2D.direction: 0 = horizontal, 1 = vertical.
-                    if (capsule.direction == CapsuleDirection2D.Vertical)
-                    {
-                        data.capsuleRadius = width * 0.5f;
-                        float segment = math.max(0f, height * 0.5f - data.capsuleRadius);
-                        // Use transform.up for vertical orientation.
-                        Vector2 up = capsule.transform.up;
-                        data.capsuleA = worldCenter + up * segment;
-                        data.capsuleB = worldCenter - up * segment;
-                    }
-                    else // Horizontal
-                    {
-                        data.capsuleRadius = height * 0.5f;
-                        float segment = math.max(0f, width * 0.5f - data.capsuleRadius);
-                        Vector2 right = capsule.transform.right;
-                        data.capsuleA = worldCenter + right * segment;
-                        data.capsuleB = worldCenter - right * segment;
-                    }
-                    colliderDataList.Add(data);
+                    ///if (capsule.direction == CapsuleDirection2D.Vertical)
+                    ///{
+                    ///    data.capsuleRadius = width * 0.5f;
+                    ///    float segment = math.max(0f, height * 0.5f - data.capsuleRadius);
+                    ///    // Use transform.up for vertical orientation.
+                    ///    Vector2 up = capsule.transform.up;
+                    ///    data.capsuleA = worldCenter + up * segment;
+                    ///    data.capsuleB = worldCenter - up * segment;
+                    ///}
+                    ///else // Horizontal
+                    ///{
+                    ///    data.capsuleRadius = height * 0.5f;
+                    ///    float segment = math.max(0f, width * 0.5f - data.capsuleRadius);
+                    ///    Vector2 right = capsule.transform.right;
+                    ///    data.capsuleA = worldCenter + right * segment;
+                    ///    data.capsuleB = worldCenter - right * segment;
+                    ///}
+                    data.capsuleDirEnum = capsule.direction;
+                    data.capsuleTransUp = capsule.transform.up;
+                    data.capsuleTransRight = capsule.transform.right;
+
+                    colliderDatasUnprepared.Add(data);
+                    Profiler.EndSample();
                 }
                 // POLYGON
                 else if (col is PolygonCollider2D poly)
                 {
-                    ColliderData data = new ColliderData();
-                    data.type = (int)ColliderType.Polygon;
-                    data.vertexStartIndex = vertexList.Count;
+                    Profiler.BeginSample("amigus poly");
+                    ColliderDataUnprepared data = new ColliderDataUnprepared();
+                    data.typeEnum = ColliderType.Polygon;
+
+                    data.vertexStartIndex = verticesUnprepared.Length;
+
                     // poly.points are in local space; transform them to world space.
-                    for (int i = 0; i < poly.points.Length; i++)
+                    Vector2[] points = poly.points;
+
+                    ///Vector2 worldPos = poly.transform.position;
+                    ///float worldAngle = poly.transform.eulerAngles.z;
+                    ///Vector2 loosyScale = poly.transform.lossyScale;
+                    data.posWorld = poly.transform.position;
+                    data.rotWorld = poly.transform.eulerAngles.z;
+                    data.lossyScale = poly.transform.lossyScale;
+
+                    for (int i = 0; i < points.Length; i++)
                     {
-                        Vector2 worldPt = poly.transform.TransformPoint(poly.points[i]);
-                        vertexList.Add(worldPt);
+                        ///Vector2 worldPt = poly.transform.TransformPoint(polyPoint[i]);
+                        ///Vector2 worldPt = Utils.TransformPoint(polyPoint[i], worldPos, worldAngle, loosyScale);
+                        ///vertexList.Add(worldPt);
+
+                        verticesUnprepared.Add(points[i]);
                     }
-                    data.vertexCount = poly.points.Length;
-                    data.isClosed = 1; // PolygonCollider2D is a closed shape.
-                    colliderDataList.Add(data);
+                    data.vertexCount = points.Length;
+
+                    ///data.isClosed = 1; // PolygonCollider2D is a closed shape.
+                    data.isClosedBool = true;
+
+                    colliderDatasUnprepared.Add(data);
+                    Profiler.EndSample();
                 }
                 // EDGE
                 else if (col is EdgeCollider2D edge)
                 {
-                    ColliderData data = new ColliderData();
-                    data.type = (int)ColliderType.Edge;
-                    data.vertexStartIndex = vertexList.Count;
+                    Profiler.BeginSample("amigus edge");
+                    ColliderDataUnprepared data = new ColliderDataUnprepared();
+                    data.typeEnum = ColliderType.Edge;
+
+                    data.vertexStartIndex = verticesUnprepared.Length;
                     for (int i = 0; i < edge.points.Length; i++)
                     {
-                        Vector2 worldPt = edge.transform.TransformPoint(edge.points[i]);
-                        vertexList.Add(worldPt);
+                        ///Vector2 worldPt = edge.transform.TransformPoint(edge.points[i]);
+                        ///Vector2 worldPt = Utils.TransformPoint(polyPoint[i], worldPos, worldAngle, loosyScale);
+                        ///vertexList.Add(worldPt);
+
+                        verticesUnprepared.Add(edge.points[i]);
                     }
+                    data.posWorld = edge.transform.position;
+                    data.rotWorld = edge.transform.eulerAngles.z;
+                    data.lossyScale = edge.transform.lossyScale;
+
                     data.vertexCount = edge.points.Length;
-                    data.isClosed = 0; // Edge is open.
-                    colliderDataList.Add(data);
+
+                    ///data.isClosed = 0; // Edge is open.
+                    data.isClosedBool = false;
+
+                    colliderDatasUnprepared.Add(data);
+                    Profiler.EndSample();
                 }
                 // COMPOSITE
                 else if (col is CompositeCollider2D composite)
                 {
                     // CompositeCollider2D may contain multiple paths. Add one ColliderData per path.
                     // IMPORTANT: To avoid applying the scale twice, do not use TransformPoint here.
+                    Profiler.BeginSample("amigus composite");
+
                     for (int p = 0; p < composite.pathCount; p++)
                     {
+                        ColliderDataUnprepared data = new ColliderDataUnprepared();
+                        data.typeEnum = ColliderType.Composite;
+
                         int pointCount = composite.GetPathPointCount(p);
                         Vector2[] path = new Vector2[pointCount];
                         composite.GetPath(p, path);
-                        ColliderData data = new ColliderData();
-                        data.type = (int)ColliderType.Composite;
-                        data.vertexStartIndex = vertexList.Count;
+                        
+                        data.vertexStartIndex = verticesUnprepared.Length;
                         // Instead of using TransformPoint (which applies scale), only apply rotation and translation.
-                        Vector2 compPos = composite.transform.position;
-                        float compRot = composite.transform.eulerAngles.z;
-                        Quaternion rot = Quaternion.Euler(0, 0, compRot);
+                        ///Vector2 compPos = composite.transform.position;
+                        ///float compRot = composite.transform.eulerAngles.z;
+                        ///Quaternion rot = Quaternion.Euler(0, 0, compRot);
+                        data.posWorld = composite.transform.position;
+                        data.rotWorld = composite.transform.eulerAngles.z;
+
                         for (int i = 0; i < path.Length; i++)
                         {
-                            Vector2 worldPt = (Vector2)compPos + (Vector2)(rot * path[i]);
-                            vertexList.Add(worldPt);
+                            ///Vector2 worldPt = (Vector2)compPos + (Vector2)(rot * path[i]);
+                            ///vertexList.Add(worldPt);
+                            verticesUnprepared.Add(path[i]);
                         }
                         data.vertexCount = path.Length;
+
                         // Assume composite shapes are closed.
-                        data.isClosed = 1;
-                        colliderDataList.Add(data);
+                        ///data.isClosed = 1;
+                        data.isClosedBool = true;
+
+                        colliderDatasUnprepared.Add(data);
                     }
+
+                    Profiler.EndSample();
                 }
                 // FALLBACK: use bounds as a box.
                 else
                 {
-                    ColliderData data = new ColliderData();
-                    data.type = (int)ColliderType.Box;
-                    data.center = new float2(col.bounds.center.x, col.bounds.center.y);
-                    data.rotation = 0f;
-                    data.size = new float2(col.bounds.size.x, col.bounds.size.y);
-                    data.radius = 0f;
-                    colliderDataList.Add(data);
+                    ColliderDataUnprepared data = new ColliderDataUnprepared();
+                    data.typeEnum = ColliderType.Unsuported;
+
+                    ///data.center = new float2(col.bounds.center.x, col.bounds.center.y);
+                    data.posWorld = col.bounds.center;
+                    
+                    ///data.rotationRad = 0f;
+                    
+                    ///data.size = new float2(col.bounds.size.x, col.bounds.size.y);
+                    data.sizeLoc = col.bounds.size;
+                    
+                    ///data.radius = 0f;
+
+                    colliderDatasUnprepared.Add(data);
                     Debug.LogError("Unsuported collider type");
                 }
             }
 
-            // Convert lists to NativeArrays.
-            NativeArray<ColliderData> colliderDataArray = new NativeArray<ColliderData>(colliderDataList.Count, Allocator.TempJob);
-            for (int i = 0; i < colliderDataList.Count; i++)
+            //Preparing data job
+            NativeArray<ColliderDataReady> colliderDatasReady = new(colliderDatasUnprepared.Length, Allocator.TempJob);
+            NativeArray<float2> verticesReady = new(verticesUnprepared.Length, Allocator.TempJob);
+
+            PrepareColliderDatasJob prepareJob = new PrepareColliderDatasJob
             {
-                colliderDataArray[i] = colliderDataList[i];
-            }
-            NativeArray<float2> vertexArray = new NativeArray<float2>(vertexList.Count, Allocator.TempJob);
-            for (int i = 0; i < vertexList.Count; i++)
-            {
-                vertexArray[i] = vertexList[i];
-            }
+                datasUnprep = colliderDatasUnprepared,
+                vertsUnprep = verticesUnprepared,
+                datasRdy = colliderDatasReady,
+                vertsRdy = verticesReady,
+            };
+
+            JobHandle prepareJobHandle = prepareJob.Schedule(colliderDatasUnprepared.Length, 5);
+            prepareJobHandle.Complete();
+             
+            colliderDatasUnprepared.Dispose();
+            verticesUnprepared.Dispose();
+
+            //Ray job
 
             NativeList<float> hitDistances = new NativeList<float>(Allocator.TempJob);
             NativeArray<float> minDistance = new NativeArray<float>(1, Allocator.TempJob);
@@ -218,32 +365,262 @@ namespace Game
             NativeArray<Vector2> hitPoint = new NativeArray<Vector2>(1, Allocator.TempJob);
             hitPoint[0] = Vector2.zero;
 
-            Raycast2DJob job = new Raycast2DJob
+            //TODO Job for convert ColliderDataUnprepared in to ColliderDataReady
+
+            Raycast2DJob raycastJob = new Raycast2DJob
             {
                 rayOrigin = transform.position,
                 rayDirection = transform.up,
                 rayDistance = _rayDistance,
-                colliderDataArray = colliderDataArray,
-                vertexArray = vertexArray,
+                colliderDataArray = colliderDatasReady,
+                vertexArray = verticesReady,
                 hitResults = hitDistances,
                 minHitDistance = minDistance,
                 hitPoint = hitPoint,
             };
 
-            job.Run();
+            raycastJob.Run();
 
-            if (job.minHitDistance[0] != _rayDistance)
-            {
-                Debug.Log(job.minHitDistance[0].ToString("f3"));
-            }
+            debugHitPoint.position = raycastJob.hitPoint[0];
 
-            debugHitPoint.position = job.hitPoint[0];
-
-            colliderDataArray.Dispose();
-            vertexArray.Dispose();
+            //colliderDatasUnprepared.Dispose();
+            //verticesUnprepared.Dispose();
             hitDistances.Dispose();
             minDistance.Dispose();
             hitPoint.Dispose();
+        }
+
+        [BurstCompile]
+        public struct PrepareColliderDatasJob : IJobParallelFor
+        {
+            [ReadOnly, NativeDisableParallelForRestriction] public NativeList<ColliderDataUnprepared> datasUnprep;
+            [ReadOnly, NativeDisableParallelForRestriction] public NativeList<Vector2> vertsUnprep;
+
+            [WriteOnly, NativeDisableParallelForRestriction] public NativeArray<ColliderDataReady> datasRdy;
+            [WriteOnly, NativeDisableParallelForRestriction] public NativeArray<float2> vertsRdy;
+
+            public void Execute(int index)
+            {
+                // BOX
+                if (datasUnprep[index].typeEnum == ColliderType.Box)
+                {
+                    ColliderDataReady data = new();
+                    data.type = (int)ColliderType.Box;
+
+                    // Compute world center using the collider’s offset.
+                    data.center = (Vector2)datasUnprep[index].posWorld +
+                        (Vector2)(Quaternion.Euler(0, 0, datasUnprep[index].rotWorld) * datasUnprep[index].offsetLoc);
+
+                    ///data.center = worldCenter;
+                    ///data.posWorld = box.transform.position;
+                    ///data.rotWorld = box.transform.eulerAngles.z;
+                    ///data.offsetLoc = box.offset;
+
+                    data.rotationRad = math.radians(datasUnprep[index].rotWorld);
+
+                    // Adjust size by lossyScale.
+                    ///Vector2 lossyScale = box.transform.lossyScale;
+
+                    data.size = new float2(datasUnprep[index].sizeLoc.x * datasUnprep[index].lossyScale.x,
+                        datasUnprep[index].sizeLoc.y * datasUnprep[index].lossyScale.y);
+                    ///data.sizeLoc = box.size;
+
+                    ///data.radius = 0f;
+
+                    datasRdy[index] = data;
+                }
+                // CIRCLE
+                else if (datasUnprep[index].typeEnum == ColliderType.Circle)
+                {
+                    ColliderDataReady data = new();
+                    data.type = (int)ColliderType.Circle;
+
+                    data.center = (Vector2)datasUnprep[index].posWorld +
+                        (Vector2)(Quaternion.Euler(0, 0, datasUnprep[index].rotWorld) * datasUnprep[index].offsetLoc);
+                    ///data.posWorld = circle.transform.position;
+                    ///data.rotWorld = circle.transform.eulerAngles.z;
+                    ///data.offsetLoc = circle.offset;
+
+
+                    ///data.size = float2.zero;
+
+                    // Assume uniform scale (using the x component).
+                    data.radius = datasUnprep[index].radiusLoc * datasUnprep[index].lossyScale.x;
+                    ///data.lossyScale = circle.transform.localScale;
+                    ///data.radiusLoc = circle.radius;
+
+                    ///datasUnprep.Add(data);
+                    datasRdy[index] = data;
+                }
+                // CAPSULE
+                else if (datasUnprep[index].typeEnum == ColliderType.Capsule)
+                {
+                    ColliderDataReady data = new();
+                    data.type = (int)ColliderType.Capsule;
+
+                    // Compute world center.
+                    ///Vector2 offset = capsule.offset;
+                    ///data.offsetLoc = capsule.offset;
+
+                    Vector2 worldCenter = (Vector2)datasUnprep[index].posWorld +
+                        (Vector2)(Quaternion.Euler(0, 0, datasUnprep[index].rotWorld) * datasUnprep[index].offsetLoc);
+                    ///data.posWorld = capsule.transform.position;
+                    ///data.rotWorld = capsule.transform.eulerAngles.z;
+
+                    // Get lossy scale.
+                    ///Vector2 lossyScale = datasUnprep[index].lossyScale;
+                    float width = datasUnprep[index].sizeLoc.x * datasUnprep[index].lossyScale.x;
+                    float height = datasUnprep[index].sizeLoc.y * datasUnprep[index].lossyScale.y;
+                    ///data.lossyScale = capsule.transform.lossyScale;
+                    ///data.sizeLoc = capsule.size;
+
+                    // CapsuleCollider2D.direction: 0 = horizontal, 1 = vertical.
+                    if (datasUnprep[index].capsuleDirEnum == CapsuleDirection2D.Vertical)
+                    {
+                        data.capsuleRadius = width * 0.5f;
+                        float segment = math.max(0f, height * 0.5f - data.capsuleRadius);
+                        // Use transform.up for vertical orientation.
+                        ///Vector2 up = capsule.transform.up;
+                        data.capsuleA = worldCenter + (Vector2)datasUnprep[index].capsuleTransUp * segment;
+                        data.capsuleB = worldCenter - (Vector2)datasUnprep[index].capsuleTransUp * segment;
+                    }
+                    else // Horizontal
+                    {
+                        data.capsuleRadius = height * 0.5f;
+                        float segment = math.max(0f, width * 0.5f - data.capsuleRadius);
+                        ///Vector2 right = datasUnprep[index].capsuleTransRight;
+                        data.capsuleA = worldCenter + (Vector2)datasUnprep[index].capsuleTransRight * segment;
+                        data.capsuleB = worldCenter - (Vector2)datasUnprep[index].capsuleTransRight * segment;
+                    }
+                    ///data.capsuleDirEnum = capsule.direction;
+                    ///data.capsuleTransUp = capsule.transform.up;
+                    ///data.capsuleTransRight = capsule.transform.right;
+
+                    //datasUnprep.Add(data);
+                    datasRdy[index] = data;
+                }
+                // POLYGON
+                else if (datasUnprep[index].typeEnum == ColliderType.Polygon)
+                {
+                    ColliderDataReady data = new();
+                    data.type = (int)ColliderType.Polygon;
+
+                    data.vertexStartIndex = datasUnprep[index].vertexStartIndex;
+
+                    // poly.points are in local space; transform them to world space.
+                    ///Vector2[] polyPoint = poly.points;
+
+                    Vector2 worldPos = datasUnprep[index].posWorld;
+                    float worldAngle = datasUnprep[index].rotWorld;
+                    Vector2 loosyScale = datasUnprep[index].lossyScale;
+                    ///data.posWorld = poly.transform.position;
+                    ///data.rotWorld = poly.transform.eulerAngles.z;
+                    ///data.lossyScale = poly.transform.lossyScale;
+
+                    for (int i = datasUnprep[index].vertexStartIndex; 
+                        i < datasUnprep[index].vertexStartIndex + datasUnprep[index].vertexCount; i++)
+                    {
+                        ///Vector2 worldPt = poly.transform.TransformPoint(polyPoint[i]);
+                        vertsRdy[i] = Utils.TransformPoint(vertsUnprep[i], worldPos, worldAngle, loosyScale);
+
+                        ///vertsUnprep.Add(poly.points[i]);
+                    }
+                    data.vertexCount = datasUnprep[index].vertexCount;
+
+                    ///data.isClosed = 1; // PolygonCollider2D is a closed shape.
+                    data.isClosed = datasUnprep[index].isClosedBool ? 1 : 0;
+
+                    ///datasUnprep.Add(data);
+                    datasRdy[index] = data;
+                }
+                // EDGE
+                else if (datasUnprep[index].typeEnum == ColliderType.Edge)
+                {
+                    ColliderDataReady data = new();
+                    data.type = (int)ColliderType.Edge;
+
+                    data.vertexStartIndex = datasUnprep[index].vertexStartIndex;
+                    for (int i = datasUnprep[index].vertexStartIndex; 
+                        i < datasUnprep[index].vertexStartIndex + datasUnprep[index].vertexCount; i++)
+                    {
+                        ///Vector2 worldPt = edge.transform.TransformPoint(edge.points[i]);
+                        vertsRdy[i] = Utils.TransformPoint(vertsUnprep[i], datasUnprep[index].posWorld,
+                            datasUnprep[index].rotWorld, datasUnprep[index].lossyScale);
+
+                        //vertsUnprep.Add(edge.points[i]);
+                    }
+                    ///data.posWorld = edge.transform.position;
+                    ///data.rotWorld = edge.transform.eulerAngles.z;
+                    ///data.lossyScale = edge.transform.lossyScale;
+
+                    data.vertexCount = datasUnprep[index].vertexCount;
+
+                    data.isClosed = datasUnprep[index].isClosedBool ? 1 : 0; // Edge is open.
+                    ///data.isClosedBool = false;
+
+                    //datasUnprep.Add(data);
+                    datasRdy[index] = data;
+                }
+                // COMPOSITE
+                else if (datasUnprep[index].typeEnum == ColliderType.Composite)
+                {
+                    // CompositeCollider2D may contain multiple paths. Add one ColliderData per path.
+                    // IMPORTANT: To avoid applying the scale twice, do not use TransformPoint here.
+                    ///for (int p = 0; p < composite.pathCount; p++)
+                    ///{
+
+                    ColliderDataReady data = new();
+                    data.type = (int)ColliderType.Composite;
+
+                    ///int pointCount = composite.GetPathPointCount(p);
+                    ///Vector2[] path = new Vector2[pointCount];
+                    ///composite.GetPath(p, path);
+
+                    data.vertexStartIndex = datasUnprep[index].vertexStartIndex;
+                    // Instead of using TransformPoint (which applies scale), only apply rotation and translation.
+                    ///Vector2 compPos = composite.transform.position;
+                    ///float compRot = composite.transform.eulerAngles.z;
+                    Quaternion rot = Quaternion.Euler(0, 0, datasUnprep[index].rotWorld);
+                    ///data.posWorld = composite.transform.position;
+                    ///data.rotWorld = composite.transform.eulerAngles.z;
+
+                    for (int i = datasUnprep[index].vertexStartIndex;
+                        i < datasUnprep[index].vertexStartIndex + datasUnprep[index].vertexCount; i++)
+                    {
+                        vertsRdy[i] = (Vector2)datasUnprep[index].posWorld + 
+                            (Vector2)(rot * vertsUnprep[i]);
+                        ///vertsUnprep.Add(path[i]);
+                    }
+                    data.vertexCount = datasUnprep[index].vertexCount;
+
+                    // Assume composite shapes are closed.
+                    data.isClosed = datasUnprep[index].isClosedBool ? 1 : 0;
+                    ///data.isClosedBool = ;
+
+                    //datasUnprep.Add(data);
+                    datasRdy[index] = data;
+                    ///}
+                }
+                // FALLBACK: use bounds as a box.
+                else
+                {
+                    ColliderDataReady data = new();
+                    data.type = (int)ColliderType.Box;
+
+                    data.center = new float2(datasUnprep[index].posWorld.x, datasUnprep[index].posWorld.y);
+                    ///data.posWorld = col.bounds.center;
+
+                    ///data.rotationRad = 0f;
+
+                    data.size = new float2(datasUnprep[index].sizeLoc.x, datasUnprep[index].sizeLoc.y);
+                    ///data.sizeLoc = col.bounds.size;
+
+                    ///data.radius = 0f;
+
+                    ///datasUnprep.Add(data);
+                    datasRdy[index] = data;
+                }
+            }
         }
 
         [BurstCompile]
@@ -253,7 +630,7 @@ namespace Game
             public Vector2 rayDirection;
             public float rayDistance;
 
-            public NativeArray<ColliderData> colliderDataArray;
+            public NativeArray<ColliderDataReady> colliderDataArray;
             // Contains vertices for all polygon/edge/composite colliders.
             public NativeArray<float2> vertexArray;
 
@@ -265,7 +642,7 @@ namespace Game
             {
                 for (int i = 0; i < colliderDataArray.Length; i++)
                 {
-                    ColliderData data = colliderDataArray[i];
+                    ColliderDataReady data = colliderDataArray[i];
                     float newHitDistance = rayDistance;
                     Vector2 newHitPoint = Vector2.zero;
                     bool hit = false;
@@ -273,7 +650,7 @@ namespace Game
                     if (data.type == (int)ColliderType.Box)
                     {
                         hit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
-                                               data.center, data.rotation, data.size,
+                                               data.center, data.rotationRad, data.size,
                                                out newHitDistance, out newHitPoint);
                     }
                     else if (data.type == (int)ColliderType.Circle)
