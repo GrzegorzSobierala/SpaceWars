@@ -171,11 +171,6 @@ namespace Game
                     //Profiler.BeginSample("amigus polygon");
                     Vector2[] points = poly.points;
 
-                    for (int i = 0; i < points.Length; i++)
-                    {
-                        verticesUnprepared.Add(points[i]);
-                    }
-
                     ColliderDataUnprepared data = new()
                     {
                         typeEnum = ColliderType.Polygon,
@@ -187,6 +182,11 @@ namespace Game
                         isClosedBool = true
                     };
 
+                    for (int i = 0; i < points.Length; i++)
+                    {
+                        verticesUnprepared.Add(points[i]);
+                    }
+
                     colliderDatasUnprepared.Add(data);
                     //Profiler.EndSample();
                 }
@@ -196,10 +196,6 @@ namespace Game
                     //Profiler.BeginSample("amigus edge");
 
                     Vector2[] points = edge.points;
-                    for (int i = 0; i < points.Length; i++)
-                    {
-                        verticesUnprepared.Add(points[i]);
-                    }
 
                     ColliderDataUnprepared data = new ColliderDataUnprepared()
                     {
@@ -211,6 +207,11 @@ namespace Game
                         vertexCount = points.Length,
                         isClosedBool = false,
                     };
+
+                    for (int i = 0; i < points.Length; i++)
+                    {
+                        verticesUnprepared.Add(points[i]);
+                    }
 
                     colliderDatasUnprepared.Add(data);
                     //Profiler.EndSample();
@@ -225,11 +226,6 @@ namespace Game
                         Vector2[] path = new Vector2[pointCount];
                         composite.GetPath(p, path);
 
-                        for (int i = 0; i < path.Length; i++)
-                        {
-                            verticesUnprepared.Add(path[i]);
-                        }
-
                         ColliderDataUnprepared data = new ColliderDataUnprepared()
                         {
                             typeEnum = ColliderType.Composite,
@@ -239,6 +235,11 @@ namespace Game
                             vertexCount = path.Length,
                             isClosedBool = true,
                         };
+
+                        for (int i = 0; i < path.Length; i++)
+                        {
+                            verticesUnprepared.Add(path[i]);
+                        }
 
                         colliderDatasUnprepared.Add(data);
                     }
