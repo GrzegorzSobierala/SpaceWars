@@ -92,27 +92,28 @@ namespace Game
 
         private void Raycast2D()
         {
-                    Profiler.BeginSample("amigus over");
+                    Profiler.BeginSample("amigus1-1 over");
             // Get colliders overlapping an area.
             colliders = Physics2D.OverlapCircleAll(transform.position, transform.lossyScale.x/2);
             Profiler.EndSample();
 
-                    Profiler.BeginSample("amigus list1");
+                    Profiler.BeginSample("amigus1-2 list1");
             // We accumulate collider data in a list (since some colliders—Composite—may produce multiple shape entries).
             NativeList<ColliderDataUnprepared> colliderDatasUnprepared = new NativeList<ColliderDataUnprepared>(colliders.Length, Allocator.TempJob);
             Profiler.EndSample();
 
-                    Profiler.BeginSample("amigus list2");
+                    Profiler.BeginSample("amigus1-3 list2");
             // For colliders that use per-vertex data (polygons, edges, composites), we accumulate vertices here.
             NativeList<Vector2> verticesUnprepared = new NativeList<Vector2>(colliders.Length * 5, Allocator.TempJob);
             Profiler.EndSample();
 
+            Profiler.BeginSample("amigus1-4 dataUnpare");
             foreach (var col in colliders)
             {
                 // BOX
                 if (col is BoxCollider2D box)
                 {
-                    Profiler.BeginSample("amigus box");
+                    //Profiler.BeginSample("amigus box");
                     ColliderDataUnprepared data = new();
                     data.typeEnum = ColliderType.Box;
 
@@ -138,12 +139,12 @@ namespace Game
                     ///data.radius = 0f;
 
                     colliderDatasUnprepared.Add(data);
-                    Profiler.EndSample();
+                    //Profiler.EndSample();
                 }
                 // CIRCLE
                 else if (col is CircleCollider2D circle)
                 {
-                    Profiler.BeginSample("amigus circle");
+                    //Profiler.BeginSample("amigus circle");
                     ColliderDataUnprepared data = new();
                     data.typeEnum = ColliderType.Circle;
 
@@ -164,12 +165,12 @@ namespace Game
                     data.radiusLoc = circle.radius;
 
                     colliderDatasUnprepared.Add(data);
-                    Profiler.EndSample();
+                    //Profiler.EndSample();
                 }
                 // CAPSULE
                 else if (col is CapsuleCollider2D capsule)
                 {
-                    Profiler.BeginSample("amigus capsule");
+                    //Profiler.BeginSample("amigus capsule");
                     ColliderDataUnprepared data = new();
                     data.typeEnum = ColliderType.Capsule;
 
@@ -212,12 +213,12 @@ namespace Game
                     data.capsuleTransRight = capsule.transform.right;
 
                     colliderDatasUnprepared.Add(data);
-                    Profiler.EndSample();
+                    //Profiler.EndSample();
                 }
                 // POLYGON
                 else if (col is PolygonCollider2D poly)
                 {
-                    Profiler.BeginSample("amigus poly");
+                    //Profiler.BeginSample("amigus poly");
                     ColliderDataUnprepared data = new ColliderDataUnprepared();
                     data.typeEnum = ColliderType.Polygon;
 
@@ -247,12 +248,12 @@ namespace Game
                     data.isClosedBool = true;
 
                     colliderDatasUnprepared.Add(data);
-                    Profiler.EndSample();
+                    //Profiler.EndSample();
                 }
                 // EDGE
                 else if (col is EdgeCollider2D edge)
                 {
-                    Profiler.BeginSample("amigus edge");
+                    //Profiler.BeginSample("amigus edge");
                     ColliderDataUnprepared data = new ColliderDataUnprepared();
                     data.typeEnum = ColliderType.Edge;
 
@@ -275,14 +276,14 @@ namespace Game
                     data.isClosedBool = false;
 
                     colliderDatasUnprepared.Add(data);
-                    Profiler.EndSample();
+                    //Profiler.EndSample();
                 }
                 // COMPOSITE
                 else if (col is CompositeCollider2D composite)
                 {
                     // CompositeCollider2D may contain multiple paths. Add one ColliderData per path.
                     // IMPORTANT: To avoid applying the scale twice, do not use TransformPoint here.
-                    Profiler.BeginSample("amigus composite");
+                    //Profiler.BeginSample("amigus composite");
 
                     for (int p = 0; p < composite.pathCount; p++)
                     {
@@ -316,7 +317,7 @@ namespace Game
                         colliderDatasUnprepared.Add(data);
                     }
 
-                    Profiler.EndSample();
+                   // Profiler.EndSample();
                 }
                 // FALLBACK: use bounds as a box.
                 else
@@ -338,11 +339,18 @@ namespace Game
                     Debug.LogError("Unsuported collider type");
                 }
             }
+            Profiler.EndSample();
 
+            Profiler.BeginSample("amigus1-5 dataPrepare list1");
             //Preparing data job
             NativeArray<ColliderDataReady> colliderDatasReady = new(colliderDatasUnprepared.Length, Allocator.TempJob);
-            NativeArray<float2> verticesReady = new(verticesUnprepared.Length, Allocator.TempJob);
+            Profiler.EndSample();
 
+            Profiler.BeginSample("amigus1-6 dataPrepare list2");
+            NativeArray<float2> verticesReady = new(verticesUnprepared.Length, Allocator.TempJob);
+            Profiler.EndSample();
+
+            Profiler.BeginSample("amigus1-7-1 dataPrepare job");
             PrepareColliderDatasJob prepareJob = new PrepareColliderDatasJob
             {
                 datasUnprep = colliderDatasUnprepared,
@@ -350,23 +358,40 @@ namespace Game
                 datasRdy = colliderDatasReady,
                 vertsRdy = verticesReady,
             };
+            Profiler.EndSample();
 
-            JobHandle prepareJobHandle = prepareJob.Schedule(colliderDatasUnprepared.Length, 5);
-            prepareJobHandle.Complete();
-             
+            //Profiler.BeginSample("amigus1-7-2 dataPrepare job");
+            //JobHandle prepareJobHandle = prepareJob.Schedule(colliderDatasUnprepared.Length, 5);
+            //Profiler.EndSample();
+
+            Profiler.BeginSample("amigus1-7-3 dataPrepare job");
+            prepareJob.Run(colliderDatasReady.Length);
+            Profiler.EndSample();
+
+            Profiler.BeginSample("amigus1-8 dataPrepare dispose");
             colliderDatasUnprepared.Dispose();
             verticesUnprepared.Dispose();
+            Profiler.EndSample();
 
             //Ray job
 
+            Profiler.BeginSample("amigus1-9 rayJob dists list");
             NativeList<float> hitDistances = new NativeList<float>(Allocator.TempJob);
+            Profiler.EndSample();
+
+            Profiler.BeginSample("amigus2-1 rayJob min array");
             NativeArray<float> minDistance = new NativeArray<float>(1, Allocator.TempJob);
             minDistance[0] = _rayDistance;
+            Profiler.EndSample();
+
+            Profiler.BeginSample("amigus2-2 rayJob hitPoint array");
             NativeArray<Vector2> hitPoint = new NativeArray<Vector2>(1, Allocator.TempJob);
             hitPoint[0] = Vector2.zero;
+            Profiler.EndSample();
 
             //TODO Job for convert ColliderDataUnprepared in to ColliderDataReady
 
+            Profiler.BeginSample("amigus2-3 rayJob");
             Raycast2DJob raycastJob = new Raycast2DJob
             {
                 rayOrigin = transform.position,
@@ -380,18 +405,23 @@ namespace Game
             };
 
             raycastJob.Run();
+            Profiler.EndSample();
 
+            Profiler.BeginSample("amigus2-4 pos set");
             debugHitPoint.position = raycastJob.hitPoint[0];
+            Profiler.EndSample();
 
-            //colliderDatasUnprepared.Dispose();
-            //verticesUnprepared.Dispose();
+            Profiler.BeginSample("amigus2-5 rayJob dispose");
+            colliderDatasReady.Dispose();
+            verticesReady.Dispose();
             hitDistances.Dispose();
             minDistance.Dispose();
             hitPoint.Dispose();
+            Profiler.EndSample();
         }
 
         [BurstCompile]
-        public struct PrepareColliderDatasJob : IJobParallelFor
+        public struct PrepareColliderDatasJob : IJobFor
         {
             [ReadOnly, NativeDisableParallelForRestriction] public NativeList<ColliderDataUnprepared> datasUnprep;
             [ReadOnly, NativeDisableParallelForRestriction] public NativeList<Vector2> vertsUnprep;
