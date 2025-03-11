@@ -21,7 +21,7 @@ namespace Game.Physics
         private void Raycast2D()
         {
             Profiler.BeginSample("amigus1-1 over");
-            colliders = Physics2D.OverlapCircleAll(transform.position, transform.lossyScale.x/2);
+            colliders = Physics2D.OverlapCircleAll(transform.position, transform.lossyScale.x / 2);
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-2 list1");
@@ -35,153 +35,134 @@ namespace Game.Physics
             Profiler.BeginSample("amigus1-4 dataUnpare");
             foreach (var col in colliders)
             {
-                // BOX
-                if (col is BoxCollider2D box)
+                switch (col)
                 {
-                    //Profiler.BeginSample("amigus box");
-                    ColliderDataUnprepared data = new()
-                    {
-                        typeEnum = ColliderType.Box,
-                        posWorld = box.transform.position,
-                        rotWorld = box.transform.eulerAngles.z,
-                        offsetLoc = box.offset,
-                        lossyScale = box.transform.lossyScale,
-                        sizeLoc = box.size
-                    };
-
-                    datasUnprep.Add(data);
-                    //Profiler.EndSample();
-                }
-                // CIRCLE
-                else if (col is CircleCollider2D circle)
-                {
-                    //Profiler.BeginSample("amigus circle");
-                    ColliderDataUnprepared data = new()
-                    {
-                        typeEnum = ColliderType.Circle,
-                        posWorld = circle.transform.position,
-                        rotWorld = circle.transform.eulerAngles.z,
-                        offsetLoc = circle.offset,
-                        lossyScale = circle.transform.localScale,
-                        radiusLoc = circle.radius
-                    };
-                    
-
-                    datasUnprep.Add(data);
-                    //Profiler.EndSample();
-                }
-                // CAPSULE
-                else if (col is CapsuleCollider2D capsule)
-                {
-                    //Profiler.BeginSample("amigus capsule");
-                    ColliderDataUnprepared data = new()
-                    {
-                        typeEnum = ColliderType.Capsule,
-                        offsetLoc = capsule.offset,
-                        posWorld = capsule.transform.position,
-                        rotWorld = capsule.transform.eulerAngles.z,
-                        lossyScale = capsule.transform.lossyScale,
-                        sizeLoc = capsule.size,
-                        capsuleDirEnum = capsule.direction,
-                        capsuleTransUp = capsule.transform.up,
-                        capsuleTransRight = capsule.transform.right
-                    };
-
-                    datasUnprep.Add(data);
-                    //Profiler.EndSample();
-                }
-                // POLYGON
-                else if (col is PolygonCollider2D poly)
-                {
-                    //Profiler.BeginSample("amigus polygon");
-                    Vector2[] points = poly.points;
-
-                    ColliderDataUnprepared data = new()
-                    {
-                        typeEnum = ColliderType.Polygon,
-                        vertexStartIndex = vertsUnprep.Length,
-                        posWorld = poly.transform.position,
-                        rotWorld = poly.transform.eulerAngles.z,
-                        lossyScale = poly.transform.lossyScale,
-                        vertexCount = points.Length,
-                        isClosedBool = true
-                    };
-
-                    for (int i = 0; i < points.Length; i++)
-                    {
-                        vertsUnprep.Add(points[i]);
-                    }
-
-                    datasUnprep.Add(data);
-                    //Profiler.EndSample();
-                }
-                // EDGE
-                else if (col is EdgeCollider2D edge)
-                {
-                    //Profiler.BeginSample("amigus edge");
-
-                    Vector2[] points = edge.points;
-
-                    ColliderDataUnprepared data = new ColliderDataUnprepared()
-                    {
-                        typeEnum = ColliderType.Edge,
-                        vertexStartIndex = vertsUnprep.Length,
-                        posWorld = edge.transform.position,
-                        rotWorld = edge.transform.eulerAngles.z,
-                        lossyScale = edge.transform.lossyScale,
-                        vertexCount = points.Length,
-                        isClosedBool = false,
-                    };
-
-                    for (int i = 0; i < points.Length; i++)
-                    {
-                        vertsUnprep.Add(points[i]);
-                    }
-
-                    datasUnprep.Add(data);
-                    //Profiler.EndSample();
-                }
-                // COMPOSITE
-                else if (col is CompositeCollider2D composite)
-                {
-                    //Profiler.BeginSample("amigus composite");
-                    for (int p = 0; p < composite.pathCount; p++)
-                    {
-                        int pointCount = composite.GetPathPointCount(p);
-                        Vector2[] path = new Vector2[pointCount];
-                        composite.GetPath(p, path);
-
-                        ColliderDataUnprepared data = new ColliderDataUnprepared()
+                    case BoxCollider2D box:
+                        //Profiler.BeginSample("amigus box");
+                        ColliderDataUnprepared boxData = new()
                         {
-                            typeEnum = ColliderType.Composite,
-                            vertexStartIndex = vertsUnprep.Length,
-                            posWorld = composite.transform.position,
-                            rotWorld = composite.transform.eulerAngles.z,
-                            vertexCount = path.Length,
-                            isClosedBool = true,
+                            typeEnum = ColliderType.Box,
+                            posWorld = box.transform.position,
+                            rotWorld = box.transform.eulerAngles.z,
+                            offsetLoc = box.offset,
+                            lossyScale = box.transform.lossyScale,
+                            sizeLoc = box.size
                         };
+                        datasUnprep.Add(boxData);
+                        //Profiler.EndSample();
+                        break;
 
-                        for (int i = 0; i < path.Length; i++)
+                    case CircleCollider2D circle:
+                        //Profiler.BeginSample("amigus circle");
+                        ColliderDataUnprepared circleData = new()
                         {
-                            vertsUnprep.Add(path[i]);
+                            typeEnum = ColliderType.Circle,
+                            posWorld = circle.transform.position,
+                            rotWorld = circle.transform.eulerAngles.z,
+                            offsetLoc = circle.offset,
+                            lossyScale = circle.transform.localScale,
+                            radiusLoc = circle.radius
+                        };
+                        datasUnprep.Add(circleData);
+                        //Profiler.EndSample();
+                        break;
+
+                    case CapsuleCollider2D capsule:
+                        //Profiler.BeginSample("amigus capsule");
+                        ColliderDataUnprepared capsuleData = new()
+                        {
+                            typeEnum = ColliderType.Capsule,
+                            offsetLoc = capsule.offset,
+                            posWorld = capsule.transform.position,
+                            rotWorld = capsule.transform.eulerAngles.z,
+                            lossyScale = capsule.transform.lossyScale,
+                            sizeLoc = capsule.size,
+                            capsuleDirEnum = capsule.direction,
+                            capsuleTransUp = capsule.transform.up,
+                            capsuleTransRight = capsule.transform.right
+                        };
+                        datasUnprep.Add(capsuleData);
+                        //Profiler.EndSample();
+                        break;
+
+                    case PolygonCollider2D poly:
+                        //Profiler.BeginSample("amigus polygon");
+                        Vector2[] points = poly.points;
+                        ColliderDataUnprepared polyData = new()
+                        {
+                            typeEnum = ColliderType.Polygon,
+                            vertexStartIndex = vertsUnprep.Length,
+                            posWorld = poly.transform.position,
+                            rotWorld = poly.transform.eulerAngles.z,
+                            lossyScale = poly.transform.lossyScale,
+                            vertexCount = points.Length,
+                            isClosedBool = true
+                        };
+                        for (int i = 0; i < points.Length; i++)
+                        {
+                            vertsUnprep.Add(points[i]);
                         }
+                        datasUnprep.Add(polyData);
+                        //Profiler.EndSample();
+                        break;
 
-                        datasUnprep.Add(data);
-                    }
+                    case EdgeCollider2D edge:
+                        //Profiler.BeginSample("amigus edge");
+                        Vector2[] edgePoints = edge.points;
+                        ColliderDataUnprepared edgeData = new()
+                        {
+                            typeEnum = ColliderType.Edge,
+                            vertexStartIndex = vertsUnprep.Length,
+                            posWorld = edge.transform.position,
+                            rotWorld = edge.transform.eulerAngles.z,
+                            lossyScale = edge.transform.lossyScale,
+                            vertexCount = edgePoints.Length,
+                            isClosedBool = false,
+                        };
+                        for (int i = 0; i < edgePoints.Length; i++)
+                        {
+                            vertsUnprep.Add(edgePoints[i]);
+                        }
+                        datasUnprep.Add(edgeData);
+                        //Profiler.EndSample();
+                        break;
 
-                   // Profiler.EndSample();
-                }
-                else
-                {
-                    ColliderDataUnprepared data = new ColliderDataUnprepared()
-                    {
-                        typeEnum = ColliderType.Unsuported,
-                        posWorld = col.bounds.center,
-                        sizeLoc = col.bounds.size,
-                    };
+                    case CompositeCollider2D composite:
+                        //Profiler.BeginSample("amigus composite");
+                        for (int p = 0; p < composite.pathCount; p++)
+                        {
+                            int pointCount = composite.GetPathPointCount(p);
+                            Vector2[] path = new Vector2[pointCount];
+                            composite.GetPath(p, path);
+                            ColliderDataUnprepared compositeData = new()
+                            {
+                                typeEnum = ColliderType.Composite,
+                                vertexStartIndex = vertsUnprep.Length,
+                                posWorld = composite.transform.position,
+                                rotWorld = composite.transform.eulerAngles.z,
+                                vertexCount = path.Length,
+                                isClosedBool = true,
+                            };
+                            for (int i = 0; i < path.Length; i++)
+                            {
+                                vertsUnprep.Add(path[i]);
+                            }
+                            datasUnprep.Add(compositeData);
+                        }
+                        //Profiler.EndSample();
+                        break;
 
-                    datasUnprep.Add(data);
-                    Debug.LogError("Unsuported collider type");
+                    default:
+                        ColliderDataUnprepared defaultData = new()
+                        {
+                            typeEnum = ColliderType.Unsuported,
+                            posWorld = col.bounds.center,
+                            sizeLoc = col.bounds.size,
+                        };
+                        datasUnprep.Add(defaultData);
+                        Debug.LogError("Unsuported collider type");
+                        break;
+
                 }
             }
             Profiler.EndSample();
@@ -260,6 +241,6 @@ namespace Game.Physics
             Profiler.EndSample();
         }
 
-        
+
     }
 }

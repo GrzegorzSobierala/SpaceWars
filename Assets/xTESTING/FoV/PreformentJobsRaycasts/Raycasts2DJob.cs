@@ -30,31 +30,30 @@ namespace Game.Physics
                 Vector2 newHitPoint = Vector2.zero;
                 bool hit = false;
 
-                if (data.type == (int)ColliderType.Box)
+                switch (data.type)
                 {
-                    hit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
-                                           data.center, data.rotationRad, data.size,
-                                           out newHitDistance, out newHitPoint);
-                }
-                else if (data.type == (int)ColliderType.Circle)
-                {
-                    hit = RayIntersectsCircle(rayOrigin, rayDirection, rayDistance,
-                                              data.center, data.radius,
-                                              out newHitDistance, out newHitPoint);
-                }
-                else if (data.type == (int)ColliderType.Capsule)
-                {
-                    hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance,
-                                               data.capsuleA, data.capsuleB, data.capsuleRadius,
-                                               out newHitDistance, out newHitPoint);
-                }
-                else if (data.type == (int)ColliderType.Polygon ||
-                         data.type == (int)ColliderType.Edge ||
-                         data.type == (int)ColliderType.Composite)
-                {
-                    hit = RayIntersectsPolygon(vertexArray, data.vertexStartIndex, data.vertexCount, data.isClosed,
-                                                rayOrigin, rayDirection, rayDistance,
-                                                out newHitDistance, out newHitPoint);
+                    case (int)ColliderType.Box:
+                        hit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
+                            data.center, data.rotationRad, data.size,out newHitDistance, 
+                            out newHitPoint);
+                        break;
+
+                    case (int)ColliderType.Circle:
+                        hit = RayIntersectsCircle(rayOrigin, rayDirection, rayDistance,data.center, 
+                            data.radius,out newHitDistance, out newHitPoint);
+                        break;
+
+                    case (int)ColliderType.Capsule:
+                        hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance,data.capsuleA, 
+                            data.capsuleB, data.capsuleRadius, out newHitDistance, out newHitPoint);
+                        break;
+
+                    case (int)ColliderType.Polygon:
+                    case (int)ColliderType.Edge:
+                    case (int)ColliderType.Composite:
+                        hit = RayIntersectsPolygon(vertexArray, data.vertexStartIndex, data.vertexCount, data.isClosed,
+                            rayOrigin, rayDirection, rayDistance, out newHitDistance, out newHitPoint);
+                        break;
                 }
 
                 if (hit)
