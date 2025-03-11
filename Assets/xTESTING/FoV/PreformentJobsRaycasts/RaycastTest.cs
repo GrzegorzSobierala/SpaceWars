@@ -12,7 +12,6 @@ namespace Game.Physics
         public float _rayDistance = 10f;
         public Transform debugHitPoint;
 
-        //private Collider2D[] colliders;
         private Vector2[] _pathPointsCompositeCache = new Vector2[10];
 
         private Collider2D _overlapCollider;
@@ -37,7 +36,6 @@ namespace Game.Physics
         private void Raycast2D()
         {
             Profiler.BeginSample("amigus1-1 over");
-            //colliders = Physics2D.OverlapCircleAll(transform.position, transform.lossyScale.x / 2);
             _overlapCollider.OverlapCollider(_filter, _collidersCashe);
             Profiler.EndSample();
 
@@ -51,8 +49,10 @@ namespace Game.Physics
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-4 dataUnpare");
-            foreach (var col in _collidersCashe)
+
+            for (int i = 0; i < _collidersCashe.Count; i++)
             {
+                Collider2D col = _collidersCashe[i];
                 Transform colTrans = col.transform;
                 switch (col)
                 {
