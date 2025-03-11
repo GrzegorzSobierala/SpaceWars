@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Game.Physics
 {
     public enum ColliderType
@@ -12,5 +10,4 @@ namespace Game.Physics
         Composite = 5, // treated as a closed set of edges
         Unsuported = 6,
     }
-
 }

@@ -1,10 +1,8 @@
-using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Profiling;
-using Game.Utility;
 
 namespace Game.Physics
 {
