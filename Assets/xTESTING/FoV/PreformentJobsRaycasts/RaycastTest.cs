@@ -36,58 +36,61 @@ namespace Game.Physics
             Profiler.BeginSample("amigus1-4 dataUnpare");
             foreach (var col in colliders)
             {
+                Transform colTrans = col.transform;
                 switch (col)
                 {
                     case BoxCollider2D box:
-                        //Profiler.BeginSample("amigus box");
+                        Profiler.BeginSample("amigus1-4-1 dataUnpare box");
+
                         ColliderDataUnprepared boxData = new()
                         {
                             typeEnum = ColliderType.Box,
-                            posWorld = box.transform.position,
-                            rotWorld = box.transform.eulerAngles.z,
+                            posWorld = colTrans.position,
+                            rotWorld = colTrans.eulerAngles.z,
                             offsetLoc = box.offset,
-                            lossyScale = box.transform.lossyScale,
+                            lossyScale = colTrans.lossyScale,
                             sizeLoc = box.size
                         };
                         datasUnprep.Add(boxData);
-                        //Profiler.EndSample();
+                        Profiler.EndSample();
                         break;
 
                     case CircleCollider2D circle:
-                        //Profiler.BeginSample("amigus circle");
+                        Profiler.BeginSample("amigus1-4-2 dataUnpare circle");
+
                         ColliderDataUnprepared circleData = new()
                         {
                             typeEnum = ColliderType.Circle,
-                            posWorld = circle.transform.position,
-                            rotWorld = circle.transform.eulerAngles.z,
+                            posWorld = colTrans.position,
+                            rotWorld = colTrans.eulerAngles.z,
                             offsetLoc = circle.offset,
-                            lossyScale = circle.transform.localScale,
+                            lossyScale = colTrans.localScale,
                             radiusLoc = circle.radius
                         };
                         datasUnprep.Add(circleData);
-                        //Profiler.EndSample();
+                        Profiler.EndSample();
                         break;
 
                     case CapsuleCollider2D capsule:
-                        //Profiler.BeginSample("amigus capsule");
+                        Profiler.BeginSample("amigus1-4-3 dataUnpare capsule");
                         ColliderDataUnprepared capsuleData = new()
                         {
                             typeEnum = ColliderType.Capsule,
                             offsetLoc = capsule.offset,
-                            posWorld = capsule.transform.position,
-                            rotWorld = capsule.transform.eulerAngles.z,
-                            lossyScale = capsule.transform.lossyScale,
+                            posWorld = colTrans.position,
+                            rotWorld = colTrans.eulerAngles.z,
+                            lossyScale = colTrans.lossyScale,
                             sizeLoc = capsule.size,
                             capsuleDirEnum = capsule.direction,
-                            capsuleTransUp = capsule.transform.up,
-                            capsuleTransRight = capsule.transform.right
+                            capsuleTransUp = colTrans.up,
+                            capsuleTransRight = colTrans.right
                         };
                         datasUnprep.Add(capsuleData);
-                        //Profiler.EndSample();
+                        Profiler.EndSample();
                         break;
 
                     case PolygonCollider2D poly:
-                        //Profiler.BeginSample("amigus polygon 1");
+                        Profiler.BeginSample("amigus1-4-4 dataUnpare poly");
                         Vector2[] points = poly.points;
                         //Profiler.EndSample();
 
@@ -96,9 +99,9 @@ namespace Game.Physics
                         {
                             typeEnum = ColliderType.Polygon,
                             vertexStartIndex = vertsUnprep.Length,
-                            posWorld = poly.transform.position,
-                            rotWorld = poly.transform.eulerAngles.z,
-                            lossyScale = poly.transform.lossyScale,
+                            posWorld = colTrans.position,
+                            rotWorld = colTrans.eulerAngles.z,
+                            lossyScale = colTrans.lossyScale,
                             vertexCount = points.Length,
                             isClosedBool = true
                         };
@@ -116,19 +119,19 @@ namespace Game.Physics
                         //Profiler.EndSample();
                         //Profiler.BeginSample("amigus polygon 4");
                         datasUnprep.Add(polyData);
-                        //Profiler.EndSample();
+                        Profiler.EndSample();
                         break;
 
                     case EdgeCollider2D edge:
-                        //Profiler.BeginSample("amigus edge");
+                        Profiler.BeginSample("amigus1-4-5 dataUnpare edge");
                         Vector2[] edgePoints = edge.points;
                         ColliderDataUnprepared edgeData = new()
                         {
                             typeEnum = ColliderType.Edge,
                             vertexStartIndex = vertsUnprep.Length,
-                            posWorld = edge.transform.position,
-                            rotWorld = edge.transform.eulerAngles.z,
-                            lossyScale = edge.transform.lossyScale,
+                            posWorld = colTrans.position,
+                            rotWorld = colTrans.eulerAngles.z,
+                            lossyScale = colTrans.lossyScale,
                             vertexCount = edgePoints.Length,
                             isClosedBool = false,
                         };
@@ -142,29 +145,30 @@ namespace Game.Physics
                         }
 
                         datasUnprep.Add(edgeData);
-                        //Profiler.EndSample();
+                        Profiler.EndSample();
                         break;
 
                     case CompositeCollider2D composite:
+                        Profiler.BeginSample("amigus1-4-6 dataUnpare composite");
                         for (int p = 0; p < composite.pathCount; p++)
                         {
-                            //Profiler.BeginSample("amigus composite 1");
+                            Profiler.BeginSample("amigus composite 1");
                             int pointCount = composite.GetPathPointCount(p);
-                            //Profiler.EndSample();
+                            Profiler.EndSample();
 
-                            //Profiler.BeginSample("amigus composite 2");
+                            Profiler.BeginSample("amigus composite 2");
                             ColliderDataUnprepared compositeData = new()
                             {
                                 typeEnum = ColliderType.Composite,
                                 vertexStartIndex = vertsUnprep.Length,
-                                posWorld = composite.transform.position,
-                                rotWorld = composite.transform.eulerAngles.z,
+                                posWorld = colTrans.position,
+                                rotWorld = colTrans.eulerAngles.z,
                                 vertexCount = pointCount,
                                 isClosedBool = true,
                             };
-                            //Profiler.EndSample();
+                            Profiler.EndSample();
 
-                            //Profiler.BeginSample("amigus composite 3");
+                            Profiler.BeginSample("amigus composite 3");
                             unsafe
                             {
                                 if (_pathPointsCompositeCache.Length < pointCount)
@@ -178,12 +182,13 @@ namespace Game.Physics
                                 }
                             }
                             
-                            //Profiler.EndSample();
+                            Profiler.EndSample();
 
-                            //Profiler.BeginSample("amigus composite 4");
+                            Profiler.BeginSample("amigus composite 4");
                             datasUnprep.Add(compositeData);
-                            //Profiler.EndSample();
+                            Profiler.EndSample();
                         }
+                        Profiler.EndSample();
                         break;
 
                     default:
@@ -219,11 +224,7 @@ namespace Game.Physics
             };
             Profiler.EndSample();
 
-            //Profiler.BeginSample("amigus1-7-2 dataPrepare job");
-            //JobHandle prepareJobHandle = prepareJob.Schedule(colliderDatasUnprepared.Length, 5);
-            //Profiler.EndSample();
-
-            Profiler.BeginSample("amigus1-7-3 dataPrepare job");
+            Profiler.BeginSample("amigus1-7-2 dataPrepare job");
             prepareJob.Run(datasRdy.Length);
             Profiler.EndSample();
 
