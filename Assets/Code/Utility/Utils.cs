@@ -615,6 +615,58 @@ namespace Game.Utility
             // Collider type not supported.
             return false;
         }
+
+        /// <summary>
+        /// Transforms a local point into world space by applying scale, rotation, and translation.
+        /// </summary>
+        /// <param name="localPoint">The local space point to transform.</param>
+        /// <param name="worldPos">The translation (world position) to add.</param>
+        /// <param name="worldAngle">The rotation angle (in degrees) to apply.</param>
+        /// <param name="loosyScale">The scale to apply.</param>
+        /// <returns>The transformed point in world space.</returns>
+        public static Vector2 TransformPoint(Vector2 localPoint, Vector2 worldPos, float worldAngle, Vector2 loosyScale)
+        {
+            // First apply the scale to the local point
+            Vector2 scaled = new Vector2(localPoint.x * loosyScale.x, localPoint.y * loosyScale.y);
+
+            // Convert angle from degrees to radians for rotation
+            float rad = worldAngle * Mathf.Deg2Rad;
+            float cos = Mathf.Cos(rad);
+            float sin = Mathf.Sin(rad);
+
+            // Rotate the scaled point
+            Vector2 rotated = new Vector2(
+                scaled.x * cos - scaled.y * sin,
+                scaled.x * sin + scaled.y * cos
+            );
+
+            // Finally, translate by world position
+            return worldPos + rotated;
+        }
+
+        /// <summary>
+        /// Transforms a local point into world space by applying rotation and translation.
+        /// </summary>
+        /// <param name="localPoint">The local space point to transform.</param>
+        /// <param name="worldPos">The translation (world position) to add.</param>
+        /// <param name="worldAngle">The rotation angle (in degrees) to apply.</param>
+        /// <returns>The transformed point in world space.</returns>
+        public static Vector2 TransformPoint(Vector2 localPoint, Vector2 worldPos, float worldAngle)
+        {
+            // Convert angle from degrees to radians for rotation
+            float rad = worldAngle * Mathf.Deg2Rad;
+            float cos = Mathf.Cos(rad);
+            float sin = Mathf.Sin(rad);
+
+            // Rotate the local point
+            Vector2 rotated = new Vector2(
+                localPoint.x * cos - localPoint.y * sin,
+                localPoint.x * sin + localPoint.y * cos
+            );
+
+            // Finally, translate by world position
+            return worldPos + rotated;
+        }
     }
 
     public static class Async
