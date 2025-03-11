@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -11,8 +12,22 @@ namespace Game.Physics
         public float _rayDistance = 10f;
         public Transform debugHitPoint;
 
-        private Collider2D[] colliders;
+        //private Collider2D[] colliders;
         private Vector2[] _pathPointsCompositeCache = new Vector2[10];
+
+        private Collider2D _overlapCollider;
+        private ContactFilter2D _filter;
+        private List<Collider2D> _collidersCashe = new();
+
+        private void Awake()
+        {
+            _overlapCollider = GetComponent<Collider2D>();
+            _filter = new ContactFilter2D()
+            {
+                useTriggers = false,
+            };
+
+        }
 
         private void Update()
         {
@@ -22,19 +37,21 @@ namespace Game.Physics
         private void Raycast2D()
         {
             Profiler.BeginSample("amigus1-1 over");
-            colliders = Physics2D.OverlapCircleAll(transform.position, transform.lossyScale.x / 2);
+            //colliders = Physics2D.OverlapCircleAll(transform.position, transform.lossyScale.x / 2);
+            _overlapCollider.OverlapCollider(_filter, _collidersCashe);
             Profiler.EndSample();
 
+
             Profiler.BeginSample("amigus1-2 list1");
-            NativeList<ColliderDataUnprepared> datasUnprep = new(colliders.Length, Allocator.TempJob);
+            NativeList<ColliderDataUnprepared> datasUnprep = new(_collidersCashe.Count, Allocator.TempJob);
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-3 list2");
-            NativeList<Vector2> vertsUnprep = new(colliders.Length * 5, Allocator.TempJob);
+            NativeList<Vector2> vertsUnprep = new(_collidersCashe.Count * 5, Allocator.TempJob);
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-4 dataUnpare");
-            foreach (var col in colliders)
+            foreach (var col in _collidersCashe)
             {
                 Transform colTrans = col.transform;
                 switch (col)
