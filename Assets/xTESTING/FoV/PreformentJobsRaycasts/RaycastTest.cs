@@ -32,7 +32,7 @@ namespace Game.Physics
             NativeList<Vector2> vertsUnprep = new(colliders.Length * 5, Allocator.TempJob);
             Profiler.EndSample();
 
-            //Profiler.BeginSample("amigus1-4 dataUnpare");
+            Profiler.BeginSample("amigus1-4 dataUnpare");
             foreach (var col in colliders)
             {
                 switch (col)
@@ -86,11 +86,11 @@ namespace Game.Physics
                         break;
 
                     case PolygonCollider2D poly:
-                        Profiler.BeginSample("amigus polygon 1");
+                        //Profiler.BeginSample("amigus polygon 1");
                         Vector2[] points = poly.points;
-                        Profiler.EndSample();
+                        //Profiler.EndSample();
 
-                        Profiler.BeginSample("amigus polygon 2");
+                        //Profiler.BeginSample("amigus polygon 2");
                         ColliderDataUnprepared polyData = new()
                         {
                             typeEnum = ColliderType.Polygon,
@@ -101,9 +101,9 @@ namespace Game.Physics
                             vertexCount = points.Length,
                             isClosedBool = true
                         };
-                        Profiler.EndSample();
+                        //Profiler.EndSample();
 
-                        Profiler.BeginSample("amigus polygon 3");
+                        //Profiler.BeginSample("amigus polygon 3");
                         unsafe
                         {
                             fixed(Vector2* ptr = points)
@@ -111,15 +111,11 @@ namespace Game.Physics
                                 vertsUnprep.AddRange(ptr, points.Length);
                             }
                         }
-                        Profiler.EndSample();
 
-                        //for (int i = 0; i < points.Length; i++)
-                        //{
-                        //    vertsUnprep.Add(points[i]);
-                        //}
-                        Profiler.BeginSample("amigus polygon 4");
+                        //Profiler.EndSample();
+                        //Profiler.BeginSample("amigus polygon 4");
                         datasUnprep.Add(polyData);
-                        Profiler.EndSample();
+                        //Profiler.EndSample();
                         break;
 
                     case EdgeCollider2D edge:
@@ -135,10 +131,15 @@ namespace Game.Physics
                             vertexCount = edgePoints.Length,
                             isClosedBool = false,
                         };
-                        for (int i = 0; i < edgePoints.Length; i++)
+
+                        unsafe
                         {
-                            vertsUnprep.Add(edgePoints[i]);
+                            fixed (Vector2* ptr = edgePoints)
+                            {
+                                vertsUnprep.AddRange(ptr, edgePoints.Length);
+                            }
                         }
+
                         datasUnprep.Add(edgeData);
                         //Profiler.EndSample();
                         break;
@@ -159,10 +160,15 @@ namespace Game.Physics
                                 vertexCount = path.Length,
                                 isClosedBool = true,
                             };
-                            for (int i = 0; i < path.Length; i++)
+
+                            unsafe
                             {
-                                vertsUnprep.Add(path[i]);
+                                fixed (Vector2* ptr = path)
+                                {
+                                    vertsUnprep.AddRange(ptr, path.Length);
+                                }
                             }
+
                             datasUnprep.Add(compositeData);
                         }
                         //Profiler.EndSample();
@@ -181,7 +187,7 @@ namespace Game.Physics
 
                 }
             }
-            //Profiler.EndSample();
+            Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-5 dataPrepare list1");
             NativeArray<ColliderDataReady> datasRdy = new(datasUnprep.Length, Allocator.TempJob);
