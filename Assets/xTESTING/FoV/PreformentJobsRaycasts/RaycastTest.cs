@@ -12,6 +12,7 @@ namespace Game.Physics
         public Transform debugHitPoint;
 
         private Collider2D[] colliders;
+        private Vector2[] _pathPointsCompositeCache = new Vector2[10];
 
         private void Update()
         {
@@ -145,33 +146,44 @@ namespace Game.Physics
                         break;
 
                     case CompositeCollider2D composite:
-                        //Profiler.BeginSample("amigus composite");
                         for (int p = 0; p < composite.pathCount; p++)
                         {
+                            //Profiler.BeginSample("amigus composite 1");
                             int pointCount = composite.GetPathPointCount(p);
-                            Vector2[] path = new Vector2[pointCount];
-                            composite.GetPath(p, path);
+                            //Profiler.EndSample();
+
+                            //Profiler.BeginSample("amigus composite 2");
                             ColliderDataUnprepared compositeData = new()
                             {
                                 typeEnum = ColliderType.Composite,
                                 vertexStartIndex = vertsUnprep.Length,
                                 posWorld = composite.transform.position,
                                 rotWorld = composite.transform.eulerAngles.z,
-                                vertexCount = path.Length,
+                                vertexCount = pointCount,
                                 isClosedBool = true,
                             };
+                            //Profiler.EndSample();
 
+                            //Profiler.BeginSample("amigus composite 3");
                             unsafe
                             {
-                                fixed (Vector2* ptr = path)
+                                if (_pathPointsCompositeCache.Length < pointCount)
                                 {
-                                    vertsUnprep.AddRange(ptr, path.Length);
+                                    _pathPointsCompositeCache = new Vector2[pointCount];
+                                }
+                                composite.GetPath(p, _pathPointsCompositeCache);
+                                fixed (Vector2* pathPointsPtr = _pathPointsCompositeCache)
+                                {
+                                    vertsUnprep.AddRange(pathPointsPtr, pointCount);
                                 }
                             }
+                            
+                            //Profiler.EndSample();
 
+                            //Profiler.BeginSample("amigus composite 4");
                             datasUnprep.Add(compositeData);
+                            //Profiler.EndSample();
                         }
-                        //Profiler.EndSample();
                         break;
 
                     default:
