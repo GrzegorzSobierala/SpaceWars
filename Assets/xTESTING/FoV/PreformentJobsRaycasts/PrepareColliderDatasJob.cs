@@ -100,7 +100,7 @@ namespace Game.Physics
                             type = (int)ColliderType.Polygon,
                             vertexStartIndex = datasUnprep[index].vertexStartIndex,
                             vertexCount = datasUnprep[index].vertexCount,
-                            isClosed = datasUnprep[index].isClosedBool ? 1 : 0,
+                            isClosed = 1,
                         };
 
                         // poly.points are in local space; transform them to world space.
@@ -126,7 +126,7 @@ namespace Game.Physics
                             type = (int)ColliderType.Edge,
                             vertexStartIndex = datasUnprep[index].vertexStartIndex,
                             vertexCount = datasUnprep[index].vertexCount,
-                            isClosed = datasUnprep[index].isClosedBool ? 1 : 0, // Edge is open.
+                            isClosed = 0, // Edge is open.
                         };
 
                         for (int i = datasUnprep[index].vertexStartIndex;
@@ -151,7 +151,7 @@ namespace Game.Physics
                             vertexStartIndex = datasUnprep[index].vertexStartIndex,
                             vertexCount = datasUnprep[index].vertexCount,
                             // Assume composite shapes are closed.
-                            isClosed = datasUnprep[index].isClosedBool ? 1 : 0,
+                            isClosed = 1,
                         };
 
                         Quaternion rot = Quaternion.Euler(0, 0, datasUnprep[index].rotWorld);

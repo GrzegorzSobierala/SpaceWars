@@ -120,7 +120,6 @@ namespace Game.Physics
                             rotWorld = colTrans.eulerAngles.z,
                             lossyScale = colTrans.lossyScale,
                             vertexCount = points.Length,
-                            isClosedBool = true
                         };
                         //Profiler.EndSample();
 
@@ -150,7 +149,6 @@ namespace Game.Physics
                             rotWorld = colTrans.eulerAngles.z,
                             lossyScale = colTrans.lossyScale,
                             vertexCount = edgePoints.Length,
-                            isClosedBool = false,
                         };
 
                         unsafe
@@ -181,8 +179,17 @@ namespace Game.Physics
                                 posWorld = colTrans.position,
                                 rotWorld = colTrans.eulerAngles.z,
                                 vertexCount = pointCount,
-                                isClosedBool = true,
                             };
+
+                            //ColliderDataUnpreparedCompose compositeData = new()
+                            //{
+                            //    typeEnum = ColliderType.Composite,
+                            //    vertexStartIndex = vertsUnprep.Length,
+                            //    posWorld = colTrans.position,
+                            //    rotWorld = colTrans.eulerAngles.z,
+                            //    vertexCount = pointCount,
+                            //};
+
                             Profiler.EndSample();
 
                             Profiler.BeginSample("amigus composite 3");
@@ -202,7 +209,7 @@ namespace Game.Physics
                             Profiler.EndSample();
 
                             Profiler.BeginSample("amigus composite 4");
-                            datasUnprep.Add(compositeData);
+                            //datasUnprep.Add(compositeData);
                             Profiler.EndSample();
                         }
                         Profiler.EndSample();
