@@ -1,6 +1,4 @@
 using AYellowpaper.SerializedCollections;
-using CodeMonkey.Utils;
-using Game.Management;
 using Game.Utility;
 using Game.Utility.Globals;
 using System;
@@ -11,7 +9,6 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Profiling;
 using Unity.Jobs.LowLevel.Unsafe;
-using Zenject;
 
 namespace Game.Physics
 {
@@ -27,9 +24,7 @@ namespace Game.Physics
         [SerializeField] private float _fov = 90;
         [SerializeField] private int _rayCount = 2;
         [SerializeField] private float _viewDistance = 500f;
-        [SerializeField] private bool _queriesStartInColliders = false;
         [SerializeField] private SerializedDictionary<Collider2D, OneEnum> _ignoreColliders;
-        [SerializeField, Range(1,50)] private int _batchCount = 10;
 
         private static HashSet<Collider2D> _DEBUG_wrongLayerColliders = new();
 
@@ -85,8 +80,6 @@ namespace Game.Physics
                 layerMask = _allLayerMask,
                 useLayerMask = true,
             };
-
-            _mesh.uv = new Vector2[_rayCount + 1 + 1];
         }
 
         private void OnValidate()
@@ -94,7 +87,10 @@ namespace Game.Physics
             if(!Application.isPlaying)
                 return;
 
-            _mesh.uv = new Vector2[_rayCount + 1 + 1];
+            if (_mesh)
+            {
+                _mesh.uv = new Vector2[_rayCount + 1 + 1];
+            }
         }
 
         private LayerMask GetAllLayerMask()
