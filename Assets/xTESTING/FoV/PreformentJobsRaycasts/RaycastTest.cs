@@ -239,7 +239,7 @@ namespace Game.Physics
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-7-1 dataPrepare job");
-            PrepareColliderDatasJob prepareJob = new PrepareColliderDatasJob
+            DEPRECATED_PrepareColliderDatasJob prepareJob = new DEPRECATED_PrepareColliderDatasJob
             {
                 datasUnprep = datasUnprep,
                 vertsUnprep = vertsUnprep,

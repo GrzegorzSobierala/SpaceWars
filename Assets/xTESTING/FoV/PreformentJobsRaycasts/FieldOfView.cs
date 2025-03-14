@@ -26,9 +26,6 @@ namespace Game.Physics
         [SerializeField] private float _viewDistance = 500f;
         [SerializeField] private SerializedDictionary<Collider2D, OneEnum> _ignoreColliders;
 
-        private static HashSet<Collider2D> _DEBUG_wrongLayerColliders = new();
-
-        private float AngleIncrease => _fov / _rayCount;
         private const float PlayerCameraMaxViewDistance = 500f;
 
         private MeshFilter _meshFilter;
@@ -294,7 +291,7 @@ namespace Game.Physics
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-7-1 dataPrepare job");
-            PrepareColliderDatasJob prepareJob = new PrepareColliderDatasJob
+            DEPRECATED_PrepareColliderDatasJob prepareJob = new DEPRECATED_PrepareColliderDatasJob
             {
                 datasUnprep = datasUnprep,
                 vertsUnprep = vertsUnprep,
@@ -322,7 +319,7 @@ namespace Game.Physics
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus2-3 rayJob create");
-            Raycast2DWithMeshJob raycastsJob = new Raycast2DWithMeshJob
+            DEPRECATED_Raycast2DWithMeshJob raycastsJob = new DEPRECATED_Raycast2DWithMeshJob
             {
                 rayOrigin = transform.position,
                 rayDistance = _viewDistance,

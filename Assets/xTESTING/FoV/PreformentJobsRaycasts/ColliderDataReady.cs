@@ -22,5 +22,7 @@ namespace Game.Physics
         public int vertexStartIndex;
         public int vertexCount;
         public int isClosed;
+
+        public int colliderId;
     }
 }

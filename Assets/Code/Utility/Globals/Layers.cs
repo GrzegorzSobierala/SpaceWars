@@ -18,6 +18,7 @@ namespace Game.Utility.Globals
         public const string Obstacle = "Obstacle";
         public const string SmallObstacle = "SmallObstacle";
         public const string ObstacleShootAbove = "ObstacleShootAbove";
+        public const string EnemyFieldOfView = "EnemyFieldOfView";
 
         // Graphic
         public const string Blur = "Blur";

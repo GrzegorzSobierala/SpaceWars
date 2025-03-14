@@ -22,5 +22,7 @@ namespace Game.Physics
         public Vector3 capsuleTransRight;
         public int vertexStartIndex;
         public int vertexCount;
+
+        public int colliderId;
     }
 }
