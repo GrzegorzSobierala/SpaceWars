@@ -13,8 +13,10 @@ namespace Game.Physics
         [ReadOnly] public NativeList<ColliderDataUnprepared> datasUnprep;
         [ReadOnly] public NativeList<Vector2> vertsUnprep;
 
-        [WriteOnly, NativeDisableParallelForRestriction] public NativeArray<ColliderDataReady> datasRdy;
-        [WriteOnly, NativeDisableParallelForRestriction] public NativeArray<float2> vertsRdy;
+        [WriteOnly, NativeDisableParallelForRestriction] 
+            public NativeHashMap<int, ColliderDataReady>.ParallelWriter datasRdy;
+        [WriteOnly, NativeDisableParallelForRestriction] 
+            public NativeArray<float2> vertsRdy;
 
         public void Execute(int index)
         {
@@ -40,7 +42,7 @@ namespace Game.Physics
                             colliderId = datasUnprep[index].colliderId
                         };
 
-                        datasRdy[index] = data;
+                        datasRdy.TryAdd(datasUnprep[index].colliderId, data);
                         break;
                     }
                 case ColliderType.Circle:
@@ -58,7 +60,7 @@ namespace Game.Physics
                             colliderId = datasUnprep[index].colliderId
                         };
 
-                        datasRdy[index] = data;
+                        datasRdy.TryAdd(datasUnprep[index].colliderId, data);
                         break;
                     }
                 case ColliderType.Capsule:
@@ -94,7 +96,7 @@ namespace Game.Physics
                             colliderId = datasUnprep[index].colliderId
                         };
 
-                        datasRdy[index] = data;
+                        datasRdy.TryAdd(datasUnprep[index].colliderId, data);
                         break;
                     }
                 case ColliderType.Polygon:
@@ -121,7 +123,7 @@ namespace Game.Physics
                                 loosyScale);
                         }
 
-                        datasRdy[index] = data;
+                        datasRdy.TryAdd(datasUnprep[index].colliderId, data);
                         break;
                     }
                 case ColliderType.Edge:
@@ -144,7 +146,7 @@ namespace Game.Physics
                                 datasUnprep[index].lossyScale);
                         }
 
-                        datasRdy[index] = data;
+                        datasRdy.TryAdd(datasUnprep[index].colliderId, data);
                         break;
                     }
                 case ColliderType.Composite:
@@ -171,7 +173,7 @@ namespace Game.Physics
                                 (Vector2)(rot * vertsUnprep[i]);
                         }
 
-                        datasRdy[index] = data;
+                        datasRdy.TryAdd(datasUnprep[index].colliderId, data);
                         break;
                     }
                 default:
@@ -188,7 +190,7 @@ namespace Game.Physics
                             colliderId = datasUnprep[index].colliderId
                         };
 
-                        datasRdy[index] = data;
+                        datasRdy.TryAdd(datasUnprep[index].colliderId, data);
                         break;
                     }
             }

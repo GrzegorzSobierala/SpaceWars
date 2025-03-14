@@ -9,7 +9,7 @@ using UnityEngine.tvOS;
 
 namespace Game.Physics
 {
-    [BurstCompile(FloatMode = FloatMode.Fast, OptimizeFor = OptimizeFor.Performance, DisableDirectCall = true)]
+    //[BurstCompile(FloatMode = FloatMode.Fast, OptimizeFor = OptimizeFor.Performance, DisableDirectCall = true)]
     public struct Raycast2DWithMeshJob : IJobParallelFor
     {
         //public Vector2 rayOrigin;
@@ -20,10 +20,10 @@ namespace Game.Physics
 
         // int - EntityId
         [ReadOnly] public NativeHashMap<int, FovEntityData> fovEntityDatas;
-        // int1 - ColliderId, int2 EntityId
-        [ReadOnly] public NativeMultiHashMap<int, int> collidersEntities;
+        // int1 - EntityId, int2 ColliderId
+        [ReadOnly] public NativeMultiHashMap<int, int> entitiesColliders;
         // int - colliderId
-        [ReadOnly] public NativeArray<ColliderDataReady> colliderDataArray;
+        [ReadOnly] public NativeHashMap<int, ColliderDataReady> colliderDataArray;
         // Contains vertices for all polygon/edge/composite colliders.
         [ReadOnly] public NativeArray<float2> vertexArray;
 
@@ -32,102 +32,131 @@ namespace Game.Physics
 
         public void Execute(int index)
         {
-            if (!collidersEntities.TryGetFirstValue(colliderDataArray[index].colliderId
-                , out int currentEntityId, out NativeMultiHashMapIterator<int> iterator))
+            int entityId = 0;
+
+            foreach (var kvp in fovEntityDatas)
+            {
+                int vertsCount = kvp.Value.rayCount + 2;
+                if (index < vertsCount + kvp.Value.vertciesBeforeCount)
+                {
+                    entityId = kvp.Key;
+                    break;
+                }
+            }
+
+            int rayCount = fovEntityDatas[entityId].rayCount;
+            Vector2 rayOrigin = fovEntityDatas[entityId].rayOrigin;
+            int verticiesBeforeCount = fovEntityDatas[entityId].vertciesBeforeCount;
+
+            if (index == verticiesBeforeCount || // first vert
+                index == verticiesBeforeCount + rayCount + 1) // last vert
+            {
+                int firstLastVertexIndex = index + fovEntityDatas[entityId].vertciesBeforeCount;
+                verticies[firstLastVertexIndex] = rayOrigin;
+                return;
+            }
+
+
+            float fovAnlge = fovEntityDatas[entityId].fovAnlge;
+            float worldAngleAdd = fovEntityDatas[entityId].worldAngleAdd;
+            float rayDistance = fovEntityDatas[entityId].rayDistance;
+            int rayBeforeCount = fovEntityDatas[entityId].rayBeforeCount;
+
+            float startAngle = (fovAnlge / 2) + 90;
+            float currentAngle = startAngle - (((float)index / (float)rayCount) * fovAnlge);
+
+            Vector2 rayDirection = UtilsClass.GetVectorFromAngle(currentAngle + worldAngleAdd);
+
+            float minHitDistance = float.MaxValue;
+            Vector2 minHitPoint = Vector2.zero;
+            bool hitOnce = false;
+
+
+            if (!entitiesColliders.TryGetFirstValue(entityId, out int currentColliderId,
+                out NativeMultiHashMapIterator<int> iterator))
             {
                 return;
             }
 
             do
             {
-                float fovAnlge = fovEntityDatas[currentEntityId].fovAnlge;
-                int rayCount = fovEntityDatas[currentEntityId].rayCount;
-                float worldAngleAdd = fovEntityDatas[currentEntityId].worldAngleAdd;
-                Vector2 rayOrigin = fovEntityDatas[currentEntityId].rayOrigin;
-                float rayDistance = fovEntityDatas[currentEntityId].rayDistance;
-                int rayBeforeCount = fovEntityDatas[currentEntityId].rayBeforeCount;
-                int verticiesBedoreCount = fovEntityDatas[currentEntityId].vertciesBeforeCount;
+                ColliderDataReady data = colliderDataArray[currentColliderId];
+                float newHitDistance = float.MaxValue;
+                Vector2 newHitPoint = Vector2.zero;
+                bool hit = false;
 
-                float startAngle = (fovAnlge / 2) + 90;
-                float currentAngle = startAngle - (((float)index / (float)rayCount) * fovAnlge);
-
-                Vector2 rayDirection = UtilsClass.GetVectorFromAngle(currentAngle + worldAngleAdd);
-
-                float minHitDistance = float.MaxValue;
-                Vector2 minHitPoint = Vector2.zero;
-
-                bool hitOnce = false;
-                for (int i = 0; i < colliderDataArray.Length; i++)
+                switch (data.type)
                 {
-                    ColliderDataReady data = colliderDataArray[i];
-                    float newHitDistance = float.MaxValue;
-                    Vector2 newHitPoint = Vector2.zero;
-                    bool hit = false;
+                    case (int)ColliderType.Box:
+                        hit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
+                            data.center, data.rotationRad, data.size, out newHitDistance,
+                            out newHitPoint);
+                        break;
 
-                    switch (data.type)
+                    case (int)ColliderType.Circle:
+                        hit = RayIntersectsCircle(rayOrigin, rayDirection, rayDistance, data.center,
+                            data.radius, out newHitDistance, out newHitPoint);
+                        break;
+
+                    case (int)ColliderType.Capsule:
+                        hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance, data.capsuleA,
+                            data.capsuleB, data.capsuleRadius, out newHitDistance, out newHitPoint);
+                        break;
+
+                    case (int)ColliderType.Polygon:
+                    case (int)ColliderType.Edge:
+                    case (int)ColliderType.Composite:
+                        hit = RayIntersectsPolygon(vertexArray, data.vertexStartIndex, data.vertexCount, data.isClosed,
+                            rayOrigin, rayDirection, rayDistance, out newHitDistance, out newHitPoint);
+                        break;
+                }
+
+                if (hit)
+                {
+                    hitOnce = true;
+                    if (newHitDistance < minHitDistance)
                     {
-                        case (int)ColliderType.Box:
-                            hit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
-                                data.center, data.rotationRad, data.size, out newHitDistance,
-                                out newHitPoint);
-                            break;
-
-                        case (int)ColliderType.Circle:
-                            hit = RayIntersectsCircle(rayOrigin, rayDirection, rayDistance, data.center,
-                                data.radius, out newHitDistance, out newHitPoint);
-                            break;
-
-                        case (int)ColliderType.Capsule:
-                            hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance, data.capsuleA,
-                                data.capsuleB, data.capsuleRadius, out newHitDistance, out newHitPoint);
-                            break;
-
-                        case (int)ColliderType.Polygon:
-                        case (int)ColliderType.Edge:
-                        case (int)ColliderType.Composite:
-                            hit = RayIntersectsPolygon(vertexArray, data.vertexStartIndex, data.vertexCount, data.isClosed,
-                                rayOrigin, rayDirection, rayDistance, out newHitDistance, out newHitPoint);
-                            break;
-                    }
-
-                    if (hit)
-                    {
-                        hitOnce = true;
-                        if (newHitDistance < minHitDistance)
-                        {
-                            minHitDistance = newHitDistance;
-                            minHitPoint = newHitPoint;
-                        }
+                        minHitDistance = newHitDistance;
+                        minHitPoint = newHitPoint;
                     }
                 }
 
-                Vector3 vertex;
-                if (hitOnce)
-                {
-                    vertex = minHitPoint - rayOrigin;
-                    vertex = Utils.RotateVector(vertex, -worldAngleAdd);
-                }
-                else
-                {
-                    Vector3 direction = UtilsClass.GetVectorFromAngle(currentAngle);
-                    vertex = direction * rayDistance;
-                }
 
-                int vertexIndex = index + 1 + verticiesBedoreCount;
-                verticies[vertexIndex] = vertex;
+            } while (entitiesColliders.TryGetNextValue(out currentColliderId, ref iterator));
 
-                if (index > 0)
-                {
-                    int triangleIndex = (index * 3) + (rayBeforeCount * 3);
-                    triangles[triangleIndex] = 0;
-                    triangles[triangleIndex + 1] = vertexIndex - 1;
-                    triangles[triangleIndex + 2] = vertexIndex;
 
-                    //triangleIndex += 3;
-                }
+            Vector3 vertex;
+            if (hitOnce)
+            {
+                vertex = minHitPoint/* - rayOrigin*/;
+                //vertex = Utils.RotateVector(vertex, -worldAngleAdd);
+            }
+            else
+            {
+                //Vector3 direction = UtilsClass.GetVectorFromAngle(currentAngle);
+                //vertex = direction * rayDistance;
 
-            } while (collidersEntities.TryGetNextValue(out currentEntityId, ref iterator));
+                Vector3 direction = UtilsClass.GetVectorFromAngle(currentAngle);
+                vertex = direction * rayDistance;
 
+
+                vertex = Utils.RotateVector(vertex, -worldAngleAdd);
+                vertex = vertex + (Vector3)rayOrigin;
+            }
+
+            int vertexIndex = index + verticiesBeforeCount;
+            verticies[vertexIndex] = vertex;
+
+            int triIndex = index - 1;
+            if (triIndex > 0)
+            {
+                int triangleIndex = (triIndex * 3) + (rayBeforeCount * 3);
+                triangles[triangleIndex] = 0;
+                triangles[triangleIndex + 1] = vertexIndex - 1;
+                triangles[triangleIndex + 2] = vertexIndex;
+
+                //triangleIndex += 3;
+            }
         }
 
         // --- Intersection routines ---

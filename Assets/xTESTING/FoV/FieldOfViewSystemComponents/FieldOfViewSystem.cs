@@ -14,11 +14,11 @@ namespace Game.Physics
         // int1 - ColliderId, int2 - enter count
         private Dictionary<int, (Collider2D, int)> _collidersToUnprepare = new();
 
-        // int1 - ColliderId, int2 - EntityId
-        private NativeMultiHashMap<int, int> _collidersEntities;
+        // int1 - EntityId, int2 ColliderId
+        private NativeMultiHashMap<int, int> _entitiesColliders;
 
         // int - EntityId
-        private Dictionary<int, FieldOfViewEntity> _entityes;
+        private Dictionary<int, FieldOfViewEntity> _entityes = new();
 
         //// int - EntityId
         //private NativeHashMap<int, FovEntityData> _entityesData;
@@ -38,7 +38,7 @@ namespace Game.Physics
 
         private void Awake()
         {
-            _collidersEntities = new NativeMultiHashMap<int, int>(10, Allocator.Persistent);
+            _entitiesColliders = new NativeMultiHashMap<int, int>(10, Allocator.Persistent);
 
             _allLayerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle, Layers.Enemy);
             _contactFilter = new ContactFilter2D
@@ -55,8 +55,13 @@ namespace Game.Physics
 
         private void OnDestroy()
         {
-            if (_collidersEntities.IsCreated)
-                _collidersEntities.Dispose();
+            if (_entitiesColliders.IsCreated)
+                _entitiesColliders.Dispose();
+        }
+
+        private void Update()
+        {
+            UpdateView();
         }
 
         public void AddCollider(FieldOfViewEntity entity, Collider2D collider)
@@ -67,7 +72,7 @@ namespace Game.Physics
             int entityId = entity.GetInstanceID();
             int colliderId = collider.GetInstanceID();
 
-            _collidersEntities.Add(colliderId, entityId);
+            _entitiesColliders.Add(entityId, colliderId);
 
             if (_collidersToUnprepare.ContainsKey(colliderId))
             {
@@ -77,7 +82,7 @@ namespace Game.Physics
             else
             {
                 _collidersToUnprepare.Add(colliderId, (collider, 1));
-                _entityes.Add(entityId, entity);
+                _entityes.TryAdd(entityId, entity);
             }
         }
 
@@ -86,34 +91,22 @@ namespace Game.Physics
             if (collider.isTrigger)
                 return;
 
-            int colliderId = entity.GetInstanceID();
-            int entityId = collider.GetInstanceID();
+            int entityId = entity.GetInstanceID();
+            int colliderId = collider.GetInstanceID();
 
             bool removed = false;
-            //if (_entityesColliders.TryGetFirstValue(entityId, out int currentColliderId, out NativeMultiHashMapIterator<int> iterator))
-            //{
-            //    do
-            //    {
-            //        if (currentColliderId == colliderId)
-            //        {
-            //            _entityesColliders.Remove(iterator);
-            //            removed = true;
-            //            break;
-            //        }
-            //    } while (_entityesColliders.TryGetNextValue(out currentColliderId, ref iterator));
-            //}
-            if (_collidersEntities.TryGetFirstValue(colliderId, out int currentEntityId,
+            if (_entitiesColliders.TryGetFirstValue(entityId, out int currentColliderId,
                 out NativeMultiHashMapIterator<int> iterator))
             {
                 do
                 {
-                    if (currentEntityId == entityId)
+                    if (currentColliderId == colliderId)
                     {
-                        _collidersEntities.Remove(iterator);
+                        _entitiesColliders.Remove(iterator);
                         removed = true;
                         break;
                     }
-                } while (_collidersEntities.TryGetNextValue(out currentEntityId, ref iterator));
+                } while (_entitiesColliders.TryGetNextValue(out currentColliderId, ref iterator));
             }
             else
             {
@@ -121,33 +114,28 @@ namespace Game.Physics
                 return;
             }
 
-            if (removed)
+            if (removed && _entitiesColliders.CountValuesForKey(entityId) == 0)
             {
-                _entityes.Remove(colliderId);
-            }
-            else
-            {
-                Debug.LogError("There is no collider to remove from _entityesColliders - entity ref", entity);
-                Debug.LogError("There is no collider to remove from _entityesColliders - collider ref", collider);
+                _entityes.Remove(entityId);
             }
 
             // Update the _collidersToUnprepare dictionary as before
-            if (_collidersToUnprepare.ContainsKey(entityId))
+            if (_collidersToUnprepare.ContainsKey(colliderId))
             {
-                if (_collidersToUnprepare[entityId].Item2 <= 1)
+                if (_collidersToUnprepare[colliderId].Item2 <= 1)
                 {
-                    if (_collidersToUnprepare[entityId].Item2 <= 0)
+                    if (_collidersToUnprepare[colliderId].Item2 <= 0)
                     {
                         Debug.LogError("_collidersToUnprepare[colliderId].Item2 <= 0 - entity ref", entity);
                         Debug.LogError("_collidersToUnprepare[colliderId].Item2 <= 0 - collider ref", collider);
                     }
 
-                    _collidersToUnprepare.Remove(entityId);
+                    _collidersToUnprepare.Remove(colliderId);
                 }
                 else
                 {
-                    var current = _collidersToUnprepare[entityId];
-                    _collidersToUnprepare[entityId] = (collider, current.Item2 - 1);
+                    var current = _collidersToUnprepare[colliderId];
+                    _collidersToUnprepare[colliderId] = (collider, current.Item2 - 1);
                 }
             }
             else
@@ -293,7 +281,7 @@ namespace Game.Physics
                         {
                             //Profiler.BeginSample("amigus composite 1");
                             int pointCount = composite.GetPathPointCount(p);
-                            Profiler.EndSample();
+                            //Profiler.EndSample();
 
                             //Profiler.BeginSample("amigus composite 2");
                             ColliderDataUnprepared compositeData = new()
@@ -349,7 +337,7 @@ namespace Game.Physics
 
             Profiler.BeginSample("amigus1-5 datasRdy alloc");
             // int - colliderId
-            NativeArray<ColliderDataReady> datasRdy = new(datasUnprep.Length, Allocator.TempJob);
+            NativeHashMap<int, ColliderDataReady> datasRdy = new(datasUnprep.Length, Allocator.TempJob);
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-6 vertsRdy alloc");
@@ -361,13 +349,13 @@ namespace Game.Physics
             {
                 datasUnprep = datasUnprep,
                 vertsUnprep = vertsUnprep,
-                datasRdy = datasRdy,
+                datasRdy = datasRdy.AsParallelWriter(),
                 vertsRdy = vertsRdy,
             };
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-7-2 dataPrepare job");
-            prepareJob.Run(datasRdy.Length);
+            prepareJob.Run(datasUnprep.Length);
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-8 dataPrepare dispose");
@@ -383,7 +371,7 @@ namespace Game.Physics
             foreach (var entity in _entityes)
             {
                 fovDatas.Add(entity.Key, entity.Value.GetData(rayCount, verticiesCount));
-                verticiesCount += fovDatas[entity.Key].rayCount + 1 /*2*/;
+                verticiesCount += fovDatas[entity.Key].rayCount + 2;
                 rayCount += fovDatas[entity.Key].rayCount;
             }
 
@@ -400,7 +388,7 @@ namespace Game.Physics
             Raycast2DWithMeshJob raycastsJob = new Raycast2DWithMeshJob
             {
                 fovEntityDatas = fovDatas,
-                collidersEntities = _collidersEntities,
+                entitiesColliders = _entitiesColliders,
                 colliderDataArray = datasRdy,
                 vertexArray = vertsRdy,
                 verticies = verticies,
@@ -409,8 +397,8 @@ namespace Game.Physics
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus2-4 rayJob run");
-            int batchCount = Mathf.Max(1, rayCount / (JobsUtility.JobWorkerCount * 2));
-            JobHandle raycastsJobHandle = raycastsJob.Schedule(rayCount, batchCount);
+            int batchCount = Mathf.Max(1, verticiesCount / (JobsUtility.JobWorkerCount * 2));
+            JobHandle raycastsJobHandle = raycastsJob.Schedule(verticiesCount, batchCount);
             raycastsJobHandle.Complete();
             Profiler.EndSample();
 
@@ -427,6 +415,7 @@ namespace Game.Physics
             vertsRdy.Dispose();
             verticies.Dispose();
             triangles.Dispose();
+            fovDatas.Dispose();
             Profiler.EndSample();
         }
     }
