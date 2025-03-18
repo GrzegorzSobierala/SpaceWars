@@ -5,11 +5,10 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.tvOS;
 
 namespace Game.Physics
 {
-    //[BurstCompile(FloatMode = FloatMode.Fast, OptimizeFor = OptimizeFor.Performance, DisableDirectCall = true)]
+    [BurstCompile(FloatMode = FloatMode.Fast, OptimizeFor = OptimizeFor.Performance, DisableDirectCall = true)]
     public struct Raycast2DWithMeshJob : IJobParallelFor
     {
         //public Vector2 rayOrigin;
@@ -37,7 +36,8 @@ namespace Game.Physics
             foreach (var kvp in fovEntityDatas)
             {
                 int vertsCount = kvp.Value.rayCount + 2;
-                if (index < vertsCount + kvp.Value.vertciesBeforeCount)
+                if (index >= kvp.Value.vertciesBeforeCount &&
+                    index < kvp.Value.vertciesBeforeCount + vertsCount)
                 {
                     entityId = kvp.Key;
                     break;
@@ -64,7 +64,7 @@ namespace Game.Physics
 
             float startAngle = (fovAnlge / 2) + 90;
 
-            int rayIndex = index - verticiesBeforeCount - rayBeforeCount - 1;
+            int rayIndex = index - verticiesBeforeCount - 1;
             float currentAngle = startAngle - (((float)rayIndex / ((float)rayCount - 1)) * fovAnlge);
 
             Vector2 rayDirection = UtilsClass.GetVectorFromAngle(currentAngle + worldAngleAdd);

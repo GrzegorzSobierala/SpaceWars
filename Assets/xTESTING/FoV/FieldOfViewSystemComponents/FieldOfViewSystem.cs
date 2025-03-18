@@ -405,6 +405,8 @@ namespace Game.Physics
             int batchCount = Mathf.Max(1, verticiesCount / (JobsUtility.JobWorkerCount * 2));
             JobHandle raycastsJobHandle = raycastsJob.Schedule(verticiesCount, batchCount);
             raycastsJobHandle.Complete();
+            //JobHandle raycastsJobHandle = raycastsJob.Schedule(verticiesCount, new JobHandle());
+            //raycastsJobHandle.Complete();
             Profiler.EndSample();
 
             if(wasEntytiAddedLastTime)
