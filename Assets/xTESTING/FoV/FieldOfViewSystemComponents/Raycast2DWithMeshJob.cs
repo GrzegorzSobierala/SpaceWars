@@ -51,7 +51,7 @@ namespace Game.Physics
             if (index == verticiesBeforeCount || // first vert
                 index == verticiesBeforeCount + rayCount + 1) // last vert
             {
-                int firstLastVertexIndex = index + fovEntityDatas[entityId].vertciesBeforeCount;
+                int firstLastVertexIndex = index;
                 verticies[firstLastVertexIndex] = rayOrigin;
                 return;
             }
@@ -63,7 +63,9 @@ namespace Game.Physics
             int rayBeforeCount = fovEntityDatas[entityId].rayBeforeCount;
 
             float startAngle = (fovAnlge / 2) + 90;
-            float currentAngle = startAngle - (((float)index / (float)rayCount) * fovAnlge);
+
+            int rayIndex = index - verticiesBeforeCount - rayBeforeCount - 1;
+            float currentAngle = startAngle - (((float)rayIndex / ((float)rayCount - 1)) * fovAnlge);
 
             Vector2 rayDirection = UtilsClass.GetVectorFromAngle(currentAngle + worldAngleAdd);
 
@@ -144,14 +146,15 @@ namespace Game.Physics
                 vertex = vertex + (Vector3)rayOrigin;
             }
 
-            int vertexIndex = index + verticiesBeforeCount;
+            int vertexIndex = index;
             verticies[vertexIndex] = vertex;
 
-            int triIndex = index - 1;
+            int tirIndexMove = verticiesBeforeCount - rayBeforeCount;
+            int triIndex = index - tirIndexMove - 1;
             if (triIndex > 0)
             {
-                int triangleIndex = (triIndex * 3) + (rayBeforeCount * 3);
-                triangles[triangleIndex] = 0;
+                int triangleIndex = (triIndex * 3);
+                triangles[triangleIndex] = verticiesBeforeCount;
                 triangles[triangleIndex + 1] = vertexIndex - 1;
                 triangles[triangleIndex + 2] = vertexIndex;
 

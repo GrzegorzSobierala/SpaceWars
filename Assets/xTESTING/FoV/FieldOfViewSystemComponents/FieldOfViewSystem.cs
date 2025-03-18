@@ -26,6 +26,7 @@ namespace Game.Physics
         private MeshFilter _meshFilter;
         private Mesh _mesh;
 
+        private bool wasEntytiAddedLastTime = false;
 
         private LayerMask _allLayerMask;
         private ContactFilter2D _contactFilter;
@@ -82,7 +83,10 @@ namespace Game.Physics
             else
             {
                 _collidersToUnprepare.Add(colliderId, (collider, 1));
-                _entityes.TryAdd(entityId, entity);
+                if(_entityes.TryAdd(entityId, entity))
+                {
+                    wasEntytiAddedLastTime = true;
+                }
             }
         }
 
@@ -117,6 +121,7 @@ namespace Game.Physics
             if (removed && _entitiesColliders.CountValuesForKey(entityId) == 0)
             {
                 _entityes.Remove(entityId);
+                wasEntytiAddedLastTime = false;
             }
 
             // Update the _collidersToUnprepare dictionary as before
@@ -402,15 +407,38 @@ namespace Game.Physics
             raycastsJobHandle.Complete();
             Profiler.EndSample();
 
-            Profiler.BeginSample("amigus2-5 mesh vertices");
-            _mesh.SetVertices(verticies);
-            Profiler.EndSample();
-            Profiler.BeginSample("amigus2-7 mesh triangles");
-            _mesh.triangles = triangles.ToArray();
-            //_mesh.SetTriangles()
-            Profiler.EndSample();
+            if(wasEntytiAddedLastTime)
+            {
+                Profiler.BeginSample("amigus2-6 mesh vertices");
+                _mesh.SetVertices(verticies);
+                Profiler.EndSample();
 
-            Profiler.BeginSample("amigus2-8 rayJob dispose");
+                Profiler.BeginSample("amigus2-5 mesh triangles");
+                _mesh.triangles = triangles.ToArray();
+                //_mesh.SetTriangles()
+                Profiler.EndSample();
+            }
+            else
+            {
+                Profiler.BeginSample("amigus2-5 mesh triangles");
+                _mesh.triangles = triangles.ToArray();
+                //_mesh.SetTriangles()
+                Profiler.EndSample();
+
+                Profiler.BeginSample("amigus2-6 mesh vertices");
+                _mesh.SetVertices(verticies);
+                Profiler.EndSample();
+            }
+
+
+
+
+
+
+
+
+
+            Profiler.BeginSample("amigus2-7 rayJob dispose");
             datasRdy.Dispose();
             vertsRdy.Dispose();
             verticies.Dispose();
