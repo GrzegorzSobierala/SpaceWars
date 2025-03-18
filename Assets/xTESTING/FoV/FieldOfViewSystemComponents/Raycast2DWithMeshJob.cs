@@ -65,14 +65,13 @@ namespace Game.Physics
             float startAngle = (fovAnlge / 2) + 90;
 
             int rayIndex = index - verticiesBeforeCount - 1;
-            float currentAngle = startAngle - (((float)rayIndex / ((float)rayCount - 1)) * fovAnlge);
+            float currentAngle = startAngle - (((float)rayIndex / ((float)rayCount - 1.0f)) * fovAnlge);
 
             Vector2 rayDirection = UtilsClass.GetVectorFromAngle(currentAngle + worldAngleAdd);
 
             float minHitDistance = float.MaxValue;
             Vector2 minHitPoint = Vector2.zero;
             bool hitOnce = false;
-
 
             if (!entitiesColliders.TryGetFirstValue(entityId, out int currentColliderId,
                 out NativeMultiHashMapIterator<int> iterator))
@@ -130,20 +129,12 @@ namespace Game.Physics
             Vector3 vertex;
             if (hitOnce)
             {
-                vertex = minHitPoint/* - rayOrigin*/;
-                //vertex = Utils.RotateVector(vertex, -worldAngleAdd);
+                vertex = minHitPoint;
             }
             else
             {
-                //Vector3 direction = UtilsClass.GetVectorFromAngle(currentAngle);
-                //vertex = direction * rayDistance;
-
-                Vector3 direction = UtilsClass.GetVectorFromAngle(currentAngle);
-                vertex = direction * rayDistance;
-
-
-                vertex = Utils.RotateVector(vertex, -worldAngleAdd);
-                vertex = vertex + (Vector3)rayOrigin;
+                Vector2 vector = rayDirection.normalized * rayDistance;
+                vertex = vector + rayOrigin;
             }
 
             int vertexIndex = index;
