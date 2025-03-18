@@ -83,10 +83,11 @@ namespace Game.Physics
             else
             {
                 _collidersToUnprepare.Add(colliderId, (collider, 1));
-                if(_entityes.TryAdd(entityId, entity))
-                {
-                    wasEntytiAddedLastTime = true;
-                }
+            }
+
+            if (_entityes.TryAdd(entityId, entity))
+            {
+                wasEntytiAddedLastTime = true;
             }
         }
 
