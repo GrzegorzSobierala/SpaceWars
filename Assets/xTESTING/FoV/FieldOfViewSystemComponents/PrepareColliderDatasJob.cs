@@ -16,7 +16,7 @@ namespace Game.Physics
         [WriteOnly, NativeDisableParallelForRestriction] 
             public NativeHashMap<int, ColliderDataReady>.ParallelWriter datasRdy;
         [WriteOnly, NativeDisableParallelForRestriction] 
-            public NativeArray<float2> vertsRdy;
+            public NativeList<float2> vertsRdy;
 
         public void Execute(int index)
         {

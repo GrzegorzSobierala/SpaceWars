@@ -7,6 +7,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.Rendering;
+using ModestTree;
 
 namespace Game.Physics
 {
@@ -29,7 +30,7 @@ namespace Game.Physics
         private VertexAttributeDescriptor _vertexAttributeDescriptor;
 
         private bool wasEntytiAddedLastTime = false;
-        private bool wasEntytiesDicChanged = true;
+        private bool wasEntitiesDicChanged = true;
 
         private LayerMask _allLayerMask;
         private ContactFilter2D _contactFilter;
@@ -40,10 +41,17 @@ namespace Game.Physics
         public LayerMask AllLayerMask => _allLayerMask;
         public ContactFilter2D ContactFilter => _contactFilter;
 
+
+        NativeList<ColliderDataUnprepared> datasUnprep;
+        NativeList<Vector2> vertsUnprep;
+        NativeHashMap<int, ColliderDataReady> datasRdy;
+        NativeList<float2> vertsRdy;
+        NativeHashMap<int, FovEntityData> fovDatas;
+        NativeArray<Vector3> verticies;
+        NativeArray<int> triangles;
+
         private void Awake()
         {
-            _entitiesColliders = new NativeMultiHashMap<int, int>(10, Allocator.Persistent);
-
             _allLayerMask = LayerMask.GetMask(Layers.Player, Layers.Obstacle, Layers.Enemy);
             _contactFilter = new ContactFilter2D
             {
@@ -64,12 +72,30 @@ namespace Game.Physics
                 );
 
             _meshFilter.mesh = _mesh;
+
+            _entitiesColliders = new NativeMultiHashMap<int, int>(10, Allocator.Persistent);
+
+            datasUnprep = new(10, Allocator.Persistent);
+            vertsUnprep = new(50, Allocator.Persistent);
+            datasRdy = new(10, Allocator.Persistent);
+            vertsRdy = new(50, Allocator.Persistent);
+            fovDatas = new(5, Allocator.Persistent);
+            verticies = new(0, Allocator.Persistent);
+            triangles = new(0, Allocator.Persistent);
         }
 
         private void OnDestroy()
         {
             if (_entitiesColliders.IsCreated)
                 _entitiesColliders.Dispose();
+
+            datasUnprep.Dispose();
+            vertsUnprep.Dispose();
+            datasRdy.Dispose();
+            vertsRdy.Dispose();
+            fovDatas.Dispose();
+            verticies.Dispose();
+            triangles.Dispose();
         }
 
         private void Update()
@@ -100,7 +126,7 @@ namespace Game.Physics
             if (_entityes.TryAdd(entityId, entity))
             {
                 wasEntytiAddedLastTime = true;
-                wasEntytiesDicChanged = true;
+                wasEntitiesDicChanged = true;
             }
         }
 
@@ -136,7 +162,7 @@ namespace Game.Physics
             {
                 _entityes.Remove(entityId);
                 wasEntytiAddedLastTime = false;
-                wasEntytiesDicChanged = true;
+                wasEntitiesDicChanged = true;
             }
 
             // Update the _collidersToUnprepare dictionary as before
@@ -167,18 +193,17 @@ namespace Game.Physics
 
         public void OnEntityDataChange()
         {
-            wasEntytiesDicChanged = true;
+            wasEntitiesDicChanged = true;
         }
 
         private void UpdateView()
         {
             Profiler.BeginSample("amigus1-2 datasUnprep alloc");
-            NativeList<ColliderDataUnprepared> datasUnprep = new(_collidersToUnprepare.Count,
-                Allocator.TempJob);
+            datasUnprep.Clear();
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-3 vertsUnprep alloc");
-            NativeList<Vector2> vertsUnprep = new(_collidersToUnprepare.Count * 5, Allocator.TempJob);
+            vertsUnprep.Clear();
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-4 dataUnpare");
@@ -362,11 +387,11 @@ namespace Game.Physics
 
             Profiler.BeginSample("amigus1-5 datasRdy alloc");
             // int - colliderId
-            NativeHashMap<int, ColliderDataReady> datasRdy = new(datasUnprep.Length, Allocator.TempJob);
+            datasRdy.Clear();
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-6 vertsRdy alloc");
-            NativeArray<float2> vertsRdy = new(vertsUnprep.Length, Allocator.TempJob);
+            vertsRdy.Resize(vertsUnprep.Length, NativeArrayOptions.UninitializedMemory);
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-7-1 dataPrepare job");
@@ -383,14 +408,14 @@ namespace Game.Physics
             prepareJob.Run(datasUnprep.Length);
             Profiler.EndSample();
 
-            Profiler.BeginSample("amigus1-8-1 dataPrepare dispose");
-            datasUnprep.Dispose();
-            vertsUnprep.Dispose();
-            Profiler.EndSample();
+            //Profiler.BeginSample("amigus1-8-1 dataPrepare dispose");
+            //datasUnprep.Dispose();
+            //vertsUnprep.Dispose();
+            //Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-8-2 rayJob fovDatas alloc");
             // int - entityId
-            NativeHashMap<int, FovEntityData> fovDatas = new(_entityes.Count, Allocator.TempJob);
+            fovDatas.Clear();
             int verticiesCount = 0;
             int rayCount = 0;
             Profiler.EndSample();
@@ -405,12 +430,22 @@ namespace Game.Physics
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-9 rayJob verticies array");
-            NativeArray<Vector3> verticies = new(verticiesCount, Allocator.TempJob);
-            //verticies[0] = Vector3.zero;
+            if(verticies.Length < verticiesCount)
+            {
+                verticies.Dispose();
+                verticies = new NativeArray<Vector3>(verticiesCount, Allocator.Persistent,
+                    NativeArrayOptions.UninitializedMemory);
+            }
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus2-2 rayJob triangles array");
-            NativeArray<int> triangles = new(rayCount * 3, Allocator.TempJob);
+            int trianglesCount = rayCount * 3;
+            if (triangles.Length < trianglesCount)
+            {
+                triangles.Dispose();
+                triangles = new NativeArray<int>(trianglesCount, Allocator.Persistent,
+                    NativeArrayOptions.ClearMemory);
+            }
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus2-3 rayJob create");
@@ -437,50 +472,42 @@ namespace Game.Physics
             if (wasEntytiAddedLastTime)
             {
                 Profiler.BeginSample("amigus2-6 mesh vertices");
-                if (wasEntytiesDicChanged)
+                if (wasEntitiesDicChanged)
                 {
-                    _mesh.SetVertexBufferParams(verticies.Length, _vertexAttributeDescriptor);
+                    _mesh.SetVertexBufferParams(verticiesCount, _vertexAttributeDescriptor);
                 }
-                _mesh.SetVertexBufferData(verticies, 0, 0, verticies.Length,0 , 
+                _mesh.SetVertexBufferData(verticies, 0, 0, verticiesCount, 0,
                     MeshUpdateFlags.DontNotifyMeshUsers | MeshUpdateFlags.DontRecalculateBounds |
                     MeshUpdateFlags.DontResetBoneBounds | MeshUpdateFlags.DontValidateIndices);
                 Profiler.EndSample();
 
-                if (wasEntytiesDicChanged)
+                if (wasEntitiesDicChanged)
                 {
                     Profiler.BeginSample("amigus2-5 mesh triangles");
-                    _mesh.SetIndices(triangles, MeshTopology.Triangles, 0, false, 0);
+                    _mesh.SetIndices(triangles, 0, trianglesCount, MeshTopology.Triangles, 0, false, 0);
                     Profiler.EndSample();
                 }
             }
             else
             {
-                if (wasEntytiesDicChanged)
+                if (wasEntitiesDicChanged)
                 {
                     Profiler.BeginSample("amigus2-5 mesh triangles");
-                    _mesh.SetIndices(triangles, MeshTopology.Triangles, 0, false, 0);
+                    _mesh.SetIndices(triangles, 0, trianglesCount, MeshTopology.Triangles, 0, false, 0);
                     Profiler.EndSample();
                 }
 
                 Profiler.BeginSample("amigus2-6 mesh vertices");
-                if(wasEntytiesDicChanged)
+                if(wasEntitiesDicChanged)
                 {
-                    _mesh.SetVertexBufferParams(verticies.Length, _vertexAttributeDescriptor);
+                    _mesh.SetVertexBufferParams(verticiesCount, _vertexAttributeDescriptor);
                 }
-                _mesh.SetVertexBufferData(verticies, 0, 0, verticies.Length, 0,
+                _mesh.SetVertexBufferData(verticies, 0, 0, verticiesCount, 0,
                     MeshUpdateFlags.DontNotifyMeshUsers | MeshUpdateFlags.DontRecalculateBounds |
                     MeshUpdateFlags.DontResetBoneBounds | MeshUpdateFlags.DontValidateIndices);
                 Profiler.EndSample();
             }
-            wasEntytiesDicChanged = false;
-
-            Profiler.BeginSample("amigus2-7 rayJob dispose");
-            datasRdy.Dispose();
-            vertsRdy.Dispose();
-            verticies.Dispose();
-            triangles.Dispose();
-            fovDatas.Dispose();
-            Profiler.EndSample();
+            wasEntitiesDicChanged = false;
         }
     }
 }
