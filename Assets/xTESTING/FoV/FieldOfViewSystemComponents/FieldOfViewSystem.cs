@@ -41,7 +41,6 @@ namespace Game.Physics
         public LayerMask AllLayerMask => _allLayerMask;
         public ContactFilter2D ContactFilter => _contactFilter;
 
-
         NativeList<ColliderDataUnprepared> datasUnprep;
         NativeList<Vector2> vertsUnprep;
         NativeHashMap<int, ColliderDataReady> datasRdy;
