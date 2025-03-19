@@ -165,6 +165,11 @@ namespace Game.Physics
             }
         }
 
+        public void OnEntityDataChange()
+        {
+            wasEntytiesDicChanged = true;
+        }
+
         private void UpdateView()
         {
             Profiler.BeginSample("amigus1-2 datasUnprep alloc");

@@ -12,6 +12,7 @@ namespace Game.Physics
         [SerializeField] private float _viewDistance = 500f;
 
         private FieldOfViewSystem _system;
+        private bool _awakeCalled = false;
         //private Collider2D[] _overlapColliders;
 
         //private List<Collider2D> _overlapCashe = new();
@@ -20,6 +21,7 @@ namespace Game.Physics
         {
             _system = GetComponentInParent<FieldOfViewSystem>();
             //_overlapColliders = GetComponents<Collider2D>();
+            _awakeCalled = true;
         }
 
         private void Start()
@@ -59,5 +61,18 @@ namespace Game.Physics
                 vertciesBeforeCount = vertciesBeforeCount
             };
         }
+
+        #region EDITOR
+
+        private void OnValidate()
+        {
+            if(!Application.isPlaying || !_awakeCalled)
+                return;
+
+            //Need for ray count change
+            _system.OnEntityDataChange();
+        }
+
+        #endregion
     }
 }
