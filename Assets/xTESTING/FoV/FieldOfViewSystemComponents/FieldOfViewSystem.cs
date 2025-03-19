@@ -27,6 +27,7 @@ namespace Game.Physics
         private Mesh _mesh;
 
         private bool wasEntytiAddedLastTime = false;
+        private bool wasEntytiesDicChanged = true;
 
         private LayerMask _allLayerMask;
         private ContactFilter2D _contactFilter;
@@ -88,6 +89,7 @@ namespace Game.Physics
             if (_entityes.TryAdd(entityId, entity))
             {
                 wasEntytiAddedLastTime = true;
+                wasEntytiesDicChanged = true;
             }
         }
 
@@ -123,6 +125,7 @@ namespace Game.Physics
             {
                 _entityes.Remove(entityId);
                 wasEntytiAddedLastTime = false;
+                wasEntytiesDicChanged = true;
             }
 
             // Update the _collidersToUnprepare dictionary as before
@@ -154,7 +157,7 @@ namespace Game.Physics
         private void UpdateView()
         {
             Profiler.BeginSample("amigus1-2 datasUnprep alloc");
-            NativeList<ColliderDataUnprepared> datasUnprep = new(_collidersToUnprepare.Count, 
+            NativeList<ColliderDataUnprepared> datasUnprep = new(_collidersToUnprepare.Count,
                 Allocator.TempJob);
             Profiler.EndSample();
 
@@ -409,37 +412,35 @@ namespace Game.Physics
             //JobHandle raycastsJobHandle = raycastsJob.Schedule(verticiesCount, new JobHandle());
             //raycastsJobHandle.Complete();
             Profiler.EndSample();
-
-            if(wasEntytiAddedLastTime)
+            
+            
+            if (wasEntytiAddedLastTime)
             {
                 Profiler.BeginSample("amigus2-6 mesh vertices");
                 _mesh.SetVertices(verticies);
                 Profiler.EndSample();
 
-                Profiler.BeginSample("amigus2-5 mesh triangles");
-                _mesh.triangles = triangles.ToArray();
-                //_mesh.SetTriangles()
-                Profiler.EndSample();
+                if (wasEntytiesDicChanged)
+                {
+                    Profiler.BeginSample("amigus2-5 mesh triangles");
+                    _mesh.SetIndices(triangles, MeshTopology.Triangles, 0, false, 0);
+                    Profiler.EndSample();
+                }
             }
             else
             {
-                Profiler.BeginSample("amigus2-5 mesh triangles");
-                _mesh.triangles = triangles.ToArray();
-                //_mesh.SetTriangles()
-                Profiler.EndSample();
+                if (wasEntytiesDicChanged)
+                {
+                    Profiler.BeginSample("amigus2-5 mesh triangles");
+                    _mesh.SetIndices(triangles, MeshTopology.Triangles, 0, false, 0);
+                    Profiler.EndSample();
+                }
 
                 Profiler.BeginSample("amigus2-6 mesh vertices");
                 _mesh.SetVertices(verticies);
                 Profiler.EndSample();
             }
-
-
-
-
-
-
-
-
+            wasEntytiesDicChanged = false;
 
             Profiler.BeginSample("amigus2-7 rayJob dispose");
             datasRdy.Dispose();
