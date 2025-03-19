@@ -437,7 +437,9 @@ namespace Game.Physics
                 {
                     _mesh.SetVertexBufferParams(verticies.Length, _vertexAttributeDescriptor);
                 }
-                _mesh.SetVertexBufferData(verticies, 0, 0, verticies.Length);
+                _mesh.SetVertexBufferData(verticies, 0, 0, verticies.Length,0 , 
+                    MeshUpdateFlags.DontNotifyMeshUsers | MeshUpdateFlags.DontRecalculateBounds |
+                    MeshUpdateFlags.DontResetBoneBounds | MeshUpdateFlags.DontValidateIndices);
                 Profiler.EndSample();
 
                 if (wasEntytiesDicChanged)
@@ -461,7 +463,9 @@ namespace Game.Physics
                 {
                     _mesh.SetVertexBufferParams(verticies.Length, _vertexAttributeDescriptor);
                 }
-                _mesh.SetVertexBufferData(verticies, 0, 0, verticies.Length);
+                _mesh.SetVertexBufferData(verticies, 0, 0, verticies.Length, 0,
+                    MeshUpdateFlags.DontNotifyMeshUsers | MeshUpdateFlags.DontRecalculateBounds |
+                    MeshUpdateFlags.DontResetBoneBounds | MeshUpdateFlags.DontValidateIndices);
                 Profiler.EndSample();
             }
             wasEntytiesDicChanged = false;
