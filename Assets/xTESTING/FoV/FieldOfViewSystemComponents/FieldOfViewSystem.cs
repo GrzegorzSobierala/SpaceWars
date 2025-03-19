@@ -383,22 +383,26 @@ namespace Game.Physics
             prepareJob.Run(datasUnprep.Length);
             Profiler.EndSample();
 
-            Profiler.BeginSample("amigus1-8 dataPrepare dispose");
+            Profiler.BeginSample("amigus1-8-1 dataPrepare dispose");
             datasUnprep.Dispose();
             vertsUnprep.Dispose();
             Profiler.EndSample();
 
+            Profiler.BeginSample("amigus1-8-2 rayJob fovDatas alloc");
             // int - entityId
             NativeHashMap<int, FovEntityData> fovDatas = new(_entityes.Count, Allocator.TempJob);
             int verticiesCount = 0;
             int rayCount = 0;
+            Profiler.EndSample();
 
+            Profiler.BeginSample("amigus1-8-3 rayJob fovDatas create");
             foreach (var entity in _entityes)
             {
                 fovDatas.Add(entity.Key, entity.Value.GetData(rayCount, verticiesCount));
                 verticiesCount += fovDatas[entity.Key].rayCount + 2;
                 rayCount += fovDatas[entity.Key].rayCount;
             }
+            Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-9 rayJob verticies array");
             NativeArray<Vector3> verticies = new(verticiesCount, Allocator.TempJob);
