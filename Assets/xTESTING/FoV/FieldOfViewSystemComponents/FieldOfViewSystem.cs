@@ -6,6 +6,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Profiling;
+using UnityEngine.Rendering;
 
 namespace Game.Physics
 {
@@ -25,6 +26,7 @@ namespace Game.Physics
 
         private MeshFilter _meshFilter;
         private Mesh _mesh;
+        private VertexAttributeDescriptor _vertexAttributeDescriptor;
 
         private bool wasEntytiAddedLastTime = false;
         private bool wasEntytiesDicChanged = true;
@@ -52,6 +54,15 @@ namespace Game.Physics
 
             _meshFilter = GetComponent<MeshFilter>();
             _mesh = new Mesh();
+            _mesh.MarkDynamic();
+
+            _vertexAttributeDescriptor = new VertexAttributeDescriptor(
+                VertexAttribute.Position,
+                VertexAttributeFormat.Float32,
+                3,  // Vector3 has 3 floats
+                stream: 0
+                );
+
             _meshFilter.mesh = _mesh;
         }
 
@@ -417,7 +428,11 @@ namespace Game.Physics
             if (wasEntytiAddedLastTime)
             {
                 Profiler.BeginSample("amigus2-6 mesh vertices");
-                _mesh.SetVertices(verticies);
+                if (wasEntytiesDicChanged)
+                {
+                    _mesh.SetVertexBufferParams(verticies.Length, _vertexAttributeDescriptor);
+                }
+                _mesh.SetVertexBufferData(verticies, 0, 0, verticies.Length);
                 Profiler.EndSample();
 
                 if (wasEntytiesDicChanged)
@@ -437,7 +452,11 @@ namespace Game.Physics
                 }
 
                 Profiler.BeginSample("amigus2-6 mesh vertices");
-                _mesh.SetVertices(verticies);
+                if(wasEntytiesDicChanged)
+                {
+                    _mesh.SetVertexBufferParams(verticies.Length, _vertexAttributeDescriptor);
+                }
+                _mesh.SetVertexBufferData(verticies, 0, 0, verticies.Length);
                 Profiler.EndSample();
             }
             wasEntytiesDicChanged = false;
