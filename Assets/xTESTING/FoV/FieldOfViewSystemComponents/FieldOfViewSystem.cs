@@ -8,46 +8,43 @@ using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.Rendering;
 using ModestTree;
+using UnityEngine.Events;
 
 namespace Game.Physics
 {
     public class FieldOfViewSystem : MonoBehaviour
     {
-        // int1 - ColliderId, int2 - enter count
-        private Dictionary<int, (Collider2D, int)> _collidersToUnprepare = new();
-
-        // int1 - EntityId, int2 ColliderId
-        private NativeMultiHashMap<int, int> _entitiesColliders;
-
-        // int - EntityId
-        private Dictionary<int, FieldOfViewEntity> _entityes = new();
-
-        //// int - EntityId
-        //private NativeHashMap<int, FovEntityData> _entityesData;
 
         private MeshFilter _meshFilter;
         private Mesh _mesh;
         private VertexAttributeDescriptor _vertexAttributeDescriptor;
+        private LayerMask _allLayerMask;
+        private ContactFilter2D _contactFilter;
 
         private bool wasEntytiAddedLastTime = false;
         private bool wasEntitiesDicChanged = true;
 
-        private LayerMask _allLayerMask;
-        private ContactFilter2D _contactFilter;
+        // int1 - ColliderId, int2 - enter count
+        private Dictionary<int, (Collider2D, int)> _collidersToUnprepare = new();
+        // int - EntityId
+        private Dictionary<int, FieldOfViewEntity> _entityes = new();
+        // int1 - EntityId, int2 ColliderId
+        private NativeMultiHashMap<int, int> _entitiesColliders;
 
         private Vector2[] _pathPointsCompositeCache = new Vector2[10];
 
+        private NativeList<ColliderDataUnprepared> datasUnprep;
+        private NativeList<Vector2> vertsUnprep;
+        //int - ColliderId
+        private NativeHashMap<int, ColliderDataReady> datasRdy;
+        private NativeList<float2> vertsRdy;
+        //int - EntityId
+        private NativeHashMap<int, FovEntityData> fovDatas;
+        private NativeArray<Vector3> verticies;
+        private NativeArray<int> triangles;
 
         public LayerMask AllLayerMask => _allLayerMask;
         public ContactFilter2D ContactFilter => _contactFilter;
-
-        NativeList<ColliderDataUnprepared> datasUnprep;
-        NativeList<Vector2> vertsUnprep;
-        NativeHashMap<int, ColliderDataReady> datasRdy;
-        NativeList<float2> vertsRdy;
-        NativeHashMap<int, FovEntityData> fovDatas;
-        NativeArray<Vector3> verticies;
-        NativeArray<int> triangles;
 
         private void Awake()
         {
@@ -110,6 +107,10 @@ namespace Game.Physics
             int entityId = entity.GetInstanceID();
             int colliderId = collider.GetInstanceID();
 
+            if (_entitiesColliders.Capacity < _entitiesColliders.Count() + 1)
+            {
+                IncreaseCapasityOfEntitiesColliders(10);
+            }
             _entitiesColliders.Add(entityId, colliderId);
 
             if (_collidersToUnprepare.ContainsKey(colliderId))
@@ -386,14 +387,22 @@ namespace Game.Physics
 
             Profiler.BeginSample("amigus1-5 datasRdy alloc");
             // int - colliderId
-            datasRdy.Clear();
+            if(datasRdy.Capacity < datasUnprep.Length)
+            {
+                datasRdy.Dispose();
+                datasRdy = new (datasUnprep.Length + 10, Allocator.Persistent);
+            }
+            else
+            {
+                datasRdy.Clear();
+            }
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-6 vertsRdy alloc");
             vertsRdy.Resize(vertsUnprep.Length, NativeArrayOptions.UninitializedMemory);
             Profiler.EndSample();
 
-            Profiler.BeginSample("amigus1-7-1 dataPrepare job");
+            Profiler.BeginSample("amigus1-7-1 dataPrepare create job");
             PrepareColliderDatasJob prepareJob = new PrepareColliderDatasJob
             {
                 datasUnprep = datasUnprep,
@@ -403,18 +412,21 @@ namespace Game.Physics
             };
             Profiler.EndSample();
 
-            Profiler.BeginSample("amigus1-7-2 dataPrepare job");
+            Profiler.BeginSample("amigus1-7-2 dataPrepare run job");
             prepareJob.Run(datasUnprep.Length);
             Profiler.EndSample();
 
-            //Profiler.BeginSample("amigus1-8-1 dataPrepare dispose");
-            //datasUnprep.Dispose();
-            //vertsUnprep.Dispose();
-            //Profiler.EndSample();
-
             Profiler.BeginSample("amigus1-8-2 rayJob fovDatas alloc");
             // int - entityId
-            fovDatas.Clear();
+            if (fovDatas.Capacity < _entityes.Count)
+            {
+                fovDatas.Dispose();
+                fovDatas = new(datasUnprep.Length + 10, Allocator.Persistent);
+            }
+            else
+            {
+                fovDatas.Clear();
+            }
             int verticiesCount = 0;
             int rayCount = 0;
             Profiler.EndSample();
@@ -507,6 +519,35 @@ namespace Game.Physics
                 Profiler.EndSample();
             }
             wasEntitiesDicChanged = false;
+        }
+
+        private void IncreaseCapasityOfEntitiesColliders(int capIncrease)
+        {
+            int newCapacity = _entitiesColliders.Capacity + capIncrease;
+            var newMap = new NativeMultiHashMap<int, int>(newCapacity, Allocator.Persistent);
+
+            // Iterate over the old map and copy each key-value pair to the new map.
+            NativeMultiHashMapIterator<int> iterator;
+            int value;
+
+            var keys = _entitiesColliders.GetKeyArray(Allocator.Temp);
+            for (int i = 0; i < keys.Length; i++)
+            {
+                int key = keys[i];
+                if (_entitiesColliders.TryGetFirstValue(key, out value, out iterator))
+                {
+                    do
+                    {
+                        newMap.Add(key, value);
+                    }
+                    while (_entitiesColliders.TryGetNextValue(out value, ref iterator));
+                }
+            }
+            keys.Dispose();
+
+            // Dispose the old map and assign the new one.
+            _entitiesColliders.Dispose();
+            _entitiesColliders = newMap;
         }
     }
 }
