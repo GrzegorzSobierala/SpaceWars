@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Game.Physics
 {
-    [BurstCompile(FloatMode = FloatMode.Fast, OptimizeFor = OptimizeFor.Performance, DisableDirectCall = true)]
+    //[BurstCompile(FloatMode = FloatMode.Fast, OptimizeFor = OptimizeFor.Performance, DisableDirectCall = true)]
     public struct Raycast2DWithMeshJob : IJobParallelFor
     {
         //public Vector2 rayOrigin;
@@ -73,58 +73,59 @@ namespace Game.Physics
             Vector2 minHitPoint = Vector2.zero;
             bool hitOnce = false;
 
-            if (!entitiesColliders.TryGetFirstValue(entityId, out int currentColliderId,
+            if (entitiesColliders.TryGetFirstValue(entityId, out int currentColliderId,
                 out NativeMultiHashMapIterator<int> iterator))
             {
-                return;
-            }
-
-            do
-            {
-                ColliderDataReady data = colliderDataArray[currentColliderId];
-                float newHitDistance = float.MaxValue;
-                Vector2 newHitPoint = Vector2.zero;
-                bool hit = false;
-
-                switch (data.type)
+                while (entitiesColliders.TryGetNextValue(out currentColliderId, ref iterator))
                 {
-                    case (int)ColliderType.Box:
-                        hit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
-                            data.center, data.rotationRad, data.size, out newHitDistance,
-                            out newHitPoint);
-                        break;
-
-                    case (int)ColliderType.Circle:
-                        hit = RayIntersectsCircle(rayOrigin, rayDirection, rayDistance, data.center,
-                            data.radius, out newHitDistance, out newHitPoint);
-                        break;
-
-                    case (int)ColliderType.Capsule:
-                        hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance, data.capsuleA,
-                            data.capsuleB, data.capsuleRadius, out newHitDistance, out newHitPoint);
-                        break;
-
-                    case (int)ColliderType.Polygon:
-                    case (int)ColliderType.Edge:
-                    case (int)ColliderType.Composite:
-                        hit = RayIntersectsPolygon(vertexArray, data.vertexStartIndex, data.vertexCount, data.isClosed,
-                            rayOrigin, rayDirection, rayDistance, out newHitDistance, out newHitPoint);
-                        break;
-                }
-
-                if (hit)
-                {
-                    hitOnce = true;
-                    if (newHitDistance < minHitDistance)
+                    if(currentColliderId == FieldOfViewSystem._EMPTY_COLLIDER_ID)
                     {
-                        minHitDistance = newHitDistance;
-                        minHitPoint = newHitPoint;
+                        continue;
                     }
-                }
 
+                    ColliderDataReady data = colliderDataArray[currentColliderId];
+                    float newHitDistance = float.MaxValue;
+                    Vector2 newHitPoint = Vector2.zero;
+                    bool hit = false;
 
-            } while (entitiesColliders.TryGetNextValue(out currentColliderId, ref iterator));
+                    switch (data.type)
+                    {
+                        case (int)ColliderType.Box:
+                            hit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
+                                data.center, data.rotationRad, data.size, out newHitDistance,
+                                out newHitPoint);
+                            break;
 
+                        case (int)ColliderType.Circle:
+                            hit = RayIntersectsCircle(rayOrigin, rayDirection, rayDistance, data.center,
+                                data.radius, out newHitDistance, out newHitPoint);
+                            break;
+
+                        case (int)ColliderType.Capsule:
+                            hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance, data.capsuleA,
+                                data.capsuleB, data.capsuleRadius, out newHitDistance, out newHitPoint);
+                            break;
+
+                        case (int)ColliderType.Polygon:
+                        case (int)ColliderType.Edge:
+                        case (int)ColliderType.Composite:
+                            hit = RayIntersectsPolygon(vertexArray, data.vertexStartIndex, data.vertexCount, data.isClosed,
+                                rayOrigin, rayDirection, rayDistance, out newHitDistance, out newHitPoint);
+                            break;
+                    }
+
+                    if (hit)
+                    {
+                        hitOnce = true;
+                        if (newHitDistance < minHitDistance)
+                        {
+                            minHitDistance = newHitDistance;
+                            minHitPoint = newHitPoint;
+                        }
+                    }
+
+                } 
+            }
 
             Vector3 vertex;
             if (hitOnce)

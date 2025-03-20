@@ -24,6 +24,16 @@ namespace Game.Physics
             _awakeCalled = true;
         }
 
+        private void OnEnable()
+        {
+            _system.AddEntity(this);
+        }
+
+        private void OnDisable()
+        {
+            _system.RemoveEntity(this);
+        }
+
         private void Start()
         {
             //foreach (var collider in _overlapColliders)
