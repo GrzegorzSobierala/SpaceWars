@@ -7,8 +7,6 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.Rendering;
-using ModestTree;
-using UnityEngine.Events;
 
 namespace Game.Physics
 {
@@ -115,10 +113,7 @@ namespace Game.Physics
             int entityId = entity.GetInstanceID();
             int colliderId = collider.GetInstanceID();
 
-            if (_entitiesColliders.Capacity < _entitiesColliders.Count() + 1)
-            {
-                IncreaseCapasityOfEntitiesColliders(10);
-            }
+            IncreaseCapasityOfEntitiesCollidersIfNeeded(10);
             _entitiesColliders.Add(entityId, colliderId);
 
             if (_collidersToUnprepare.ContainsKey(colliderId))
@@ -219,10 +214,13 @@ namespace Game.Physics
             _wasEntytiAddedLastTime = true;
             _wasEntitiesDicChanged = true;
 
-            if (_entitiesColliders.Capacity < _entitiesColliders.Count() + 1)
+            int countKeys = 0;
+            foreach (var item in _entitiesColliders)
             {
-                IncreaseCapasityOfEntitiesColliders(10);
+                countKeys++;
             }
+
+            IncreaseCapasityOfEntitiesCollidersIfNeeded(10);
             _entitiesColliders.Add(entityId, _EMPTY_COLLIDER_ID);
         }
 
@@ -597,19 +595,32 @@ namespace Game.Physics
             _wasEntitiesDicChanged = false;
         }
 
-        private void IncreaseCapasityOfEntitiesColliders(int capIncrease)
+        private void IncreaseCapasityOfEntitiesCollidersIfNeeded(int capIncrease)
         {
-            int newCapacity = _entitiesColliders.Capacity + capIncrease;
-            var newMap = new NativeMultiHashMap<int, int>(newCapacity, Allocator.Persistent);
+            if (_entitiesColliders.Capacity >= _entityes.Count + 1)
+            {
+                return;
+            }
 
-            // Iterate over the old map and copy each key-value pair to the new map.
+            int newCapacity = _entitiesColliders.Capacity + capIncrease;
+            NativeMultiHashMap<int, int> newMap = new(newCapacity, Allocator.Persistent);
+
             NativeMultiHashMapIterator<int> iterator;
             int value;
 
-            var keys = _entitiesColliders.GetKeyArray(Allocator.Temp);
-            for (int i = 0; i < keys.Length; i++)
+            var nonUniqueKeys = _entitiesColliders.GetKeyArray(Allocator.Temp);
+            NativeHashSet<int> uniqueKeys = new(nonUniqueKeys.Length, Allocator.Temp);
+            foreach (var key in nonUniqueKeys)
             {
-                int key = keys[i];
+                if (uniqueKeys.Contains(key))
+                    continue;
+
+                uniqueKeys.Add(key);
+            }
+            nonUniqueKeys.Dispose();
+
+            foreach (var key in uniqueKeys)
+            {
                 if (_entitiesColliders.TryGetFirstValue(key, out value, out iterator))
                 {
                     do
@@ -619,7 +630,8 @@ namespace Game.Physics
                     while (_entitiesColliders.TryGetNextValue(out value, ref iterator));
                 }
             }
-            keys.Dispose();
+
+            uniqueKeys.Dispose();
 
             // Dispose the old map and assign the new one.
             _entitiesColliders.Dispose();

@@ -8,15 +8,9 @@ using UnityEngine;
 
 namespace Game.Physics
 {
-    //[BurstCompile(FloatMode = FloatMode.Fast, OptimizeFor = OptimizeFor.Performance, DisableDirectCall = true)]
+    [BurstCompile(FloatMode = FloatMode.Fast, OptimizeFor = OptimizeFor.Performance, DisableDirectCall = true)]
     public struct Raycast2DWithMeshJob : IJobParallelFor
     {
-        //public Vector2 rayOrigin;
-        //public float rayDistance;
-        //public int rayCount;
-        //public float fovAnlge;
-        //public float worldAngleAdd;
-
         // int - EntityId
         [ReadOnly] public NativeHashMap<int, FovEntityData> fovEntityDatas;
         // int1 - EntityId, int2 ColliderId
