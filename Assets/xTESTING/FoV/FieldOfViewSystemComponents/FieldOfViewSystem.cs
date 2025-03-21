@@ -481,13 +481,13 @@ namespace Game.Physics
             {
                 datasUnprep = _datasUnprep,
                 vertsUnprep = _vertsUnprep,
-                datasRdy = _datasRdy.AsParallelWriter(),
+                datasRdy = _datasRdy,
                 vertsRdy = _vertsRdy,
             };
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-7-2 dataPrepare run job");
-            prepareJob.Run(_datasUnprep.Length);
+            prepareJob.Run(/*_datasUnprep.Length*/);
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-8-2 rayJob fovDatas alloc");

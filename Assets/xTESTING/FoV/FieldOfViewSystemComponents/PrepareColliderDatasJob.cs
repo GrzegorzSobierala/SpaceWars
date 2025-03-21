@@ -8,192 +8,198 @@ using UnityEngine;
 namespace Game.Physics
 {
     [BurstCompile]
-    public struct PrepareColliderDatasJob : IJobFor
+    public struct PrepareColliderDatasJob : IJob
     {
         [ReadOnly] public NativeList<ColliderDataUnprepared> datasUnprep;
         [ReadOnly] public NativeList<Vector2> vertsUnprep;
 
         [WriteOnly, NativeDisableParallelForRestriction] 
-            public NativeHashMap<int, ColliderDataReady>.ParallelWriter datasRdy;
+            public NativeHashMap<int, ColliderDataReady> datasRdy;
         [WriteOnly, NativeDisableParallelForRestriction] 
             public NativeList<float2> vertsRdy;
 
-        public void Execute(int index)
+        public void Execute()
         {
-            switch (datasUnprep[index].typeEnum)
+            for (int index = 0; index < datasUnprep.Length ; index++)
             {
-                case ColliderType.Box:
-                    {
-                        ColliderDataReady data = new()
+                switch (datasUnprep[index].typeEnum)
+                {
+                    case ColliderType.Box:
                         {
-                            type = (int)ColliderType.Box,
+                            ColliderDataReady data = new()
+                            {
+                                type = (int)ColliderType.Box,
 
-                            // Compute world center using the collider’s offset.
-                            center = (Vector2)datasUnprep[index].posWorld +
-                                (Vector2)(Quaternion.Euler(0, 0, datasUnprep[index].rotWorld)
-                                * datasUnprep[index].offsetLoc),
+                                // Compute world center using the collider’s offset.
+                                center = (Vector2)datasUnprep[index].posWorld +
+                                    (Vector2)(Quaternion.Euler(0, 0, datasUnprep[index].rotWorld)
+                                    * datasUnprep[index].offsetLoc),
 
-                            rotationRad = math.radians(datasUnprep[index].rotWorld),
+                                rotationRad = math.radians(datasUnprep[index].rotWorld),
 
-                            size = new float2(datasUnprep[index].sizeLoc.x *
-                                datasUnprep[index].lossyScale.x,
-                            datasUnprep[index].sizeLoc.y * datasUnprep[index].lossyScale.y),
+                                size = new float2(datasUnprep[index].sizeLoc.x *
+                                    datasUnprep[index].lossyScale.x,
+                                datasUnprep[index].sizeLoc.y * datasUnprep[index].lossyScale.y),
 
-                            colliderId = datasUnprep[index].colliderId
-                        };
+                                colliderId = datasUnprep[index].colliderId
+                            };
 
-                        datasRdy.TryAdd(datasUnprep[index].colliderId, data);
-                        break;
-                    }
-                case ColliderType.Circle:
-                    {
-                        ColliderDataReady data = new()
-                        {
-                            type = (int)ColliderType.Circle,
-
-                            center = (Vector2)datasUnprep[index].posWorld +
-                                (Vector2)(Quaternion.Euler(0, 0, datasUnprep[index].rotWorld)
-                                * datasUnprep[index].offsetLoc),
-
-                            // Assume uniform scale (using the x component).
-                            radius = datasUnprep[index].radiusLoc * datasUnprep[index].lossyScale.x,
-                            colliderId = datasUnprep[index].colliderId
-                        };
-
-                        datasRdy.TryAdd(datasUnprep[index].colliderId, data);
-                        break;
-                    }
-                case ColliderType.Capsule:
-                    {
-                        // Compute world center.
-                        Vector2 worldPos = (Vector2)datasUnprep[index].posWorld +
-                        (Vector2)(Quaternion.Euler(0, 0, datasUnprep[index].rotWorld)
-                        * datasUnprep[index].offsetLoc);
-
-                        // Get lossy scale.
-                        float width;
-                        float height;
-                        if (datasUnprep[index].capsuleDirEnum == CapsuleDirection2D.Vertical)
-                        {
-                            width = datasUnprep[index].sizeLoc.x * datasUnprep[index].lossyScale.x;
-                            height = datasUnprep[index].sizeLoc.y * datasUnprep[index].lossyScale.y;
+                            datasRdy.TryAdd(datasUnprep[index].colliderId, data);
+                            break;
                         }
-                        else
+                    case ColliderType.Circle:
                         {
-                            width = datasUnprep[index].sizeLoc.y * datasUnprep[index].lossyScale.y;
-                            height = datasUnprep[index].sizeLoc.x * datasUnprep[index].lossyScale.x;
+                            ColliderDataReady data = new()
+                            {
+                                type = (int)ColliderType.Circle,
+
+                                center = (Vector2)datasUnprep[index].posWorld +
+                                    (Vector2)(Quaternion.Euler(0, 0, datasUnprep[index].rotWorld)
+                                    * datasUnprep[index].offsetLoc),
+
+                                // Assume uniform scale (using the x component).
+                                radius = datasUnprep[index].radiusLoc * datasUnprep[index].lossyScale.x,
+                                colliderId = datasUnprep[index].colliderId
+                            };
+
+                            datasRdy.TryAdd(datasUnprep[index].colliderId, data);
+                            break;
                         }
-                        float capsuleRadius = width * 0.5f;
-                        float segment = math.max(0f, height * 0.5f - capsuleRadius);
-
-                        ColliderDataReady data = new()
+                    case ColliderType.Capsule:
                         {
-                            type = (int)ColliderType.Capsule,
+                            // Compute world center.
+                            Vector2 worldPos = (Vector2)datasUnprep[index].posWorld +
+                            (Vector2)(Quaternion.Euler(0, 0, datasUnprep[index].rotWorld)
+                            * datasUnprep[index].offsetLoc);
 
-                            capsuleRadius = capsuleRadius,
-                            capsuleA = worldPos + (Vector2)datasUnprep[index].capsuleTransUp * segment,
-                            capsuleB = worldPos - (Vector2)datasUnprep[index].capsuleTransUp * segment,
-                            colliderId = datasUnprep[index].colliderId
-                        };
+                            // Get lossy scale.
+                            float width;
+                            float height;
+                            if (datasUnprep[index].capsuleDirEnum == CapsuleDirection2D.Vertical)
+                            {
+                                width = datasUnprep[index].sizeLoc.x * datasUnprep[index].lossyScale.x;
+                                height = datasUnprep[index].sizeLoc.y * datasUnprep[index].lossyScale.y;
+                            }
+                            else
+                            {
+                                width = datasUnprep[index].sizeLoc.y * datasUnprep[index].lossyScale.y;
+                                height = datasUnprep[index].sizeLoc.x * datasUnprep[index].lossyScale.x;
+                            }
+                            float capsuleRadius = width * 0.5f;
+                            float segment = math.max(0f, height * 0.5f - capsuleRadius);
 
-                        datasRdy.TryAdd(datasUnprep[index].colliderId, data);
-                        break;
-                    }
-                case ColliderType.Polygon:
-                    {
-                        ColliderDataReady data = new()
-                        {
-                            type = (int)ColliderType.Polygon,
-                            vertexStartIndex = datasUnprep[index].vertexStartIndex,
-                            vertexCount = datasUnprep[index].vertexCount,
-                            isClosed = 1,
-                            colliderId = datasUnprep[index].colliderId
-                        };
+                            ColliderDataReady data = new()
+                            {
+                                type = (int)ColliderType.Capsule,
 
-                        // poly.points are in local space; transform them to world space.
-                        Vector2 worldPos = datasUnprep[index].posWorld;
-                        float worldAngle = datasUnprep[index].rotWorld;
-                        Vector2 loosyScale = datasUnprep[index].lossyScale;
+                                capsuleRadius = capsuleRadius,
+                                capsuleA = worldPos + (Vector2)datasUnprep[index].capsuleTransUp * segment,
+                                capsuleB = worldPos - (Vector2)datasUnprep[index].capsuleTransUp * segment,
+                                colliderId = datasUnprep[index].colliderId
+                            };
 
-                        for (int i = datasUnprep[index].vertexStartIndex;
-                            i < datasUnprep[index].vertexStartIndex + datasUnprep[index].vertexCount;
-                            i++)
-                        {
-                            vertsRdy[i] = Utils.TransformPoint(vertsUnprep[i], worldPos, worldAngle,
-                                loosyScale);
+                            datasRdy.TryAdd(datasUnprep[index].colliderId, data);
+                            break;
                         }
-
-                        datasRdy.TryAdd(datasUnprep[index].colliderId, data);
-                        break;
-                    }
-                case ColliderType.Edge:
-                    {
-                        ColliderDataReady data = new()
+                    case ColliderType.Polygon:
                         {
-                            type = (int)ColliderType.Edge,
-                            vertexStartIndex = datasUnprep[index].vertexStartIndex,
-                            vertexCount = datasUnprep[index].vertexCount,
-                            isClosed = 0, // Edge is open.
-                            colliderId = datasUnprep[index].colliderId
-                        };
+                            ColliderDataReady data = new()
+                            {
+                                type = (int)ColliderType.Polygon,
+                                vertexStartIndex = datasUnprep[index].vertexStartIndex,
+                                vertexCount = datasUnprep[index].vertexCount,
+                                isClosed = 1,
+                                colliderId = datasUnprep[index].colliderId
+                            };
 
-                        for (int i = datasUnprep[index].vertexStartIndex;
-                            i < datasUnprep[index].vertexStartIndex + datasUnprep[index].vertexCount;
-                            i++)
-                        {
-                            vertsRdy[i] = Utils.TransformPoint(vertsUnprep[i],
-                                datasUnprep[index].posWorld, datasUnprep[index].rotWorld,
-                                datasUnprep[index].lossyScale);
+                            // poly.points are in local space; transform them to world space.
+                            Vector2 worldPos = datasUnprep[index].posWorld;
+                            float worldAngle = datasUnprep[index].rotWorld;
+                            Vector2 loosyScale = datasUnprep[index].lossyScale;
+
+                            for (int i = datasUnprep[index].vertexStartIndex;
+                                i < datasUnprep[index].vertexStartIndex + datasUnprep[index].vertexCount;
+                                i++)
+                            {
+                                vertsRdy[i] = Utils.TransformPoint(vertsUnprep[i], worldPos, worldAngle,
+                                    loosyScale);
+                            }
+
+                            datasRdy.TryAdd(datasUnprep[index].colliderId, data);
+                            break;
                         }
-
-                        datasRdy.TryAdd(datasUnprep[index].colliderId, data);
-                        break;
-                    }
-                case ColliderType.Composite:
-                    {
-                        // CompositeCollider2D may contain multiple paths. Add one ColliderData per path.
-                        // IMPORTANT: To avoid applying the scale twice, do not use TransformPoint here.
-                        ColliderDataReady data = new()
+                    case ColliderType.Edge:
                         {
-                            type = (int)ColliderType.Composite,
-                            vertexStartIndex = datasUnprep[index].vertexStartIndex,
-                            vertexCount = datasUnprep[index].vertexCount,
-                            // Assume composite shapes are closed.
-                            isClosed = 1,
-                            colliderId = datasUnprep[index].colliderId
-                        };
+                            ColliderDataReady data = new()
+                            {
+                                type = (int)ColliderType.Edge,
+                                vertexStartIndex = datasUnprep[index].vertexStartIndex,
+                                vertexCount = datasUnprep[index].vertexCount,
+                                isClosed = 0, // Edge is open.
+                                colliderId = datasUnprep[index].colliderId
+                            };
 
-                        Quaternion rot = Quaternion.Euler(0, 0, datasUnprep[index].rotWorld);
+                            for (int i = datasUnprep[index].vertexStartIndex;
+                                i < datasUnprep[index].vertexStartIndex + datasUnprep[index].vertexCount;
+                                i++)
+                            {
+                                vertsRdy[i] = Utils.TransformPoint(vertsUnprep[i],
+                                    datasUnprep[index].posWorld, datasUnprep[index].rotWorld,
+                                    datasUnprep[index].lossyScale);
+                            }
 
-                        for (int i = datasUnprep[index].vertexStartIndex;
-                            i < datasUnprep[index].vertexStartIndex + datasUnprep[index].vertexCount;
-                            i++)
-                        {
-                            vertsRdy[i] = (Vector2)datasUnprep[index].posWorld +
-                                (Vector2)(rot * vertsUnprep[i]);
+                            datasRdy.TryAdd(datasUnprep[index].colliderId, data);
+                            break;
                         }
-
-                        datasRdy.TryAdd(datasUnprep[index].colliderId, data);
-                        break;
-                    }
-                default:
-                    {
-                        // FALLBACK: use bounds as a box.
-                        ColliderDataReady data = new()
+                    case ColliderType.Composite:
                         {
-                            type = (int)ColliderType.Box,
-                            center = new float2(datasUnprep[index].posWorld.x,
-                                datasUnprep[index].posWorld.y),
-                            size = new float2(datasUnprep[index].sizeLoc.x,
-                                datasUnprep[index].sizeLoc.y),
+                            // CompositeCollider2D may contain multiple paths. Add one ColliderData per path.
+                            // IMPORTANT: To avoid applying the scale twice, do not use TransformPoint here.
+                            ColliderDataReady data = new()
+                            {
+                                type = (int)ColliderType.Composite,
+                                vertexStartIndex = datasUnprep[index].vertexStartIndex,
+                                vertexCount = datasUnprep[index].vertexCount,
+                                // Assume composite shapes are closed.
+                                isClosed = 1,
+                                colliderId = datasUnprep[index].colliderId
+                            };
 
-                            colliderId = datasUnprep[index].colliderId
-                        };
+                            Quaternion rot = Quaternion.Euler(0, 0, datasUnprep[index].rotWorld);
 
-                        datasRdy.TryAdd(datasUnprep[index].colliderId, data);
-                        break;
-                    }
+                            for (int i = datasUnprep[index].vertexStartIndex;
+                                i < datasUnprep[index].vertexStartIndex + datasUnprep[index].vertexCount;
+                                i++)
+                            {
+                                vertsRdy[i] = (Vector2)datasUnprep[index].posWorld +
+                                    (Vector2)(rot * vertsUnprep[i]);
+                            }
+
+                            datasRdy.TryAdd(datasUnprep[index].colliderId, data);
+                            break;
+                        }
+                    default:
+                        {
+                            // FALLBACK: use bounds as a box.
+                            ColliderDataReady data = new()
+                            {
+                                type = (int)ColliderType.Box,
+                                center = new float2(datasUnprep[index].posWorld.x,
+                                    datasUnprep[index].posWorld.y),
+                                size = new float2(datasUnprep[index].sizeLoc.x,
+                                    datasUnprep[index].sizeLoc.y),
+
+                                colliderId = datasUnprep[index].colliderId
+                            };
+
+                            datasRdy.TryAdd(datasUnprep[index].colliderId, data);
+                            break;
+                        }
+                }
+
             }
+
+
         }
     }
 }
