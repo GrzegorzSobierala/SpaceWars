@@ -39,8 +39,14 @@ namespace Game.Physics
         private NativeList<float2> _vertsRdy;
         //int - EntityId
         private NativeHashMap<int, FovEntityData> _fovDatas;
+        // Vector3 - vertex world position
         private NativeArray<Vector3> _verticies;
+        // int - vertexIndex 
         private NativeArray<int> _triangles;
+        // int - cast enemyId
+        private NativeHashSet<int> _enemiesPlayerHit;
+        private NativeHashSet<EnemyHitData> _enemiesEnemyHit;
+
 
         public LayerMask AllLayerMask => _allLayerMask;
         public ContactFilter2D ContactFilter => _contactFilter;
@@ -79,11 +85,8 @@ namespace Game.Physics
             _fovDatas = new(5, Allocator.Persistent);
             _verticies = new(0, Allocator.Persistent);
             _triangles = new(0, Allocator.Persistent);
-        }
-
-        private void OnEnable()
-        {
-            
+            _enemiesPlayerHit = new(5, Allocator.Persistent);
+            _enemiesEnemyHit = new(25, Allocator.Persistent);
         }
 
         private void OnDestroy()
@@ -98,6 +101,8 @@ namespace Game.Physics
             _fovDatas.Dispose();
             _verticies.Dispose();
             _triangles.Dispose();
+            _enemiesPlayerHit.Dispose();
+            _enemiesEnemyHit.Dispose();
         }
 
         private void Update()
@@ -541,13 +546,27 @@ namespace Game.Physics
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus2-2-2 rayJob enemiesPlayerHit alloc");
-            // int - cast enemyId
-            NativeHashSet<int> enemiesPlayerHit = new(rayCount, Allocator.TempJob);
+            if (_enemiesPlayerHit.Capacity < rayCount)
+            {
+                _enemiesPlayerHit.Dispose();
+                _enemiesPlayerHit = new(rayCount, Allocator.Persistent);
+            }
+            else
+            {
+                _enemiesPlayerHit.Clear();
+            }
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus2-2-3 rayJob enemiesEnemyHit alloc");
-            // int1 - cast enemyId, int2 - hit enemyId
-            NativeHashSet<EnemyHitData> enemiesEnemyHit = new(rayCount, Allocator.TempJob);
+            if (_enemiesEnemyHit.Capacity < rayCount)
+            {
+                _enemiesEnemyHit.Dispose();
+                _enemiesEnemyHit = new(rayCount + 10, Allocator.Persistent);
+            }
+            else
+            {
+                _enemiesEnemyHit.Clear();
+            }
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus2-3 rayJob create");
@@ -559,8 +578,8 @@ namespace Game.Physics
                 vertexArray = _vertsRdy,
                 verticies = _verticies,
                 triangles = _triangles,
-                enemiesPlayerHit = enemiesPlayerHit.AsParallelWriter(),
-                enemiesEnemyHit = enemiesEnemyHit.AsParallelWriter(),
+                enemiesPlayerHit = _enemiesPlayerHit.AsParallelWriter(),
+                enemiesEnemyHit = _enemiesEnemyHit.AsParallelWriter(),
                 playerLayer = LayerMask.NameToLayer(Layers.Player),
                 enemyLayer = LayerMask.NameToLayer(Layers.Enemy),
             };
@@ -614,9 +633,6 @@ namespace Game.Physics
                 Profiler.EndSample();
             }
             _wasEntitiesDicChanged = false;
-
-            enemiesPlayerHit.Dispose();
-            enemiesEnemyHit.Dispose();
         }
 
         private void IncreaseCapasityOfEntitiesCollidersIfNeeded(int capIncrease)
