@@ -26,8 +26,8 @@ namespace Game.Physics
 
         // int - cast enemyId
         public NativeHashSet<int>.ParallelWriter enemiesPlayerHit;
-        // int1 - cast enemyId, int2 - hit enemyId
-        public NativeMultiHashMap<int, int>.ParallelWriter enemiesEnemyHit;
+        // int1 - cast enemyId, int2 - hit enemyColliderId
+        public NativeHashSet<EnemyHitData>.ParallelWriter enemiesEnemyHit;
 
         public int playerLayer;
         public int enemyLayer;
@@ -77,6 +77,7 @@ namespace Game.Physics
             bool isMinHitPlayer = false;
             bool hitOnce = false;
 
+            #region StopRaycastLoop
             if (entitiesColliders.TryGetFirstValue(entityId, out int currentColliderId,
                 out NativeMultiHashMapIterator<int> iterator))
             {
@@ -88,6 +89,12 @@ namespace Game.Physics
                     }
 
                     ColliderDataReady data = colliderDataArray[currentColliderId];
+
+                    if(data.layer == enemyLayer)
+                    {
+                        continue;
+                    }
+
                     float newHitDistance = float.MaxValue;
                     Vector2 newHitPoint = Vector2.zero;
                     bool hit = false;
@@ -131,7 +138,70 @@ namespace Game.Physics
                 }
                 while (entitiesColliders.TryGetNextValue(out currentColliderId, ref iterator));
             }
+            #endregion
 
+            #region EnemiesLoop
+            if (entitiesColliders.TryGetFirstValue(entityId, out currentColliderId,
+                out iterator))
+            {
+                do
+                {
+                    if (currentColliderId == FieldOfViewSystem._EMPTY_COLLIDER_ID)
+                    {
+                        continue;
+                    }
+
+                    ColliderDataReady data = colliderDataArray[currentColliderId];
+
+                    if (data.layer != enemyLayer)
+                    {
+                        continue;
+                    }
+
+                    float newHitDistance = float.MaxValue;
+                    Vector2 newHitPoint = Vector2.zero;
+                    bool hit = false;
+
+                    switch (data.type)
+                    {
+                        case (int)ColliderType.Box:
+                            hit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
+                                data.center, data.rotationRad, data.size, out newHitDistance,
+                                out newHitPoint);
+                            break;
+
+                        case (int)ColliderType.Circle:
+                            hit = RayIntersectsCircle(rayOrigin, rayDirection, rayDistance, data.center,
+                                data.radius, out newHitDistance, out newHitPoint);
+                            break;
+
+                        case (int)ColliderType.Capsule:
+                            hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance, data.capsuleA,
+                                data.capsuleB, data.capsuleRadius, out newHitDistance, out newHitPoint);
+                            break;
+
+                        case (int)ColliderType.Polygon:
+                        case (int)ColliderType.Edge:
+                        case (int)ColliderType.Composite:
+                            hit = RayIntersectsPolygon(vertexArray, data.vertexStartIndex, data.vertexCount, data.isClosed,
+                                rayOrigin, rayDirection, rayDistance, out newHitDistance, out newHitPoint);
+                            break;
+                    }
+
+                    if (hit)
+                    {
+                        // Enemies detection
+                        if (minHitDistance > newHitDistance)
+                        {
+                            enemiesEnemyHit.Add(new(entityId, data.colliderId));
+                        }
+                    }
+                }
+                while (entitiesColliders.TryGetNextValue(out currentColliderId, ref iterator));
+            }
+            #endregion
+
+            // Mesh
             Vector3 vertex;
             if (hitOnce)
             {
@@ -156,6 +226,7 @@ namespace Game.Physics
                 triangles[triangleIndex + 2] = vertexIndex;
             }
 
+            // Player detection
             if (isMinHitPlayer)
             {
                 enemiesPlayerHit.Add(entityId);

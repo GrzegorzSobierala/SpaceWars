@@ -547,7 +547,7 @@ namespace Game.Physics
 
             Profiler.BeginSample("amigus2-2-3 rayJob enemiesEnemyHit alloc");
             // int1 - cast enemyId, int2 - hit enemyId
-            NativeMultiHashMap<int, int> enemiesEnemyHit = new(rayCount, Allocator.TempJob);
+            NativeHashSet<EnemyHitData> enemiesEnemyHit = new(rayCount, Allocator.TempJob);
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus2-3 rayJob create");
@@ -614,11 +614,6 @@ namespace Game.Physics
                 Profiler.EndSample();
             }
             _wasEntitiesDicChanged = false;
-
-            if(enemiesPlayerHit.Count() > 0)
-            {
-                Debug.Log(enemiesPlayerHit.Count());
-            }
 
             enemiesPlayerHit.Dispose();
             enemiesEnemyHit.Dispose();
