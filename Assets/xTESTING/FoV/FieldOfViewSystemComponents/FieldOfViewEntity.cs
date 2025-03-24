@@ -49,13 +49,13 @@ namespace Game.Physics
         private void OnTriggerEnter2D(Collider2D collision)
         {
             _system.AddCollider(this, collision);
-            Debug.Log("enter");
+            //Debug.Log("enter");
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
             _system.RemoveCollider(this, collision);
-            Debug.Log("exit");
+            //Debug.Log("exit");
         }
 
         public FovEntityData GetData(int rayBeforeCount, int vertciesBeforeCount)

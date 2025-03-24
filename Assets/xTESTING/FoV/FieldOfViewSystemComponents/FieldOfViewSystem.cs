@@ -299,6 +299,7 @@ namespace Game.Physics
                             lossyScale = colTrans.lossyScale,
                             sizeLoc = box.size,
                             colliderId = pair.Key,
+                            layer = col.gameObject.layer
                         };
                         _datasUnprep.Add(boxData);
                         Profiler.EndSample();
@@ -316,6 +317,7 @@ namespace Game.Physics
                             lossyScale = colTrans.localScale,
                             radiusLoc = circle.radius,
                             colliderId = pair.Key,
+                            layer = col.gameObject.layer
                         };
                         _datasUnprep.Add(circleData);
                         Profiler.EndSample();
@@ -335,6 +337,7 @@ namespace Game.Physics
                             capsuleTransUp = colTrans.up,
                             capsuleTransRight = colTrans.right,
                             colliderId = pair.Key,
+                            layer = col.gameObject.layer
                         };
                         _datasUnprep.Add(capsuleData);
                         Profiler.EndSample();
@@ -355,6 +358,7 @@ namespace Game.Physics
                             lossyScale = colTrans.lossyScale,
                             vertexCount = points.Length,
                             colliderId = pair.Key,
+                            layer = col.gameObject.layer
                         };
                         //Profiler.EndSample();
 
@@ -385,6 +389,7 @@ namespace Game.Physics
                             lossyScale = colTrans.lossyScale,
                             vertexCount = edgePoints.Length,
                             colliderId = pair.Key,
+                            layer = col.gameObject.layer
                         };
 
                         unsafe
@@ -416,6 +421,7 @@ namespace Game.Physics
                                 rotWorld = colTrans.eulerAngles.z,
                                 vertexCount = pointCount,
                                 colliderId = pair.Key,
+                                layer = col.gameObject.layer
                             };
 
                             //Profiler.EndSample();
@@ -450,6 +456,7 @@ namespace Game.Physics
                             posWorld = col.bounds.center,
                             sizeLoc = col.bounds.size,
                             colliderId = pair.Key,
+                            layer = col.gameObject.layer
                         };
                         _datasUnprep.Add(defaultData);
                         Debug.LogError("Unsuported collider type");
@@ -523,7 +530,7 @@ namespace Game.Physics
             }
             Profiler.EndSample();
 
-            Profiler.BeginSample("amigus2-2 rayJob triangles array");
+            Profiler.BeginSample("amigus2-2-1 rayJob triangles array");
             int trianglesCount = rayCount * 3;
             if (_triangles.Length < trianglesCount)
             {
@@ -531,6 +538,16 @@ namespace Game.Physics
                 _triangles = new NativeArray<int>(trianglesCount, Allocator.Persistent,
                     NativeArrayOptions.ClearMemory);
             }
+            Profiler.EndSample();
+
+            Profiler.BeginSample("amigus2-2-2 rayJob enemiesPlayerHit alloc");
+            // int - cast enemyId
+            NativeHashSet<int> enemiesPlayerHit = new(rayCount, Allocator.TempJob);
+            Profiler.EndSample();
+
+            Profiler.BeginSample("amigus2-2-3 rayJob enemiesEnemyHit alloc");
+            // int1 - cast enemyId, int2 - hit enemyId
+            NativeMultiHashMap<int, int> enemiesEnemyHit = new(rayCount, Allocator.TempJob);
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus2-3 rayJob create");
@@ -542,6 +559,10 @@ namespace Game.Physics
                 vertexArray = _vertsRdy,
                 verticies = _verticies,
                 triangles = _triangles,
+                enemiesPlayerHit = enemiesPlayerHit.AsParallelWriter(),
+                enemiesEnemyHit = enemiesEnemyHit.AsParallelWriter(),
+                playerLayer = LayerMask.NameToLayer(Layers.Player),
+                enemyLayer = LayerMask.NameToLayer(Layers.Enemy),
             };
             Profiler.EndSample();
 
@@ -593,6 +614,14 @@ namespace Game.Physics
                 Profiler.EndSample();
             }
             _wasEntitiesDicChanged = false;
+
+            if(enemiesPlayerHit.Count() > 0)
+            {
+                Debug.Log(enemiesPlayerHit.Count());
+            }
+
+            enemiesPlayerHit.Dispose();
+            enemiesEnemyHit.Dispose();
         }
 
         private void IncreaseCapasityOfEntitiesCollidersIfNeeded(int capIncrease)

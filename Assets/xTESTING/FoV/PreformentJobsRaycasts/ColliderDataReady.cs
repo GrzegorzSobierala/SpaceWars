@@ -24,5 +24,6 @@ namespace Game.Physics
         public int isClosed;
 
         public int colliderId;
+        public int layer;
     }
 }

@@ -41,7 +41,8 @@ namespace Game.Physics
                                     datasUnprep[index].lossyScale.x,
                                 datasUnprep[index].sizeLoc.y * datasUnprep[index].lossyScale.y),
 
-                                colliderId = datasUnprep[index].colliderId
+                                colliderId = datasUnprep[index].colliderId,
+                                layer = datasUnprep[index].layer
                             };
 
                             datasRdy.TryAdd(datasUnprep[index].colliderId, data);
@@ -59,7 +60,8 @@ namespace Game.Physics
 
                                 // Assume uniform scale (using the x component).
                                 radius = datasUnprep[index].radiusLoc * datasUnprep[index].lossyScale.x,
-                                colliderId = datasUnprep[index].colliderId
+                                colliderId = datasUnprep[index].colliderId,
+                                layer = datasUnprep[index].layer
                             };
 
                             datasRdy.TryAdd(datasUnprep[index].colliderId, data);
@@ -95,7 +97,8 @@ namespace Game.Physics
                                 capsuleRadius = capsuleRadius,
                                 capsuleA = worldPos + (Vector2)datasUnprep[index].capsuleTransUp * segment,
                                 capsuleB = worldPos - (Vector2)datasUnprep[index].capsuleTransUp * segment,
-                                colliderId = datasUnprep[index].colliderId
+                                colliderId = datasUnprep[index].colliderId,
+                                layer = datasUnprep[index].layer
                             };
 
                             datasRdy.TryAdd(datasUnprep[index].colliderId, data);
@@ -109,7 +112,8 @@ namespace Game.Physics
                                 vertexStartIndex = datasUnprep[index].vertexStartIndex,
                                 vertexCount = datasUnprep[index].vertexCount,
                                 isClosed = 1,
-                                colliderId = datasUnprep[index].colliderId
+                                colliderId = datasUnprep[index].colliderId,
+                                layer = datasUnprep[index].layer
                             };
 
                             // poly.points are in local space; transform them to world space.
@@ -136,7 +140,8 @@ namespace Game.Physics
                                 vertexStartIndex = datasUnprep[index].vertexStartIndex,
                                 vertexCount = datasUnprep[index].vertexCount,
                                 isClosed = 0, // Edge is open.
-                                colliderId = datasUnprep[index].colliderId
+                                colliderId = datasUnprep[index].colliderId,
+                                layer = datasUnprep[index].layer
                             };
 
                             for (int i = datasUnprep[index].vertexStartIndex;
@@ -162,7 +167,8 @@ namespace Game.Physics
                                 vertexCount = datasUnprep[index].vertexCount,
                                 // Assume composite shapes are closed.
                                 isClosed = 1,
-                                colliderId = datasUnprep[index].colliderId
+                                colliderId = datasUnprep[index].colliderId,
+                                layer = datasUnprep[index].layer
                             };
 
                             Quaternion rot = Quaternion.Euler(0, 0, datasUnprep[index].rotWorld);
@@ -189,7 +195,8 @@ namespace Game.Physics
                                 size = new float2(datasUnprep[index].sizeLoc.x,
                                     datasUnprep[index].sizeLoc.y),
 
-                                colliderId = datasUnprep[index].colliderId
+                                colliderId = datasUnprep[index].colliderId,
+                                layer = datasUnprep[index].layer
                             };
 
                             datasRdy.TryAdd(datasUnprep[index].colliderId, data);

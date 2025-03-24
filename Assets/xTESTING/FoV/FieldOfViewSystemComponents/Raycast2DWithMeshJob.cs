@@ -1,5 +1,6 @@
 using CodeMonkey.Utils;
 using Game.Utility;
+using Game.Utility.Globals;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
@@ -22,6 +23,14 @@ namespace Game.Physics
 
         [WriteOnly, NativeDisableParallelForRestriction] public NativeArray<Vector3> verticies;
         [WriteOnly, NativeDisableParallelForRestriction] public NativeArray<int> triangles;
+
+        // int - cast enemyId
+        public NativeHashSet<int>.ParallelWriter enemiesPlayerHit;
+        // int1 - cast enemyId, int2 - hit enemyId
+        public NativeMultiHashMap<int, int>.ParallelWriter enemiesEnemyHit;
+
+        public int playerLayer;
+        public int enemyLayer;
 
         public void Execute(int index)
         {
@@ -65,6 +74,7 @@ namespace Game.Physics
 
             float minHitDistance = float.MaxValue;
             Vector2 minHitPoint = Vector2.zero;
+            bool isMinHitPlayer = false;
             bool hitOnce = false;
 
             if (entitiesColliders.TryGetFirstValue(entityId, out int currentColliderId,
@@ -115,9 +125,9 @@ namespace Game.Physics
                         {
                             minHitDistance = newHitDistance;
                             minHitPoint = newHitPoint;
+                            isMinHitPlayer = data.layer == playerLayer;
                         }
                     }
-
                 }
                 while (entitiesColliders.TryGetNextValue(out currentColliderId, ref iterator));
             }
@@ -144,12 +154,15 @@ namespace Game.Physics
                 triangles[triangleIndex] = verticiesBeforeCount;
                 triangles[triangleIndex + 1] = vertexIndex - 1;
                 triangles[triangleIndex + 2] = vertexIndex;
+            }
 
-                //triangleIndex += 3;
+            if (isMinHitPlayer)
+            {
+                enemiesPlayerHit.Add(entityId);
             }
         }
 
-        // --- Intersection routines ---
+        #region Intersection routines
 
         private bool RayIntersectsBox(Vector2 rayOrigin, Vector2 rayDir, float rayDist,
                                         float2 boxCenter, float boxRotation, float2 boxSize,
@@ -315,5 +328,6 @@ namespace Game.Physics
             return false;
         }
 
+        #endregion
     }
 }

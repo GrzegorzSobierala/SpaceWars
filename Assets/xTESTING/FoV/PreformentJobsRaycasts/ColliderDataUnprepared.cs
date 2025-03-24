@@ -24,5 +24,6 @@ namespace Game.Physics
         public int vertexCount;
 
         public int colliderId;
+        public int layer;
     }
 }
