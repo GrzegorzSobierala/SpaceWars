@@ -70,9 +70,9 @@ namespace Game.Physics
             if (entitiesColliders.TryGetFirstValue(entityId, out int currentColliderId,
                 out NativeMultiHashMapIterator<int> iterator))
             {
-                while (entitiesColliders.TryGetNextValue(out currentColliderId, ref iterator))
+                do
                 {
-                    if(currentColliderId == FieldOfViewSystem._EMPTY_COLLIDER_ID)
+                    if (currentColliderId == FieldOfViewSystem._EMPTY_COLLIDER_ID)
                     {
                         continue;
                     }
@@ -118,7 +118,8 @@ namespace Game.Physics
                         }
                     }
 
-                } 
+                }
+                while (entitiesColliders.TryGetNextValue(out currentColliderId, ref iterator));
             }
 
             Vector3 vertex;
