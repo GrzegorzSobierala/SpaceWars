@@ -29418,10 +29418,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e45624f93aee56b4895bd63a320963a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnShoot:
+  _rotationTrans: {fileID: 2923649639386474618}
+  _beforeShootIndicateTime: 0.25
+  _onBeforeShootGun:
     m_PersistentCalls:
       m_Calls: []
-  _rotationTrans: {fileID: 2923649639386474618}
+  _onShoot:
+    m_PersistentCalls:
+      m_Calls: []
   _leftGunTransform: {fileID: 7137388153904881829}
   _leftGunShootPoint: {fileID: 4714313184447014243}
   _rightGunTransform: {fileID: 3113656267949211620}
@@ -29513,7 +29517,7 @@ Transform:
   - {fileID: 8878008854674303711}
   - {fileID: 5460247260779581530}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6160428084483414833
 MonoBehaviour:
@@ -29545,8 +29549,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d59e1c7f6565bb488c0299d169d9279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enable0CountEnemyDamageHandlers: 1
-  enable0CountFOVs: 1
+  _bindEnemyDamageHandlers: 1
+  _bindFOVs: 1
 --- !u!50 &5098940128701385669
 Rigidbody2D:
   serializedVersion: 4
@@ -29570,7 +29574,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
@@ -34582,6 +34586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af96d5436d7d1c549aad05abdc5ba829, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _startState: 0
 --- !u!1 &7511227865153729720
 GameObject:
   m_ObjectHideFlags: 0
@@ -39552,6 +39557,8 @@ MonoBehaviour:
   _stopOnRunDistanceToRayHit: 100
   _runSpeedMulti: 1.5
   _spotPlayerRange: 350
+  _maxSpotPlayerRange: Infinity
+  _spotRangeIncreasePerSec: 5
 --- !u!1 &7888642962685155240
 GameObject:
   m_ObjectHideFlags: 0
