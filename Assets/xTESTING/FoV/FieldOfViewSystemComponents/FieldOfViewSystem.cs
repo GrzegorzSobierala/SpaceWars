@@ -499,7 +499,7 @@ namespace Game.Physics
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-7-2 dataPrepare run job");
-            prepareJob.Run(/*_datasUnprep.Length*/);
+            prepareJob.Run();
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-8-2 rayJob fovDatas alloc");
@@ -601,15 +601,15 @@ namespace Game.Physics
                 {
                     _mesh.SetVertexBufferParams(verticiesCount, _vertexAttributeDescriptor);
                 }
-                _mesh.SetVertexBufferData(_verticies, 0, 0, verticiesCount, 0,
+                _mesh.SetVertexBufferData(_verticies, 0, 0, verticiesCount/*, 0,
                     MeshUpdateFlags.DontNotifyMeshUsers | MeshUpdateFlags.DontRecalculateBounds |
-                    MeshUpdateFlags.DontResetBoneBounds | MeshUpdateFlags.DontValidateIndices);
+                    MeshUpdateFlags.DontResetBoneBounds | MeshUpdateFlags.DontValidateIndices*/);
                 Profiler.EndSample();
 
                 if (_wasEntitiesDicChanged)
                 {
                     Profiler.BeginSample("amigus2-5 mesh triangles");
-                    _mesh.SetIndices(_triangles, 0, trianglesCount, MeshTopology.Triangles, 0, false, 0);
+                    _mesh.SetIndices(_triangles, 0, trianglesCount, MeshTopology.Triangles, 0/*, false, 0*/);
                     Profiler.EndSample();
                 }
             }
@@ -618,7 +618,7 @@ namespace Game.Physics
                 if (_wasEntitiesDicChanged)
                 {
                     Profiler.BeginSample("amigus2-5 mesh triangles");
-                    _mesh.SetIndices(_triangles, 0, trianglesCount, MeshTopology.Triangles, 0, false, 0);
+                    _mesh.SetIndices(_triangles, 0, trianglesCount, MeshTopology.Triangles, 0/*, false, 0*/);
                     Profiler.EndSample();
                 }
 
@@ -627,9 +627,9 @@ namespace Game.Physics
                 {
                     _mesh.SetVertexBufferParams(verticiesCount, _vertexAttributeDescriptor);
                 }
-                _mesh.SetVertexBufferData(_verticies, 0, 0, verticiesCount, 0,
+                _mesh.SetVertexBufferData(_verticies, 0, 0, verticiesCount/*, 0,
                     MeshUpdateFlags.DontNotifyMeshUsers | MeshUpdateFlags.DontRecalculateBounds |
-                    MeshUpdateFlags.DontResetBoneBounds | MeshUpdateFlags.DontValidateIndices);
+                    MeshUpdateFlags.DontResetBoneBounds | MeshUpdateFlags.DontValidateIndices*/);
                 Profiler.EndSample();
             }
             _wasEntitiesDicChanged = false;

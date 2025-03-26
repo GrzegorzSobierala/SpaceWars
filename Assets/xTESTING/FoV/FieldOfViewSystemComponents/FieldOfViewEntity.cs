@@ -1,41 +1,52 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Physics
 {
     public class FieldOfViewEntity : MonoBehaviour
     {
+        [InjectOptional] private FieldOfViewEntitiesController _controller;
+        [Inject] private FieldOfViewSystem _system;
+
         [SerializeField] private float _fov = 90;
         [SerializeField] private int _rayCount = 2;
         [SerializeField] private float _viewDistance = 500f;
 
-        private FieldOfViewSystem _system;
         private bool _awakeCalled = false;
         //private Collider2D[] _overlapColliders;
 
         //private List<Collider2D> _overlapCashe = new();
 
+        private bool _wasStartCalled = false;
+
         private void Awake()
         {
-            _system = GetComponentInParent<FieldOfViewSystem>();
+            //_system = GetComponentInParent<FieldOfViewSystem>();
             //_overlapColliders = GetComponents<Collider2D>();
             _awakeCalled = true;
         }
 
         private void OnEnable()
         {
-            _system.AddEntity(this);
+            if(_wasStartCalled)
+            {
+                EnableEntity();
+            }
         }
 
         private void OnDisable()
         {
-            _system.RemoveEntity(this);
+            DisableEntity();
         }
 
         private void Start()
         {
+            if (!_wasStartCalled)
+            {
+                EnableEntity();
+                _wasStartCalled = true;
+            }
+
             //foreach (var collider in _overlapColliders)
             //{
             //    collider.OverlapCollider(_system.ContactFilter, _overlapCashe);
@@ -45,19 +56,7 @@ namespace Game.Physics
             //    }
             //}
         }
-
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            _system.AddCollider(this, collision);
-            //Debug.Log("enter");
-        }
-
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            _system.RemoveCollider(this, collision);
-            //Debug.Log("exit");
-        }
-
+       
         public FovEntityData GetData(int rayBeforeCount, int vertciesBeforeCount)
         {
             return new()
@@ -71,6 +70,31 @@ namespace Game.Physics
                 vertciesBeforeCount = vertciesBeforeCount
             };
         }
+
+        private void TriggerEnter2D(Collider2D collision)
+        {
+            _system.AddCollider(this, collision);
+        }
+
+        private void TriggerExit2D(Collider2D collision)
+        {
+            _system.RemoveCollider(this, collision);
+        }
+
+        private void EnableEntity()
+        {
+            _system.AddEntity(this);
+            _controller.OnTriggerEnterEvent += TriggerEnter2D;
+            _controller.OnTriggerExitEvent += TriggerExit2D;
+        }
+
+        private void DisableEntity()
+        {
+            _system.RemoveEntity(this);
+            _controller.OnTriggerEnterEvent -= TriggerEnter2D;
+            _controller.OnTriggerExitEvent -= TriggerExit2D;
+        }
+
 
         #region EDITOR
 
