@@ -11,7 +11,7 @@ namespace Game.Physics
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            OnTriggerEnterEvent.Invoke(collision);
+            OnTriggerEnterEvent?.Invoke(collision);
         }
 
         private void OnTriggerExit2D(Collider2D collision)
@@ -19,7 +19,7 @@ namespace Game.Physics
             if(GameManager.IsGameQuitungOrSceneUnloading(gameObject))
                 return;
 
-            OnTriggerExitEvent.Invoke(collision);
+            OnTriggerExitEvent?.Invoke(collision);
         }
     }
 }
