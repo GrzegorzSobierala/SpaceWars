@@ -7,13 +7,17 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.Rendering;
+using System;
 
 namespace Game.Physics
 {
     [DefaultExecutionOrder(-100)]
     public class FieldOfViewSystem : MonoBehaviour
     {
-        [SerializeField] float _meshMoveZStep = 0.001f;
+        public event Action OnUpdateViewCompleted;
+
+        [SerializeField] private float _meshMoveZStep = 0.001f;
+        [SerializeField, Range(1, 10000)] private int _batchCount;
 
         private MeshFilter _meshFilter;
         private Mesh _mesh;
@@ -90,6 +94,12 @@ namespace Game.Physics
             _enemiesEnemyHit = new(25, Allocator.Persistent);
         }
 
+        private void Start()
+        {
+            CustomPlayerLoopInjection.OnAfterPhysics2DUpdate += ScheduleUpdateView;
+            CustomPlayerLoopInjection.OnPostLateUpdateEnd += CompliteUpdateView;
+        }
+
         private void OnDestroy()
         {
             if (_entitiesColliders.IsCreated)
@@ -104,11 +114,9 @@ namespace Game.Physics
             _triangles.Dispose();
             _enemiesPlayerHit.Dispose();
             _enemiesEnemyHit.Dispose();
-        }
 
-        private void Update()
-        {
-            UpdateView();
+            CustomPlayerLoopInjection.OnAfterPhysics2DUpdate -= ScheduleUpdateView;
+            CustomPlayerLoopInjection.OnPostLateUpdateEnd -= CompliteUpdateView;
         }
 
         public void AddCollider(FieldOfViewEntity entity, Collider2D collider)
@@ -143,10 +151,10 @@ namespace Game.Physics
             if (collider.isTrigger)
                 return;
 
-            if(!entity.isActiveAndEnabled)
+            if (!entity.isActiveAndEnabled)
             {
                 return;
-            }    
+            }
 
             int entityId = entity.GetInstanceID();
             int colliderId = collider.GetInstanceID();
@@ -211,7 +219,7 @@ namespace Game.Physics
                 return;
             }
 
-            if(_entitiesColliders.ContainsKey(entityId))
+            if (_entitiesColliders.ContainsKey(entityId))
             {
                 Debug.LogError("Found in _entitiesColliders", entity);
                 return;
@@ -276,7 +284,20 @@ namespace Game.Physics
             _wasEntitiesDicChanged = true;
         }
 
-        private void UpdateView()
+        public void DoWhenJobCompleted(Action action)
+        {
+            if(raycastsJobHandle.IsCompleted)
+            {
+                TryCompleteRayJob();
+                action?.Invoke();
+            }
+            else
+            {
+                OnUpdateViewCompleted += action;
+            }
+        }
+
+        private void ScheduleUpdateView()
         {
             Profiler.BeginSample("amigus1-2 datasUnprep alloc");
             _datasUnprep.Clear();
@@ -474,10 +495,10 @@ namespace Game.Physics
 
             Profiler.BeginSample("amigus1-5 datasRdy alloc");
             // int - colliderId
-            if(_datasRdy.Capacity < _datasUnprep.Length)
+            if (_datasRdy.Capacity < _datasUnprep.Length)
             {
                 _datasRdy.Dispose();
-                _datasRdy = new (_datasUnprep.Length + 10, Allocator.Persistent);
+                _datasRdy = new(_datasUnprep.Length + 10, Allocator.Persistent);
             }
             else
             {
@@ -514,7 +535,7 @@ namespace Game.Physics
             {
                 _fovDatas.Clear();
             }
-            int verticiesCount = 0;
+            verticiesCount = 0;
             int rayCount = 0;
             Profiler.EndSample();
 
@@ -531,7 +552,7 @@ namespace Game.Physics
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-9 rayJob verticies array");
-            if(_verticies.Length < verticiesCount)
+            if (_verticies.Length < verticiesCount)
             {
                 _verticies.Dispose();
                 _verticies = new NativeArray<Vector3>(verticiesCount, Allocator.Persistent,
@@ -540,7 +561,7 @@ namespace Game.Physics
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus2-2-1 rayJob triangles array");
-            int trianglesCount = rayCount * 3;
+            trianglesCount = rayCount * 3;
             if (_triangles.Length < trianglesCount)
             {
                 _triangles.Dispose();
@@ -589,15 +610,28 @@ namespace Game.Physics
             };
             Profiler.EndSample();
 
-            Profiler.BeginSample("amigus2-4 rayJob run");
-            int batchCount = Mathf.Max(1, verticiesCount / (JobsUtility.JobWorkerCount * 2));
-            JobHandle raycastsJobHandle = raycastsJob.Schedule(verticiesCount, batchCount);
-            raycastsJobHandle.Complete();
+            Profiler.BeginSample("amigus2-4-1 rayJob Schedule");
+            int batchCount = Mathf.Max(1, /*_batchCount*/ /*(verticiesCount / JobsUtility.JobWorkerCount)  - 1*/ (verticiesCount / (JobsUtility.JobWorkerCount * 2)) - 2);
+            raycastsJobHandle = raycastsJob.Schedule(verticiesCount, batchCount);
+            Profiler.EndSample();
+        }
+
+        JobHandle raycastsJobHandle;
+        int verticiesCount;
+        int trianglesCount;
+        bool wasJobCompleteCalled = true;
+
+        private void CompliteUpdateView()
+        {
+            wasJobCompleteCalled = false;
+
+            Profiler.BeginSample("amigus2-4-2 rayJob Complite");
+            TryCompleteRayJob();
             //JobHandle raycastsJobHandle = raycastsJob.Schedule(verticiesCount, new JobHandle());
             //raycastsJobHandle.Complete();
             Profiler.EndSample();
-            
-            
+
+
             if (_wasEntytiAddedLastTime)
             {
                 Profiler.BeginSample("amigus2-6 mesh vertices");
@@ -627,7 +661,7 @@ namespace Game.Physics
                 }
 
                 Profiler.BeginSample("amigus2-6 mesh vertices");
-                if(_wasEntitiesDicChanged)
+                if (_wasEntitiesDicChanged)
                 {
                     _mesh.SetVertexBufferParams(verticiesCount, _vertexAttributeDescriptor);
                 }
@@ -643,6 +677,24 @@ namespace Game.Physics
             _mesh.RecalculateBounds(MeshUpdateFlags.DontNotifyMeshUsers | MeshUpdateFlags.DontRecalculateBounds |
                     MeshUpdateFlags.DontResetBoneBounds | MeshUpdateFlags.DontValidateIndices);
             Profiler.EndSample();
+
+            Profiler.BeginSample("amigus2-8 OnUpdateViewCompleted Invoke");
+            OnUpdateViewCompleted?.Invoke();
+            OnUpdateViewCompleted = null;
+            Profiler.EndSample();
+        }
+
+        private void TryCompleteRayJob()
+        {
+            if (wasJobCompleteCalled)
+            {
+                return;
+            }
+            else
+            {
+                raycastsJobHandle.Complete();
+                wasJobCompleteCalled = true;
+            }
         }
 
         private void IncreaseCapasityOfEntitiesCollidersIfNeeded(int capIncrease)

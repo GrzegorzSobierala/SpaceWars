@@ -85,22 +85,22 @@ namespace Game.Physics
 
         public void TriggerEnter2D(Collider2D collision)
         {
-            _system.AddCollider(this, collision);
+            _system.OnUpdateViewCompleted += () => _system.AddCollider(this, collision);
         }
 
         public void TriggerExit2D(Collider2D collision)
         {
-            _system.RemoveCollider(this, collision);
+            _system.OnUpdateViewCompleted += () => _system.RemoveCollider(this, collision);
         }
 
         public void EnableEntity()
         {
-            _system.AddEntity(this);
+            _system.OnUpdateViewCompleted += () => _system.AddEntity(this);
         }
 
         public void DisableEntity()
         {
-            _system.RemoveEntity(this);
+            _system.OnUpdateViewCompleted += () => _system.RemoveEntity(this);
         }
 
 

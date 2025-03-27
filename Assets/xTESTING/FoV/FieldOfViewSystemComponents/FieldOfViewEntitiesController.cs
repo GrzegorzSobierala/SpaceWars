@@ -59,7 +59,6 @@ namespace Game.Physics
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-
             OnTriggerEnterEvent?.Invoke(collision);
         }
 
