@@ -1,3 +1,4 @@
+using Game.Management;
 using UnityEngine;
 using Zenject;
 
@@ -36,6 +37,9 @@ namespace Game.Physics
 
         private void OnDisable()
         {
+            if(GameManager.IsGameQuitungOrSceneUnloading(gameObject))
+                return;
+
             DisableEntity();
         }
 
@@ -47,6 +51,8 @@ namespace Game.Physics
                 _wasStartCalled = true;
             }
 
+            _controller.SubscribeTriggerEvents(this);
+
             //foreach (var collider in _overlapColliders)
             //{
             //    collider.OverlapCollider(_system.ContactFilter, _overlapCashe);
@@ -56,7 +62,12 @@ namespace Game.Physics
             //    }
             //}
         }
-       
+
+        private void OnDestroy()
+        {
+            _controller.UnsubscribeTriggerEvents(this);
+        }
+
         public FovEntityData GetData(int rayBeforeCount, int vertciesBeforeCount)
         {
             return new()
@@ -71,28 +82,24 @@ namespace Game.Physics
             };
         }
 
-        private void TriggerEnter2D(Collider2D collision)
+        public void TriggerEnter2D(Collider2D collision)
         {
             _system.AddCollider(this, collision);
         }
 
-        private void TriggerExit2D(Collider2D collision)
+        public void TriggerExit2D(Collider2D collision)
         {
             _system.RemoveCollider(this, collision);
         }
 
-        private void EnableEntity()
+        public void EnableEntity()
         {
             _system.AddEntity(this);
-            _controller.OnTriggerEnterEvent += TriggerEnter2D;
-            _controller.OnTriggerExitEvent += TriggerExit2D;
         }
 
-        private void DisableEntity()
+        public void DisableEntity()
         {
             _system.RemoveEntity(this);
-            _controller.OnTriggerEnterEvent -= TriggerEnter2D;
-            _controller.OnTriggerExitEvent -= TriggerExit2D;
         }
 
 
