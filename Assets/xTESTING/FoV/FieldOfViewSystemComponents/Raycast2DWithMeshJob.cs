@@ -214,7 +214,7 @@ namespace Game.Physics
             }
 
             int vertexIndex = index;
-            verticies[vertexIndex] = vertex;
+            verticies[vertexIndex] = vertex + new Vector3(0,0, fovEntityDatas[entityId].meshMoveZ);
 
             int tirIndexMove = verticiesBeforeCount - rayBeforeCount;
             int triIndex = index - tirIndexMove - 1;

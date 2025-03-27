@@ -13,6 +13,7 @@ namespace Game.Physics
     [DefaultExecutionOrder(-100)]
     public class FieldOfViewSystem : MonoBehaviour
     {
+        [SerializeField] float _meshMoveZStep = 0.001f;
 
         private MeshFilter _meshFilter;
         private Mesh _mesh;
@@ -518,11 +519,14 @@ namespace Game.Physics
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus1-8-3 rayJob fovDatas create");
+            float currentMeshMoveZ = 0;
             foreach (var entity in _entityes)
             {
-                _fovDatas.Add(entity.Key, entity.Value.GetData(rayCount, verticiesCount));
+                _fovDatas.Add(entity.Key, entity.Value.GetData(rayCount, verticiesCount,
+                    currentMeshMoveZ));
                 verticiesCount += _fovDatas[entity.Key].rayCount + 2;
                 rayCount += _fovDatas[entity.Key].rayCount;
+                currentMeshMoveZ += _meshMoveZStep;
             }
             Profiler.EndSample();
 

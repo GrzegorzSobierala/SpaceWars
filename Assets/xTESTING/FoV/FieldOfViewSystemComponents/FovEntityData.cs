@@ -12,5 +12,6 @@ namespace Game.Physics
 
         public int rayBeforeCount;
         public int vertciesBeforeCount;
+        public float meshMoveZ;
     }
 }

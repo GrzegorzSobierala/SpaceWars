@@ -68,7 +68,7 @@ namespace Game.Physics
             _controller.UnsubscribeTriggerEvents(this);
         }
 
-        public FovEntityData GetData(int rayBeforeCount, int vertciesBeforeCount)
+        public FovEntityData GetData(int rayBeforeCount, int vertciesBeforeCount, float meshMoveZ)
         {
             return new()
             {
@@ -78,7 +78,8 @@ namespace Game.Physics
                 fovAnlge = _fov,
                 worldAngleAdd = transform.eulerAngles.z,
                 rayBeforeCount = rayBeforeCount,
-                vertciesBeforeCount = vertciesBeforeCount
+                vertciesBeforeCount = vertciesBeforeCount,
+                meshMoveZ = meshMoveZ
             };
         }
 
