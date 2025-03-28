@@ -8,13 +8,15 @@ using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.Rendering;
 using System;
+using Game.Room.Enemy;
+using System.Collections;
 
 namespace Game.Physics
 {
     [DefaultExecutionOrder(-100)]
     public class FieldOfViewSystem : MonoBehaviour
     {
-        public event Action OnUpdateViewCompleted;
+        private event Action _onUpdateViewCompleted;
 
         [SerializeField] private float _meshMoveZStep = 0.001f;
 
@@ -30,6 +32,9 @@ namespace Game.Physics
         private Dictionary<int, (Collider2D, int)> _collidersToUnprepare = new();
         // int - EntityId
         private Dictionary<int, FieldOfViewEntity> _entityes = new();
+        // int - enemy's colliderId
+        private Dictionary<int, IGuardStateDetectable> _collidersDetectable = new();
+
         // int1 - EntityId, int2 ColliderId
         private NativeMultiHashMap<int, int> _entitiesColliders;
 
@@ -47,9 +52,10 @@ namespace Game.Physics
         // int - vertexIndex 
         private NativeArray<int> _triangles;
         // int - cast enemyId
-        private NativeHashSet<int> _enemiesPlayerHit;
-        private NativeHashSet<EnemyHitData> _enemiesEnemyHit;
+        private NativeHashMap<int, bool> _enemiesPlayerHit;
+        private NativeHashMap<EnemyHitData, bool> _enemiesEnemyHit;
 
+        private int _enemyLayer;
 
         public LayerMask AllLayerMask => _allLayerMask;
         public ContactFilter2D ContactFilter => _contactFilter;
@@ -65,6 +71,7 @@ namespace Game.Physics
                 layerMask = _allLayerMask,
                 useLayerMask = true
             };
+            _enemyLayer = LayerMask.NameToLayer(Layers.Enemy);
 
             _meshFilter = GetComponent<MeshFilter>();
             _mesh = new Mesh();
@@ -94,8 +101,7 @@ namespace Game.Physics
 
         private void Start()
         {
-            CustomPlayerLoopInjection.OnAfterPhysics2DUpdate += ScheduleUpdateView;
-            CustomPlayerLoopInjection.OnPostLateUpdateEnd += CompliteUpdateView;
+            StartCoroutine(SubscribeCustomLoop());
         }
 
         private void OnDestroy()
@@ -142,6 +148,18 @@ namespace Game.Physics
             else
             {
                 _collidersToUnprepare.Add(colliderId, (collider, 1));
+            }
+
+            if(collider.gameObject.layer == _enemyLayer && !_collidersDetectable.ContainsKey(colliderId))
+            {
+                if (collider.TryGetComponent(out IGuardStateDetectable detectable))
+                {
+                    _collidersDetectable.Add(colliderId, detectable);
+                }
+                else
+                {
+                    Debug.LogError("Collider doesn't have IGuardStateDetectable", collider);    
+                }
             }
         }
 
@@ -284,7 +302,7 @@ namespace Game.Physics
                 }
                 else
                 {
-                    OnUpdateViewCompleted += action;
+                    _onUpdateViewCompleted += action;
                 }
             }
             else
@@ -313,8 +331,6 @@ namespace Game.Physics
                 switch (col)
                 {
                     case BoxCollider2D box:
-                        Profiler.BeginSample("amigus1-4-1 dataUnpare box");
-
                         ColliderDataUnprepared boxData = new()
                         {
                             typeEnum = ColliderType.Box,
@@ -327,12 +343,9 @@ namespace Game.Physics
                             layer = col.gameObject.layer
                         };
                         _datasUnprep.Add(boxData);
-                        Profiler.EndSample();
                         break;
 
                     case CircleCollider2D circle:
-                        Profiler.BeginSample("amigus1-4-2 dataUnpare circle");
-
                         ColliderDataUnprepared circleData = new()
                         {
                             typeEnum = ColliderType.Circle,
@@ -345,11 +358,9 @@ namespace Game.Physics
                             layer = col.gameObject.layer
                         };
                         _datasUnprep.Add(circleData);
-                        Profiler.EndSample();
                         break;
 
                     case CapsuleCollider2D capsule:
-                        Profiler.BeginSample("amigus1-4-3 dataUnpare capsule");
                         ColliderDataUnprepared capsuleData = new()
                         {
                             typeEnum = ColliderType.Capsule,
@@ -365,11 +376,9 @@ namespace Game.Physics
                             layer = col.gameObject.layer
                         };
                         _datasUnprep.Add(capsuleData);
-                        Profiler.EndSample();
                         break;
 
                     case PolygonCollider2D poly:
-                        Profiler.BeginSample("amigus1-4-4 dataUnpare poly");
                         Vector2[] points = poly.points;
                         //Profiler.EndSample();
 
@@ -399,11 +408,9 @@ namespace Game.Physics
                         //Profiler.EndSample();
                         //Profiler.BeginSample("amigus polygon 4");
                         _datasUnprep.Add(polyData);
-                        Profiler.EndSample();
                         break;
 
                     case EdgeCollider2D edge:
-                        Profiler.BeginSample("amigus1-4-5 dataUnpare edge");
                         Vector2[] edgePoints = edge.points;
                         ColliderDataUnprepared edgeData = new()
                         {
@@ -426,11 +433,9 @@ namespace Game.Physics
                         }
 
                         _datasUnprep.Add(edgeData);
-                        Profiler.EndSample();
                         break;
 
                     case CompositeCollider2D composite:
-                        Profiler.BeginSample("amigus1-4-6 dataUnpare composite");
                         for (int p = 0; p < composite.pathCount; p++)
                         {
                             //Profiler.BeginSample("amigus composite 1");
@@ -471,7 +476,6 @@ namespace Game.Physics
                             _datasUnprep.Add(compositeData);
                             //Profiler.EndSample();
                         }
-                        Profiler.EndSample();
                         break;
 
                     default:
@@ -569,10 +573,10 @@ namespace Game.Physics
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus2-2-2 rayJob enemiesPlayerHit alloc");
-            if (_enemiesPlayerHit.Capacity < rayCount)
+            if (_enemiesPlayerHit.Capacity < _entityes.Count)
             {
                 _enemiesPlayerHit.Dispose();
-                _enemiesPlayerHit = new(rayCount, Allocator.Persistent);
+                _enemiesPlayerHit = new(_entityes.Count, Allocator.Persistent);
             }
             else
             {
@@ -581,10 +585,11 @@ namespace Game.Physics
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus2-2-3 rayJob enemiesEnemyHit alloc");
-            if (_enemiesEnemyHit.Capacity < rayCount)
+            int newCap = (_entityes.Count - 1) * (_entityes.Count - 1) + 10  /** _entityes.Count * 2 + 10*/;
+            if (_enemiesEnemyHit.Capacity < newCap)
             {
                 _enemiesEnemyHit.Dispose();
-                _enemiesEnemyHit = new(rayCount + 10, Allocator.Persistent);
+                _enemiesEnemyHit = new(newCap + 10, Allocator.Persistent);
             }
             else
             {
@@ -649,14 +654,31 @@ namespace Game.Physics
             }
             _wasEntitiesDicChanged = false;
 
-            Profiler.BeginSample("amigus2-7 mesh RecalculateBounds");
+            Profiler.BeginSample("amigus2-7-1 mesh RecalculateBounds");
             _mesh.RecalculateBounds(MeshUpdateFlags.DontRecalculateBounds |
                     MeshUpdateFlags.DontResetBoneBounds | MeshUpdateFlags.DontValidateIndices);
             Profiler.EndSample();
 
+            Profiler.BeginSample("amigus2-7-2 Found player events");
+            foreach (var found in _enemiesPlayerHit)
+            {
+                _entityes[found.Key].OnPlayerFound();
+            }
+            Profiler.EndSample();
+
+            Profiler.BeginSample("amigus2-7-3 Found enemy events");
+            foreach (var found in _enemiesEnemyHit)
+            {
+                if (!_collidersDetectable[found.Key.hitEnemyColliderId].IsEnemyInGuardState)
+                {
+                    _entityes[found.Key.rayCasterEnemyId].OnEnemyNotInGuardStateFound();
+                }
+            }
+            Profiler.EndSample();
+
             Profiler.BeginSample("amigus2-8 OnUpdateViewCompleted Invoke");
-            OnUpdateViewCompleted?.Invoke();
-            OnUpdateViewCompleted = null;
+            _onUpdateViewCompleted?.Invoke();
+            _onUpdateViewCompleted = null;
             Profiler.EndSample();
             _isJobInProgress = false;
         }
@@ -702,6 +724,14 @@ namespace Game.Physics
             // Dispose the old map and assign the new one.
             _entitiesColliders.Dispose();
             _entitiesColliders = newMap;
+        }
+
+        //To avoid StateMachine Enabel/Disable at start
+        private IEnumerator SubscribeCustomLoop()
+        {
+            yield return new WaitForEndOfFrame();
+            CustomPlayerLoopInjection.OnAfterPhysics2DUpdate += ScheduleUpdateView;
+            CustomPlayerLoopInjection.OnPostLateUpdateEnd += CompliteUpdateView;
         }
     }
 }

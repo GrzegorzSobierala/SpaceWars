@@ -1,3 +1,4 @@
+using Game.Physics;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -6,7 +7,7 @@ namespace Game.Room.Enemy
 {
     public class CursorEnemyGuardState : EnemyGuardStateBase
     {
-        [Inject] private List<EnemyFieldOfView> _views;
+        [Inject] private List<FieldOfViewEntity> _views;
         [Inject] private PatrolController _patrolController;
         [Inject] private EnemyMovementBase _movement;
         [Inject] private EnemyGunBase _enemyGun;

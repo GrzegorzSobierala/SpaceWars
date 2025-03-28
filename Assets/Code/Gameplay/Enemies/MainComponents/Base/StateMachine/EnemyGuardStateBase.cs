@@ -1,5 +1,6 @@
 using Game.Combat;
 using Game.Management;
+using Game.Physics;
 using Game.Player.Ship;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,23 +45,23 @@ namespace Game.Room.Enemy
             }
         }
 
-        protected void SubscribeToFOVs(List<EnemyFieldOfView> views)
+        protected void SubscribeToFOVs(List<FieldOfViewEntity> views)
         {
             foreach (var view in views)
             {
-                view.OnTargetFound += OnPlayerFind;
+                view.OnKnowWherePlayerIs += OnPlayerFind;
             }
         }
 
-        protected void UnubscribeToFOVs(List<EnemyFieldOfView> views)
+        protected void UnubscribeToFOVs(List<FieldOfViewEntity> views)
         {
             foreach (var view in views)
             {
-                view.OnTargetFound -= OnPlayerFind;
+                view.OnKnowWherePlayerIs -= OnPlayerFind;
             }
         }
 
-        private void OnPlayerFind(GameObject foundTarget)
+        private void OnPlayerFind()
         {
             _stateMachine.SwitchToCombatState();
         }

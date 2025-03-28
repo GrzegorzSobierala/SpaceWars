@@ -1,3 +1,4 @@
+using Game.Physics;
 using System.Collections.Generic;
 using Zenject;
 
@@ -5,7 +6,7 @@ namespace Game.Room.Enemy
 {
     public class SupplyStationEnemyGuardState : EnemyGuardStateBase
     {
-        [Inject] private List<EnemyFieldOfView> _views;
+        [Inject] private List<FieldOfViewEntity> _views;
 
         protected override void OnEnterState()
         {

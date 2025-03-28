@@ -24,10 +24,9 @@ namespace Game.Physics
         [WriteOnly, NativeDisableParallelForRestriction] public NativeArray<Vector3> verticies;
         [WriteOnly, NativeDisableParallelForRestriction] public NativeArray<int> triangles;
 
-        // int - cast enemyId
-        public NativeHashSet<int>.ParallelWriter enemiesPlayerHit;
-        // int1 - cast enemyId, int2 - hit enemyColliderId
-        public NativeHashSet<EnemyHitData>.ParallelWriter enemiesEnemyHit;
+        // int - cast enemyId, bool 
+        public NativeHashMap<int, bool>.ParallelWriter enemiesPlayerHit;
+        public NativeHashMap<EnemyHitData, bool>.ParallelWriter enemiesEnemyHit;
 
         public int playerLayer;
         public int enemyLayer;
@@ -193,7 +192,7 @@ namespace Game.Physics
                         // Enemies detection
                         if (minHitDistance > newHitDistance)
                         {
-                            enemiesEnemyHit.Add(new(entityId, data.colliderId));
+                            enemiesEnemyHit.TryAdd(new(entityId, data.colliderId), false);
                         }
                     }
                 }
@@ -229,7 +228,7 @@ namespace Game.Physics
             // Player detection
             if (isMinHitPlayer)
             {
-                enemiesPlayerHit.Add(entityId);
+                enemiesPlayerHit.TryAdd(entityId, false);
             }
         }
 

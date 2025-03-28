@@ -1,4 +1,5 @@
 using Game.Management;
+using System;
 using UnityEngine;
 using Zenject;
 
@@ -6,6 +7,8 @@ namespace Game.Physics
 {
     public class FieldOfViewEntity : MonoBehaviour
     {
+        public event Action OnKnowWherePlayerIs;
+
         [InjectOptional] private FieldOfViewEntitiesController _controller;
         [Inject] private FieldOfViewSystem _system;
 
@@ -14,16 +17,11 @@ namespace Game.Physics
         [SerializeField] private float _viewDistance = 500f;
 
         private bool _awakeCalled = false;
-        //private Collider2D[] _overlapColliders;
-
-        //private List<Collider2D> _overlapCashe = new();
 
         private bool _wasStartCalled = false;
 
         private void Awake()
         {
-            //_system = GetComponentInParent<FieldOfViewSystem>();
-            //_overlapColliders = GetComponents<Collider2D>();
             _awakeCalled = true;
         }
 
@@ -52,15 +50,6 @@ namespace Game.Physics
             }
 
             _controller.SubscribeTriggerEvents(this);
-
-            //foreach (var collider in _overlapColliders)
-            //{
-            //    collider.OverlapCollider(_system.ContactFilter, _overlapCashe);
-            //    foreach (var overlaped in _overlapCashe)
-            //    {
-            //        _system.AddCollider(this, overlaped);
-            //    }
-            //}
         }
 
         private void OnDestroy()
@@ -85,24 +74,33 @@ namespace Game.Physics
 
         public void TriggerEnter2D(Collider2D collision)
         {
-            _system.OnUpdateViewCompleted += () => _system.AddCollider(this, collision);
+            _system.DoWhenJobCompleted(() => _system.AddCollider(this, collision));
         }
 
         public void TriggerExit2D(Collider2D collision)
         {
-            _system.OnUpdateViewCompleted += () => _system.RemoveCollider(this, collision);
+            _system.DoWhenJobCompleted(() => _system.RemoveCollider(this, collision));
         }
 
         public void EnableEntity()
         {
-            _system.OnUpdateViewCompleted += () => _system.AddEntity(this);
+            _system.DoWhenJobCompleted(() => _system.AddEntity(this));
         }
 
         public void DisableEntity()
         {
-            _system.OnUpdateViewCompleted += () => _system.RemoveEntity(this);
+            _system.DoWhenJobCompleted(() => _system.RemoveEntity(this));
         }
 
+        public void OnPlayerFound()
+        {
+            OnKnowWherePlayerIs?.Invoke();
+        }
+
+        public void OnEnemyNotInGuardStateFound()
+        {
+            OnKnowWherePlayerIs?.Invoke();
+        }
 
         #region EDITOR
 
