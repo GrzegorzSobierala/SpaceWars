@@ -2,6 +2,7 @@ using Game.Combat;
 using UnityEngine;
 using Zenject;
 using Game.Utility;
+using Game.Physics;
 
 namespace Game.Room.Enemy
 {
@@ -29,7 +30,7 @@ namespace Game.Room.Enemy
             }
             if (_bindFOVs)
             {
-                Utils.BindComponentsInChildrens<EnemyFieldOfView>(Container, gameObject, true);
+                Utils.BindComponentsInChildrens<FieldOfViewEntity>(Container, gameObject, true);
             }
         }
     }

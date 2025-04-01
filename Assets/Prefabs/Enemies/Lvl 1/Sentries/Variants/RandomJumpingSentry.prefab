@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 194244735973129138, guid: b98c4b24658b6354eb224cda10403264, type: 3}
+      propertyPath: _rayCount
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 194244735973129138, guid: b98c4b24658b6354eb224cda10403264, type: 3}
+      propertyPath: _viewDistance
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 1794343333879605157, guid: b98c4b24658b6354eb224cda10403264, type: 3}
       propertyPath: _baseSpeed
       value: 10000
@@ -66,7 +74,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7139211373183719632, guid: b98c4b24658b6354eb224cda10403264, type: 3}
       propertyPath: m_RootOrder
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7139211373183719632, guid: b98c4b24658b6354eb224cda10403264, type: 3}
       propertyPath: m_LocalPosition.x

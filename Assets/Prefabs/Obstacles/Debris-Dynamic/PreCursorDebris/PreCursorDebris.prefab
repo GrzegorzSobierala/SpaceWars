@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6857570770162082475}
   - component: {fileID: 7371557028625834509}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: BoxCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8580593478150962008}
   - component: {fileID: 4555688260707045002}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: NavMeshObstacleBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -369,6 +369,14 @@ PrefabInstance:
     - target: {fileID: 1629456693823223369, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2292744948932214466, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2411541035093932403, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3107648636054580959, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
       propertyPath: m_ColliderPaths.Array.size
@@ -796,11 +804,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4220081984581531736, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
       propertyPath: m_Mass
-      value: 150000
+      value: 100000
       objectReference: {fileID: 0}
     - target: {fileID: 4444896352746680950, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
       propertyPath: m_Name
       value: PreCursorDebris
+      objectReference: {fileID: 0}
+    - target: {fileID: 4444896352746680950, guid: d1f8da2e53e874f428d2e83f4c7bfc25, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

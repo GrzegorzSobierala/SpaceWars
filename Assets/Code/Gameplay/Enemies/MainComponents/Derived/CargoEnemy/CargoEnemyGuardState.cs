@@ -1,3 +1,4 @@
+using Game.Physics;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -6,7 +7,7 @@ namespace Game.Room.Enemy
 {
     public class CargoEnemyGuardState : EnemyGuardStateBase
     {
-        [Inject] private List<EnemyFieldOfView> _views;
+        [Inject] private List<FieldOfViewEntity> _views;
 
         protected override void OnEnterState()
         {
@@ -24,7 +25,7 @@ namespace Game.Room.Enemy
         {
             foreach (var view in _views)
             {
-                view.OnTargetFound += OnPlayerFind;
+                view.OnKnowWherePlayerIs += OnPlayerFind;
             }
         }
 
@@ -32,11 +33,11 @@ namespace Game.Room.Enemy
         {
             foreach (var view in _views)
             {
-                view.OnTargetFound -= OnPlayerFind;
+                view.OnKnowWherePlayerIs -= OnPlayerFind;
             }
         }
 
-        private void OnPlayerFind(GameObject foundTarget)
+        private void OnPlayerFind()
         {
             _stateMachine.SwitchToCombatState();
         }
