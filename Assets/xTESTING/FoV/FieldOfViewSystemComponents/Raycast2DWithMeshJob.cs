@@ -1,11 +1,8 @@
-using CodeMonkey.Utils;
-using Game.Utility;
-using Game.Utility.Globals;
+using System.Runtime.CompilerServices;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace Game.Physics
 {
@@ -34,7 +31,9 @@ namespace Game.Physics
         public void Execute(int index)
         {
             int entityId = 0;
+            FovEntityData entityData = default;
 
+            // Cache entity data so we don't repeatedly index the dictionary.
             foreach (var kvp in fovEntityDatas)
             {
                 int vertsCount = kvp.Value.rayCount + 2;
@@ -42,27 +41,27 @@ namespace Game.Physics
                     index < kvp.Value.vertciesBeforeCount + vertsCount)
                 {
                     entityId = kvp.Key;
+                    entityData = kvp.Value;
                     break;
                 }
             }
 
-            int rayCount = fovEntityDatas[entityId].rayCount;
-            float2 rayOrigin = fovEntityDatas[entityId].rayOrigin;
-            int verticiesBeforeCount = fovEntityDatas[entityId].vertciesBeforeCount;
+            int rayCount = entityData.rayCount;
+            float2 rayOrigin = entityData.rayOrigin;
+            int verticiesBeforeCount = entityData.vertciesBeforeCount;
 
             if (index == verticiesBeforeCount || // first vert
                 index == verticiesBeforeCount + rayCount + 1) // last vert
             {
                 int firstLastVertexIndex = index;
-                verticies[firstLastVertexIndex] = new float3(rayOrigin, 0.0f); ;
+                verticies[firstLastVertexIndex] = new float3(rayOrigin, 0.0f);
                 return;
             }
 
-
-            float fovAnlge = fovEntityDatas[entityId].fovAnlge;
-            float worldAngleAdd = fovEntityDatas[entityId].worldAngleAdd;
-            float rayDistance = fovEntityDatas[entityId].rayDistance;
-            int rayBeforeCount = fovEntityDatas[entityId].rayBeforeCount;
+            float fovAnlge = entityData.fovAnlge;
+            float worldAngleAdd = entityData.worldAngleAdd;
+            float rayDistance = entityData.rayDistance;
+            int rayBeforeCount = entityData.rayBeforeCount;
 
             float startAngle = (fovAnlge / 2) + 90;
 
@@ -89,7 +88,7 @@ namespace Game.Physics
 
                     ColliderDataReady data = colliderDataArray[currentColliderId];
 
-                    if(data.layer == enemyLayer)
+                    if (data.layer == enemyLayer)
                     {
                         continue;
                     }
@@ -218,18 +217,18 @@ namespace Game.Physics
             float3 vertex;
             if (hitOnce)
             {
-                vertex = new float3(minHitPoint, fovEntityDatas[entityId].meshMoveZ);
+                vertex = new float3(minHitPoint, entityData.meshMoveZ);
             }
             else
             {
                 float2 vector = math.normalize(rayDirection) * rayDistance;
-                vertex = new float3(vector + rayOrigin, fovEntityDatas[entityId].meshMoveZ);
+                vertex = new float3(vector + rayOrigin, entityData.meshMoveZ);
             }
 
             int vertexIndex = index;
             verticies[vertexIndex] = vertex;
 
-            int tirIndexMove = verticiesBeforeCount - rayBeforeCount;
+            int tirIndexMove = verticiesBeforeCount - entityData.rayBeforeCount;
             int triIndex = index - tirIndexMove - 1;
             if (triIndex > 0)
             {
@@ -248,6 +247,7 @@ namespace Game.Physics
 
         #region Intersection routines
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool RayIntersectsBox(float2 rayOrigin, float2 rayDir, float rayDist,
                                         float2 boxCenter, float boxRotation, float2 boxSize,
                                         out float hitDistance, out float2 hitPoint)
@@ -323,6 +323,7 @@ namespace Game.Physics
             return true;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool RayIntersectsCapsule(float2 rayOrigin, float2 rayDir, float rayDist,
                                             float2 A, float2 B, float radius,
                                             out float hitDistance, out float2 hitPoint)
@@ -350,6 +351,7 @@ namespace Game.Physics
             return hit;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool RayIntersectsPolygon(NativeArray<float2> vertices, int startIndex, int count, int isClosed,
                                           float2 rayOrigin, float2 rayDir, float rayDist,
                                           out float hitDistance, out float2 hitPoint)
@@ -388,6 +390,7 @@ namespace Game.Physics
             return hitFound;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool RayIntersectsSegment(float2 rayOrigin, float2 rayDir, float rayDist,
                                             float2 p0, float2 p1, out float t, out float2 pt)
         {
@@ -414,6 +417,7 @@ namespace Game.Physics
 
         #endregion
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static float2 GetVectorFromAngle(float angle)
         {
             // Convert angle (in degrees) to radians.
