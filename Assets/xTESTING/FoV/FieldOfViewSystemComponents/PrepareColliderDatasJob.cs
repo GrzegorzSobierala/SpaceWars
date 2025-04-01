@@ -13,14 +13,14 @@ namespace Game.Physics
         [ReadOnly] public NativeList<ColliderDataUnprepared> datasUnprep;
         [ReadOnly] public NativeList<Vector2> vertsUnprep;
 
-        [WriteOnly, NativeDisableParallelForRestriction] 
-            public NativeHashMap<int, ColliderDataReady> datasRdy;
-        [WriteOnly, NativeDisableParallelForRestriction] 
-            public NativeList<float2> vertsRdy;
+        [WriteOnly, NativeDisableParallelForRestriction]
+        public NativeHashMap<int, ColliderDataReady> datasRdy;
+        [WriteOnly, NativeDisableParallelForRestriction]
+        public NativeList<float2> vertsRdy;
 
         public void Execute()
         {
-            for (int index = 0; index < datasUnprep.Length ; index++)
+            for (int index = 0; index < datasUnprep.Length; index++)
             {
                 switch (datasUnprep[index].typeEnum)
                 {
@@ -95,8 +95,8 @@ namespace Game.Physics
                                 type = (int)ColliderType.Capsule,
 
                                 capsuleRadius = capsuleRadius,
-                                capsuleA = worldPos + (Vector2)datasUnprep[index].capsuleTransUp * segment,
-                                capsuleB = worldPos - (Vector2)datasUnprep[index].capsuleTransUp * segment,
+                                capsuleAOrBoundsPos = worldPos + (Vector2)datasUnprep[index].capsuleTransUpOrBoundsPos * segment,
+                                capsuleBOrBoundsSize = worldPos - (Vector2)datasUnprep[index].capsuleTransUpOrBoundsPos * segment,
                                 colliderId = datasUnprep[index].colliderId,
                                 layer = datasUnprep[index].layer
                             };
@@ -112,6 +112,8 @@ namespace Game.Physics
                                 vertexStartIndex = datasUnprep[index].vertexStartIndex,
                                 vertexCount = datasUnprep[index].vertexCount,
                                 isClosed = 1,
+                                capsuleAOrBoundsPos = (Vector2)datasUnprep[index].capsuleTransUpOrBoundsPos,
+                                capsuleBOrBoundsSize = (Vector2)datasUnprep[index].capsuleTransRightOrBoundsSize,
                                 colliderId = datasUnprep[index].colliderId,
                                 layer = datasUnprep[index].layer
                             };
@@ -140,6 +142,8 @@ namespace Game.Physics
                                 vertexStartIndex = datasUnprep[index].vertexStartIndex,
                                 vertexCount = datasUnprep[index].vertexCount,
                                 isClosed = 0, // Edge is open.
+                                capsuleAOrBoundsPos = (Vector2)datasUnprep[index].capsuleTransUpOrBoundsPos,
+                                capsuleBOrBoundsSize = (Vector2)datasUnprep[index].capsuleTransRightOrBoundsSize,
                                 colliderId = datasUnprep[index].colliderId,
                                 layer = datasUnprep[index].layer
                             };
@@ -167,6 +171,8 @@ namespace Game.Physics
                                 vertexCount = datasUnprep[index].vertexCount,
                                 // Assume composite shapes are closed.
                                 isClosed = 1,
+                                capsuleAOrBoundsPos = (Vector2)datasUnprep[index].capsuleTransUpOrBoundsPos,
+                                capsuleBOrBoundsSize = (Vector2)datasUnprep[index].capsuleTransRightOrBoundsSize,
                                 colliderId = datasUnprep[index].colliderId,
                                 layer = datasUnprep[index].layer
                             };
@@ -205,8 +211,6 @@ namespace Game.Physics
                 }
 
             }
-
-
         }
     }
 }

@@ -17,9 +17,9 @@ namespace Game.Physics
         public float radiusLoc;
 
         public CapsuleDirection2D capsuleDirEnum;
-        public Vector3 capsuleTransUp;
+        public Vector3 capsuleTransUpOrBoundsPos;
 
-        public Vector3 capsuleTransRight;
+        public Vector3 capsuleTransRightOrBoundsSize;
         public int vertexStartIndex;
         public int vertexCount;
 

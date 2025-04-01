@@ -99,8 +99,8 @@ namespace Game.Physics
                             lossyScale = colTrans.lossyScale,
                             sizeLoc = capsule.size,
                             capsuleDirEnum = capsule.direction,
-                            capsuleTransUp = colTrans.up,
-                            capsuleTransRight = colTrans.right
+                            capsuleTransUpOrBoundsPos = colTrans.up,
+                            capsuleTransRightOrBoundsSize = colTrans.right
                         };
                         datasUnprep.Add(capsuleData);
                         Profiler.EndSample();

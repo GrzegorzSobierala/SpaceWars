@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Game.Physics
 {
     [BurstCompile(FloatMode = FloatMode.Fast, OptimizeFor = OptimizeFor.Performance, DisableDirectCall = true)]
-    public struct Raycast2DWithMeshJob : IJobParallelFor
+    public struct Raycast2DWithMeshJob : IJobParallelFor /*IJobFor*/
     {
         // int - EntityId
         [ReadOnly] public NativeHashMap<int, FovEntityData> fovEntityDatas;
@@ -112,15 +112,22 @@ namespace Game.Physics
                             break;
 
                         case (int)ColliderType.Capsule:
-                            hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance, data.capsuleA,
-                                data.capsuleB, data.capsuleRadius, out newHitDistance, out newHitPoint);
+                            hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance, data.capsuleAOrBoundsPos,
+                                data.capsuleBOrBoundsSize, data.capsuleRadius, out newHitDistance, out newHitPoint);
                             break;
 
                         case (int)ColliderType.Polygon:
                         case (int)ColliderType.Edge:
                         case (int)ColliderType.Composite:
+                            bool boundsHit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
+                                data.capsuleAOrBoundsPos, 0, data.capsuleBOrBoundsSize, out newHitDistance,
+                                out newHitPoint);
+
+                            if (!boundsHit)
+                                break;
+
                             hit = RayIntersectsPolygon(vertexArray, data.vertexStartIndex, data.vertexCount, data.isClosed,
-                                rayOrigin, rayDirection, rayDistance, out newHitDistance, out newHitPoint);
+                            rayOrigin, rayDirection, rayDistance, out newHitDistance, out newHitPoint);
                             break;
                     }
 
@@ -175,14 +182,21 @@ namespace Game.Physics
                             break;
 
                         case (int)ColliderType.Capsule:
-                            hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance, data.capsuleA,
-                                data.capsuleB, data.capsuleRadius, out newHitDistance, out newHitPoint);
+                            hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance, data.capsuleAOrBoundsPos,
+                                data.capsuleBOrBoundsSize, data.capsuleRadius, out newHitDistance, out newHitPoint);
                             break;
 
                         case (int)ColliderType.Polygon:
                         case (int)ColliderType.Edge:
                         case (int)ColliderType.Composite:
-                            hit = RayIntersectsPolygon(vertexArray, data.vertexStartIndex, data.vertexCount, data.isClosed,
+                            bool boundsHit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
+                                data.capsuleAOrBoundsPos, 0, data.capsuleBOrBoundsSize, out newHitDistance,
+                                out newHitPoint);
+
+                            if (!boundsHit)
+                                break;
+
+                                hit = RayIntersectsPolygon(vertexArray, data.vertexStartIndex, data.vertexCount, data.isClosed,
                                 rayOrigin, rayDirection, rayDistance, out newHitDistance, out newHitPoint);
                             break;
                     }

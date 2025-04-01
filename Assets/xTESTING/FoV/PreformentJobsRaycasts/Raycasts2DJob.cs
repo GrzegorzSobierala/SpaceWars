@@ -44,8 +44,8 @@ namespace Game.Physics
                         break;
 
                     case (int)ColliderType.Capsule:
-                        hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance,data.capsuleA, 
-                            data.capsuleB, data.capsuleRadius, out newHitDistance, out newHitPoint);
+                        hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance,data.capsuleAOrBoundsPos, 
+                            data.capsuleBOrBoundsSize, data.capsuleRadius, out newHitDistance, out newHitPoint);
                         break;
 
                     case (int)ColliderType.Polygon:

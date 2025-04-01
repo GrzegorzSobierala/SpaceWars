@@ -15,8 +15,8 @@ namespace Game.Physics
 
         public float radius;
 
-        public float2 capsuleA;
-        public float2 capsuleB;
+        public float2 capsuleAOrBoundsPos;
+        public float2 capsuleBOrBoundsSize;
         public float capsuleRadius;
 
         public int vertexStartIndex;

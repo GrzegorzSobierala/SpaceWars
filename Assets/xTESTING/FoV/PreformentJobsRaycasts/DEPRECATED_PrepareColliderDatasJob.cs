@@ -86,8 +86,8 @@ namespace Game.Physics
                             type = (int)ColliderType.Capsule,
 
                             capsuleRadius = capsuleRadius,
-                            capsuleA = worldPos + (Vector2)datasUnprep[index].capsuleTransUp * segment,
-                            capsuleB = worldPos - (Vector2)datasUnprep[index].capsuleTransUp * segment
+                            capsuleAOrBoundsPos = worldPos + (Vector2)datasUnprep[index].capsuleTransUpOrBoundsPos * segment,
+                            capsuleBOrBoundsSize = worldPos - (Vector2)datasUnprep[index].capsuleTransUpOrBoundsPos * segment
                         };
 
                         datasRdy[index] = data;

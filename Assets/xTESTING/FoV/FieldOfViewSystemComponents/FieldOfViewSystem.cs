@@ -370,8 +370,8 @@ namespace Game.Physics
                             lossyScale = colTrans.lossyScale,
                             sizeLoc = capsule.size,
                             capsuleDirEnum = capsule.direction,
-                            capsuleTransUp = colTrans.up,
-                            capsuleTransRight = colTrans.right,
+                            capsuleTransUpOrBoundsPos = colTrans.up,
+                            capsuleTransRightOrBoundsSize = colTrans.right,
                             colliderId = pair.Key,
                             layer = col.gameObject.layer
                         };
@@ -383,6 +383,7 @@ namespace Game.Physics
                         //Profiler.EndSample();
 
                         //Profiler.BeginSample("amigus polygon 2");
+                        Bounds boundsPoly = col.bounds;
                         ColliderDataUnprepared polyData = new()
                         {
                             typeEnum = ColliderType.Polygon,
@@ -391,6 +392,8 @@ namespace Game.Physics
                             rotWorld = colTrans.eulerAngles.z,
                             lossyScale = colTrans.lossyScale,
                             vertexCount = points.Length,
+                            capsuleTransUpOrBoundsPos = boundsPoly.center,
+                            capsuleTransRightOrBoundsSize = boundsPoly.size,
                             colliderId = pair.Key,
                             layer = col.gameObject.layer
                         };
@@ -412,6 +415,7 @@ namespace Game.Physics
 
                     case EdgeCollider2D edge:
                         Vector2[] edgePoints = edge.points;
+                        Bounds boundsEdge = col.bounds;
                         ColliderDataUnprepared edgeData = new()
                         {
                             typeEnum = ColliderType.Edge,
@@ -420,6 +424,8 @@ namespace Game.Physics
                             rotWorld = colTrans.eulerAngles.z,
                             lossyScale = colTrans.lossyScale,
                             vertexCount = edgePoints.Length,
+                            capsuleTransUpOrBoundsPos = boundsEdge.center,
+                            capsuleTransRightOrBoundsSize = boundsEdge.size,
                             colliderId = pair.Key,
                             layer = col.gameObject.layer
                         };
@@ -443,6 +449,7 @@ namespace Game.Physics
                             //Profiler.EndSample();
 
                             //Profiler.BeginSample("amigus composite 2");
+                            Bounds boundsComposite = col.bounds;
                             ColliderDataUnprepared compositeData = new()
                             {
                                 typeEnum = ColliderType.Composite,
@@ -450,6 +457,8 @@ namespace Game.Physics
                                 posWorld = colTrans.position,
                                 rotWorld = colTrans.eulerAngles.z,
                                 vertexCount = pointCount,
+                                capsuleTransUpOrBoundsPos = boundsComposite.center,
+                                capsuleTransRightOrBoundsSize = boundsComposite.size,
                                 colliderId = pair.Key,
                                 layer = col.gameObject.layer
                             };
@@ -616,6 +625,8 @@ namespace Game.Physics
             Profiler.BeginSample("amigus2-4-1 rayJob Schedule");
             int batchCount = Mathf.Max(1, (verticiesCount / (JobsUtility.JobWorkerCount * 2)) - 2);
             raycastsJobHandle = raycastsJob.Schedule(verticiesCount, batchCount);
+            //JobHandle raycastsJobHandle = raycastsJob.Schedule(verticiesCount, new JobHandle());
+            //raycastsJobHandle.Complete();
             Profiler.EndSample();
         }
 
@@ -632,8 +643,6 @@ namespace Game.Physics
 
             Profiler.BeginSample("amigus2-4-2 rayJob Complite");
             raycastsJobHandle.Complete();
-            //JobHandle raycastsJobHandle = raycastsJob.Schedule(verticiesCount, new JobHandle());
-            //raycastsJobHandle.Complete();
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus2-6 mesh vertices");
