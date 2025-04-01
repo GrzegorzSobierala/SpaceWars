@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9024581312856705035}
   - component: {fileID: 2052800350180075989}
   - component: {fileID: 4538589866906768796}
-  - component: {fileID: 2587297437954789902}
+  - component: {fileID: 1907743458172386885}
   m_Layer: 10
   m_Name: StaticObstacle
   m_TagString: Untagged
@@ -34,7 +34,7 @@ Transform:
   - {fileID: 2785789881035579130}
   - {fileID: 8203393756530729216}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2052800350180075989
 MonoBehaviour:
@@ -79,7 +79,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!66 &2587297437954789902
+--- !u!66 &1907743458172386885
 CompositeCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
