@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Game.Physics
@@ -8,18 +9,18 @@ namespace Game.Physics
     public struct ColliderDataUnprepared
     {
         public ColliderType typeEnum;
-        public Vector3 posWorld;
-        public Vector2 offsetLoc;
+        public float2 posWorld;
+        public float2 offsetLoc;
         public float rotWorld;
-        public Vector3 lossyScale;
-        public Vector2 sizeLoc;
+        public float2 lossyScale;
+        public float2 sizeLoc;
 
         public float radiusLoc;
 
         public CapsuleDirection2D capsuleDirEnum;
-        public Vector3 capsuleTransUpOrBoundsPos;
+        public float2 capsuleTransUpOrBoundsPos;
 
-        public Vector3 capsuleTransRightOrBoundsSize;
+        public float2 capsuleTransRightOrBoundsSize;
         public int vertexStartIndex;
         public int vertexCount;
 

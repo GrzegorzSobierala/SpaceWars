@@ -41,14 +41,14 @@ namespace Game.Physics
         private Vector2[] _pathPointsCompositeCache = new Vector2[10];
 
         private NativeList<ColliderDataUnprepared> _datasUnprep;
-        private NativeList<Vector2> _vertsUnprep;
+        private NativeList<float2> _vertsUnprep;
         //int - ColliderId
         private NativeHashMap<int, ColliderDataReady> _datasRdy;
         private NativeList<float2> _vertsRdy;
         //int - EntityId
         private NativeHashMap<int, FovEntityData> _fovDatas;
         // Vector3 - vertex world position
-        private NativeArray<Vector3> _verticies;
+        private NativeArray<float3> _verticies;
         // int - vertexIndex 
         private NativeArray<int> _triangles;
         // int - cast enemyId
@@ -334,10 +334,10 @@ namespace Game.Physics
                         ColliderDataUnprepared boxData = new()
                         {
                             typeEnum = ColliderType.Box,
-                            posWorld = colTrans.position,
+                            posWorld = (Vector2)colTrans.position,
                             rotWorld = colTrans.eulerAngles.z,
                             offsetLoc = box.offset,
-                            lossyScale = colTrans.lossyScale,
+                            lossyScale = (Vector2)colTrans.lossyScale,
                             sizeLoc = box.size,
                             colliderId = pair.Key,
                             layer = col.gameObject.layer
@@ -349,10 +349,10 @@ namespace Game.Physics
                         ColliderDataUnprepared circleData = new()
                         {
                             typeEnum = ColliderType.Circle,
-                            posWorld = colTrans.position,
+                            posWorld = (Vector2)colTrans.position,
                             rotWorld = colTrans.eulerAngles.z,
                             offsetLoc = circle.offset,
-                            lossyScale = colTrans.localScale,
+                            lossyScale = (Vector2)colTrans.localScale,
                             radiusLoc = circle.radius,
                             colliderId = pair.Key,
                             layer = col.gameObject.layer
@@ -365,13 +365,13 @@ namespace Game.Physics
                         {
                             typeEnum = ColliderType.Capsule,
                             offsetLoc = capsule.offset,
-                            posWorld = colTrans.position,
+                            posWorld = (Vector2)colTrans.position,
                             rotWorld = colTrans.eulerAngles.z,
-                            lossyScale = colTrans.lossyScale,
+                            lossyScale = (Vector2)colTrans.lossyScale,
                             sizeLoc = capsule.size,
                             capsuleDirEnum = capsule.direction,
-                            capsuleTransUpOrBoundsPos = colTrans.up,
-                            capsuleTransRightOrBoundsSize = colTrans.right,
+                            capsuleTransUpOrBoundsPos = (Vector2)colTrans.up,
+                            capsuleTransRightOrBoundsSize = (Vector2)colTrans.right,
                             colliderId = pair.Key,
                             layer = col.gameObject.layer
                         };
@@ -388,12 +388,12 @@ namespace Game.Physics
                         {
                             typeEnum = ColliderType.Polygon,
                             vertexStartIndex = _vertsUnprep.Length,
-                            posWorld = colTrans.position,
+                            posWorld = (Vector2)colTrans.position,
                             rotWorld = colTrans.eulerAngles.z,
-                            lossyScale = colTrans.lossyScale,
+                            lossyScale = (Vector2)colTrans.lossyScale,
                             vertexCount = points.Length,
-                            capsuleTransUpOrBoundsPos = boundsPoly.center,
-                            capsuleTransRightOrBoundsSize = boundsPoly.size,
+                            capsuleTransUpOrBoundsPos = (Vector2)boundsPoly.center,
+                            capsuleTransRightOrBoundsSize = (Vector2)boundsPoly.size,
                             colliderId = pair.Key,
                             layer = col.gameObject.layer
                         };
@@ -420,12 +420,12 @@ namespace Game.Physics
                         {
                             typeEnum = ColliderType.Edge,
                             vertexStartIndex = _vertsUnprep.Length,
-                            posWorld = colTrans.position,
+                            posWorld = (Vector2)colTrans.position,
                             rotWorld = colTrans.eulerAngles.z,
-                            lossyScale = colTrans.lossyScale,
+                            lossyScale = (Vector2)colTrans.lossyScale,
                             vertexCount = edgePoints.Length,
-                            capsuleTransUpOrBoundsPos = boundsEdge.center,
-                            capsuleTransRightOrBoundsSize = boundsEdge.size,
+                            capsuleTransUpOrBoundsPos = (Vector2)boundsEdge.center,
+                            capsuleTransRightOrBoundsSize = (Vector2)boundsEdge.size,
                             colliderId = pair.Key,
                             layer = col.gameObject.layer
                         };
@@ -454,11 +454,11 @@ namespace Game.Physics
                             {
                                 typeEnum = ColliderType.Composite,
                                 vertexStartIndex = _vertsUnprep.Length,
-                                posWorld = colTrans.position,
+                                posWorld = (Vector2)colTrans.position,
                                 rotWorld = colTrans.eulerAngles.z,
                                 vertexCount = pointCount,
-                                capsuleTransUpOrBoundsPos = boundsComposite.center,
-                                capsuleTransRightOrBoundsSize = boundsComposite.size,
+                                capsuleTransUpOrBoundsPos = (Vector2)boundsComposite.center,
+                                capsuleTransRightOrBoundsSize = (Vector2)boundsComposite.size,
                                 colliderId = pair.Key,
                                 layer = col.gameObject.layer
                             };
@@ -491,8 +491,8 @@ namespace Game.Physics
                         ColliderDataUnprepared defaultData = new()
                         {
                             typeEnum = ColliderType.Unsuported,
-                            posWorld = col.bounds.center,
-                            sizeLoc = col.bounds.size,
+                            posWorld = (Vector2)col.bounds.center,
+                            sizeLoc = (Vector2)col.bounds.size,
                             colliderId = pair.Key,
                             layer = col.gameObject.layer
                         };
@@ -566,7 +566,7 @@ namespace Game.Physics
             if (_verticies.Length < verticiesCount)
             {
                 _verticies.Dispose();
-                _verticies = new NativeArray<Vector3>(verticiesCount, Allocator.Persistent,
+                _verticies = new(verticiesCount, Allocator.Persistent,
                     NativeArrayOptions.UninitializedMemory);
             }
             Profiler.EndSample();

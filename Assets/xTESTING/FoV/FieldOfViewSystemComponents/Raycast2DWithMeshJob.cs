@@ -21,7 +21,7 @@ namespace Game.Physics
         // Contains vertices for all polygon/edge/composite colliders.
         [ReadOnly] public NativeArray<float2> vertexArray;
 
-        [WriteOnly, NativeDisableParallelForRestriction] public NativeArray<Vector3> verticies;
+        [WriteOnly, NativeDisableParallelForRestriction] public NativeArray<float3> verticies;
         [WriteOnly, NativeDisableParallelForRestriction] public NativeArray<int> triangles;
 
         // int - cast enemyId, bool 
@@ -47,14 +47,14 @@ namespace Game.Physics
             }
 
             int rayCount = fovEntityDatas[entityId].rayCount;
-            Vector2 rayOrigin = fovEntityDatas[entityId].rayOrigin;
+            float2 rayOrigin = fovEntityDatas[entityId].rayOrigin;
             int verticiesBeforeCount = fovEntityDatas[entityId].vertciesBeforeCount;
 
             if (index == verticiesBeforeCount || // first vert
                 index == verticiesBeforeCount + rayCount + 1) // last vert
             {
                 int firstLastVertexIndex = index;
-                verticies[firstLastVertexIndex] = rayOrigin;
+                verticies[firstLastVertexIndex] = new float3(rayOrigin, 0.0f); ;
                 return;
             }
 
@@ -69,10 +69,10 @@ namespace Game.Physics
             int rayIndex = index - verticiesBeforeCount - 1;
             float currentAngle = startAngle - (((float)rayIndex / ((float)rayCount - 1.0f)) * fovAnlge);
 
-            Vector2 rayDirection = UtilsClass.GetVectorFromAngle(currentAngle + worldAngleAdd);
+            float2 rayDirection = GetVectorFromAngle(currentAngle + worldAngleAdd);
 
             float minHitDistance = float.MaxValue;
-            Vector2 minHitPoint = Vector2.zero;
+            float2 minHitPoint = float2.zero;
             bool isMinHitPlayer = false;
             bool hitOnce = false;
 
@@ -95,7 +95,7 @@ namespace Game.Physics
                     }
 
                     float newHitDistance = float.MaxValue;
-                    Vector2 newHitPoint = Vector2.zero;
+                    float2 newHitPoint = float2.zero;
                     bool hit = false;
 
                     switch (data.type)
@@ -165,7 +165,7 @@ namespace Game.Physics
                     }
 
                     float newHitDistance = float.MaxValue;
-                    Vector2 newHitPoint = Vector2.zero;
+                    float2 newHitPoint = float2.zero;
                     bool hit = false;
 
                     switch (data.type)
@@ -215,19 +215,19 @@ namespace Game.Physics
             #endregion
 
             // Mesh
-            Vector3 vertex;
+            float3 vertex;
             if (hitOnce)
             {
-                vertex = minHitPoint;
+                vertex = new float3(minHitPoint, fovEntityDatas[entityId].meshMoveZ);
             }
             else
             {
-                Vector2 vector = rayDirection.normalized * rayDistance;
-                vertex = vector + rayOrigin;
+                float2 vector = math.normalize(rayDirection) * rayDistance;
+                vertex = new float3(vector + rayOrigin, fovEntityDatas[entityId].meshMoveZ);
             }
 
             int vertexIndex = index;
-            verticies[vertexIndex] = vertex + new Vector3(0,0, fovEntityDatas[entityId].meshMoveZ);
+            verticies[vertexIndex] = vertex;
 
             int tirIndexMove = verticiesBeforeCount - rayBeforeCount;
             int triIndex = index - tirIndexMove - 1;
@@ -248,9 +248,9 @@ namespace Game.Physics
 
         #region Intersection routines
 
-        private bool RayIntersectsBox(Vector2 rayOrigin, Vector2 rayDir, float rayDist,
+        private bool RayIntersectsBox(float2 rayOrigin, float2 rayDir, float rayDist,
                                         float2 boxCenter, float boxRotation, float2 boxSize,
-                                        out float hitDistance, out Vector2 hitPoint)
+                                        out float hitDistance, out float2 hitPoint)
         {
             // Transform the ray into the box's local space.
             float2 relativeOrigin = new float2(rayOrigin.x, rayOrigin.y) - boxCenter;
@@ -286,9 +286,9 @@ namespace Game.Physics
             return true;
         }
 
-        private bool RayIntersectsCircle(Vector2 rayOrigin, Vector2 rayDir, float rayDist,
+        private bool RayIntersectsCircle(float2 rayOrigin, float2 rayDir, float rayDist,
                                            float2 circleCenter, float radius,
-                                           out float hitDistance, out Vector2 hitPoint)
+                                           out float hitDistance, out float2 hitPoint)
         {
             float2 m = new float2(rayOrigin.x, rayOrigin.y) - circleCenter;
             float b = math.dot(m, rayDir);
@@ -323,16 +323,16 @@ namespace Game.Physics
             return true;
         }
 
-        private bool RayIntersectsCapsule(Vector2 rayOrigin, Vector2 rayDir, float rayDist,
+        private bool RayIntersectsCapsule(float2 rayOrigin, float2 rayDir, float rayDist,
                                             float2 A, float2 B, float radius,
-                                            out float hitDistance, out Vector2 hitPoint)
+                                            out float hitDistance, out float2 hitPoint)
         {
             bool hit = false;
             hitDistance = float.MaxValue;
-            Vector2 tempHitPoint = Vector2.zero;
+            float2 tempHitPoint = float2.zero;
 
             float tA, tB, tRect;
-            Vector2 ptA, ptB, ptRect;
+            float2 ptA, ptB, ptRect;
             bool hitA = RayIntersectsCircle(rayOrigin, rayDir, rayDist, A, radius, out tA, out ptA);
             bool hitB = RayIntersectsCircle(rayOrigin, rayDir, rayDist, B, radius, out tB, out ptB);
 
@@ -351,16 +351,16 @@ namespace Game.Physics
         }
 
         private bool RayIntersectsPolygon(NativeArray<float2> vertices, int startIndex, int count, int isClosed,
-                                          Vector2 rayOrigin, Vector2 rayDir, float rayDist,
-                                          out float hitDistance, out Vector2 hitPoint)
+                                          float2 rayOrigin, float2 rayDir, float rayDist,
+                                          out float hitDistance, out float2 hitPoint)
         {
             bool hitFound = false;
             hitDistance = rayDist;
-            hitPoint = Vector2.zero;
+            hitPoint = float2.zero;
             for (int i = 0; i < count - 1; i++)
             {
                 float t;
-                Vector2 pt;
+                float2 pt;
                 if (RayIntersectsSegment(rayOrigin, rayDir, rayDist, vertices[startIndex + i], vertices[startIndex + i + 1], out t, out pt))
                 {
                     if (t < hitDistance)
@@ -374,7 +374,7 @@ namespace Game.Physics
             if (isClosed == 1 && count > 2)
             {
                 float t;
-                Vector2 pt;
+                float2 pt;
                 if (RayIntersectsSegment(rayOrigin, rayDir, rayDist, vertices[startIndex + count - 1], vertices[startIndex], out t, out pt))
                 {
                     if (t < hitDistance)
@@ -388,8 +388,8 @@ namespace Game.Physics
             return hitFound;
         }
 
-        private bool RayIntersectsSegment(Vector2 rayOrigin, Vector2 rayDir, float rayDist,
-                                            float2 p0, float2 p1, out float t, out Vector2 pt)
+        private bool RayIntersectsSegment(float2 rayOrigin, float2 rayDir, float rayDist,
+                                            float2 p0, float2 p1, out float t, out float2 pt)
         {
             float2 v = p1 - p0;
             float d = rayDir.x * v.y - rayDir.y * v.x;
@@ -413,5 +413,12 @@ namespace Game.Physics
         }
 
         #endregion
+
+        private static float2 GetVectorFromAngle(float angle)
+        {
+            // Convert angle (in degrees) to radians.
+            float angleRad = math.radians(angle);
+            return new float2(math.cos(angleRad), math.sin(angleRad));
+        }
     }
 }

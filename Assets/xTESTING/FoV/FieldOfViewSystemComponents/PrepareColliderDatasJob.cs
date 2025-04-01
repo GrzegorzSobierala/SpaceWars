@@ -11,7 +11,7 @@ namespace Game.Physics
     public struct PrepareColliderDatasJob : IJob
     {
         [ReadOnly] public NativeList<ColliderDataUnprepared> datasUnprep;
-        [ReadOnly] public NativeList<Vector2> vertsUnprep;
+        [ReadOnly] public NativeList<float2> vertsUnprep;
 
         [WriteOnly, NativeDisableParallelForRestriction]
         public NativeHashMap<int, ColliderDataReady> datasRdy;
@@ -26,17 +26,16 @@ namespace Game.Physics
                 {
                     case ColliderType.Box:
                         {
+                            float angleRad = math.radians(datasUnprep[index].rotWorld);
+                            float2 rotatedOffset = new float2(
+                                datasUnprep[index].offsetLoc.x * math.cos(angleRad) - datasUnprep[index].offsetLoc.y * math.sin(angleRad),
+                                datasUnprep[index].offsetLoc.x * math.sin(angleRad) + datasUnprep[index].offsetLoc.y * math.cos(angleRad)
+                            );
                             ColliderDataReady data = new()
                             {
                                 type = (int)ColliderType.Box,
-
-                                // Compute world center using the collider’s offset.
-                                center = (Vector2)datasUnprep[index].posWorld +
-                                    (Vector2)(Quaternion.Euler(0, 0, datasUnprep[index].rotWorld)
-                                    * datasUnprep[index].offsetLoc),
-
-                                rotationRad = math.radians(datasUnprep[index].rotWorld),
-
+                                center = datasUnprep[index].posWorld + rotatedOffset,
+                                rotationRad = angleRad,
                                 size = new float2(datasUnprep[index].sizeLoc.x *
                                     datasUnprep[index].lossyScale.x,
                                 datasUnprep[index].sizeLoc.y * datasUnprep[index].lossyScale.y),
@@ -50,13 +49,16 @@ namespace Game.Physics
                         }
                     case ColliderType.Circle:
                         {
+                            float angleRad = math.radians(datasUnprep[index].rotWorld);
+                            float2 rotatedOffset = new float2(
+                                datasUnprep[index].offsetLoc.x * math.cos(angleRad) - datasUnprep[index].offsetLoc.y * math.sin(angleRad),
+                                datasUnprep[index].offsetLoc.x * math.sin(angleRad) + datasUnprep[index].offsetLoc.y * math.cos(angleRad)
+                            );
                             ColliderDataReady data = new()
                             {
                                 type = (int)ColliderType.Circle,
 
-                                center = (Vector2)datasUnprep[index].posWorld +
-                                    (Vector2)(Quaternion.Euler(0, 0, datasUnprep[index].rotWorld)
-                                    * datasUnprep[index].offsetLoc),
+                                center = datasUnprep[index].posWorld + rotatedOffset,
 
                                 // Assume uniform scale (using the x component).
                                 radius = datasUnprep[index].radiusLoc * datasUnprep[index].lossyScale.x,
@@ -69,10 +71,12 @@ namespace Game.Physics
                         }
                     case ColliderType.Capsule:
                         {
-                            // Compute world center.
-                            Vector2 worldPos = (Vector2)datasUnprep[index].posWorld +
-                            (Vector2)(Quaternion.Euler(0, 0, datasUnprep[index].rotWorld)
-                            * datasUnprep[index].offsetLoc);
+                            float angleRad = math.radians(datasUnprep[index].rotWorld);
+                            float2 rotatedOffset = new float2(
+                                datasUnprep[index].offsetLoc.x * math.cos(angleRad) - datasUnprep[index].offsetLoc.y * math.sin(angleRad),
+                                datasUnprep[index].offsetLoc.x * math.sin(angleRad) + datasUnprep[index].offsetLoc.y * math.cos(angleRad)
+                            );
+                            float2 worldPos = datasUnprep[index].posWorld + rotatedOffset;
 
                             // Get lossy scale.
                             float width;
@@ -95,8 +99,8 @@ namespace Game.Physics
                                 type = (int)ColliderType.Capsule,
 
                                 capsuleRadius = capsuleRadius,
-                                capsuleAOrBoundsPos = worldPos + (Vector2)datasUnprep[index].capsuleTransUpOrBoundsPos * segment,
-                                capsuleBOrBoundsSize = worldPos - (Vector2)datasUnprep[index].capsuleTransUpOrBoundsPos * segment,
+                                capsuleAOrBoundsPos = worldPos + datasUnprep[index].capsuleTransUpOrBoundsPos * segment,
+                                capsuleBOrBoundsSize = worldPos - datasUnprep[index].capsuleTransUpOrBoundsPos * segment,
                                 colliderId = datasUnprep[index].colliderId,
                                 layer = datasUnprep[index].layer
                             };
@@ -112,22 +116,22 @@ namespace Game.Physics
                                 vertexStartIndex = datasUnprep[index].vertexStartIndex,
                                 vertexCount = datasUnprep[index].vertexCount,
                                 isClosed = 1,
-                                capsuleAOrBoundsPos = (Vector2)datasUnprep[index].capsuleTransUpOrBoundsPos,
-                                capsuleBOrBoundsSize = (Vector2)datasUnprep[index].capsuleTransRightOrBoundsSize,
+                                capsuleAOrBoundsPos = datasUnprep[index].capsuleTransUpOrBoundsPos,
+                                capsuleBOrBoundsSize = datasUnprep[index].capsuleTransRightOrBoundsSize,
                                 colliderId = datasUnprep[index].colliderId,
                                 layer = datasUnprep[index].layer
                             };
 
                             // poly.points are in local space; transform them to world space.
-                            Vector2 worldPos = datasUnprep[index].posWorld;
+                            float2 worldPos = datasUnprep[index].posWorld;
                             float worldAngle = datasUnprep[index].rotWorld;
-                            Vector2 loosyScale = datasUnprep[index].lossyScale;
+                            float2 loosyScale = datasUnprep[index].lossyScale;
 
                             for (int i = datasUnprep[index].vertexStartIndex;
                                 i < datasUnprep[index].vertexStartIndex + datasUnprep[index].vertexCount;
                                 i++)
                             {
-                                vertsRdy[i] = Utils.TransformPoint(vertsUnprep[i], worldPos, worldAngle,
+                                vertsRdy[i] = TransformPoint(vertsUnprep[i], worldPos, worldAngle,
                                     loosyScale);
                             }
 
@@ -142,8 +146,8 @@ namespace Game.Physics
                                 vertexStartIndex = datasUnprep[index].vertexStartIndex,
                                 vertexCount = datasUnprep[index].vertexCount,
                                 isClosed = 0, // Edge is open.
-                                capsuleAOrBoundsPos = (Vector2)datasUnprep[index].capsuleTransUpOrBoundsPos,
-                                capsuleBOrBoundsSize = (Vector2)datasUnprep[index].capsuleTransRightOrBoundsSize,
+                                capsuleAOrBoundsPos = datasUnprep[index].capsuleTransUpOrBoundsPos,
+                                capsuleBOrBoundsSize = datasUnprep[index].capsuleTransRightOrBoundsSize,
                                 colliderId = datasUnprep[index].colliderId,
                                 layer = datasUnprep[index].layer
                             };
@@ -152,7 +156,7 @@ namespace Game.Physics
                                 i < datasUnprep[index].vertexStartIndex + datasUnprep[index].vertexCount;
                                 i++)
                             {
-                                vertsRdy[i] = Utils.TransformPoint(vertsUnprep[i],
+                                vertsRdy[i] = TransformPoint(vertsUnprep[i],
                                     datasUnprep[index].posWorld, datasUnprep[index].rotWorld,
                                     datasUnprep[index].lossyScale);
                             }
@@ -171,20 +175,23 @@ namespace Game.Physics
                                 vertexCount = datasUnprep[index].vertexCount,
                                 // Assume composite shapes are closed.
                                 isClosed = 1,
-                                capsuleAOrBoundsPos = (Vector2)datasUnprep[index].capsuleTransUpOrBoundsPos,
-                                capsuleBOrBoundsSize = (Vector2)datasUnprep[index].capsuleTransRightOrBoundsSize,
+                                capsuleAOrBoundsPos = datasUnprep[index].capsuleTransUpOrBoundsPos,
+                                capsuleBOrBoundsSize = datasUnprep[index].capsuleTransRightOrBoundsSize,
                                 colliderId = datasUnprep[index].colliderId,
                                 layer = datasUnprep[index].layer
                             };
 
-                            Quaternion rot = Quaternion.Euler(0, 0, datasUnprep[index].rotWorld);
-
+                            float angleRad = math.radians(datasUnprep[index].rotWorld);
                             for (int i = datasUnprep[index].vertexStartIndex;
                                 i < datasUnprep[index].vertexStartIndex + datasUnprep[index].vertexCount;
                                 i++)
                             {
-                                vertsRdy[i] = (Vector2)datasUnprep[index].posWorld +
-                                    (Vector2)(rot * vertsUnprep[i]);
+                                float2 rotatedOffset = new float2(
+                                    vertsUnprep[i].x * math.cos(angleRad) - vertsUnprep[i].y * math.sin(angleRad),
+                                    vertsUnprep[i].x * math.sin(angleRad) + vertsUnprep[i].y * math.cos(angleRad)
+                                );
+
+                                vertsRdy[i] = datasUnprep[index].posWorld + rotatedOffset;
                             }
 
                             datasRdy.TryAdd(datasUnprep[index].colliderId, data);
@@ -211,6 +218,28 @@ namespace Game.Physics
                 }
 
             }
+        }
+
+        private static float2 TransformPoint(float2 localPoint, float2 worldPos, float worldAngle, float2 loosyScale)
+        {
+            // Apply the scale to the local point.
+            float2 scaled = localPoint * loosyScale;
+
+            // Convert the angle from degrees to radians.
+            float rad = math.radians(worldAngle);
+
+            // Calculate cosine and sine of the angle.
+            float cos = math.cos(rad);
+            float sin = math.sin(rad);
+
+            // Rotate the scaled point.
+            float2 rotated = new float2(
+                scaled.x * cos - scaled.y * sin,
+                scaled.x * sin + scaled.y * cos
+            );
+
+            // Translate by world position.
+            return worldPos + rotated;
         }
     }
 }
