@@ -623,7 +623,7 @@ namespace Game.Physics
             Profiler.EndSample();
 
             Profiler.BeginSample("amigus2-4-1 rayJob Schedule");
-            int batchCount = Mathf.Max(1, (verticiesCount / (JobsUtility.JobWorkerCount * 2)) - 2);
+            int batchCount = CalculateOptimalBatchSize(verticiesCount);
             raycastsJobHandle = raycastsJob.Schedule(verticiesCount, batchCount);
             //JobHandle raycastsJobHandle = raycastsJob.Schedule(verticiesCount, new JobHandle());
             //raycastsJobHandle.Complete();
@@ -741,6 +741,14 @@ namespace Game.Physics
             yield return new WaitForEndOfFrame();
             CustomPlayerLoopInjection.OnAfterPhysics2DUpdate += ScheduleUpdateView;
             CustomPlayerLoopInjection.OnPostLateUpdateEnd += CompliteUpdateView;
+        }
+
+        private int CalculateOptimalBatchSize(int arrayLength)
+        {
+            int targetThreads = Mathf.Max(1, (JobsUtility.JobWorkerCount * 3) - 4);
+
+            int batchSize = Mathf.CeilToInt((float)arrayLength / targetThreads);
+            return Mathf.Max(1, batchSize);
         }
     }
 }
