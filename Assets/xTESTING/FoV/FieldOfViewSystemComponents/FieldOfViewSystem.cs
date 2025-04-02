@@ -44,6 +44,7 @@ namespace Game.Physics
         private NativeMultiHashMap<int, int> _entitiesColliders;
 
         private Vector2[] _pathPointsCompositeCache = new Vector2[10];
+        private static List<Vector2> _compositePathCache = new List<Vector2>(100);
 
         private NativeList<ColliderDataUnprepared> _datasUnprep;
         private NativeList<float2> _vertsUnprep;
@@ -233,7 +234,7 @@ namespace Game.Physics
             int entityId = entity.GetInstanceID();
             if (!_entityes.TryAdd(entityId, entity))
             {
-                Debug.LogError("Entity already added", entity);
+                //Debug.LogError("Entity already added", entity);
                 return;
             }
 
@@ -255,7 +256,7 @@ namespace Game.Physics
 
             if (!_entityes.ContainsKey(entityId))
             {
-                Debug.LogError("Entity not found in _entityes", entity);
+                //Debug.LogError("Entity not found in _entityes", entity);
                 return;
             }
 
@@ -454,7 +455,8 @@ namespace Game.Physics
 
             foreach (var found in _enemiesEnemyHit)
             {
-                if (!_collidersDetectable[found.Key.hitEnemyColliderId].IsEnemyInGuardState)
+                if (!_collidersDetectable[found.Key.hitEnemyColliderId].IsEnemyInGuardState
+                    && _entityes.ContainsKey(found.Key.rayCasterEnemyId))
                 {
                     _entityes[found.Key.rayCasterEnemyId].OnEnemyNotInGuardStateFound();
                 }

@@ -13,7 +13,6 @@ namespace Game.Physics
     {
         [Inject] private PlayerManager _playerManager;
         [Inject] private Rigidbody2D _body;
-        [Inject] private List<EnemyDamageHandler> _damageHandles;
         [Inject] private List<EnemyBase> _roomEnemies;
         [Inject] private CursorCamera _cursorCamera;
 
