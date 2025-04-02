@@ -96,12 +96,12 @@ namespace Game.Physics
 
         public void OnPlayerFound()
         {
-            OnKnowWherePlayerIs?.Invoke();
+            //OnKnowWherePlayerIs?.Invoke();
         }
 
         public void OnEnemyNotInGuardStateFound()
         {
-            OnKnowWherePlayerIs?.Invoke();
+            //OnKnowWherePlayerIs?.Invoke();
         }
 
         #region EDITOR

@@ -11,20 +11,23 @@ namespace Game.Physics
 {
     public class FieldOfViewEntitiesController : MonoBehaviour
     {
+        public event Action<Collider2D> OnTriggerEnterEvent;
+        public event Action<Collider2D> OnTriggerExitEvent;
+
         [Inject] private PlayerManager _playerManager;
         [Inject] private Rigidbody2D _body;
         [Inject] private List<EnemyBase> _roomEnemies;
         [Inject] private CursorCamera _cursorCamera;
         [Inject] private GlobalAssets _globalAssets;
         [Inject] private FieldOfViewSystem _fovSystem;
-        [Inject] EnemyBase _enemyBase;
-
-        public event Action<Collider2D> OnTriggerEnterEvent;
-        public event Action<Collider2D> OnTriggerExitEvent;
+        [Inject] private EnemyBase _enemyBase;
 
         private List<FieldOfViewEntity> _entities = new();
         private Collider2D _trigger;
-        Dictionary<EnemyBase, EnemySeeEnemyLine> _enemiesLine = new();
+
+        private Dictionary<EnemyBase, EnemySeeEnemyArrow> _enemiesLine = new();
+        private HashSet<EnemyBase> _thisFrameEnemiesWithLine = new();
+        private List<EnemyBase> _enemiesToRemoveFomDic = new();
 
         private float _enemyEnableDistance;
         private float _playerEnableDistance;
@@ -164,9 +167,6 @@ namespace Game.Physics
             _playerEnableDistance = largestFovDistance + midToTopRightDistanceWorld + _SAFE_DISTANCE_ADD;
             _enemyEnableDistance = largestFovDistance;
         }
-        
-        private HashSet<EnemyBase> _thisFrameEnemiesWithLine = new();
-        private List<EnemyBase> _enemiesToRemoveFomDic = new();
 
         public void OnEnemySeeEnemy(IGuardStateDetectable detectable)
         {
@@ -177,12 +177,12 @@ namespace Game.Physics
 
             if (!_enemiesLine.ContainsKey(detectable.Enemy))
             {
-                EnemySeeEnemyLine line = Instantiate(_globalAssets.EnemySeeEnemyLine, transform);
+                EnemySeeEnemyArrow line = Instantiate(_globalAssets.EnemySeeEnemyLine, transform);
                 _enemiesLine.Add(detectable.Enemy, line);
             }
 
             _enemiesLine[detectable.Enemy].SetLine(_enemyBase.transform.position,
-                detectable.Enemy.transform.position);
+                detectable.Enemy.transform.position, detectable.Enemy.DistanceFromTargetForArrow);
         }
 
         public void OnPostEnemySeeEnemy()

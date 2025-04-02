@@ -18,10 +18,12 @@ namespace Game.Room.Enemy
         [ShowNonSerializedField] protected float _currentHp;
 
         [SerializeField] private float _baseHp = 5f;
+        [SerializeField] private float _distanceFromTargetForArrow = 35f;
 
         public EnemyStateMachineBase StateMachine => _stateMachine;
         public float CurrentHp => _currentHp;
         public float MaxHp => _maxHp;
+        public float DistanceFromTargetForArrow => _distanceFromTargetForArrow;
 
         protected virtual void Awake()
         {

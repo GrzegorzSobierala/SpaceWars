@@ -6,9 +6,9 @@ namespace Game.Management
     public class GlobalAssets : MonoBehaviour
     {
         [SerializeField] private Material _testMaterial;
-        [SerializeField] private EnemySeeEnemyLine _enemySeeEnemyLine;
+        [SerializeField] private EnemySeeEnemyArrow _enemySeeEnemyLine;
 
         public Material TestMaterial => _testMaterial;
-        public EnemySeeEnemyLine EnemySeeEnemyLine => _enemySeeEnemyLine;
+        public EnemySeeEnemyArrow EnemySeeEnemyLine => _enemySeeEnemyLine;
     }
 }
