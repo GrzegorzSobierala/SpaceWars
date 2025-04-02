@@ -81,7 +81,7 @@ namespace Game.Physics
             {
                 do
                 {
-                    if (currentColliderId == FieldOfViewSystem._EMPTY_COLLIDER_ID)
+                    if (currentColliderId == FieldOfViewSystem.EMPTY_COLLIDER_ID)
                     {
                         continue;
                     }
@@ -99,25 +99,25 @@ namespace Game.Physics
 
                     switch (data.type)
                     {
-                        case (int)ColliderType.Box:
+                        case ColliderType.Box:
                             hit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
                                 data.center, data.rotationRad, data.size, out newHitDistance,
                                 out newHitPoint);
                             break;
 
-                        case (int)ColliderType.Circle:
+                        case ColliderType.Circle:
                             hit = RayIntersectsCircle(rayOrigin, rayDirection, rayDistance, data.center,
                                 data.radius, out newHitDistance, out newHitPoint);
                             break;
 
-                        case (int)ColliderType.Capsule:
+                        case ColliderType.Capsule:
                             hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance, data.capsuleAOrBoundsPos,
                                 data.capsuleBOrBoundsSize, data.capsuleRadius, out newHitDistance, out newHitPoint);
                             break;
 
-                        case (int)ColliderType.Polygon:
-                        case (int)ColliderType.Edge:
-                        case (int)ColliderType.Composite:
+                        case ColliderType.Polygon:
+                        case ColliderType.Edge:
+                        case ColliderType.Composite:
                             bool boundsHit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
                                 data.capsuleAOrBoundsPos, 0, data.capsuleBOrBoundsSize, out newHitDistance,
                                 out newHitPoint);
@@ -151,7 +151,7 @@ namespace Game.Physics
             {
                 do
                 {
-                    if (currentColliderId == FieldOfViewSystem._EMPTY_COLLIDER_ID)
+                    if (currentColliderId == FieldOfViewSystem.EMPTY_COLLIDER_ID)
                     {
                         continue;
                     }
@@ -169,25 +169,25 @@ namespace Game.Physics
 
                     switch (data.type)
                     {
-                        case (int)ColliderType.Box:
+                        case ColliderType.Box:
                             hit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
                                 data.center, data.rotationRad, data.size, out newHitDistance,
                                 out newHitPoint);
                             break;
 
-                        case (int)ColliderType.Circle:
+                        case ColliderType.Circle:
                             hit = RayIntersectsCircle(rayOrigin, rayDirection, rayDistance, data.center,
                                 data.radius, out newHitDistance, out newHitPoint);
                             break;
 
-                        case (int)ColliderType.Capsule:
+                        case ColliderType.Capsule:
                             hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance, data.capsuleAOrBoundsPos,
                                 data.capsuleBOrBoundsSize, data.capsuleRadius, out newHitDistance, out newHitPoint);
                             break;
 
-                        case (int)ColliderType.Polygon:
-                        case (int)ColliderType.Edge:
-                        case (int)ColliderType.Composite:
+                        case ColliderType.Polygon:
+                        case ColliderType.Edge:
+                        case ColliderType.Composite:
                             bool boundsHit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
                                 data.capsuleAOrBoundsPos, 0, data.capsuleBOrBoundsSize, out newHitDistance,
                                 out newHitPoint);

@@ -5,7 +5,6 @@ using Unity.Jobs.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Profiling;
 using UnityEngine.Rendering;
 using System;
 using Game.Room.Enemy;
@@ -16,20 +15,26 @@ namespace Game.Physics
     [DefaultExecutionOrder(-100)]
     public class FieldOfViewSystem : MonoBehaviour
     {
-        private event Action _onUpdateViewCompleted;
-
         [SerializeField] private float _meshMoveZStep = 0.001f;
+
+        private event Action _onUpdateViewCompleted;
 
         private MeshFilter _meshFilter;
         private Mesh _mesh;
         private VertexAttributeDescriptor _vertexAttributeDescriptor;
         private LayerMask _allLayerMask;
         private ContactFilter2D _contactFilter;
+        private int _enemyLayer;
 
         private bool _wasEntitiesDicChanged = false;
 
+        private bool _isJobInProgress = false;
+        private JobHandle raycastsJobHandle;
+        private int verticiesCount;
+        private int trianglesCount;
+
         // int1 - ColliderId, int2 - enter count
-        private Dictionary<int, (Collider2D, int)> _collidersToUnprepare = new();
+        private Dictionary<int, (Collider2D, int)> _collidersUnprepared = new();
         // int - EntityId
         private Dictionary<int, FieldOfViewEntity> _entityes = new();
         // int - enemy's colliderId
@@ -55,12 +60,10 @@ namespace Game.Physics
         private NativeHashMap<int, bool> _enemiesPlayerHit;
         private NativeHashMap<EnemyHitData, bool> _enemiesEnemyHit;
 
-        private int _enemyLayer;
+        public const int EMPTY_COLLIDER_ID = 0;
 
         public LayerMask AllLayerMask => _allLayerMask;
         public ContactFilter2D ContactFilter => _contactFilter;
-
-        public const int _EMPTY_COLLIDER_ID = 0;
 
         private void Awake()
         {
@@ -101,7 +104,7 @@ namespace Game.Physics
 
         private void Start()
         {
-            StartCoroutine(SubscribeCustomLoop());
+            StartCoroutine(SubscribeToCustomLoop());
         }
 
         private void OnDestroy()
@@ -140,14 +143,14 @@ namespace Game.Physics
             IncreaseCapasityOfEntitiesCollidersIfNeeded(10);
             _entitiesColliders.Add(entityId, colliderId);
 
-            if (_collidersToUnprepare.ContainsKey(colliderId))
+            if (_collidersUnprepared.ContainsKey(colliderId))
             {
-                var current = _collidersToUnprepare[colliderId];
-                _collidersToUnprepare[colliderId] = (collider, current.Item2 + 1);
+                var current = _collidersUnprepared[colliderId];
+                _collidersUnprepared[colliderId] = (collider, current.Item2 + 1);
             }
             else
             {
-                _collidersToUnprepare.Add(colliderId, (collider, 1));
+                _collidersUnprepared.Add(colliderId, (collider, 1));
             }
 
             if(collider.gameObject.layer == _enemyLayer && !_collidersDetectable.ContainsKey(colliderId))
@@ -200,22 +203,22 @@ namespace Game.Physics
                 return;
             }
 
-            if (_collidersToUnprepare.ContainsKey(colliderId))
+            if (_collidersUnprepared.ContainsKey(colliderId))
             {
-                if (_collidersToUnprepare[colliderId].Item2 <= 1)
+                if (_collidersUnprepared[colliderId].Item2 <= 1)
                 {
-                    if (_collidersToUnprepare[colliderId].Item2 <= 0)
+                    if (_collidersUnprepared[colliderId].Item2 <= 0)
                     {
                         Debug.LogError("_collidersToUnprepare[colliderId].Item2 <= 0 - entity ref", entity);
                         Debug.LogError("_collidersToUnprepare[colliderId].Item2 <= 0 - collider ref", collider);
                     }
 
-                    _collidersToUnprepare.Remove(colliderId);
+                    _collidersUnprepared.Remove(colliderId);
                 }
                 else
                 {
-                    var current = _collidersToUnprepare[colliderId];
-                    _collidersToUnprepare[colliderId] = (collider, current.Item2 - 1);
+                    var current = _collidersUnprepared[colliderId];
+                    _collidersUnprepared[colliderId] = (collider, current.Item2 - 1);
                 }
             }
             else
@@ -243,7 +246,7 @@ namespace Game.Physics
             _wasEntitiesDicChanged = true;
 
             IncreaseCapasityOfEntitiesCollidersIfNeeded(10);
-            _entitiesColliders.Add(entityId, _EMPTY_COLLIDER_ID);
+            _entitiesColliders.Add(entityId, EMPTY_COLLIDER_ID);
         }
 
         public void RemoveEntity(FieldOfViewEntity entity)
@@ -265,16 +268,16 @@ namespace Game.Physics
             {
                 do
                 {
-                    if (_collidersToUnprepare.ContainsKey(colliderId))
+                    if (_collidersUnprepared.ContainsKey(colliderId))
                     {
-                        var current = _collidersToUnprepare[colliderId];
+                        var current = _collidersUnprepared[colliderId];
                         if (current.Item2 <= 1)
                         {
-                            _collidersToUnprepare.Remove(colliderId);
+                            _collidersUnprepared.Remove(colliderId);
                         }
                         else
                         {
-                            _collidersToUnprepare[colliderId] = (current.Item1, current.Item2 - 1);
+                            _collidersUnprepared[colliderId] = (current.Item1, current.Item2 - 1);
                         }
                     }
                 } while (_entitiesColliders.TryGetNextValue(out colliderId, ref iterator));
@@ -315,16 +318,156 @@ namespace Game.Physics
         {
             _isJobInProgress = true;
 
-            Profiler.BeginSample("amigus1-2 datasUnprep alloc");
             _datasUnprep.Clear();
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus1-3 vertsUnprep alloc");
             _vertsUnprep.Clear();
-            Profiler.EndSample();
+            FillDatasUnprepWithCurrentCollidersData();
 
-            Profiler.BeginSample("amigus1-4 dataUnpare");
-            foreach (var pair in _collidersToUnprepare)
+            if (_datasRdy.Capacity < _datasUnprep.Length)
+            {
+                _datasRdy.Dispose();
+                _datasRdy = new(_datasUnprep.Length + 10, Allocator.Persistent);
+            }
+            else
+            {
+                _datasRdy.Clear();
+            }
+
+            _vertsRdy.Resize(_vertsUnprep.Length, NativeArrayOptions.UninitializedMemory);
+
+            PrepareColliderDatasJob prepareJob = new PrepareColliderDatasJob
+            {
+                datasUnprep = _datasUnprep,
+                vertsUnprep = _vertsUnprep,
+                datasRdy = _datasRdy,
+                vertsRdy = _vertsRdy,
+            };
+
+            prepareJob.Run();
+
+            if (_fovDatas.Capacity < _entityes.Count)
+            {
+                _fovDatas.Dispose();
+                _fovDatas = new(_datasUnprep.Length + 10, Allocator.Persistent);
+            }
+            else
+            {
+                _fovDatas.Clear();
+            }
+            verticiesCount = 0;
+            int rayCount = 0;
+
+            float currentMeshMoveZ = 0;
+            foreach (var entity in _entityes)
+            {
+                _fovDatas.Add(entity.Key, entity.Value.GetData(rayCount, verticiesCount,
+                    currentMeshMoveZ));
+                verticiesCount += _fovDatas[entity.Key].rayCount + 2;
+                rayCount += _fovDatas[entity.Key].rayCount;
+                currentMeshMoveZ += _meshMoveZStep;
+            }
+
+            if (_verticies.Length < verticiesCount)
+            {
+                _verticies.Dispose();
+                _verticies = new(verticiesCount, Allocator.Persistent,
+                    NativeArrayOptions.UninitializedMemory);
+            }
+
+            trianglesCount = rayCount * 3;
+            if (_triangles.Length < trianglesCount)
+            {
+                _triangles.Dispose();
+                _triangles = new NativeArray<int>(trianglesCount, Allocator.Persistent,
+                    NativeArrayOptions.ClearMemory);
+            }
+
+            if (_enemiesPlayerHit.Capacity < _entityes.Count)
+            {
+                _enemiesPlayerHit.Dispose();
+                _enemiesPlayerHit = new(_entityes.Count, Allocator.Persistent);
+            }
+            else
+            {
+                _enemiesPlayerHit.Clear();
+            }
+
+            int newCap = (_entityes.Count - 1) * (_entityes.Count - 1) + 10  /** _entityes.Count * 2 + 10*/;
+            if (_enemiesEnemyHit.Capacity < newCap)
+            {
+                _enemiesEnemyHit.Dispose();
+                _enemiesEnemyHit = new(newCap + 10, Allocator.Persistent);
+            }
+            else
+            {
+                _enemiesEnemyHit.Clear();
+            }
+
+            Raycast2DWithMeshJob raycastsJob = new Raycast2DWithMeshJob
+            {
+                fovEntityDatas = _fovDatas,
+                entitiesColliders = _entitiesColliders,
+                colliderDataArray = _datasRdy,
+                vertexArray = _vertsRdy,
+                verticies = _verticies,
+                triangles = _triangles,
+                enemiesPlayerHit = _enemiesPlayerHit.AsParallelWriter(),
+                enemiesEnemyHit = _enemiesEnemyHit.AsParallelWriter(),
+                playerLayer = LayerMask.NameToLayer(Layers.Player),
+                enemyLayer = LayerMask.NameToLayer(Layers.Enemy),
+            };
+
+            int batchCount = CalculateOptimalBatchSize(verticiesCount);
+            raycastsJobHandle = raycastsJob.Schedule(verticiesCount, batchCount);
+            //Version to Debug on main thread
+            //JobHandle raycastsJobHandle = raycastsJob.Schedule(verticiesCount, new JobHandle());
+            //raycastsJobHandle.Complete();
+        }
+        
+        private void CompliteUpdateView()
+        {
+            if(!_isJobInProgress)
+                return;
+
+            raycastsJobHandle.Complete();
+
+            if (_wasEntitiesDicChanged)
+            {
+                _mesh.SetVertexBufferParams(verticiesCount, _vertexAttributeDescriptor);
+            }
+            _mesh.SetVertexBufferData(_verticies, 0, 0, verticiesCount, 0,
+                MeshUpdateFlags.DontNotifyMeshUsers | MeshUpdateFlags.DontRecalculateBounds |
+                MeshUpdateFlags.DontResetBoneBounds | MeshUpdateFlags.DontValidateIndices);
+
+            if (_wasEntitiesDicChanged)
+            {
+                _mesh.SetIndices(_triangles, 0, trianglesCount, MeshTopology.Triangles, 0, false, 0);
+            }
+            _wasEntitiesDicChanged = false;
+
+            _mesh.RecalculateBounds(MeshUpdateFlags.DontRecalculateBounds |
+                    MeshUpdateFlags.DontResetBoneBounds | MeshUpdateFlags.DontValidateIndices);
+
+            foreach (var found in _enemiesPlayerHit)
+            {
+                _entityes[found.Key].OnPlayerFound();
+            }
+
+            foreach (var found in _enemiesEnemyHit)
+            {
+                if (!_collidersDetectable[found.Key.hitEnemyColliderId].IsEnemyInGuardState)
+                {
+                    _entityes[found.Key.rayCasterEnemyId].OnEnemyNotInGuardStateFound();
+                }
+            }
+
+            _onUpdateViewCompleted?.Invoke();
+            _onUpdateViewCompleted = null;
+            _isJobInProgress = false;
+        }
+
+        private void FillDatasUnprepWithCurrentCollidersData()
+        {
+            foreach (var pair in _collidersUnprepared)
             {
                 Collider2D col = pair.Value.Item1;
                 Transform colTrans = col.transform;
@@ -380,9 +523,7 @@ namespace Game.Physics
 
                     case PolygonCollider2D poly:
                         Vector2[] points = poly.points;
-                        //Profiler.EndSample();
 
-                        //Profiler.BeginSample("amigus polygon 2");
                         Bounds boundsPoly = col.bounds;
                         ColliderDataUnprepared polyData = new()
                         {
@@ -397,9 +538,7 @@ namespace Game.Physics
                             colliderId = pair.Key,
                             layer = col.gameObject.layer
                         };
-                        //Profiler.EndSample();
 
-                        //Profiler.BeginSample("amigus polygon 3");
                         unsafe
                         {
                             fixed (Vector2* ptr = points)
@@ -408,8 +547,6 @@ namespace Game.Physics
                             }
                         }
 
-                        //Profiler.EndSample();
-                        //Profiler.BeginSample("amigus polygon 4");
                         _datasUnprep.Add(polyData);
                         break;
 
@@ -444,11 +581,8 @@ namespace Game.Physics
                     case CompositeCollider2D composite:
                         for (int p = 0; p < composite.pathCount; p++)
                         {
-                            //Profiler.BeginSample("amigus composite 1");
                             int pointCount = composite.GetPathPointCount(p);
-                            //Profiler.EndSample();
 
-                            //Profiler.BeginSample("amigus composite 2");
                             Bounds boundsComposite = col.bounds;
                             ColliderDataUnprepared compositeData = new()
                             {
@@ -463,9 +597,6 @@ namespace Game.Physics
                                 layer = col.gameObject.layer
                             };
 
-                            //Profiler.EndSample();
-
-                            //Profiler.BeginSample("amigus composite 3");
                             unsafe
                             {
                                 if (_pathPointsCompositeCache.Length < pointCount)
@@ -479,11 +610,7 @@ namespace Game.Physics
                                 }
                             }
 
-                            //Profiler.EndSample();
-
-                            //Profiler.BeginSample("amigus composite 4");
                             _datasUnprep.Add(compositeData);
-                            //Profiler.EndSample();
                         }
                         break;
 
@@ -499,197 +626,8 @@ namespace Game.Physics
                         _datasUnprep.Add(defaultData);
                         Debug.LogError("Unsuported collider type");
                         break;
-
                 }
             }
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus1-5 datasRdy alloc");
-            // int - colliderId
-            if (_datasRdy.Capacity < _datasUnprep.Length)
-            {
-                _datasRdy.Dispose();
-                _datasRdy = new(_datasUnprep.Length + 10, Allocator.Persistent);
-            }
-            else
-            {
-                _datasRdy.Clear();
-            }
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus1-6 vertsRdy alloc");
-            _vertsRdy.Resize(_vertsUnprep.Length, NativeArrayOptions.UninitializedMemory);
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus1-7-1 dataPrepare create job");
-            PrepareColliderDatasJob prepareJob = new PrepareColliderDatasJob
-            {
-                datasUnprep = _datasUnprep,
-                vertsUnprep = _vertsUnprep,
-                datasRdy = _datasRdy,
-                vertsRdy = _vertsRdy,
-            };
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus1-7-2 dataPrepare run job");
-            prepareJob.Run();
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus1-8-2 rayJob fovDatas alloc");
-            // int - entityId
-            if (_fovDatas.Capacity < _entityes.Count)
-            {
-                _fovDatas.Dispose();
-                _fovDatas = new(_datasUnprep.Length + 10, Allocator.Persistent);
-            }
-            else
-            {
-                _fovDatas.Clear();
-            }
-            verticiesCount = 0;
-            int rayCount = 0;
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus1-8-3 rayJob fovDatas create");
-            float currentMeshMoveZ = 0;
-            foreach (var entity in _entityes)
-            {
-                _fovDatas.Add(entity.Key, entity.Value.GetData(rayCount, verticiesCount,
-                    currentMeshMoveZ));
-                verticiesCount += _fovDatas[entity.Key].rayCount + 2;
-                rayCount += _fovDatas[entity.Key].rayCount;
-                currentMeshMoveZ += _meshMoveZStep;
-            }
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus1-9 rayJob verticies array");
-            if (_verticies.Length < verticiesCount)
-            {
-                _verticies.Dispose();
-                _verticies = new(verticiesCount, Allocator.Persistent,
-                    NativeArrayOptions.UninitializedMemory);
-            }
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus2-2-1 rayJob triangles array");
-            trianglesCount = rayCount * 3;
-            if (_triangles.Length < trianglesCount)
-            {
-                _triangles.Dispose();
-                _triangles = new NativeArray<int>(trianglesCount, Allocator.Persistent,
-                    NativeArrayOptions.ClearMemory);
-            }
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus2-2-2 rayJob enemiesPlayerHit alloc");
-            if (_enemiesPlayerHit.Capacity < _entityes.Count)
-            {
-                _enemiesPlayerHit.Dispose();
-                _enemiesPlayerHit = new(_entityes.Count, Allocator.Persistent);
-            }
-            else
-            {
-                _enemiesPlayerHit.Clear();
-            }
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus2-2-3 rayJob enemiesEnemyHit alloc");
-            int newCap = (_entityes.Count - 1) * (_entityes.Count - 1) + 10  /** _entityes.Count * 2 + 10*/;
-            if (_enemiesEnemyHit.Capacity < newCap)
-            {
-                _enemiesEnemyHit.Dispose();
-                _enemiesEnemyHit = new(newCap + 10, Allocator.Persistent);
-            }
-            else
-            {
-                _enemiesEnemyHit.Clear();
-            }
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus2-3 rayJob create");
-            Raycast2DWithMeshJob raycastsJob = new Raycast2DWithMeshJob
-            {
-                fovEntityDatas = _fovDatas,
-                entitiesColliders = _entitiesColliders,
-                colliderDataArray = _datasRdy,
-                vertexArray = _vertsRdy,
-                verticies = _verticies,
-                triangles = _triangles,
-                enemiesPlayerHit = _enemiesPlayerHit.AsParallelWriter(),
-                enemiesEnemyHit = _enemiesEnemyHit.AsParallelWriter(),
-                playerLayer = LayerMask.NameToLayer(Layers.Player),
-                enemyLayer = LayerMask.NameToLayer(Layers.Enemy),
-            };
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus2-4-1 rayJob Schedule");
-            int batchCount = CalculateOptimalBatchSize(verticiesCount);
-            raycastsJobHandle = raycastsJob.Schedule(verticiesCount, batchCount);
-            //JobHandle raycastsJobHandle = raycastsJob.Schedule(verticiesCount, new JobHandle());
-            //raycastsJobHandle.Complete();
-            Profiler.EndSample();
-        }
-
-        JobHandle raycastsJobHandle;
-        int verticiesCount;
-        int trianglesCount;
-
-        bool _isJobInProgress = false;
-
-        private void CompliteUpdateView()
-        {
-            if(!_isJobInProgress)
-                return;
-
-            Profiler.BeginSample("amigus2-4-2 rayJob Complite");
-            raycastsJobHandle.Complete();
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus2-6 mesh vertices");
-            if (_wasEntitiesDicChanged)
-            {
-                _mesh.SetVertexBufferParams(verticiesCount, _vertexAttributeDescriptor);
-            }
-            _mesh.SetVertexBufferData(_verticies, 0, 0, verticiesCount, 0,
-                MeshUpdateFlags.DontNotifyMeshUsers | MeshUpdateFlags.DontRecalculateBounds |
-                MeshUpdateFlags.DontResetBoneBounds | MeshUpdateFlags.DontValidateIndices);
-            Profiler.EndSample();
-
-            if (_wasEntitiesDicChanged)
-            {
-                Profiler.BeginSample("amigus2-5 mesh triangles");
-                _mesh.SetIndices(_triangles, 0, trianglesCount, MeshTopology.Triangles, 0, false, 0);
-                Profiler.EndSample();
-            }
-            _wasEntitiesDicChanged = false;
-
-            Profiler.BeginSample("amigus2-7-1 mesh RecalculateBounds");
-            _mesh.RecalculateBounds(MeshUpdateFlags.DontRecalculateBounds |
-                    MeshUpdateFlags.DontResetBoneBounds | MeshUpdateFlags.DontValidateIndices);
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus2-7-2 Found player events");
-            foreach (var found in _enemiesPlayerHit)
-            {
-                _entityes[found.Key].OnPlayerFound();
-            }
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus2-7-3 Found enemy events");
-            foreach (var found in _enemiesEnemyHit)
-            {
-                if (!_collidersDetectable[found.Key.hitEnemyColliderId].IsEnemyInGuardState)
-                {
-                    _entityes[found.Key.rayCasterEnemyId].OnEnemyNotInGuardStateFound();
-                }
-            }
-            Profiler.EndSample();
-
-            Profiler.BeginSample("amigus2-8 OnUpdateViewCompleted Invoke");
-            _onUpdateViewCompleted?.Invoke();
-            _onUpdateViewCompleted = null;
-            Profiler.EndSample();
-            _isJobInProgress = false;
         }
 
         private void IncreaseCapasityOfEntitiesCollidersIfNeeded(int capIncrease)
@@ -736,7 +674,7 @@ namespace Game.Physics
         }
 
         //To avoid StateMachine Enabel/Disable at start
-        private IEnumerator SubscribeCustomLoop()
+        private IEnumerator SubscribeToCustomLoop()
         {
             yield return new WaitForEndOfFrame();
             CustomPlayerLoopInjection.OnAfterPhysics2DUpdate += ScheduleUpdateView;

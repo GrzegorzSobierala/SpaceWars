@@ -1,4 +1,3 @@
-using Game.Utility;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
@@ -33,7 +32,7 @@ namespace Game.Physics
                             );
                             ColliderDataReady data = new()
                             {
-                                type = (int)ColliderType.Box,
+                                type = ColliderType.Box,
                                 center = datasUnprep[index].posWorld + rotatedOffset,
                                 rotationRad = angleRad,
                                 size = new float2(datasUnprep[index].sizeLoc.x *
@@ -56,7 +55,7 @@ namespace Game.Physics
                             );
                             ColliderDataReady data = new()
                             {
-                                type = (int)ColliderType.Circle,
+                                type = ColliderType.Circle,
 
                                 center = datasUnprep[index].posWorld + rotatedOffset,
 
@@ -96,7 +95,7 @@ namespace Game.Physics
 
                             ColliderDataReady data = new()
                             {
-                                type = (int)ColliderType.Capsule,
+                                type = ColliderType.Capsule,
 
                                 capsuleRadius = capsuleRadius,
                                 capsuleAOrBoundsPos = worldPos + datasUnprep[index].capsuleTransUpOrBoundsPos * segment,
@@ -112,7 +111,7 @@ namespace Game.Physics
                         {
                             ColliderDataReady data = new()
                             {
-                                type = (int)ColliderType.Polygon,
+                                type = ColliderType.Polygon,
                                 vertexStartIndex = datasUnprep[index].vertexStartIndex,
                                 vertexCount = datasUnprep[index].vertexCount,
                                 isClosed = 1,
@@ -142,7 +141,7 @@ namespace Game.Physics
                         {
                             ColliderDataReady data = new()
                             {
-                                type = (int)ColliderType.Edge,
+                                type = ColliderType.Edge,
                                 vertexStartIndex = datasUnprep[index].vertexStartIndex,
                                 vertexCount = datasUnprep[index].vertexCount,
                                 isClosed = 0, // Edge is open.
@@ -170,7 +169,7 @@ namespace Game.Physics
                             // IMPORTANT: To avoid applying the scale twice, do not use TransformPoint here.
                             ColliderDataReady data = new()
                             {
-                                type = (int)ColliderType.Composite,
+                                type = ColliderType.Composite,
                                 vertexStartIndex = datasUnprep[index].vertexStartIndex,
                                 vertexCount = datasUnprep[index].vertexCount,
                                 // Assume composite shapes are closed.
@@ -202,7 +201,7 @@ namespace Game.Physics
                             // FALLBACK: use bounds as a box.
                             ColliderDataReady data = new()
                             {
-                                type = (int)ColliderType.Box,
+                                type = ColliderType.Box,
                                 center = new float2(datasUnprep[index].posWorld.x,
                                     datasUnprep[index].posWorld.y),
                                 size = new float2(datasUnprep[index].sizeLoc.x,

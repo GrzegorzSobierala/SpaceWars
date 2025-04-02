@@ -32,25 +32,25 @@ namespace Game.Physics
 
                 switch (data.type)
                 {
-                    case (int)ColliderType.Box:
+                    case ColliderType.Box:
                         hit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
                             data.center, data.rotationRad, data.size,out newHitDistance, 
                             out newHitPoint);
                         break;
 
-                    case (int)ColliderType.Circle:
+                    case ColliderType.Circle:
                         hit = RayIntersectsCircle(rayOrigin, rayDirection, rayDistance,data.center, 
                             data.radius,out newHitDistance, out newHitPoint);
                         break;
 
-                    case (int)ColliderType.Capsule:
+                    case ColliderType.Capsule:
                         hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance,data.capsuleAOrBoundsPos, 
                             data.capsuleBOrBoundsSize, data.capsuleRadius, out newHitDistance, out newHitPoint);
                         break;
 
-                    case (int)ColliderType.Polygon:
-                    case (int)ColliderType.Edge:
-                    case (int)ColliderType.Composite:
+                    case ColliderType.Polygon:
+                    case ColliderType.Edge:
+                    case ColliderType.Composite:
                         hit = RayIntersectsPolygon(vertexArray, data.vertexStartIndex, data.vertexCount, data.isClosed,
                             rayOrigin, rayDirection, rayDistance, out newHitDistance, out newHitPoint);
                         break;

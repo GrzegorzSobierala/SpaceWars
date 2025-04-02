@@ -7,7 +7,7 @@ namespace Game.Physics
     /// </summary>
     public struct ColliderDataReady
     {
-        public int type;
+        public ColliderType type;
 
         public float2 center;
         public float rotationRad;

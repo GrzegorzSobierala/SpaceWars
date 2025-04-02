@@ -1,7 +1,6 @@
 using Game.Management;
 using Game.Player.Control;
 using Game.Room.Enemy;
-using Game.Utility;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,11 +23,10 @@ namespace Game.Physics
         private List<FieldOfViewEntity> _entities = new();
         private Collider2D _trigger;
 
-        //private float _viewDistance = 300f;
-        //private const float PlayerCameraMaxViewDistance = 500f;
         private float _enemyEnableDistance;
         private float _playerEnableDistance;
-        private float _saveDistaneAdd = 10f;
+
+        private const float _SAVE_DISTANCE_ADD = 10f;
 
         private void Awake()
         {
@@ -42,29 +40,7 @@ namespace Game.Physics
 
         private void Update()
         {
-            if (IsPlayerInRange() || IsNonGuardEnemyInRange())
-            {
-                if(!_trigger.enabled)
-                {
-                    foreach (var entity in _entities)
-                    {
-                        entity.EnableEntity();
-                    }
-                    _trigger.enabled = true;
-                }
-
-            }
-            else
-            {
-                if (_trigger.enabled)
-                {
-                    foreach (var entity in _entities)
-                    {
-                        entity.DisableEntity();
-                    }
-                    _trigger.enabled = false;
-                }
-            }
+            UpdateEnableEntities();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -99,6 +75,32 @@ namespace Game.Physics
             OnTriggerExitEvent -= entity.TriggerExit2D;
 
             _entities.Remove(entity);
+        }
+
+        private void UpdateEnableEntities()
+        {
+            if (IsPlayerInRange() || IsNonGuardEnemyInRange())
+            {
+                if (!_trigger.enabled)
+                {
+                    foreach (var entity in _entities)
+                    {
+                        entity.EnableEntity();
+                    }
+                    _trigger.enabled = true;
+                }
+            }
+            else
+            {
+                if (_trigger.enabled)
+                {
+                    foreach (var entity in _entities)
+                    {
+                        entity.DisableEntity();
+                    }
+                    _trigger.enabled = false;
+                }
+            }
         }
 
         private bool IsPlayerInRange()
@@ -152,7 +154,7 @@ namespace Game.Physics
                     largestFovDistance = entityFovDistance;
             }
 
-            _playerEnableDistance = largestFovDistance + midToTopRightDistanceWorld + _saveDistaneAdd;
+            _playerEnableDistance = largestFovDistance + midToTopRightDistanceWorld + _SAVE_DISTANCE_ADD;
             _enemyEnableDistance = largestFovDistance;
         }
     }
