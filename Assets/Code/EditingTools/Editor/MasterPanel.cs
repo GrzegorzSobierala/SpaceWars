@@ -277,17 +277,17 @@ namespace Game.Editor
         {
             if (_settings.ShowEnemiesFov)
             {
-                List<EnemyFieldOfView> fovs = new();
+                List<DEPRECATED_EnemyFieldOfView> fovs = new();
                 foreach (var go in Selection.gameObjects)
                 {
-                    if (go.TryGetComponent(out EnemyFieldOfView fov))
+                    if (go.TryGetComponent(out DEPRECATED_EnemyFieldOfView fov))
                     {
                         if (!fovs.Contains(fov))
                         {
                             fovs.Add(fov);
                         }
                     }
-                    foreach (var childFov in go.GetComponentsInChildren<EnemyFieldOfView>())
+                    foreach (var childFov in go.GetComponentsInChildren<DEPRECATED_EnemyFieldOfView>())
                     {
                         if (!fovs.Contains(childFov))
                         {

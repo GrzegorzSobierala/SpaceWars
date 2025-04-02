@@ -1,3 +1,4 @@
+using Game.Physics;
 using Game.Utility;
 using UnityEngine.AI;
 
@@ -12,6 +13,9 @@ namespace Game.Room.Enemy
             Utils.BindGetComponent<NavMeshAgent>(Container, gameObject);
 
             Utils.BindComponentsInChildrens<EnemyGunBase>(Container, gameObject);
+
+            Container.Bind<FieldOfViewEntitiesController>().FromComponentInHierarchy(false).AsSingle().NonLazy();
+
         }
     }
 }

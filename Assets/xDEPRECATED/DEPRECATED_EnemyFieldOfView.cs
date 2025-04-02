@@ -10,8 +10,8 @@ using Zenject;
 
 namespace Game.Room.Enemy
 {
-    [RequireComponent(typeof(MeshFilter))]
-    public class EnemyFieldOfView : MonoBehaviour
+    //[RequireComponent(typeof(MeshFilter))]
+    public class DEPRECATED_EnemyFieldOfView : MonoBehaviour
     {
         public Action<GameObject> OnTargetFound;
 

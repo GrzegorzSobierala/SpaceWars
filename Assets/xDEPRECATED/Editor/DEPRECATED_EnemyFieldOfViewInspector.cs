@@ -4,8 +4,8 @@ using Game.Room.Enemy;
 
 namespace Game.Editor
 {
-    [CustomEditor(typeof(EnemyFieldOfView))]
-    public class EnemyFieldOfViewInspector : SpaceWarsInspector
+    [CustomEditor(typeof(DEPRECATED_EnemyFieldOfView))]
+    public class DEPRECATED_EnemyFieldOfViewInspector : SpaceWarsInspector
     {
         private bool isDrawGizmosOn = false;
 
@@ -18,7 +18,7 @@ namespace Game.Editor
             if (GUILayout.Toggle(isDrawGizmosOn, "Draw Gizmos", options))
             {
                 isDrawGizmosOn = true;
-                EnemyFieldOfView enemyFieldOfView = (EnemyFieldOfView)target;
+                DEPRECATED_EnemyFieldOfView enemyFieldOfView = (DEPRECATED_EnemyFieldOfView)target;
                 enemyFieldOfView.DrawViewGizmos();
                 SceneView.RepaintAll();
             }
@@ -29,7 +29,7 @@ namespace Game.Editor
 
             if (GUILayout.Button("Clear and Assign Colliders"))
             {
-                EnemyFieldOfView enemyFieldOfView = (EnemyFieldOfView)target;
+                DEPRECATED_EnemyFieldOfView enemyFieldOfView = (DEPRECATED_EnemyFieldOfView)target;
                 enemyFieldOfView.ClearAndAssignColliders();
             }
         }
@@ -39,7 +39,7 @@ namespace Game.Editor
             if (!isDrawGizmosOn)
                 return;
 
-            EnemyFieldOfView enemyFieldOfView = (EnemyFieldOfView)target;
+            DEPRECATED_EnemyFieldOfView enemyFieldOfView = (DEPRECATED_EnemyFieldOfView)target;
             enemyFieldOfView.DrawViewGizmos();
         }
     }

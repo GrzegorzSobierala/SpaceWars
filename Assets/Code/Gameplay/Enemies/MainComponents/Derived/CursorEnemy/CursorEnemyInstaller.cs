@@ -1,3 +1,4 @@
+using Game.Physics;
 using Game.Utility;
 using UnityEngine.AI;
 
@@ -14,6 +15,8 @@ namespace Game.Room.Enemy
             Container.Bind<PatrolController>().FromComponentInHierarchy().AsSingle();
             Container.Bind<EnemyGunBase>().FromComponentInHierarchy().AsSingle();
             Container.Bind<CursorEnemyGun>().FromComponentInHierarchy().AsSingle();
+
+            Container.Bind<FieldOfViewEntitiesController>().FromComponentInHierarchy(false).AsSingle().NonLazy();
         }
     }
 }

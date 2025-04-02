@@ -7,7 +7,7 @@ namespace Game.Room.Enemy
 {
     public class CursorEnemyMovement : EnemyMovementBase
     {
-        public override bool UseFixedUpdate => false;
+        public override bool UseFixedUpdate => true;
 
         [Inject] private NavMeshAgent _agent;
 
@@ -17,8 +17,7 @@ namespace Game.Room.Enemy
 
         private void Start()
         {
-            _agent.speed = CurrentSpeed;
-            _agent.angularSpeed = CurrentAngularSpeed;
+            NavBodySetUp();
         }
 
         protected override void OnGoingTo(Transform fallowTarget)
@@ -26,6 +25,8 @@ namespace Game.Room.Enemy
             base.OnGoingTo(fallowTarget);
 
             TrySetAgentDestinationInterval(fallowTarget.position);
+
+            _body.MovePosition(_agent.nextPosition);
 
             UpdateRotation(fallowTarget.position);
         }
@@ -48,6 +49,8 @@ namespace Game.Room.Enemy
                 return;
             }
 
+            _body.MovePosition(_agent.nextPosition);
+
             if (_agent.remainingDistance < _agent.stoppingDistance)
             {
                 OnAchivedTarget?.Invoke();
@@ -61,6 +64,27 @@ namespace Game.Room.Enemy
             base.SetSpeedModifier(modifier);
 
             _agent.speed = CurrentSpeed;
+        }
+
+        private void NavBodySetUp()
+        {
+            _agent.speed = CurrentSpeed;
+            _agent.angularSpeed = CurrentAngularSpeed;
+
+            _agent.updatePosition = false;
+            _agent.updateRotation = false;
+
+            if (_body.bodyType != RigidbodyType2D.Kinematic)
+            {
+                Debug.LogError("Rigidbody2D is not Kinematic, changing to dynamic", this);
+                _body.bodyType = RigidbodyType2D.Kinematic;
+            }
+
+            if (_body.interpolation != RigidbodyInterpolation2D.Interpolate)
+            {
+                Debug.LogError("Rigidbody2D interpolation is not Interpolate, changing to Interpolate", this);
+                _body.interpolation = RigidbodyInterpolation2D.Interpolate;
+            }
         }
 
         private void UpdateRotation(Vector2 targetPosition)
@@ -83,9 +107,7 @@ namespace Game.Room.Enemy
             float rotSpeed = CurrentAngularSpeed * DeltaTime;
             float newAngle = Mathf.MoveTowardsAngle(_body.rotation, angle, rotSpeed);
 
-            Vector3 newRot = transform.localRotation.eulerAngles;
-            newRot.z = newAngle;
-            transform.localRotation = Quaternion.Euler(newRot);
+            _body.MoveRotation(newAngle);
         }
 
         private void TrySetAgentDestinationInterval(Vector2 targetPos)
