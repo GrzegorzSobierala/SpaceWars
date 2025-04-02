@@ -1,4 +1,5 @@
 using Game.Management;
+using Game.Room.Enemy;
 using System;
 using UnityEngine;
 using Zenject;
@@ -99,7 +100,7 @@ namespace Game.Physics
             OnKnowWherePlayerIs?.Invoke();
         }
 
-        public void OnEnemyNotInGuardStateFound()
+        public void OnEnemyNotInGuardStateFound(IGuardStateDetectable detectable)
         {
             OnKnowWherePlayerIs?.Invoke();
         }

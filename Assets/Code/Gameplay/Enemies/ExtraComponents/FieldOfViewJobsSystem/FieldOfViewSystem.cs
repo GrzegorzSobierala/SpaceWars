@@ -39,12 +39,14 @@ namespace Game.Physics
         private Dictionary<int, FieldOfViewEntity> _entityes = new();
         // int - enemy's colliderId
         private Dictionary<int, IGuardStateDetectable> _collidersDetectable = new();
+        //int - EntityId
+        private Dictionary<int, FieldOfViewEntitiesController> _entitiesController = new();
+        private HashSet<FieldOfViewEntitiesController> _controllers = new();
 
         // int1 - EntityId, int2 ColliderId
         private NativeMultiHashMap<int, int> _entitiesColliders;
 
         private Vector2[] _pathPointsCompositeCache = new Vector2[10];
-        private static List<Vector2> _compositePathCache = new List<Vector2>(100);
 
         private NativeList<ColliderDataUnprepared> _datasUnprep;
         private NativeList<float2> _vertsUnprep;
@@ -290,6 +292,26 @@ namespace Game.Physics
             _wasEntitiesDicChanged = true;
         }
 
+        public void AddController(FieldOfViewEntitiesController controller, FieldOfViewEntity entity)
+        {
+            if (!_entitiesController.ContainsValue(controller))
+            {
+                _controllers.Add(controller);
+            }
+
+            _entitiesController.Add(entity.GetInstanceID(), controller);
+        }
+
+        public void RemoveController(FieldOfViewEntitiesController controller, FieldOfViewEntity entity)
+        {
+            _entitiesController.Remove(entity.GetInstanceID());
+
+            if (!_entitiesController.ContainsValue(controller))
+            {
+                _controllers.Remove(controller);
+            }
+        }
+
         public void OnEntityDataChange()
         {
             _wasEntitiesDicChanged = true;
@@ -455,11 +477,33 @@ namespace Game.Physics
 
             foreach (var found in _enemiesEnemyHit)
             {
-                if (!_collidersDetectable[found.Key.hitEnemyColliderId].IsEnemyInGuardState
-                    && _entityes.ContainsKey(found.Key.rayCasterEnemyId))
+                IGuardStateDetectable detectable = _collidersDetectable[found.Key.hitEnemyColliderId];
+                
+                if(_entityes.ContainsKey(found.Key.rayCasterEnemyId))
                 {
-                    _entityes[found.Key.rayCasterEnemyId].OnEnemyNotInGuardStateFound();
+                    _entitiesController[found.Key.rayCasterEnemyId].OnEnemySeeEnemy(detectable);
+
+                    if (!detectable.IsEnemyInGuardState)
+                    {
+                        _entityes[found.Key.rayCasterEnemyId].OnEnemyNotInGuardStateFound(detectable);
+                    }
                 }
+
+
+                //if (!_entityes.ContainsKey(found.Key.rayCasterEnemyId))
+                //    return;
+
+                //_entitiesController[found.Key.rayCasterEnemyId].OnEnemySeeEnemy(detectable);
+
+                //if (detectable.IsEnemyInGuardState)
+                //    return;
+
+                //_entityes[found.Key.rayCasterEnemyId].OnEnemyNotInGuardStateFound(detectable);
+            }
+
+            foreach (var controller in _controllers)
+            {
+                controller.OnPostEnemySeeEnemy();
             }
 
             _onUpdateViewCompleted?.Invoke();
