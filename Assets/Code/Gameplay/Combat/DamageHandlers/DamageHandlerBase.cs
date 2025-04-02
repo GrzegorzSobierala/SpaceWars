@@ -8,13 +8,15 @@ namespace Game.Combat
     [RequireComponent(typeof(Collider2D))]
     public abstract class DamageHandlerBase : MonoBehaviour, IHittable, IGuardStateDetectable
     {
-        public Collider2D Collider => _collider;
-
         [InjectOptional] private EnemyStateMachineBase _stateMachine;
+        [InjectOptional] private EnemyBase _enemy;
 
         private Action<DamageData> OnGetHit;
 
         private Collider2D _collider;
+
+        public Collider2D Collider => _collider;
+        public EnemyBase Enemy => _enemy; 
 
         public bool IsEnemyInGuardState
         {

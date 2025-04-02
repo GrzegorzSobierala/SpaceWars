@@ -104,7 +104,7 @@ namespace Game.Player.Ship
             HullModuleBase newHull = hullPrototype.Instatiate(parent, _container);
             _moduleHandler.SetHull(this, newHull);
             ReplaceGun(_currentGunPrototype);
-            ReplaceSpecialGun(_currentSpecialGunPrototype);
+            //ReplaceSpecialGun(_currentSpecialGunPrototype);
         }
 
         public void ReplaceGun(GunModuleBase gunPrototype)
@@ -153,7 +153,7 @@ namespace Game.Player.Ship
 
             ReplaceHull(_currentHullPrototype);
             ReplaceGun(_currentGunPrototype);
-            ReplaceSpecialGun(_currentSpecialGunPrototype);
+            //ReplaceSpecialGun(_currentSpecialGunPrototype);
         }
         
         private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : IModule

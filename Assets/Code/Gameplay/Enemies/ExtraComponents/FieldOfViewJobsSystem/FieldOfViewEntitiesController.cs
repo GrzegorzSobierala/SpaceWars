@@ -15,17 +15,21 @@ namespace Game.Physics
         [Inject] private Rigidbody2D _body;
         [Inject] private List<EnemyBase> _roomEnemies;
         [Inject] private CursorCamera _cursorCamera;
+        [Inject] private GlobalAssets _globalAssets;
+        [Inject] private FieldOfViewSystem _fovSystem;
+        [Inject] EnemyBase _enemyBase;
 
         public event Action<Collider2D> OnTriggerEnterEvent;
         public event Action<Collider2D> OnTriggerExitEvent;
 
         private List<FieldOfViewEntity> _entities = new();
         private Collider2D _trigger;
+        Dictionary<EnemyBase, EnemySeeEnemyLine> _enemiesLine = new();
 
         private float _enemyEnableDistance;
         private float _playerEnableDistance;
 
-        private const float _SAVE_DISTANCE_ADD = 10f;
+        private const float _SAFE_DISTANCE_ADD = 10f;
 
         private void Awake()
         {
@@ -66,6 +70,8 @@ namespace Game.Physics
             _entities.Add(entity);
 
             SetEnableDistance();
+
+            _fovSystem.AddController(this, entity);
         }
 
         public void UnsubscribeTriggerEvents(FieldOfViewEntity entity)
@@ -74,6 +80,8 @@ namespace Game.Physics
             OnTriggerExitEvent -= entity.TriggerExit2D;
 
             _entities.Remove(entity);
+
+            _fovSystem.RemoveController(this, entity);
         }
 
         private void UpdateEnableEntities()
@@ -153,8 +161,48 @@ namespace Game.Physics
                     largestFovDistance = entityFovDistance;
             }
 
-            _playerEnableDistance = largestFovDistance + midToTopRightDistanceWorld + _SAVE_DISTANCE_ADD;
+            _playerEnableDistance = largestFovDistance + midToTopRightDistanceWorld + _SAFE_DISTANCE_ADD;
             _enemyEnableDistance = largestFovDistance;
+        }
+        
+        private HashSet<EnemyBase> _thisFrameEnemiesWithLine = new();
+        private List<EnemyBase> _enemiesToRemoveFomDic = new();
+
+        public void OnEnemySeeEnemy(IGuardStateDetectable detectable)
+        {
+            if(!_thisFrameEnemiesWithLine.Contains(detectable.Enemy))
+            {
+                _thisFrameEnemiesWithLine.Add(detectable.Enemy);
+            }
+
+            if (!_enemiesLine.ContainsKey(detectable.Enemy))
+            {
+                EnemySeeEnemyLine line = Instantiate(_globalAssets.EnemySeeEnemyLine, transform);
+                _enemiesLine.Add(detectable.Enemy, line);
+            }
+
+            _enemiesLine[detectable.Enemy].SetLine(_enemyBase.transform.position,
+                detectable.Enemy.transform.position);
+        }
+
+        public void OnPostEnemySeeEnemy()
+        {
+            foreach (var enemy in _enemiesLine)
+            {
+                if (!_thisFrameEnemiesWithLine.Contains(enemy.Key))
+                {
+                    _enemiesToRemoveFomDic.Add(enemy.Key);
+                }
+            }
+            
+            foreach (var enemy in _enemiesToRemoveFomDic)
+            {
+                Destroy(_enemiesLine[enemy].gameObject);
+                _enemiesLine.Remove(enemy);
+            }
+
+            _thisFrameEnemiesWithLine.Clear();
+            _enemiesToRemoveFomDic.Clear();
         }
     }
 }
