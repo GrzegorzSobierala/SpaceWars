@@ -485,20 +485,9 @@ namespace Game.Physics
 
                     if (!detectable.IsEnemyInGuardState)
                     {
-                        _entityes[found.Key.rayCasterEnemyId].OnEnemyNotInGuardStateFound(detectable);
+                        _entityes[found.Key.rayCasterEnemyId].OnEnemyNotInGuardStateFound();
                     }
                 }
-
-
-                //if (!_entityes.ContainsKey(found.Key.rayCasterEnemyId))
-                //    return;
-
-                //_entitiesController[found.Key.rayCasterEnemyId].OnEnemySeeEnemy(detectable);
-
-                //if (detectable.IsEnemyInGuardState)
-                //    return;
-
-                //_entityes[found.Key.rayCasterEnemyId].OnEnemyNotInGuardStateFound(detectable);
             }
 
             foreach (var controller in _controllers)
