@@ -8,7 +8,7 @@ namespace Game.Room.Enemy
         public void SetLine(Vector2 start, Vector2 end, float distanceFromTarget)
         {
             Vector2 backVector = (start - end).normalized * distanceFromTarget;
-            transform.position = end + backVector;
+            transform.position = (Vector3)(end + backVector) + new Vector3(0,0, -0.05f);
             Utils.RotateTowards(transform, end);
         }
     }

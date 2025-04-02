@@ -677,7 +677,7 @@ namespace Game.Utility
             Vector2 direction = worldPosition - currentPosition;
 
             // Calculate the angle in degrees using the arctan of the direction.
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
 
             // Create a quaternion that represents a rotation around the z-axis by the calculated angle.
             Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
