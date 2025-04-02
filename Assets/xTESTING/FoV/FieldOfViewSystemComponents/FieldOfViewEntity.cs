@@ -9,7 +9,7 @@ namespace Game.Physics
     {
         public event Action OnKnowWherePlayerIs;
 
-        [InjectOptional] private FieldOfViewEntitiesController _controller;
+        [Inject] private FieldOfViewEntitiesController _controller;
         [Inject] private FieldOfViewSystem _system;
 
         [SerializeField] private float _fov = 90;
@@ -19,6 +19,8 @@ namespace Game.Physics
         private bool _awakeCalled = false;
 
         private bool _wasStartCalled = false;
+
+        public float ViewDistance => _viewDistance;
 
         private void Awake()
         {
