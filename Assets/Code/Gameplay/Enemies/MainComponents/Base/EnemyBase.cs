@@ -22,6 +22,8 @@ namespace Game.Room.Enemy
         [SerializeField] private float _baseHp = 5f;
         [SerializeField] private ArrowParameters _arrowParameters;
 
+        private bool _onDamageVisualEffectInProgress = false;
+
         public EnemyStateMachineBase StateMachine => _stateMachine;
         public float CurrentHp => _currentHp;
         public float MaxHp => _maxHp;
@@ -120,8 +122,6 @@ namespace Game.Room.Enemy
 
             OnHpChange?.Invoke(_currentHp);
         }
-
-        bool _onDamageVisualEffectInProgress = false;
 
         private void OnDamageVisualEffect()
         {
