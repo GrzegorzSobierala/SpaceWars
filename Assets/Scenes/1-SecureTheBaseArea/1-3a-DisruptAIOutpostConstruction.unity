@@ -508,6 +508,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &612271885 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6436993768920457287, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
+  m_PrefabInstance: {fileID: 482529026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9121d303ba8641b4b9997018891ebefb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1298798947
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,6 +550,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1379410371 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5189555305797106306, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
+  m_PrefabInstance: {fileID: 482529026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 321ad3c0ef1d5fc42875f2b050d68660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1901064048 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3914411356666505064, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
@@ -680,6 +702,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1765238026267045545, guid: 72ddc98cf387df141b0e572f47c831b7, type: 3}
+      propertyPath: targets.Array.data[0]._underlyingValue
+      value: 
+      objectReference: {fileID: 1379410371}
     - target: {fileID: 1798308185645239841, guid: 72ddc98cf387df141b0e572f47c831b7, type: 3}
       propertyPath: m_Name
       value: 1-3a-RoomTestSceneContext
@@ -728,6 +754,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4273597810859752374, guid: 72ddc98cf387df141b0e572f47c831b7, type: 3}
+      propertyPath: targets.Array.data[0]._underlyingValue
+      value: 
+      objectReference: {fileID: 612271885}
     - target: {fileID: 6651570090638292703, guid: 72ddc98cf387df141b0e572f47c831b7, type: 3}
       propertyPath: targets.Array.data[0]._underlyingValue
       value: 

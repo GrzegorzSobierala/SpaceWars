@@ -53,6 +53,58 @@ MonoBehaviour:
   <NextQuestsOnFailure>k__BackingField: []
   targets:
   - _underlyingValue: {fileID: 0}
+--- !u!1 &2284178836939451506
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2128107318519158514}
+  - component: {fileID: 4273597810859752374}
+  m_Layer: 0
+  m_Name: DestroySupplyStationQuest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2128107318519158514
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2284178836939451506}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4299936467383795881}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4273597810859752374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2284178836939451506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5aacef4dd912314197129dd28004daa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Destroy supply station
+  <Description>k__BackingField: 
+  <IsMain>k__BackingField: 0
+  <NextQuestsOnEnd>k__BackingField: []
+  <NextQuestsOnSuccess>k__BackingField: []
+  <NextQuestsOnFailure>k__BackingField: []
+  targets:
+  - _underlyingValue: {fileID: 0}
 --- !u!1 &3940398504465871914
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,6 +197,58 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveToTarget: {fileID: 0}
+--- !u!1 &6633080325411584988
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6862858297389491736}
+  - component: {fileID: 1765238026267045545}
+  m_Layer: 0
+  m_Name: DestroyCargoShipQuest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6862858297389491736
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6633080325411584988}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4299936467383795881}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1765238026267045545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6633080325411584988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5aacef4dd912314197129dd28004daa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Destroy cargo ship
+  <Description>k__BackingField: 
+  <IsMain>k__BackingField: 0
+  <NextQuestsOnEnd>k__BackingField: []
+  <NextQuestsOnSuccess>k__BackingField: []
+  <NextQuestsOnFailure>k__BackingField: []
+  targets:
+  - _underlyingValue: {fileID: 0}
 --- !u!1 &7905633575975482511
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,10 +394,18 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5638891312303112144, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
       propertyPath: _startQuests.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5638891312303112144, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
       propertyPath: _startQuests.Array.data[0]
+      value: 
+      objectReference: {fileID: 1765238026267045545}
+    - target: {fileID: 5638891312303112144, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
+      propertyPath: _startQuests.Array.data[1]
+      value: 
+      objectReference: {fileID: 4273597810859752374}
+    - target: {fileID: 5638891312303112144, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
+      propertyPath: _startQuests.Array.data[2]
       value: 
       objectReference: {fileID: 6651570090638292703}
     - target: {fileID: 6292327569458055410, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
@@ -353,11 +465,22 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1706272827258599144, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6376760432929875274}
+    - targetCorrespondingSourceObject: {fileID: 8361627861938259578, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2128107318519158514}
+    - targetCorrespondingSourceObject: {fileID: 8361627861938259578, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6862858297389491736}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2989231663520137686, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2351082297599976247}
   m_SourcePrefab: {fileID: 100100000, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
+--- !u!4 &4299936467383795881 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8361627861938259578, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
+  m_PrefabInstance: {fileID: 5739285024163628755}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6344427604800991291 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1706272827258599144, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
