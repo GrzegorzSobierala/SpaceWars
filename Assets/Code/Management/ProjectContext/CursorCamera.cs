@@ -6,11 +6,12 @@ using UnityEngine.Rendering.Universal;
 
 namespace Game.Player.Control
 {
+    [DefaultExecutionOrder(-1001)]
     public class CursorCamera : MonoBehaviour
     {
         [SerializeField, ReadOnly] private Camera _camera;
 
-        private void Start()
+        public void OnCameraActivation()
         {
             Init();
         }

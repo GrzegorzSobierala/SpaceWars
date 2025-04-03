@@ -29517,7 +29517,7 @@ Transform:
   - {fileID: 8878008854674303711}
   - {fileID: 5460247260779581530}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6160428084483414833
 MonoBehaviour:
@@ -29591,6 +29591,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _baseHp: 2.5
+  _arrowParameters:
+    verdicalDistanceFromTarget: 32
+    horizontalDistanceFromTarget: 20
+    scale: 0.8
+    offset: {x: 0, y: -4.07}
 --- !u!114 &2159849205792520315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40120,11 +40125,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5058236097053726588, guid: 30c7971e9d22b8f4da6a2a03f7bce6ef, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 13.3
+      value: 12.26
       objectReference: {fileID: 0}
     - target: {fileID: 5058236097053726588, guid: 30c7971e9d22b8f4da6a2a03f7bce6ef, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -22.6
+      value: -13.65
       objectReference: {fileID: 0}
     - target: {fileID: 5058236097053726588, guid: 30c7971e9d22b8f4da6a2a03f7bce6ef, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -40547,6 +40552,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: FieldOfViewComponents
       objectReference: {fileID: 0}
+    - target: {fileID: 5295290390337713091, guid: c97f91c6cfa112a478fbd5a105df3acc, type: 3}
+      propertyPath: _viewDistance
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 5892955955777816192, guid: c97f91c6cfa112a478fbd5a105df3acc, type: 3}
+      propertyPath: _viewDistance
+      value: 190
+      objectReference: {fileID: 0}
     - target: {fileID: 6025503847233601707, guid: c97f91c6cfa112a478fbd5a105df3acc, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -40590,6 +40603,10 @@ PrefabInstance:
     - target: {fileID: 6025503847233601707, guid: c97f91c6cfa112a478fbd5a105df3acc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7328669840350523954, guid: c97f91c6cfa112a478fbd5a105df3acc, type: 3}
+      propertyPath: _distanceFromTargetForArrow
+      value: 23
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

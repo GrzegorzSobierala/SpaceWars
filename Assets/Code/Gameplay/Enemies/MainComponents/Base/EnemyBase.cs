@@ -1,4 +1,5 @@
 using Game.Combat;
+using Game.Management;
 using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
@@ -13,15 +14,20 @@ namespace Game.Room.Enemy
 
         [Inject] protected EnemyStateMachineBase _stateMachine;
         [Inject] protected List<EnemyDamageHandler> _damageHandlers;
+        [Inject] private GlobalAssets _globalAssets;
 
         [ShowNonSerializedField] protected float _maxHp;
         [ShowNonSerializedField] protected float _currentHp;
 
         [SerializeField] private float _baseHp = 5f;
+        [SerializeField] private ArrowParameters _arrowParameters;
+
+        private bool _onDamageVisualEffectInProgress = false;
 
         public EnemyStateMachineBase StateMachine => _stateMachine;
         public float CurrentHp => _currentHp;
         public float MaxHp => _maxHp;
+        public ArrowParameters ArrowParameters => _arrowParameters;
 
         protected virtual void Awake()
         {
@@ -69,6 +75,7 @@ namespace Game.Room.Enemy
                 return;
 
             ChangeCurrentHpBy(-damage.BaseDamage);
+            OnDamageVisualEffect();
         }
 
         protected void AddCurrentHp(float hp)
@@ -114,6 +121,57 @@ namespace Game.Room.Enemy
             }
 
             OnHpChange?.Invoke(_currentHp);
+        }
+
+        private void OnDamageVisualEffect()
+        {
+            if(_onDamageVisualEffectInProgress)
+            {
+                CancelInvoke(nameof(RestoreMaterial));
+                Invoke(nameof(RestoreMaterial), _globalAssets.GetDamageVisualEfectTime);
+                return;
+            }
+
+            _onDamageVisualEffectInProgress = true;
+
+            foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
+            {
+                List<Material> materials = new();
+                renderer.GetSharedMaterials(materials);
+
+                int originalMaterialsCount = materials.Count;
+                for (int i = 0; i < originalMaterialsCount; i++)
+                {
+                    materials.Insert(0, _globalAssets.GetDamageMaterial);
+                }
+
+                renderer.sharedMaterials = materials.ToArray();
+            }
+
+            Invoke(nameof(RestoreMaterial), _globalAssets.GetDamageVisualEfectTime);
+        }
+
+        private void RestoreMaterial()
+        {
+            if (!_onDamageVisualEffectInProgress)
+            {
+                Debug.LogError("Cant restore materials, _onDamageVisualEffectInProgress if false");
+                return;
+            }
+
+            foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
+            {
+                List<Material> materials = new();
+                renderer.GetSharedMaterials(materials);
+                int originalMaterialsCount = materials.Count/2;
+                for (int i = 0; i < originalMaterialsCount; i++)
+                {
+                    materials.RemoveAt(0);  
+                }
+                renderer.sharedMaterials = materials.ToArray();
+            }
+
+            _onDamageVisualEffectInProgress = false;
         }
     }
 }
