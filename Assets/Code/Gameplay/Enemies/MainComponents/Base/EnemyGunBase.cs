@@ -175,14 +175,14 @@ namespace Game.Room.Enemy
                 return false;
 
             OnBeforeShootEvent?.Invoke();
-            if (_onBeforeShootGun.GetPersistentEventCount() == 0)
-            {
-                DefaultBeforeShootAction();
-            }
-            else
-            {
-                _onBeforeShootGun.Invoke();
-            }
+            //if (_onBeforeShootGun.GetPersistentEventCount() == 0)
+            //{
+            //    DefaultBeforeShootAction();
+            //}
+            //else
+            //{
+                _onBeforeShootGun?.Invoke();
+            //}
 
             Invoke(nameof(InvokeShootEvents), _beforeShootIndicateTime);
             return true;
