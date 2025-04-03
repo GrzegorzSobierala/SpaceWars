@@ -9,7 +9,6 @@ namespace Game.Utility.Globals
         public const string Water = "Water";
         public const string UI = "UI";
 
-
         // Physics
         public const string Player = "Player";
         public const string PlayerCombat = "PlayerCombat";
@@ -19,6 +18,7 @@ namespace Game.Utility.Globals
         public const string SmallObstacle = "SmallObstacle";
         public const string ObstacleShootAbove = "ObstacleShootAbove";
         public const string EnemyFieldOfView = "EnemyFieldOfView";
+        public const string EnemyIgnore = "EnemyIgnore";
 
         // Graphic
         public const string Blur = "Blur";
