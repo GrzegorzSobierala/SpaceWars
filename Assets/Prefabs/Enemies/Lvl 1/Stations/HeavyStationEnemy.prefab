@@ -43,7 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8287445882738696543}
   - component: {fileID: 896384638257233257}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: CollidersBuilding  (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -704,7 +704,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3900756876776794218}
   - component: {fileID: 5346467290942737682}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: CollidersObstacles (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1064,7 +1064,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4928318363873078035}
   - component: {fileID: 3908503927623109589}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: CollidersBuilding (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1384,7 +1384,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7110534978727609322}
   - component: {fileID: 8903736253548324678}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: CollidersObstacles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1461,7 +1461,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2816322207596648934}
   - component: {fileID: 6595347742169489774}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: CollidersBuilding  (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1652,7 +1652,7 @@ Transform:
   - {fileID: 4665536967199212350}
   - {fileID: 8840632169190081004}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 192.148}
 --- !u!114 &1090034401289258903
 MonoBehaviour:
@@ -1667,6 +1667,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _baseHp: 2
+  _distanceFromTargetForArrow: 117
+  _arrowParameters:
+    verdicalDistanceFromTarget: 132
+    horizontalDistanceFromTarget: 115
+    scale: 1.4
+    offset: {x: -13, y: -46.18}
 --- !u!50 &2622981496131505048
 Rigidbody2D:
   serializedVersion: 4
@@ -1750,7 +1756,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7528599093210887920}
   - component: {fileID: 5604551352355488997}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: CollidersObstacles (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

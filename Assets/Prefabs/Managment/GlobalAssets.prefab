@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1286054077338093253
 MonoBehaviour:
@@ -46,7 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _testMaterial: {fileID: 2100000, guid: 0f8bc18cea53c2446a4497551ece1063, type: 2}
+  _getDamageMaterial: {fileID: 2100000, guid: b4ed0079e62a93c4fbad07956fc903d8, type: 2}
   _enemySeeEnemyLine: {fileID: 8931021607152683064, guid: 1a8d2592036a70343a849b645149bfd4, type: 3}
+  _getDamageVisualEfectTime: 0.11
 --- !u!114 &2311716431139583082
 MonoBehaviour:
   m_ObjectHideFlags: 0

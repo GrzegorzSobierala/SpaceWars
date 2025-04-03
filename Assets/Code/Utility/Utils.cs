@@ -667,6 +667,32 @@ namespace Game.Utility
             // Finally, translate by world position
             return worldPos + rotated;
         }
+
+        /// <summary>
+        /// Rotates the transform to face the specified world position.
+        /// </summary>
+        /// <param name="transform">The transform to rotate.</param>
+        /// <param name="worldPosition">The target world position to face.</param>
+        /// <returns>The angle in degrees by which the transform was rotated.</returns>
+        public static float RotateTowards(Transform transform, Vector2 worldPosition)
+        {
+            // Get the current position of the object as a Vector2.
+            Vector2 currentPosition = new Vector2(transform.position.x, transform.position.y);
+
+            // Calculate the direction from the current position to the target world position.
+            Vector2 direction = worldPosition - currentPosition;
+
+            // Calculate the angle in degrees using the arctan of the direction.
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
+
+            // Create a quaternion that represents a rotation around the z-axis by the calculated angle.
+            Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+            // Apply the rotation to the transform.
+            transform.rotation = rotation;
+
+            return angle;
+        }
     }
 
     public static class Async

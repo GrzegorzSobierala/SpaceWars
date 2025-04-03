@@ -183,6 +183,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6883520708894126799}
     m_Modifications:
+    - target: {fileID: 5729298759652737189, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
+      propertyPath: m_text
+      value: Destroy station mission
+      objectReference: {fileID: 0}
     - target: {fileID: 6482655027260059523, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_Name
       value: 1-3a-DisruptButton
@@ -217,11 +221,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 200
+      value: 574.9824
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 71.8754
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_LocalPosition.x
@@ -233,7 +237,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -18
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_LocalRotation.w
@@ -253,11 +257,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 354
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -120
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -310,13 +314,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6883520708894126799}
     m_Modifications:
+    - target: {fileID: 1405624847775840135, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5729298759652737189, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_text
-      value: Destroy
+      value: Steal cargo mission
       objectReference: {fileID: 0}
     - target: {fileID: 6482655027260059523, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_Name
-      value: 1-1a-DestroyButton
+      value: 1-1a-StealButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 6482655027260059523, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_Pivot.x
@@ -348,11 +360,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 200
+      value: 574.9824
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 71.8754
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_LocalPosition.x
@@ -364,7 +376,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -18
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_LocalRotation.w
@@ -384,11 +396,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -351
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -441,13 +453,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6883520708894126799}
     m_Modifications:
+    - target: {fileID: 1405624847775840135, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5729298759652737189, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_text
-      value: Capture
+      value: Capture mission
       objectReference: {fileID: 0}
     - target: {fileID: 6482655027260059523, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_Name
       value: 1-2a-CaptureButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 6482655027260059523, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_Pivot.x
@@ -479,11 +499,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 200
+      value: 574.9824
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 71.8754
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_LocalPosition.x
@@ -495,7 +515,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -18
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_LocalRotation.w
@@ -519,7 +539,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -30
       objectReference: {fileID: 0}
     - target: {fileID: 8621255189707534927, guid: c0ae0e0c08e073548adb1e8a1fa87f00, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
