@@ -6,15 +6,6 @@ namespace Game.Room.Enemy
 {
     public class EnemySeeEnemyArrow : MonoBehaviour
     {
-        //[SerializeField] private ArrowParameters _arrowParameters;
-
-        //public void SetParameters(ArrowParameters arrowParameters)
-        //{
-        //    _arrowParameters = arrowParameters;
-        //    float scale = arrowParameters.scale;
-        //    transform.localScale = new Vector3(scale, scale, scale);
-        //}
-
         private const float _Z_POS_MOVE = -0.05f;
 
         public void TransformArrow(EnemyBase startEnemy, EnemyBase endEnemy)
