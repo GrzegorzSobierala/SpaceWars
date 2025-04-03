@@ -29591,7 +29591,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _baseHp: 2.5
-  _distanceFromTargetForArrow: 31
   _arrowParameters:
     verdicalDistanceFromTarget: 32
     horizontalDistanceFromTarget: 20
@@ -40552,6 +40551,14 @@ PrefabInstance:
     - target: {fileID: 451769140829965227, guid: c97f91c6cfa112a478fbd5a105df3acc, type: 3}
       propertyPath: m_Name
       value: FieldOfViewComponents
+      objectReference: {fileID: 0}
+    - target: {fileID: 5295290390337713091, guid: c97f91c6cfa112a478fbd5a105df3acc, type: 3}
+      propertyPath: _viewDistance
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 5892955955777816192, guid: c97f91c6cfa112a478fbd5a105df3acc, type: 3}
+      propertyPath: _viewDistance
+      value: 190
       objectReference: {fileID: 0}
     - target: {fileID: 6025503847233601707, guid: c97f91c6cfa112a478fbd5a105df3acc, type: 3}
       propertyPath: m_RootOrder
