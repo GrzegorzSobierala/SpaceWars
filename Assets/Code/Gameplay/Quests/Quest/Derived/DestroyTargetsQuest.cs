@@ -1,12 +1,17 @@
 using AYellowpaper;
+using Game.Player.Ui;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Objectives
 {
     public class DestroyTargetsQuest : Quest
     {
+        [Inject] private MissionPoinerUi missionPoinerUi;
+
         [Space]
         [SerializeField] private InterfaceReference<IDefeatedCallback>[] targets;
 
@@ -15,6 +20,7 @@ namespace Game.Objectives
         protected override void OnStartQuest()
         {
             Subscribe();
+            missionPoinerUi.SetCurrentTarget(currentTargets.First().Key.MainTransform);
         }
 
         protected override void OnSuccess()
@@ -34,10 +40,6 @@ namespace Game.Objectives
 
         private void StartAnim(Action onEnd)
         {
-
-
-
-
             onEnd.Invoke();
         }
 
@@ -72,6 +74,10 @@ namespace Game.Objectives
             if(currentTargets.Count == 0) 
             {
                 Success();
+            }
+            else
+            {
+                missionPoinerUi.SetCurrentTarget(currentTargets.First().Key.MainTransform);
             }
         }
 

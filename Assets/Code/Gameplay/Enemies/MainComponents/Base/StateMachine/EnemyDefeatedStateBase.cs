@@ -2,6 +2,7 @@ using Game.Objectives;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
 
 namespace Game.Room.Enemy
 {
@@ -9,7 +10,11 @@ namespace Game.Room.Enemy
     {
         public event Action OnDefeated;
 
+        [Inject] protected EnemyBase _enemyBase;
+
         [SerializeField] protected UnityEvent OnDestroyEvent;
+
+        public Transform MainTransform => _enemyBase.transform;
 
         protected override void OnEnterState()
         {

@@ -1,4 +1,5 @@
 using Game.Management;
+using Game.Player.Ui;
 using System;
 using UnityEngine;
 using Zenject;
@@ -9,6 +10,7 @@ namespace Game.Objectives
     public class GoToTarget : MonoBehaviour
     {
         [Inject] private PlayerManager _playerManager;
+        [Inject] private MissionPoinerUi _missionPoinerUi;
 
         public event Action OnPlayerReachedTarget;
 
@@ -25,6 +27,11 @@ namespace Game.Objectives
             }
 
             SafeChecks();
+        }
+
+        private void Start()
+        {
+            _missionPoinerUi.SetCurrentTarget(transform);
         }
 
         private void OnTriggerEnter2D(Collider2D trigger)

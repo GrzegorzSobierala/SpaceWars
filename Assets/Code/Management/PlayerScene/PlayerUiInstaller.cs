@@ -11,6 +11,7 @@ namespace Game.Player
             Container.Bind<AlarmUi>().FromComponentInHierarchy(false).AsSingle();
             Container.Bind<PlayerUiController>().FromComponentInHierarchy(false).AsSingle();
             Container.Bind<PlayerQuestsUiController>().FromComponentInHierarchy(false).AsSingle();
+            Container.Bind<MissionPoinerUi>().FromComponentInHierarchy(false).AsSingle();
         }
     }
 }
