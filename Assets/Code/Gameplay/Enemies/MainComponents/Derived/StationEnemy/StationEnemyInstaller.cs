@@ -13,7 +13,7 @@ namespace Game.Room.Enemy
             Utils.BindComponentsInChildrens<EnemyGunBase>(Container, gameObject, false);
 
             Container.Bind<DockPlace>().FromComponentInHierarchy().AsSingle();
-            //Container.Bind<FieldOfViewEntitiesController>().FromComponentInHierarchy(false).AsSingle().NonLazy();
+            Container.Bind<FieldOfViewEntitiesController>().FromComponentInHierarchy(false).AsSingle().NonLazy();
 
         }
     }
