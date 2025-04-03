@@ -178,11 +178,12 @@ namespace Game.Physics
             if (!_enemiesLine.ContainsKey(detectable.Enemy))
             {
                 EnemySeeEnemyArrow line = Instantiate(_globalAssets.EnemySeeEnemyLine, transform);
+                //line.SetParameters(_enemyBase.ArrowParameters);
                 _enemiesLine.Add(detectable.Enemy, line);
             }
 
-            _enemiesLine[detectable.Enemy].SetLine(_enemyBase.transform.position,
-                detectable.Enemy.transform.position, detectable.Enemy.DistanceFromTargetForArrow);
+            //_enemiesLine[detectable.Enemy].SetParameters(detectable.Enemy.ArrowParameters);
+            _enemiesLine[detectable.Enemy].TransformArrow(_enemyBase, detectable.Enemy);
         }
 
         public void OnPostEnemySeeEnemy()

@@ -19,11 +19,12 @@ namespace Game.Room.Enemy
 
         [SerializeField] private float _baseHp = 5f;
         [SerializeField] private float _distanceFromTargetForArrow = 35f;
+        [SerializeField] private ArrowParameters _arrowParameters;
 
         public EnemyStateMachineBase StateMachine => _stateMachine;
         public float CurrentHp => _currentHp;
         public float MaxHp => _maxHp;
-        public float DistanceFromTargetForArrow => _distanceFromTargetForArrow;
+        public ArrowParameters ArrowParameters => _arrowParameters;
 
         protected virtual void Awake()
         {

@@ -668,7 +668,13 @@ namespace Game.Utility
             return worldPos + rotated;
         }
 
-        public static void RotateTowards(Transform transform, Vector2 worldPosition)
+        /// <summary>
+        /// Rotates the transform to face the specified world position.
+        /// </summary>
+        /// <param name="transform">The transform to rotate.</param>
+        /// <param name="worldPosition">The target world position to face.</param>
+        /// <returns>The angle in degrees by which the transform was rotated.</returns>
+        public static float RotateTowards(Transform transform, Vector2 worldPosition)
         {
             // Get the current position of the object as a Vector2.
             Vector2 currentPosition = new Vector2(transform.position.x, transform.position.y);
@@ -684,6 +690,8 @@ namespace Game.Utility
 
             // Apply the rotation to the transform.
             transform.rotation = rotation;
+
+            return angle;
         }
     }
 

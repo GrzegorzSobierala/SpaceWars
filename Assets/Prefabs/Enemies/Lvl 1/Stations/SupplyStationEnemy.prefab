@@ -358,7 +358,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3766969606851677841}
   - component: {fileID: 3932986080211519108}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: CollidersObstacles (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -435,7 +435,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3286867586819130392}
   - component: {fileID: 8849371237856556159}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: CollidersBuilding  (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -958,7 +958,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8673867666738524712}
   - component: {fileID: 4597894994057832770}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: CollidersObstacles (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1339,7 +1339,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4553640108249205941}
   - component: {fileID: 5323972894736808392}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: CollidersBuilding  (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1616,7 +1616,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5024756227298159088}
   - component: {fileID: 1618211733479969174}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: CollidersObstacles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1728,7 +1728,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4006923461196122239}
   - component: {fileID: 8534469427097250848}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: CollidersBuilding (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1838,7 +1838,7 @@ Transform:
   - {fileID: 2679442836525405010}
   - {fileID: 3116646563071685381}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 94.813}
 --- !u!114 &4408658853625345277
 MonoBehaviour:
@@ -1854,6 +1854,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _baseHp: 2
   _distanceFromTargetForArrow: 117
+  _arrowParameters:
+    verdicalDistanceFromTarget: 132
+    horizontalDistanceFromTarget: 115
+    scale: 1.4
+    offset: {x: -13, y: -46.18}
 --- !u!50 &6072686007832565159
 Rigidbody2D:
   serializedVersion: 4

@@ -542,6 +542,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _baseHp: 125
+  _distanceFromTargetForArrow: 35
+  _arrowParameters:
+    verdicalDistanceFromTarget: 90
+    horizontalDistanceFromTarget: 25
+    scale: 1.1
+    offset: {x: 0, y: -25.2}
   _emisiveColor: {r: 1, g: 0, b: 0, a: 1}
   _emisiveIntesvity: 50
   _shipMeshRenderer: {fileID: 3468256321605477082}
