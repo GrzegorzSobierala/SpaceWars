@@ -216,6 +216,11 @@ namespace Game.Editor
             else if ((_currentPlayerHp != playerHpText || _isFirstFrameOfAppPlay) &&
                 int.TryParse(playerHpText, out int playerHp))
             {
+                HullModuleBase hull = FindObjectOfType<HullModuleBase>();
+
+                if (!hull)
+                    return;
+
                 playerHp = math.clamp(playerHp, 1, 9999);
                 _settings.PlayerHp = playerHp.ToString();
                 _currentPlayerHp = _settings.PlayerHp;
@@ -223,7 +228,7 @@ namespace Game.Editor
 
                 if (Application.isPlaying)
                 {
-                    FindObjectOfType<HullModuleBase>().DEBUG_TrySetHp(_currentPlayerHp);
+                    hull.DEBUG_TrySetHp(_currentPlayerHp);
                 }
             }
         }
