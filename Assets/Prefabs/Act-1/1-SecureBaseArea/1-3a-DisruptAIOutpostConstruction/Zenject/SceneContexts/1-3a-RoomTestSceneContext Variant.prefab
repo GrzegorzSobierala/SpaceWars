@@ -226,7 +226,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4299936467383795881}
+  m_Father: {fileID: 6344427604800991291}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1765238026267045545
@@ -243,9 +243,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Destroy cargo ship
   <Description>k__BackingField: 
-  <IsMain>k__BackingField: 0
+  <IsMain>k__BackingField: 1
   <NextQuestsOnEnd>k__BackingField: []
-  <NextQuestsOnSuccess>k__BackingField: []
+  <NextQuestsOnSuccess>k__BackingField:
+  - {fileID: 6651570090638292703}
   <NextQuestsOnFailure>k__BackingField: []
   targets:
   - _underlyingValue: {fileID: 0}
@@ -394,20 +395,20 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5638891312303112144, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
       propertyPath: _startQuests.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5638891312303112144, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
       propertyPath: _startQuests.Array.data[0]
       value: 
-      objectReference: {fileID: 1765238026267045545}
+      objectReference: {fileID: 4273597810859752374}
     - target: {fileID: 5638891312303112144, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
       propertyPath: _startQuests.Array.data[1]
       value: 
-      objectReference: {fileID: 4273597810859752374}
+      objectReference: {fileID: 1765238026267045545}
     - target: {fileID: 5638891312303112144, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
       propertyPath: _startQuests.Array.data[2]
       value: 
-      objectReference: {fileID: 6651570090638292703}
+      objectReference: {fileID: 1765238026267045545}
     - target: {fileID: 6292327569458055410, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
       propertyPath: m_Name
       value: 1-3a-RoomTestSceneContext Variant
@@ -461,6 +462,9 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1706272827258599144, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 6862858297389491736}
+    - targetCorrespondingSourceObject: {fileID: 1706272827258599144, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 5635145472113473190}
     - targetCorrespondingSourceObject: {fileID: 1706272827258599144, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
       insertIndex: -1
@@ -468,9 +472,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8361627861938259578, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2128107318519158514}
-    - targetCorrespondingSourceObject: {fileID: 8361627861938259578, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6862858297389491736}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2989231663520137686, guid: a0785b0b1505a9b438ffc89b49b7f347, type: 3}
       insertIndex: -1

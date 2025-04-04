@@ -1,6 +1,7 @@
 using AYellowpaper;
 using Game.Player.Ui;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -20,7 +21,20 @@ namespace Game.Objectives
         protected override void OnStartQuest()
         {
             Subscribe();
-            missionPoinerUi.SetCurrentTarget(currentTargets.First().Key.MainTransform);
+            if(currentTargets.Count == 0)
+            {
+                StartCoroutine(WaitAndSiccess());
+            }
+            else
+            {
+                missionPoinerUi.SetCurrentTarget(currentTargets.First().Key.MainTransform);
+            }
+        }
+
+        private IEnumerator WaitAndSiccess()
+        {
+            yield return new WaitForEndOfFrame();
+            Success();
         }
 
         protected override void OnSuccess()
@@ -47,6 +61,9 @@ namespace Game.Objectives
         {
             foreach (var target in targets)
             {
+                if (target.Value == null)
+                    continue;
+
                 Action action = () => RemoveTarget(target.Value);
                 currentTargets.Add(target.Value, action);
                 target.Value.OnDefeated += action;
