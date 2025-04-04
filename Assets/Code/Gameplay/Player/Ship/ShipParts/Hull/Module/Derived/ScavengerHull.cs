@@ -1,5 +1,4 @@
 using Game.Combat;
-using Game.Player.Control;
 using UnityEngine;
 using Zenject;
 
@@ -26,7 +25,6 @@ namespace Game.Player.Ship
             Unsubscribe();
         }
     
-
         public override void OnGetHit(DamageData damage)
         {
             ChangeCurrentHp(-damage.BaseDamage);
