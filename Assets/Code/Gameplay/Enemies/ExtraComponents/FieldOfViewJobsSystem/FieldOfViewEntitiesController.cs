@@ -30,6 +30,7 @@ namespace Game.Physics
         private List<EnemyBase> _enemiesToRemoveFomDic = new();
 
         private float _enemyEnableDistance;
+        private float _enemyEnableSqrMagnitude;
         private float _playerEnableDistance;
 
         private const float _SAFE_DISTANCE_ADD = 10f;
@@ -123,24 +124,40 @@ namespace Game.Physics
 
         private bool IsNonGuardEnemyInRange()
         {
-            Profiler.BeginSample("IsNonGuardEnemyInRange");
+
             for (int i = 0; i < _roomEnemies.Count; i++)
             {
-                var enemy = _roomEnemies[i];
+                EnemyBase enemy = _roomEnemies[i];
+
                 if (enemy == null)
                     continue;
 
                 if (enemy.StateMachine.CurrentState is EnemyGuardStateBase)
                     continue;
 
-                if (Vector2.Distance(enemy.transform.position, transform.position) > _enemyEnableDistance)
+                if (Vector2.SqrMagnitude(transform.position - enemy.transform.position) > _enemyEnableSqrMagnitude)
                     continue;
 
-                Profiler.EndSample();
                 return true;
             }
 
-            Profiler.EndSample();
+
+
+            //foreach(var enemy in _roomEnemies)
+            //{
+            //    if (enemy == null)
+            //        continue;
+
+            //    if (enemy.StateMachine.CurrentState is EnemyGuardStateBase)
+            //        continue;
+
+            //    if (Vector2.Distance(enemy.transform.position, transform.position) > _enemyEnableDistance)
+            //        continue;
+
+            //    Profiler.EndSample();
+            //    return true;
+            //}
+
             return false;
         }
         
@@ -166,6 +183,7 @@ namespace Game.Physics
 
             _playerEnableDistance = largestFovDistance + midToTopRightDistanceWorld + _SAFE_DISTANCE_ADD;
             _enemyEnableDistance = largestFovDistance;
+            _enemyEnableSqrMagnitude = _enemyEnableDistance * _enemyEnableDistance;
         }
 
         public void OnEnemySeeEnemy(IGuardStateDetectable detectable)

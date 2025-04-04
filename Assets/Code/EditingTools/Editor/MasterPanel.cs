@@ -216,9 +216,15 @@ namespace Game.Editor
             else if ((_currentPlayerHp != playerHpText || _isFirstFrameOfAppPlay) &&
                 int.TryParse(playerHpText, out int playerHp))
             {
-                HullModuleBase hull = FindObjectOfType<HullModuleBase>();
+                bool hullneeded = Application.isPlaying;
 
-                if (!hull)
+                HullModuleBase hull = null;
+                if (hullneeded)
+                {
+                    hull = FindObjectOfType<HullModuleBase>();
+                }
+
+                if (hullneeded && !hull)
                     return;
 
                 playerHp = math.clamp(playerHp, 1, 9999);
