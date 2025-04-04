@@ -21,6 +21,7 @@ namespace Game.Player.Ui
 
         [SerializeField] private Button _onOffButton;
         [SerializeField] private GameObject _panel;
+        [SerializeField] private Button _continueButton;
         [SerializeField] private Button _restartButton;
         [SerializeField] private Button _exitButton;
         [SerializeField] private TextMeshProUGUI _messageText;
@@ -64,6 +65,7 @@ namespace Game.Player.Ui
         private void Subscribe()
         {
             _onOffButton.onClick.AddListener(OnOffPanel);
+            _continueButton.onClick.AddListener(OnOffPanel);
             _restartButton.onClick.AddListener(Restart);
             _exitButton.onClick.AddListener(ExitGame);
             _playerManager.OnPlayerDied += OnDeadPlayer;
@@ -75,6 +77,7 @@ namespace Game.Player.Ui
         private void Unsubscribe()
         {
             _onOffButton.onClick.RemoveListener(OnOffPanel);
+            _continueButton.onClick.RemoveListener(OnOffPanel);
             _restartButton.onClick.RemoveListener(Restart);
             _exitButton.onClick.RemoveListener(ExitGame);
             _playerManager.OnPlayerDied -= OnDeadPlayer;
@@ -132,16 +135,18 @@ namespace Game.Player.Ui
             _startRoomTime = Time.time;
             OffPanel();
             _alarmUI.Deactivate();
-            _onOffButton.gameObject.SetActive(true);
-            _messageText.text = "hello man";
+            _onOffButton.interactable = true;
+            _continueButton.interactable = true;
+            _messageText.text = "";
             _playerManager.ModuleHandler.CurrentHull.SetStartHP();
         }
 
         private void OnDeadPlayer()
         {
             OnPanel();
-            _onOffButton.gameObject.SetActive(false);
-            _messageText.text = "u ded :((";
+            _onOffButton.interactable = false;
+            _continueButton.interactable = false;
+            _messageText.text = "u ded :((, try again :D?";
         }
 
         private void OnEndRoom()
@@ -149,8 +154,9 @@ namespace Game.Player.Ui
             float currentRoomTime = Time.time - _startRoomTime;
             _winTimes.Add(currentRoomTime);
             OnPanel();
-            _onOffButton.gameObject.SetActive(false);
-            _messageText.text = "wiktory rojale";
+            _onOffButton.interactable = false;
+            _continueButton.interactable = false;
+            _messageText.text = "TURBO WIN!!!";
 
             _winTimes.Sort();
 
