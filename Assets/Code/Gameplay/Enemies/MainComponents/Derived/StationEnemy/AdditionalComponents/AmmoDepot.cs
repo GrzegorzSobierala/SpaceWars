@@ -92,6 +92,7 @@ namespace Game.Room.Enemy
 
                     AmmoSupply ammoSupply = shipCargoSpace.UnloadCargo(transform);
                     _cargoSpace.LoadCargo(ammoSupply);
+                    ammoSupply.PlayEffect();
                     ammoSupply.EnableCollider(true);
                     yield return null;
                 }

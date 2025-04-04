@@ -56,6 +56,7 @@ namespace Game.Room.Enemy
             yield return new WaitForSeconds(_loadSupplyTime);
 
             shipCargoSpace.LoadCargo(_currentSupply);
+            _currentSupply.PlayEffect();
             _currentSupply = null;
             _loadingCoroutine = null;
             StartLoadingSupply(shipCargoSpace);
