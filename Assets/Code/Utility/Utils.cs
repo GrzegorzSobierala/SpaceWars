@@ -232,7 +232,7 @@ namespace Game.Utility
             if (absValue < 0 || absValue > halfPeriod)
             {
                 Debug.LogError("Invalid parameters: resulting absValue is out of bounds.");
-                return (float.NaN, float.NaN);
+                return (0, 0);
             }
 
             float S1 = modX - (halfPeriod + absValue);

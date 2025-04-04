@@ -107,13 +107,14 @@ namespace Game.Room.Enemy
                     _movement.UnsubscribeOnAchivedTarget(OnAchivedTargetAction);
                     _movement.StartGoingTo(_playerManager.PlayerBody.transform);
                 }
+                else if (!_knowSupplyStationDestroyed)
+                {
+                    _movement.UnsubscribeOnAchivedTarget(OnAchivedTargetAction);
+                    _movement.StartGoingTo(_playerManager.PlayerBody.transform);
+                }
                 else if (!_knowMainStationDestroyed)
                 {
                     _movement.StartGoingTo(_lastMainDockPos);
-                }
-                else if (!_knowSupplyStationDestroyed)
-                {
-                    _movement.StartGoingTo(_lastSupplyDockPos);
                 }
 
                 return;
@@ -176,8 +177,8 @@ namespace Game.Room.Enemy
 
             if (!_isMainDockTarget && _knowSupplyStationDestroyed)
             {
-                _isMainDockTarget = true;
-                _movement.StartGoingTo(_lastMainDockPos);
+                _movement.UnsubscribeOnAchivedTarget(OnAchivedTargetAction);
+                _movement.StartGoingTo(_playerManager.PlayerBody.transform);
                 return;
             }
 
