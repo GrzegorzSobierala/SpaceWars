@@ -3,6 +3,7 @@ using Game.Management;
 using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Zenject;
 
@@ -136,6 +137,9 @@ namespace Game.Room.Enemy
 
             foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
             {
+                if (renderer.TryGetComponent(out TextMeshPro _))
+                    continue;
+
                 List<Material> materials = new();
                 renderer.GetSharedMaterials(materials);
 
@@ -161,6 +165,9 @@ namespace Game.Room.Enemy
 
             foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
             {
+                if(renderer.TryGetComponent(out TextMeshPro _))
+                    continue;
+
                 List<Material> materials = new();
                 renderer.GetSharedMaterials(materials);
                 int originalMaterialsCount = materials.Count/2;
