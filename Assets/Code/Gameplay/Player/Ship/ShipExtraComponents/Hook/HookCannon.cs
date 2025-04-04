@@ -1,10 +1,8 @@
 using Game.Input.System;
-using Game.Management;
 using Game.Player.Control;
 using Game.Utility;
 using Game.Utility.Globals;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Zenject;
 
 namespace Game.Player.Ship
