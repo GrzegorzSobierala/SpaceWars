@@ -143,42 +143,40 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Move - W S A D
+  m_text: 'Mouse - Aim/Rotation
 
-    Fire - LMB
+    Movement - W S A D
 
-    Swap gun - RMB
+    Ship Rotation - Q/E
 
-    Boost - W S A
-    D + Space
+    Fire
+    - LMB
 
-    KeyRotate - Q E
+    RMB - Locks the ship rotation
 
-    Alt/Mouse5 - Click or Hold to deploy hook
-    forward
+    -------------------------------------------------
 
-    Alt/Mouse5 + A/D - Click or Hold to deploy hook side
+    Click
+    or hold Alt/Mouse5 - Launches the hook forward
 
-    Alt/Mouse5
-    + RMB - Click or Hold to deploy hook in aim direction
+    A/D + Alt/Mouse5 - Launches
+    the hook to the sides
 
-    Alt/Mouse5 - Click
-    to dissconnect hook
+    RMB + Alt/Mouse5 - Launches the hook in the aim direction
 
-    When orbits around with hook while it is yellow speed
-    boost is recived
+    Click
+    Alt/Mouse5 (when the hook is attached) - Detaches the hook
 
-    ---|||--- BINDINGS
+    The ship receives
+    a speed bonus when the hook line is yellow
 
-    0 - Swap Rotation with Veridical
-    Move (Q/A | E/D)
+    ------------------------------------------------
 
-    9 - Toggle/Press Swap gun  (RMB)
+    0
+    - Swaps between A/D and Q/E for rotation control
 
-    8 - On/Off Swapping 
-    Rotation with Veridical Move on Swap gun
-
-'
+    8 - Swaps between A/D and
+    Q/E for rotation control when the RMB is held'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
