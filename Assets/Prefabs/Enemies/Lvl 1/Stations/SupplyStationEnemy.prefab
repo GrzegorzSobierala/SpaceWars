@@ -740,6 +740,8 @@ MonoBehaviour:
   OnDestroyEvent:
     m_PersistentCalls:
       m_Calls: []
+  _enableBasicOnDestroyEffect: 1
+  _basicOnDestroyEffectScale: 3
 --- !u!1 &5163165232470218273
 GameObject:
   m_ObjectHideFlags: 0
@@ -1839,7 +1841,7 @@ Transform:
   - {fileID: 2679442836525405010}
   - {fileID: 3116646563071685381}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 94.813}
 --- !u!114 &4408658853625345277
 MonoBehaviour:
