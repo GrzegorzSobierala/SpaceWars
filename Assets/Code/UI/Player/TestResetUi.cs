@@ -24,6 +24,9 @@ namespace Game.Player.Ui
         [SerializeField] private Button _continueButton;
         [SerializeField] private Button _restartButton;
         [SerializeField] private Button _exitButton;
+        [SerializeField] private Button _tutorialOpenButton;
+        [SerializeField] private Button _tutorialCloseButton;
+        [SerializeField] private GameObject _tutorialPanel;
         [SerializeField] private TextMeshProUGUI _messageText;
         [SerializeField] private TextMeshProUGUI _currentTimerText;
         [SerializeField] private TextMeshProUGUI _timerListText;
@@ -34,6 +37,12 @@ namespace Game.Player.Ui
         private void OnEnable()
         {
             Subscribe();
+        }
+
+        private void Start()
+        {
+            _messageText.text = "";
+            OpenTutorialOnceForBuild();
         }
 
         private void OnDisable()
@@ -72,6 +81,8 @@ namespace Game.Player.Ui
             _playerSceneManager.OnEndRoom += OnEndRoom;
             _input.PlayerControls.Gameplay.Pasue.performed += OnOffPanelForInput;
             _input.PlayerControls.Ui.Back.performed += OnOffPanelForInput;
+            _tutorialOpenButton.onClick.AddListener(OpenTutorial);
+            _tutorialCloseButton.onClick.AddListener(CloseTutorial);
         }
 
         private void Unsubscribe()
@@ -84,13 +95,22 @@ namespace Game.Player.Ui
             _playerSceneManager.OnEndRoom -= OnEndRoom;
             _input.PlayerControls.Gameplay.Pasue.performed -= OnOffPanelForInput;
             _input.PlayerControls.Ui.Back.performed -= OnOffPanelForInput;
+            _tutorialOpenButton.onClick.RemoveListener(OpenTutorial);
+            _tutorialCloseButton.onClick.RemoveListener(CloseTutorial);
         }
 
         private void OnOffPanel()
         {
             if(_panel.activeSelf)
             {
-                OffPanel();
+                if(_tutorialPanel.activeSelf)
+                {
+                    CloseTutorial();
+                }
+                else
+                {
+                    OffPanel();
+                }
             }
             else
             {
@@ -167,6 +187,34 @@ namespace Game.Player.Ui
             }
 
             _timerListText.text = timesText;
+        }
+
+        private void OpenTutorial()
+        {
+            _tutorialPanel.SetActive(true);
+        }
+
+        private void CloseTutorial()
+        {
+            _tutorialPanel.SetActive(false);
+        }
+
+#if UNITY_EDITOR
+#else
+        private static bool wasTutorialShownFirstTime = false;
+#endif
+
+        private void OpenTutorialOnceForBuild()
+        {
+#if UNITY_EDITOR
+#else
+            if (!wasTutorialShownFirstTime)
+            {
+                wasTutorialShownFirstTime = true;
+                OnOffPanel();
+                OpenTutorial();
+            }
+#endif
         }
     }
 }
