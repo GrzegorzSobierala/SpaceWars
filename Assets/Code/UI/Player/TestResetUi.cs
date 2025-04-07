@@ -42,7 +42,6 @@ namespace Game.Player.Ui
         private void Start()
         {
             _messageText.text = "";
-            OpenTutorialOnceForBuild();
         }
 
         private void OnDisable()
@@ -204,7 +203,7 @@ namespace Game.Player.Ui
         private static bool wasTutorialShownFirstTime = false;
 #endif
 
-        private void OpenTutorialOnceForBuild()
+        public void OpenTutorialOnceForBuild()
         {
 #if UNITY_EDITOR
 #else
