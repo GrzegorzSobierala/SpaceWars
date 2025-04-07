@@ -66,9 +66,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "  In the top-right corner of the screen, you\u2019ll see the quests for
-    this mission. \n\n  Active quests are highlighted in yellow. \n\n  The yellow
-    arrow indicates the direction of the current main quest\u2019s target."
+  m_text: " - In the top-right corner of the screen, you\u2019ll see the quests for
+    this mission. \n\n - Active quests are highlighted in yellow. \n\n - The yellow
+    arrow indicates the direction to the current main quest."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -401,8 +401,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Mouse - Aim/Rotation\nW S A D - Movement\nQ/E - Ship Rotation \nLMB -
-    Fire \nRMB - Lock ship rotation"
+  m_text: "Mouse - Aim/Rotation\nW S A D - Movement\nW/S/A/D + Space - Dash\nQ/E
+    - Ship Rotation \nLMB - Fire \nRMB - Locks the ship rotation"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -600,7 +600,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -337.71484, y: -264.57806}
+  m_AnchoredPosition: {x: -337.71484, y: -280}
   m_SizeDelta: {x: 1024.5703, y: 434.4149}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &24535389429208611
@@ -913,7 +913,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -666.0942, y: -11}
+  m_AnchoredPosition: {x: -666.0942, y: -26.421936}
   m_SizeDelta: {x: 370, y: 43.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6309919330646124423
@@ -1080,7 +1080,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Enemies field of view
+  m_text: 'Enemy field of view
 
 '
   m_isRightToLeft: 0
@@ -1487,12 +1487,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "  Your mission is to destroy the main station. The main station is equipped
-    with a heavy defense system that consumes ammunition supplies when firing. \n\n 
-    In order to damage the station, you need to hit the red silos. \n\n  A cargo
-    ship delivers supplies from the supply station to the main station, and the supply
-    station also repairs the cargo ship. \n\n  Find the best way to destroy the main
-    station. Good luck!"
+  m_text: " - Your mission is to destroy the main station. To damage the station,
+    you need to hit the red silos.\n\n- The main station is equipped with heavy defenses
+    that consume limited ammunition supplies when firing.\n - The cargo ship resupplies
+    the ammunition from the supply station to the main station. The supply station
+    also repairs the cargo ship.\n\n - Find the best way to destroy the main station.
+    Good luck!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1955,11 +1955,18 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "  The yellow area represents an enemy's field of view. If the player enters
-    this area, the enemy will switch to combat mode and begin attacking. \n\n  An
-    enemy in guard mode will also switch to combat mode if it sees another enemy
-    already engaged in combat. \n\n  The orange arrow with the eye icon indicates
-    that this enemy is in the line of sight of another enemy."
+  m_text: '- The yellow area represents the field of view. If your ship enters this
+    area, enemies will switch to combat mode and begin attacking you.
+
+
+    - Enemies
+    that are not currently attacking you will also switch to combat mode if another
+    ship, already engaged in combat, enters their field of view.
+
+
+    - The arrow
+    with an eye icon indicates that this enemy is within the line of sight of another
+    enemy.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2178,7 +2185,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 9106643176637475115}
   m_RootOrder: -1
