@@ -693,6 +693,12 @@ namespace Game.Utility
 
             return angle;
         }
+
+        public static void ClearAction(Action action)
+        {
+            foreach (var d in action.GetInvocationList())
+                action -= (Action)d;
+        }
     }
 
     public static class Async

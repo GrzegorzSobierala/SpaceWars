@@ -35,6 +35,8 @@ namespace Game.Physics
 
         private const float _SAFE_DISTANCE_ADD = 10f;
 
+        private FieldOfViewSystemFacade FovFacade => _fovSystem.Facade;
+
         private void Awake()
         {
             _trigger = GetComponent<Collider2D>();
@@ -75,7 +77,7 @@ namespace Game.Physics
 
             SetEnableDistance();
 
-            _fovSystem.AddController(this, entity);
+            FovFacade.AddController(this, entity);
         }
 
         public void UnsubscribeTriggerEvents(FieldOfViewEntity entity)
@@ -85,7 +87,7 @@ namespace Game.Physics
 
             _entities.Remove(entity);
 
-            _fovSystem.RemoveController(this, entity);
+            FovFacade.RemoveController(this, entity);
         }
 
         private void UpdateEnableEntities()
