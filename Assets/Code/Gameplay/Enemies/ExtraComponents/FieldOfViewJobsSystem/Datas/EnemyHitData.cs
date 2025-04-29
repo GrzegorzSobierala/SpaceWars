@@ -3,6 +3,10 @@ using Unity.Mathematics;
 
 namespace Game.Physics
 {
+    /// <summary>
+    /// Represents data for an enemy hit event, including the IDs of the ray-casting enemy and the hit 
+    /// enemy collider.
+    /// </summary>
     public struct EnemyHitData : IEquatable<EnemyHitData>
     {
         public int rayCasterEnemyId;

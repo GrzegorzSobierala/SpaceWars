@@ -94,25 +94,25 @@ namespace Game.Physics
         {
             if (IsPlayerInRange() || IsNonGuardEnemyInRange())
             {
-                if (!_trigger.enabled)
+                if (_trigger.enabled)
+                    return;
+
+                foreach (var entity in _entities)
                 {
-                    foreach (var entity in _entities)
-                    {
-                        entity.EnableEntity();
-                    }
-                    _trigger.enabled = true;
+                    entity.EnableEntity();
                 }
+                _trigger.enabled = true;
             }
             else
             {
-                if (_trigger.enabled)
+                if (!_trigger.enabled)
+                    return;
+
+                foreach (var entity in _entities)
                 {
-                    foreach (var entity in _entities)
-                    {
-                        entity.DisableEntity();
-                    }
-                    _trigger.enabled = false;
+                    entity.DisableEntity();
                 }
+                _trigger.enabled = false;
             }
         }
 
@@ -126,7 +126,6 @@ namespace Game.Physics
 
         private bool IsNonGuardEnemyInRange()
         {
-
             for (int i = 0; i < _roomEnemies.Count; i++)
             {
                 EnemyBase enemy = _roomEnemies[i];
@@ -143,31 +142,14 @@ namespace Game.Physics
                 return true;
             }
 
-
-
-            //foreach(var enemy in _roomEnemies)
-            //{
-            //    if (enemy == null)
-            //        continue;
-
-            //    if (enemy.StateMachine.CurrentState is EnemyGuardStateBase)
-            //        continue;
-
-            //    if (Vector2.Distance(enemy.transform.position, transform.position) > _enemyEnableDistance)
-            //        continue;
-
-            //    Profiler.EndSample();
-            //    return true;
-            //}
-
             return false;
         }
         
         private void SetEnableDistance()
         {
-            Vector2 screenMid = new Vector2(Screen.width / 2, Screen.height / 2);
+            Vector2 screenMid = new(Screen.width / 2, Screen.height / 2);
             Vector2 screenMidWorld = _cursorCamera.ScreanPositionOn2DIntersection(screenMid);
-            Vector2 screnTopRight = new Vector2(Screen.width, Screen.height);
+            Vector2 screnTopRight = new(Screen.width, Screen.height);
             Vector2 screenTopRightWorld = _cursorCamera.ScreanPositionOn2DIntersection(screnTopRight);
 
             float midToTopRightDistanceWorld = Vector2.Distance(screenMidWorld, screenTopRightWorld);
@@ -198,11 +180,9 @@ namespace Game.Physics
             if (!_enemiesLine.ContainsKey(detectable.Enemy))
             {
                 EnemySeeEnemyArrow line = Instantiate(_globalAssets.EnemySeeEnemyLine, transform);
-                //line.SetParameters(_enemyBase.ArrowParameters);
                 _enemiesLine.Add(detectable.Enemy, line);
             }
 
-            //_enemiesLine[detectable.Enemy].SetParameters(detectable.Enemy.ArrowParameters);
             _enemiesLine[detectable.Enemy].TransformArrow(_enemyBase, detectable.Enemy);
         }
 

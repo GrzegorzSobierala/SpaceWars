@@ -4,7 +4,8 @@ using UnityEngine;
 namespace Game.Physics
 {
     /// <summary>
-    /// Represents unprepared collider data before it is processed for raycasting.
+    /// Represents data copied from type fo UnityEngine.Collider2D to be used in PrepareColliderDatasJob
+    /// to make use of BurstCompiler and prepare the data for raycast job.
     /// </summary>
     public struct ColliderDataUnprepared
     {

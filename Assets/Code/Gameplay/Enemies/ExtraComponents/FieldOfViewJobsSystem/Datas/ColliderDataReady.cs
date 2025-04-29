@@ -3,7 +3,7 @@ using Unity.Mathematics;
 namespace Game.Physics
 {
     /// <summary>
-    /// Represents prepared collider data ready for raycasting.
+    /// Represents prepared collider data ready for raycast job.
     /// </summary>
     public struct ColliderDataReady
     {

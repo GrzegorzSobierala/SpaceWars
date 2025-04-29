@@ -81,16 +81,7 @@ namespace Game.Physics
         /// </summary>  
         public bool wasEntitiesDicChanged;
 
-        public FieldOfViewSystemCollectionsCache()
-        {
-            InitCollections();
-        }
-
-        ~FieldOfViewSystemCollectionsCache()
-        {
-            Debug.Log("Destructor called");
-            DisposeCollections();
-        }
+        private bool _areCollectionsInitialized = false;
 
         public void IncreaseCapasityOfEntitiesCollidersIfNeeded(int capIncrease)
         {
@@ -101,9 +92,6 @@ namespace Game.Physics
 
             int newCapacity = entitiesColliders.Capacity + capIncrease;
             NativeMultiHashMap<int, int> newMap = new(newCapacity, Allocator.Persistent);
-
-            NativeMultiHashMapIterator<int> iterator;
-            int value;
 
             var nonUniqueKeys = entitiesColliders.GetKeyArray(Allocator.Temp);
             NativeHashSet<int> uniqueKeys = new(nonUniqueKeys.Length, Allocator.Temp);
@@ -118,7 +106,8 @@ namespace Game.Physics
 
             foreach (var key in uniqueKeys)
             {
-                if (entitiesColliders.TryGetFirstValue(key, out value, out iterator))
+                if (entitiesColliders.TryGetFirstValue(key, out int value, 
+                    out NativeMultiHashMapIterator<int> iterator))
                 {
                     do
                     {
@@ -135,8 +124,16 @@ namespace Game.Physics
             entitiesColliders = newMap;
         }
 
-        private void InitCollections()
+        public void InitCollections()
         {
+            if(_areCollectionsInitialized)
+            {
+                Debug.LogError("Collections already initialized");
+                return;
+            }
+
+            _areCollectionsInitialized = true;
+
             entitiesColliders = new NativeMultiHashMap<int, int>(10, Allocator.Persistent);
             datasUnprep = new(10, Allocator.Persistent);
             vertsUnprep = new(50, Allocator.Persistent);
@@ -149,8 +146,14 @@ namespace Game.Physics
             enemiesEnemyHit = new(25, Allocator.Persistent);
         }
 
-        private void DisposeCollections()
+        public void DisposeCollections()
         {
+            if(!_areCollectionsInitialized)
+            {
+                Debug.LogError("Collections not initialized");
+                return;
+            }
+
             entitiesColliders.Dispose();
             datasUnprep.Dispose();
             vertsUnprep.Dispose();

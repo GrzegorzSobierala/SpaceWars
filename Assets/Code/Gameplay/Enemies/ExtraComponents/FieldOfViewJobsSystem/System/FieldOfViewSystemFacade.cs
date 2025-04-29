@@ -27,7 +27,7 @@ namespace Game.Physics
             int entityId = entity.GetInstanceID();
             int colliderId = collider.GetInstanceID();
 
-            if (_collections.entities.ContainsKey(entityId))
+            if (!_collections.entities.ContainsKey(entityId))
             {
                 Debug.LogError("Add collider failed, entity isn't added", entity);
                 return;
@@ -187,7 +187,7 @@ namespace Game.Physics
 
         public void AddController(FieldOfViewEntitiesController controller, FieldOfViewEntity entity)
         {
-            if (_collections.entitiesController.ContainsValue(controller))
+            if (!_collections.entitiesController.ContainsValue(controller))
             {
                 _collections.controllers.Add(controller);
             }
