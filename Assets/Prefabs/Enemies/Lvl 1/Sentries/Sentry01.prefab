@@ -39320,7 +39320,19 @@ MonoBehaviour:
       m_Calls: []
   _onReloaded:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Right
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6079376119645994901
 GameObject:
   m_ObjectHideFlags: 0
@@ -49518,6 +49530,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a9930e24c707a634d8553e0e12c679ba, type: 3}
       propertyPath: m_Name
       value: SentryTurret01Unity
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a9930e24c707a634d8553e0e12c679ba, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
