@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2703836453691104602
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_Bubble_Inner_Blue
+  m_Shader: {fileID: -6465566751694194690, guid: 519c4f68526099d45bed9f8f36d60ed2, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _RECEIVE_SHADOWS_OFF
+  - _SURFACE_TYPE_TRANSPARENT
+  m_InvalidKeywords: []
+  m_LightmapFlags: 2
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap:
+    RenderType: Transparent
+  disabledShaderPasses:
+  - DepthOnly
+  - SHADOWCASTER
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Pattern:
+        m_Texture: {fileID: 2800000, guid: b76fca1f4fb8915409f42a649beeaed2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_d56ede5134064abb807bcad316c48a19_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 3bb823e97e54f624cb4a4a553720cf9a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaveTexture:
+        m_Texture: {fileID: 2800000, guid: 68369a0cbfde5b34a99f9177bd405224, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Alpha: 1
+    - _AlphaClip: 0
+    - _AlphaToMask: 0
+    - _BackgroundFade: 1
+    - _Blend: 2
+    - _BlendModePreserveSpecular: 0
+    - _CastShadows: 0
+    - _Cull: 2
+    - _DistortionSpeed: 0.18
+    - _DistortionStrength: 170
+    - _DstBlend: 1
+    - _FADE: 11.9
+    - _FadeStrength: 22.3
+    - _Fill: 0.17
+    - _FillScale: 50
+    - _FillSpeed: 1
+    - _Float: 1
+    - _InnerFadePower: 3.5
+    - _InnerLinesScrollSpeed: 0.005
+    - _InnerLinesSpeed: 2
+    - _InnerSize: 0.637
+    - _NearCameraFadeEnd: 40
+    - _NearCameraFadeStart: 400
+    - _NormalStrength: 0.3
+    - _Offset: 38.35
+    - _OutlineStrength: 2.33
+    - _Outline_Strength: 0.81
+    - _OverallInnerSize: 1
+    - _PatternPulseFullness: 0
+    - _PatternPulseSpeed: 1
+    - _PatternScale: 40
+    - _PulseSpeed: 0
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 0
+    - _ScrollSpeed: 0.01
+    - _SecondaryWaveScale: 5
+    - _SrcBlend: 5
+    - _Surface: 1
+    - _TopologyFade: 6
+    - _WaveBrightness: 0
+    - _WaveFullness: 0
+    - _WaveHeight: 1.14
+    - _WavePulseFullness: 1
+    - _WavePulseSpeed: 1
+    - _WaveRoughness: 50
+    - _WaveScale: 20
+    - _WaveScaleandRoughness: 20
+    - _WaveScaleorRoughness: 20
+    - _WaveSmoothness: 0.2
+    - _WaveSpeed: 1.5
+    - _WorkflowMode: 1
+    - _ZTest: 4
+    - _ZWrite: 0
+    - _ZWriteControl: 0
+    m_Colors:
+    - _Color: {r: 3.056999, g: 28.17755, b: 3.6901479, a: 0}
+    - _ColorBack: {r: 0.42250562, g: 0.23818614, b: 0.18933034, a: 0}
+    - _ColorFront: {r: 6.262368, g: 3.5279331, b: 2.8062499, a: 0}
+    - _Color_1: {r: 6.883181, g: 4.3785834, b: 2.774895, a: 0}
+    - _EffectScrollSpeed: {r: 0, g: 0.02, b: 0, a: 0}
+    - _Emission: {r: 0.6792453, g: 0.39118838, b: 0, a: 0}
+    - _FaceOffset: {r: 0.5, g: 0.5, b: 0.5, a: 0}
+    - _FadeTillingScale: {r: 2, g: 2, b: 0, a: 0}
+    - _FillColor: {r: 0, g: 0, b: 0, a: 0}
+    - _InnerLinesColor: {r: 1.1978099, g: 13.365042, b: 2.8766794, a: 0}
+    - _InnerScrollSpeed: {r: 0, g: 0.02, b: 0, a: 0}
+    - _PatternScrollSpeed: {r: 1.5, g: 0, b: 0, a: 0}
+    - _PulseOffset: {r: 1, g: 1, b: 1, a: 0}
+    - _ScrollSpeed: {r: 0, g: 0.02, b: 0, a: 0}
+    - _ScrollSpeed_1: {r: 0, g: 2, b: 0, a: 0}
+    - _SecondaryColor: {r: 1.4431363, g: 10.756274, b: 11.984306, a: 0}
+    - _SecondaryWaveTextureScale: {r: 5, g: 5, b: 0, a: 0}
+    - _TillingScale: {r: 2, g: 3, b: 0, a: 0}
+    - _WaveScrollSpeed: {r: 0.05, g: 0.05, b: 0, a: 0}
+    - _WaveScrolling: {r: 0.001, g: 0.002, b: 0, a: 0}
+    - _WaveTextureScale: {r: 5, g: 5, b: 0, a: 0}
+  m_BuildTextureStacks: []

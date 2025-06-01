@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Bubble_Outer
+  m_Name: M_Bubble_Outer_Orange
   m_Shader: {fileID: -6465566751694194690, guid: 519c4f68526099d45bed9f8f36d60ed2, type: 3}
   m_Parent: {fileID: 2100000, guid: a8a54da39492ac6439cfed3e31728301, type: 2}
   m_ModifiedSerializedProperties: 0
@@ -27,19 +27,24 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _WaveTexture:
+        m_Texture: {fileID: 2800000, guid: b76fca1f4fb8915409f42a649beeaed2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BackgroundFade: 0.04
     - _FADE: 12.3
     - _FillScale: 630.5
-    - _FillSpeed: 5
+    - _FillSpeed: 2
     - _InnerFadePower: 7.04
     - _InnerSize: 0.49
     - _WaveScaleandRoughness: 20
     - _WorkflowMode: 1
     m_Colors:
     - _Color: {r: 4.541204, g: 1.7667308, b: 0.54494447, a: 0}
-    - _FillColor: {r: 0.11320752, g: 0.052761942, b: 0.02616589, a: 0}
+    - _FillColor: {r: 0.9098039, g: 0.40784314, b: 0.21960784, a: 0}
     - _InnerLinesColor: {r: 0, g: 0, b: 0, a: 0}
     - _SecondaryColor: {r: 4.541204, g: 2.0264583, b: 0.8991584, a: 0}
     - _SecondaryWaveTextureScale: {r: 0.5, g: 0.5, b: 0, a: 0}
