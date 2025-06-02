@@ -122,8 +122,8 @@ namespace Game.Room.Enemy
                 _movement.StartGoingTo(targetPos);
             }
 
-            _movement.UnsubscribeOnAchivedTarget(FallowPlayer);
-            _movement.SubscribeOnAchivedTarget(FallowPlayer);
+            _movement.UnsubscribeOnAchivedTarget(RunFromPlayer);
+            _movement.SubscribeOnAchivedTarget(RunFromPlayer);
 
             _movement.SetSpeedModifier(_runSpeedMulti);
             _movement.SetAngularSpeedModifier(_runAngularSpeedMulti);
