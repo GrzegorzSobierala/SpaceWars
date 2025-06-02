@@ -13,13 +13,14 @@ namespace Game.Room.Enemy
         [Inject] private EnemyGunBase _enemyGun;
 
         [SerializeField] private float _movementSpeedMulti = 0.5f;
+        [SerializeField] private float _angularMovementSpeedMulti = 0.5f;
 
         protected override void OnEnterState()
         {
             base.OnEnterState();
             SubscribeToFOVs(_views);
             _movement.SetSpeedModifier(_movementSpeedMulti);
-            _movement.SetAngularSpeedModifier(_movementSpeedMulti);
+            _movement.SetAngularSpeedModifier(_angularMovementSpeedMulti);
             _patrolController.StartPatroling();
         }
 

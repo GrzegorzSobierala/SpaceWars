@@ -18,7 +18,10 @@ namespace Game.Room.Enemy
         [SerializeField] private float _maxRunRange = 1000;
         [SerializeField] private float _runAngle = 45;
         [SerializeField] private float _stopOnRunDistanceToRayHit = 100;
+        [SerializeField] private float _followSpeedMulti = 1.5f;
+        [SerializeField] private float _followAngularSpeedMulti = 1.5f;
         [SerializeField] private float _runSpeedMulti = 1.5f;
+        [SerializeField] private float _runAngularSpeedMulti = 1.5f;
         [SerializeField] private float _spotPlayerRange = 750;
         [SerializeField] private float _maxSpotPlayerRange = float.PositiveInfinity;
         [SerializeField] private float _spotRangeIncreasePerSec = 5;
@@ -65,7 +68,9 @@ namespace Game.Room.Enemy
 
             _gun.StartAimingAt(_playerManager.PlayerBody.transform);
             _movement.StartGoingTo(_playerManager.PlayerBody.transform);
-            _movement.SetSpeedModifier(_runSpeedMulti);
+            _movement.SetSpeedModifier(_followSpeedMulti);
+            _movement.SetAngularSpeedModifier(_followAngularSpeedMulti);
+
 
             _gun.UnsubscribeOnStartReload(RunFromPlayer);
             _gun.SubscribeOnStartReload(RunFromPlayer);
@@ -77,6 +82,8 @@ namespace Game.Room.Enemy
 
             _gun.UnsubscribeOnStopReload(FallowPlayer);
             _gun.SubscribeOnStopReload(FallowPlayer);
+            _movement.SetSpeedModifier(_runSpeedMulti);
+            _movement.SetAngularSpeedModifier(_runAngularSpeedMulti);
 
             _gun.StopAiming();
             StartMovingAwayFromPlayer();
@@ -117,6 +124,7 @@ namespace Game.Room.Enemy
             _movement.SubscribeOnAchivedTarget(FallowPlayer);
 
             _movement.SetSpeedModifier(_runSpeedMulti);
+            _movement.SetAngularSpeedModifier(_runAngularSpeedMulti);
         }
 
         private IEnumerator TryFallowPlayer()
