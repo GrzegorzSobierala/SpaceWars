@@ -29517,7 +29517,7 @@ Transform:
   - {fileID: 8878008854674303711}
   - {fileID: 5460247260779581530}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6160428084483414833
 MonoBehaviour:
@@ -29608,8 +29608,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd15dbd11c4f8dc438499ccd64fc0373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseSpeed: 113.04348
-  _baseAngularSpeed: 85
+  _baseSpeed: 1
+  _baseAngularSpeed: 1
   _agentTargetUpdateInterval: 0.2
 --- !u!195 &9196227978536751886
 NavMeshAgent:
@@ -39558,9 +39558,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxRunRange: 1000
-  _runAngle: 40
+  _runAngle: 50
   _stopOnRunDistanceToRayHit: 100
-  _runSpeedMulti: 1.5
+  _followSpeedMulti: 60
+  _followAngularSpeedMulti: 85
+  _runSpeedMulti: 180
+  _runAngularSpeedMulti: 100
   _spotPlayerRange: 350
   _maxSpotPlayerRange: Infinity
   _spotRangeIncreasePerSec: 5
@@ -39912,7 +39915,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5b780e3bee938d4191038a9297f2628, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeedMulti: 0.5
+  _movementSpeedMulti: 55
+  _angularMovementSpeedMulti: 42
 --- !u!1001 &110312985749708642
 PrefabInstance:
   m_ObjectHideFlags: 0
