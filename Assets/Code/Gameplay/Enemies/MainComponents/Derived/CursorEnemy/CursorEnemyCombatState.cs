@@ -14,6 +14,7 @@ namespace Game.Room.Enemy
         [Inject] private EnemyMovementBase _movement;
         [Inject] private PlayerManager _playerManager;
         [Inject] private NavMeshAgent _agent;
+        // [Inject] private CustomEnemyTarget _target;
 
         [SerializeField] private float _maxRunRange = 1000;
         [SerializeField] private float _runAngle = 45;
@@ -68,6 +69,7 @@ namespace Game.Room.Enemy
 
             _gun.StartAimingAt(_playerManager.PlayerBody.transform);
             _movement.StartGoingTo(_playerManager.PlayerBody.transform);
+            // _movement.StartGoingTo(_target.SetEnemyTargetPoint.transform);
             _movement.SetSpeedModifier(_followSpeedMulti);
             _movement.SetAngularSpeedModifier(_followAngularSpeedMulti);
 
