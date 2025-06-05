@@ -46,6 +46,7 @@ namespace Game.Room.Enemy
         private Coroutine _reloadCoroutine;
         private float _lastShootTime = 0f;
         private float _endReloadTime = 0f;
+        private int _currentNotReservedMagAmmo = 0;
         private int _currenaMagAmmo = 0;
         private bool _wasOnBeforeReloadedCalled = false;
         private ContactFilter2D _contactFilter;
@@ -58,6 +59,7 @@ namespace Game.Room.Enemy
         {
             base.Awake();
 
+            _currentNotReservedMagAmmo = _magCapacity;
             _currenaMagAmmo = _magCapacity;
             Initalize();
         }
@@ -135,6 +137,11 @@ namespace Game.Room.Enemy
                 flakBullet.SetTarget(_playerManager.PlayerBody.position);
             }
 
+            if (_currenaMagAmmo <= 0)
+                Debug.LogWarning("No ammo left in the current mag!");
+
+            _currenaMagAmmo--;
+
             if (_currenaMagAmmo == 0)
             {
                 StartReloading();
@@ -143,7 +150,7 @@ namespace Game.Room.Enemy
 
         private void TryShootOne()
         {
-            if (Time.time - _lastShootTime < _shotInterval || _currenaMagAmmo <= 0)
+            if (Time.time - _lastShootTime < _shotInterval || _currentNotReservedMagAmmo <= 0)
                 return;
 
             if (!IsAimedAtPlayer)
@@ -158,7 +165,7 @@ namespace Game.Room.Enemy
                 return;
 
             _lastShootTime = Time.time;
-            _currenaMagAmmo--;
+            _currentNotReservedMagAmmo--;
         }
 
         private bool TryReload()
@@ -178,10 +185,11 @@ namespace Game.Room.Enemy
 
         private void Reload()
         {
+            _currentNotReservedMagAmmo = _magCapacity;
             _currenaMagAmmo = _magCapacity;
             OnStopReload?.Invoke();
             _onReloaded?.Invoke();
-            _wasOnBeforeReloadedCalled = true;
+            _wasOnBeforeReloadedCalled = false;
         }
 
         private void StartReloading()
@@ -194,7 +202,7 @@ namespace Game.Room.Enemy
 
             _endReloadTime = Time.time + _reloadTime;
             OnStartReload?.Invoke();
-            StartCoroutine(ReloadingMag());
+            _reloadCoroutine = StartCoroutine(ReloadingMag());
         }
 
         private IEnumerator ReloadingMag()

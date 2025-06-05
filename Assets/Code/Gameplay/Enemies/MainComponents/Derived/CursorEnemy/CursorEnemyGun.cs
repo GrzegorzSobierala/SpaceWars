@@ -34,7 +34,7 @@ namespace Game.Room.Enemy
         private Coroutine _reloadCoroutine;
         private float _lastShotTime = 0f;
         private float _endReloadTime = 0f;
-        private int _currentReservedMagAmmo = 0;
+        private int _currentNotReservedMagAmmo = 0;
         private int _currenaMagAmmo = 0;
         private bool _isAimed = false;
         private bool _isAimingLeft = false;
@@ -44,7 +44,7 @@ namespace Game.Room.Enemy
         {
             base.Awake();
 
-            _currentReservedMagAmmo = _magCapasity;
+            _currentNotReservedMagAmmo = _magCapasity;
             _currenaMagAmmo = _magCapasity;
         }
 
@@ -154,7 +154,7 @@ namespace Game.Room.Enemy
 
         private void TryShootOne()
         {
-            if (Time.time - _lastShotTime < _shotInterval || _currentReservedMagAmmo <= 0)
+            if (Time.time - _lastShotTime < _shotInterval || _currentNotReservedMagAmmo <= 0)
                 return;
 
             if (!_isAimed)
@@ -167,7 +167,7 @@ namespace Game.Room.Enemy
             if(TryShoot())
             {
                 _lastShotTime = Time.time;
-                _currentReservedMagAmmo--;
+                _currentNotReservedMagAmmo--;
             }
         }
 
@@ -188,7 +188,7 @@ namespace Game.Room.Enemy
 
         private void Reload()
         {
-            _currentReservedMagAmmo = _magCapasity;
+            _currentNotReservedMagAmmo = _magCapasity;
             _currenaMagAmmo = _magCapasity;
             _onStopReload?.Invoke();
             _wasOnBeforeReloadedCalled = false;
