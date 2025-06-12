@@ -18,9 +18,9 @@ namespace Game.Room.Enemy
         [SerializeField] private Transform _rightGunShootPoint;
         [SerializeField] private ShootableObjectBase _bulletPrototype;
         [SerializeField] private float _shotInterval = 0.5f;
-        [SerializeField] private int _magCapasity = 5;
+        [SerializeField] private int _magCapacity = 5;
         [SerializeField] private float _reloadTime = 7f;
-        [SerializeField] private float _gunTravers = 45f;
+        [SerializeField] private float _gunTraverse = 45f;
         [SerializeField] private float _shootAtMaxDistanceMutli = 0.7f;
         [SerializeField] private float _beforeReloadEventTime = 0.5f;
         [Space]
@@ -44,8 +44,8 @@ namespace Game.Room.Enemy
         {
             base.Awake();
 
-            _currentNotReservedMagAmmo = _magCapasity;
-            _currenaMagAmmo = _magCapasity;
+            _currentNotReservedMagAmmo = _magCapacity;
+            _currenaMagAmmo = _magCapacity;
         }
 
         public override void Prepare()
@@ -188,8 +188,8 @@ namespace Game.Room.Enemy
 
         private void Reload()
         {
-            _currentNotReservedMagAmmo = _magCapasity;
-            _currenaMagAmmo = _magCapasity;
+            _currentNotReservedMagAmmo = _magCapacity;
+            _currenaMagAmmo = _magCapacity;
             _onStopReload?.Invoke();
             _wasOnBeforeReloadedCalled = false;
         }
