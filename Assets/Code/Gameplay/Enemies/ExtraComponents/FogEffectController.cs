@@ -1,13 +1,14 @@
 using Game.Utility;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.AI;
 using Zenject;
 
 namespace Game.Room.Enemy
 {
     public class FogEffectController : MonoBehaviour
     {
-        [Inject] private Rigidbody2D _body;
+        [Inject] private NavMeshAgent _body;
 
         [SerializeField, MinMaxSlider(0, 1000)] private Vector2 _fogEffectMinMaxSpeed;
         [SerializeField, MinMaxSlider(0, 1)] private Vector2 _fogEffectMinMaxAlpha;
