@@ -655,12 +655,14 @@ MonoBehaviour:
   _boostSpeed: 10000
   _movementQE: 0
   _oppositeForce: 3.5
-  _fogEffectMinMaxSpeed: {x: 50, y: 200}
-  _fogEffectMinMaxAlpha: {x: 0, y: 0.5}
+  _fogEffectMinMaxSpeed: {x: 25, y: 200}
+  _fogEffectMinMaxAlpha: {x: 0, y: 0.01}
   _fogEffects:
   - {fileID: 3066702814708752901}
   - {fileID: 6051387915316784783}
   - {fileID: 5163592028073829883}
+  - {fileID: 6261670539921288414}
+  _toggleFogEffectRot: 1
 --- !u!50 &488120537346839382
 Rigidbody2D:
   serializedVersion: 4
@@ -1108,6 +1110,11 @@ ParticleSystem:
 --- !u!198 &6051387915316784783 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 6082491682859353288, guid: 3c874234f964dd74fbe560cb2a9980ca, type: 3}
+  m_PrefabInstance: {fileID: 545921588547414599}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6261670539921288414 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 5869998894860764825, guid: 3c874234f964dd74fbe560cb2a9980ca, type: 3}
   m_PrefabInstance: {fileID: 545921588547414599}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &6555198922968250111 stripped
