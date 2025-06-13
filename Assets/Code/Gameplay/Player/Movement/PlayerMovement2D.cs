@@ -37,6 +37,7 @@ namespace Game.Player.Ship
         [SerializeField, MinMaxSlider(0, 1000)] private Vector2 _fogEffectMinMaxSpeed;
         [SerializeField, MinMaxSlider(0, 1)] private Vector2 _fogEffectMinMaxAlpha;
         [SerializeField] private ParticleSystem[] _fogEffects;
+        [SerializeField] private bool _toggleFogEffectRot;
 
         private Option _lastVerdical = Option.Default;
         private Option _lastHorizontal = Option.Default;
@@ -77,6 +78,11 @@ namespace Game.Player.Ship
                 var color = effect.startColor;
                 color.a = fogEffectStrenght;
                 effect.startColor = color;
+
+                if (_toggleFogEffectRot)
+                {
+                    effect.transform.rotation = Quaternion.LookRotation(-_body.velocity, Vector3.back);
+                }
             }
         }
 
