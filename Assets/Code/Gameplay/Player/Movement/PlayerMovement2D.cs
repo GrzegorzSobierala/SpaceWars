@@ -1,8 +1,10 @@
 using Game.Input.System;
 using Game.Player.Control;
 using Game.Utility;
+using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
@@ -32,6 +34,9 @@ namespace Game.Player.Ship
         [SerializeField] private float _boostSpeed = 100;
         [SerializeField] private bool _movementQE = false;
         [SerializeField] private float _oppositeForce = 3;
+        [SerializeField, MinMaxSlider(0, 1000)] private Vector2 _fogEffectMinMaxSpeed;
+        [SerializeField, MinMaxSlider(0, 1)] private Vector2 _fogEffectMinMaxAlpha;
+        [SerializeField] private ParticleSystem[] _fogEffects;
 
         private Option _lastVerdical = Option.Default;
         private Option _lastHorizontal = Option.Default;
@@ -45,6 +50,8 @@ namespace Game.Player.Ship
 
         public Vector2 EnginesPower => _enginesPower;
 
+        [ShowNativeProperty] private float CurrentSpeed => _body ? _body.velocity.magnitude : 0f;
+
         private PlayerControls.GameplayActions Input => _inputProvider.PlayerControls.Gameplay;
 
         private InputAction MoveLeft => _inverseRotWithVerMove ? Input.RotateLeft : Input.MoveLeft;
@@ -55,6 +62,22 @@ namespace Game.Player.Ship
         private void FixedUpdate()
         {
             UpdateMovement();
+        }
+
+        private void Update()
+        {
+            float fogEffectStrenght =  Utils.Remap(_body.velocity.magnitude, _fogEffectMinMaxSpeed.x, 
+                _fogEffectMinMaxSpeed.y, _fogEffectMinMaxAlpha.x, _fogEffectMinMaxAlpha.y);
+
+            fogEffectStrenght = Mathf.Clamp(fogEffectStrenght, _fogEffectMinMaxAlpha.x, 
+                _fogEffectMinMaxAlpha.y);
+
+            foreach (var effect in _fogEffects)
+            {
+                var color = effect.startColor;
+                color.a = fogEffectStrenght;
+                effect.startColor = color;
+            }
         }
 
         private void OnCollisionStay2D(Collision2D collision)
