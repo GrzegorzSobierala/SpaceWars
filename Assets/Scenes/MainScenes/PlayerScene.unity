@@ -219,6 +219,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01ba3785e24f394498936b38f875edfb, type: 3}
+--- !u!198 &974610516 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6261670539921288414, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+  m_PrefabInstance: {fileID: 1953121835}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1758982259
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,6 +263,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6261670539921288414, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6261670539921288414, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6261670539921288414, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6261670539921288414, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6261670539921288414, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6261670539921288414, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: EmissionModule.rateOverDistance.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6407811719305028010, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -306,6 +335,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7355797947062913825, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: m_SortingOrder
+      value: -4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9167951744479927178, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: _toggleFogEffectRot
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9167951744479927178, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: _fogEffects.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9167951744479927178, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: _fogEffectMinMaxAlpha.y
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 9167951744479927178, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: _fogEffectMinMaxSpeed.x
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 9167951744479927178, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: _fogEffects.Array.data[3]
+      value: 
+      objectReference: {fileID: 974610516}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
