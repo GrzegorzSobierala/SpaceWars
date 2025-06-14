@@ -1614,6 +1614,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 302955987}
     m_Modifications:
+    - target: {fileID: 1634328920611331138, guid: 2c742503e1345694cbac6a0b38150b53, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3035043542367822083, guid: 2c742503e1345694cbac6a0b38150b53, type: 3}
       propertyPath: m_Name
       value: Building01_TwinTurret_Asteroid
@@ -1632,7 +1636,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5802793529835548406, guid: 2c742503e1345694cbac6a0b38150b53, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 25.6
       objectReference: {fileID: 0}
     - target: {fileID: 5802793529835548406, guid: 2c742503e1345694cbac6a0b38150b53, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1673,9 +1677,6 @@ PrefabInstance:
       addedObject: {fileID: 1834844841813368327}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4319212211591779573, guid: 2c742503e1345694cbac6a0b38150b53, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 1634328920611331138, guid: 2c742503e1345694cbac6a0b38150b53, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 2c742503e1345694cbac6a0b38150b53, type: 3}
