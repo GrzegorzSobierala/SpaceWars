@@ -525,7 +525,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 0.4627451, g: 0.38011205, b: 0.34705883, a: 1}
-  m_Intensity: 2.7
+  m_Intensity: 15
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -804,7 +804,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1532819135657364453, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1574789142661683547, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
       propertyPath: m_IsActive
@@ -860,6 +860,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 177960546067533309}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4117767668394575261, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 7644423092570621004, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
       insertIndex: -1
       addedObject: {fileID: 590536428}
@@ -4480,11 +4483,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2123134984302703241, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 994
+      value: -20.3
       objectReference: {fileID: 0}
     - target: {fileID: 2123134984302703241, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -518
+      value: 1930.4
       objectReference: {fileID: 0}
     - target: {fileID: 2130528402622394609, guid: dcf1502b4cff31243be032e99a80b1c3, type: 3}
       propertyPath: m_ColliderPaths.Array.size
