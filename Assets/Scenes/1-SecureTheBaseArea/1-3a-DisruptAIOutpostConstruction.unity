@@ -839,12 +839,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6022396745400033783, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
+      propertyPath: _shootTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6022396745400033783, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
+      propertyPath: _reloadTime
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6022396745400033783, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
       propertyPath: _chargingWidth
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6022396745400033783, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
       propertyPath: _dealDamageInterval
-      value: 0.3
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6185154249651099661, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
       propertyPath: m_IsActive
@@ -856,11 +864,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7113323734896509335, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
       propertyPath: _aimFallowTime
-      value: 70
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7113323734896509335, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
       propertyPath: _rotationSpeed
-      value: 50
+      value: 65
       objectReference: {fileID: 0}
     - target: {fileID: 8503593784363833260, guid: d5606f8b30fd51c459feeb5bd34d44ea, type: 3}
       propertyPath: m_Name
