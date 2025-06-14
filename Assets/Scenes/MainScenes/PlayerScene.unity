@@ -266,6 +266,18 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -583
       objectReference: {fileID: 0}
+    - target: {fileID: 2704964588635097454, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3003105925988970656, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3285925929339079723, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5715009007233723425, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 911
@@ -333,6 +345,26 @@ PrefabInstance:
     - target: {fileID: 6932844938547107274, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 9167951744479927178, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: _moveSpeed
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9167951744479927178, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: _toggleFogEffectRot
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9167951744479927178, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: _fogEffectMinMaxAlpha.x
+      value: 0.049999997
+      objectReference: {fileID: 0}
+    - target: {fileID: 9167951744479927178, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: _fogEffectMinMaxAlpha.y
+      value: 0.049999997
+      objectReference: {fileID: 0}
+    - target: {fileID: 9167951744479927178, guid: 14e11d210b3db79448681a09b0b56bb0, type: 3}
+      propertyPath: _fogEffectMinMaxSpeed.x
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
