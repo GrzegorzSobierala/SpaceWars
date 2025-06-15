@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -27,7 +28,7 @@ namespace Game.Player.Ship
 
         #region Changing modules
 
-        [ContextMenu("SetNextHull")]
+        [Button(nameof(SetNextHull), EButtonEnableMode.Playmode)]
         public void SetNextHull()
         {
             SetNext(_hullPrefabs, ref _currentHullPrototype, false);
@@ -35,7 +36,7 @@ namespace Game.Player.Ship
             ReplaceHull(_currentHullPrototype);
         }
 
-        [ContextMenu("SetPreviusHull")]
+        [Button(nameof(SetPreviusHull), EButtonEnableMode.Playmode)]
         public void SetPreviusHull()
         {
             SetNext(_hullPrefabs, ref _currentHullPrototype, true);
@@ -43,7 +44,7 @@ namespace Game.Player.Ship
             ReplaceHull(_currentHullPrototype);
         }
 
-        [ContextMenu("SetNextGun")]
+        [Button(nameof(SetNextGun), EButtonEnableMode.Playmode)]
         public void SetNextGun()
         {
             SetNext(_gunPrefabs, ref _currentGunPrototype, false);
@@ -51,7 +52,7 @@ namespace Game.Player.Ship
             ReplaceGun(_currentGunPrototype);
         }
 
-        [ContextMenu("SetPreviusGun")]
+        [Button(nameof(SetPreviusGun), EButtonEnableMode.Playmode)]
         public void SetPreviusGun()
         {
             SetNext(_gunPrefabs, ref _currentGunPrototype, true);
@@ -59,7 +60,7 @@ namespace Game.Player.Ship
             ReplaceGun(_currentGunPrototype);
         }
 
-        [ContextMenu("SetNextBridge")]
+        [Button(nameof(SetNextBridge), EButtonEnableMode.Playmode)]
         public void SetNextBridge()
         {
             SetNext(_bridgesPrefabs, ref _currentBridgePrototype, false);
@@ -67,7 +68,7 @@ namespace Game.Player.Ship
             ReplaceBridge(_currentBridgePrototype);
         }
 
-        [ContextMenu("SetPreviusBridge")]
+        [Button(nameof(SetPreviusBridge), EButtonEnableMode.Playmode)]
         public void SetPreviusBridge()
         {
             SetNext(_bridgesPrefabs, ref _currentBridgePrototype, true);
@@ -75,7 +76,7 @@ namespace Game.Player.Ship
             ReplaceBridge(_currentBridgePrototype);
         }
 
-        [ContextMenu("SetNextSpecialGun")]
+        [Button(nameof(SetNextSpecialGun), EButtonEnableMode.Playmode)]
         public void SetNextSpecialGun()
         {
             SetNext(_specialGunsPrefabs, ref _currentSpecialGunPrototype, false);
@@ -83,7 +84,7 @@ namespace Game.Player.Ship
             ReplaceSpecialGun(_currentSpecialGunPrototype);
         }
 
-        [ContextMenu("SetPreviusSpecialGun")]
+        [Button(nameof(SetNextHull), EButtonEnableMode.Playmode)]
         public void SetPreviusSpecialGun()
         {
             SetNext(_specialGunsPrefabs, ref _currentSpecialGunPrototype, true);
@@ -104,7 +105,7 @@ namespace Game.Player.Ship
             HullModuleBase newHull = hullPrototype.Instatiate(parent, _container);
             _moduleHandler.SetHull(this, newHull);
             ReplaceGun(_currentGunPrototype);
-            //ReplaceSpecialGun(_currentSpecialGunPrototype);
+            ReplaceSpecialGun(_currentSpecialGunPrototype);
         }
 
         public void ReplaceGun(GunModuleBase gunPrototype)
@@ -138,6 +139,9 @@ namespace Game.Player.Ship
                 Destroy(_moduleHandler.CurrentSpecialGun.gameObject);
             }
 
+            if (!gunPrototype)
+                return;
+
             Transform gunSpot = _moduleHandler.CurrentHull.SpecialGunSpot;
             SpecialGunModuleBase newGun = gunPrototype.Instatiate(gunSpot, _container);
             _moduleHandler.SetSpecialGun(this, newGun);
@@ -153,7 +157,7 @@ namespace Game.Player.Ship
 
             ReplaceHull(_currentHullPrototype);
             ReplaceGun(_currentGunPrototype);
-            //ReplaceSpecialGun(_currentSpecialGunPrototype);
+            ReplaceSpecialGun(_currentSpecialGunPrototype);
         }
         
         private void SetNext<T>(List<T> prototypes, ref T currentModule, bool goBack) where T : IModule

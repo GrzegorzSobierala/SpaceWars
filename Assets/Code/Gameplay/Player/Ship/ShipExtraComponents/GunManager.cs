@@ -24,7 +24,7 @@ namespace Game.Player.Ship
         public bool IsCurrentGunMainGun => _isCurrentGunMainGun;
 
         private GunModuleBase Gun => _moduleHandler.CurrentGun;
-        //private SpecialGunModuleBase SpecialGun => _moduleHandler.CurrentSpecialGun;
+        private SpecialGunModuleBase SpecialGun => _moduleHandler.CurrentSpecialGun;
 
         private PlayerControls.GameplayActions GameplayActions => _input.PlayerControls.Gameplay;
 
@@ -78,8 +78,14 @@ namespace Game.Player.Ship
             }
             else
             {
-                Gun.TryShoot();
-                //SpecialGun.TryShoot();
+                if(SpecialGun)
+                {
+                    SpecialGun.TryShoot();
+                }
+                else
+                {
+                    Gun.TryShoot();
+                }
             }
         }
 
@@ -107,11 +113,14 @@ namespace Game.Player.Ship
             Vector2 mousePos = GameplayActions.CursorPosition.ReadValue<Vector2>();
             Vector2 aimPoint = _cursorCamera.ScreanPositionOn2DIntersection(mousePos);
 
-            //Vector2 specialGunPos = (Vector2)SpecialGun.transform.position;
-            //float angleDegrees = Utils.AngleDirected(specialGunPos, aimPoint);
+            if(SpecialGun)
+            {
+                Vector2 specialGunPos = (Vector2)SpecialGun.transform.position;
+                float angleDegrees = Utils.AngleDirected(specialGunPos, aimPoint);
 
-            //Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
-            //SpecialGun.transform.rotation = rotation;
+                Quaternion rotation = Quaternion.Euler(0, 0, angleDegrees);
+                SpecialGun.transform.rotation = rotation;
+            }
         }
 
         private void SwitchAimType()
