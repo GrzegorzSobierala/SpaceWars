@@ -13,6 +13,7 @@ namespace Game.Room
         [Inject] private PlayerUiController _playerUiController;
         [Inject] private PlayerManager _playerManager;
         [Inject] private InputProvider _input;
+        [Inject] private TestResetUi _testResetUi;
 
         public PlayerObjectsParent PlayerObjectsParent => _playerObjectsParent;
 
@@ -22,6 +23,7 @@ namespace Game.Room
             _input.SwitchActionMap(_input.PlayerControls.Gameplay);
             _playerUiController.SetActive(true);
             _playerManager.SetShipRoomMode();
+            _testResetUi.OpenTutorialOnceForBuild();
         }
     }
 }

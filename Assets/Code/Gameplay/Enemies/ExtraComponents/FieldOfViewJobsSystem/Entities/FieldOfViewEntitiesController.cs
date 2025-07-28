@@ -30,9 +30,12 @@ namespace Game.Physics
         private List<EnemyBase> _enemiesToRemoveFomDic = new();
 
         private float _enemyEnableDistance;
+        private float _enemyEnableSqrMagnitude;
         private float _playerEnableDistance;
 
         private const float _SAFE_DISTANCE_ADD = 10f;
+
+        private FieldOfViewSystemFacade FovFacade => _fovSystem.Facade;
 
         private void Awake()
         {
@@ -74,7 +77,7 @@ namespace Game.Physics
 
             SetEnableDistance();
 
-            _fovSystem.AddController(this, entity);
+            FovFacade.AddController(this, entity);
         }
 
         public void UnsubscribeTriggerEvents(FieldOfViewEntity entity)
@@ -84,32 +87,32 @@ namespace Game.Physics
 
             _entities.Remove(entity);
 
-            _fovSystem.RemoveController(this, entity);
+            FovFacade.RemoveController(this, entity);
         }
 
         private void UpdateEnableEntities()
         {
             if (IsPlayerInRange() || IsNonGuardEnemyInRange())
             {
-                if (!_trigger.enabled)
+                if (_trigger.enabled)
+                    return;
+
+                foreach (var entity in _entities)
                 {
-                    foreach (var entity in _entities)
-                    {
-                        entity.EnableEntity();
-                    }
-                    _trigger.enabled = true;
+                    entity.EnableEntity();
                 }
+                _trigger.enabled = true;
             }
             else
             {
-                if (_trigger.enabled)
+                if (!_trigger.enabled)
+                    return;
+
+                foreach (var entity in _entities)
                 {
-                    foreach (var entity in _entities)
-                    {
-                        entity.DisableEntity();
-                    }
-                    _trigger.enabled = false;
+                    entity.DisableEntity();
                 }
+                _trigger.enabled = false;
             }
         }
 
@@ -123,32 +126,30 @@ namespace Game.Physics
 
         private bool IsNonGuardEnemyInRange()
         {
-            Profiler.BeginSample("IsNonGuardEnemyInRange");
             for (int i = 0; i < _roomEnemies.Count; i++)
             {
-                var enemy = _roomEnemies[i];
+                EnemyBase enemy = _roomEnemies[i];
+
                 if (enemy == null)
                     continue;
 
                 if (enemy.StateMachine.CurrentState is EnemyGuardStateBase)
                     continue;
 
-                if (Vector2.Distance(enemy.transform.position, transform.position) > _enemyEnableDistance)
+                if (Vector2.SqrMagnitude(transform.position - enemy.transform.position) > _enemyEnableSqrMagnitude)
                     continue;
 
-                Profiler.EndSample();
                 return true;
             }
 
-            Profiler.EndSample();
             return false;
         }
         
         private void SetEnableDistance()
         {
-            Vector2 screenMid = new Vector2(Screen.width / 2, Screen.height / 2);
+            Vector2 screenMid = new(Screen.width / 2, Screen.height / 2);
             Vector2 screenMidWorld = _cursorCamera.ScreanPositionOn2DIntersection(screenMid);
-            Vector2 screnTopRight = new Vector2(Screen.width, Screen.height);
+            Vector2 screnTopRight = new(Screen.width, Screen.height);
             Vector2 screenTopRightWorld = _cursorCamera.ScreanPositionOn2DIntersection(screnTopRight);
 
             float midToTopRightDistanceWorld = Vector2.Distance(screenMidWorld, screenTopRightWorld);
@@ -166,6 +167,7 @@ namespace Game.Physics
 
             _playerEnableDistance = largestFovDistance + midToTopRightDistanceWorld + _SAFE_DISTANCE_ADD;
             _enemyEnableDistance = largestFovDistance;
+            _enemyEnableSqrMagnitude = _enemyEnableDistance * _enemyEnableDistance;
         }
 
         public void OnEnemySeeEnemy(IGuardStateDetectable detectable)
@@ -178,11 +180,9 @@ namespace Game.Physics
             if (!_enemiesLine.ContainsKey(detectable.Enemy))
             {
                 EnemySeeEnemyArrow line = Instantiate(_globalAssets.EnemySeeEnemyLine, transform);
-                //line.SetParameters(_enemyBase.ArrowParameters);
                 _enemiesLine.Add(detectable.Enemy, line);
             }
 
-            //_enemiesLine[detectable.Enemy].SetParameters(detectable.Enemy.ArrowParameters);
             _enemiesLine[detectable.Enemy].TransformArrow(_enemyBase, detectable.Enemy);
         }
 

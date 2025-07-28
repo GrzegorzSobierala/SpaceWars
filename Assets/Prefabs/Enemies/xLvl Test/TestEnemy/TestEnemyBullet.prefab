@@ -219,7 +219,7 @@ Transform:
   - {fileID: 3907446705585901697}
   - {fileID: 4053206069005621231}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &405864246989137584
 MonoBehaviour:
@@ -233,10 +233,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a4ce5af71ecc58468db59aae2870404, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDamageHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
   _body: {fileID: 4562933555896563138}
   _particleSystem: {fileID: 3705347350567245477}
   _damage: 1
-  _speed: 300
+  _speed: 260
   _horizontalMoveInpactMulti: 0
   _maxTimeAlive: 3
   _maxDistance: 250

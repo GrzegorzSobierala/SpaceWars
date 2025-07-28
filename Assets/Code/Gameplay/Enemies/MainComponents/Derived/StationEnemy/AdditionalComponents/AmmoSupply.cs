@@ -7,6 +7,7 @@ namespace Game.Room.Enemy
     public class AmmoSupply : MonoBehaviour
     {
         [SerializeField] private int _maxAmmoCapasity = 100;
+        [SerializeField] private AmmoVisualEffect _ammoVisualEffect;
 
         private Collider2D _collider;
         private int _currentAmmo;
@@ -36,12 +37,18 @@ namespace Game.Room.Enemy
 
         public void DestroySupply()
         {
+            _ammoVisualEffect.PlayEffectAndDestroy(transform.parent);
             Destroy(gameObject);
         }
 
         public void EnableCollider(bool enable)
         {
             _collider.enabled = enable;
+        }
+
+        public void PlayEffect()
+        {
+            _ammoVisualEffect.PlayEffect();
         }
     }
 }

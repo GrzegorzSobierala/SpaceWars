@@ -29431,9 +29431,9 @@ MonoBehaviour:
   _rightGunTransform: {fileID: 3113656267949211620}
   _rightGunShootPoint: {fileID: 6853514698264144243}
   _bulletPrototype: {fileID: 5577059757908764798}
-  _shotInterval: 0.25
-  _magCapasity: 3
-  _reloadTime: 7
+  _shotInterval: 0.4
+  _magCapasity: 2
+  _reloadTime: 9
   _gunTravers: 45
   _shootAtMaxDistanceMutli: 0.7
   _beforeReloadEventTime: 0.5
@@ -29517,7 +29517,7 @@ Transform:
   - {fileID: 8878008854674303711}
   - {fileID: 5460247260779581530}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6160428084483414833
 MonoBehaviour:
@@ -29608,7 +29608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd15dbd11c4f8dc438499ccd64fc0373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseSpeed: 130
+  _baseSpeed: 113.04348
   _baseAngularSpeed: 85
   _agentTargetUpdateInterval: 0.2
 --- !u!195 &9196227978536751886
@@ -39865,6 +39865,8 @@ MonoBehaviour:
   OnDestroyEvent:
     m_PersistentCalls:
       m_Calls: []
+  _enableBasicOnDestroyEffect: 1
+  _basicOnDestroyEffectScale: 0.7
 --- !u!1 &9150193854707139770
 GameObject:
   m_ObjectHideFlags: 0
@@ -40362,7 +40364,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 405864246989137584, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}
       propertyPath: _speed
-      value: 250
+      value: 230
       objectReference: {fileID: 0}
     - target: {fileID: 405864246989137584, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}
       propertyPath: _maxDistance

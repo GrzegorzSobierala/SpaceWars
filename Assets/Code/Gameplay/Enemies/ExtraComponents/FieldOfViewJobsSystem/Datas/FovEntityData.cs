@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Game.Physics
 {
+    /// <summary>
+    /// Represents the data required for calculating the field of view (FOV) for an entity.
+    /// </summary>
     public struct FovEntityData
     {
         public Vector2 rayOrigin;

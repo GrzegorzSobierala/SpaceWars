@@ -6,8 +6,9 @@ using Unity.Mathematics;
 
 namespace Game.Physics
 {
-    [BurstCompile(FloatMode = FloatMode.Fast, OptimizeFor = OptimizeFor.Performance, DisableDirectCall = true)]
-    public struct Raycast2DWithMeshJob : IJobParallelFor /*IJobFor*/
+    [BurstCompile(FloatMode = FloatMode.Fast, OptimizeFor = OptimizeFor.Performance, 
+        DisableDirectCall = true)]
+    public struct CreateEnemiesFieldOfViewJob : IJobParallelFor /*IJobFor*/
     {
         // int - EntityId
         [ReadOnly] public NativeHashMap<int, FovEntityData> fovEntityDatas;
@@ -61,7 +62,6 @@ namespace Game.Physics
             float fovAnlge = entityData.fovAnlge;
             float worldAngleAdd = entityData.worldAngleAdd;
             float rayDistance = entityData.rayDistance;
-            int rayBeforeCount = entityData.rayBeforeCount;
 
             float startAngle = (fovAnlge / 2) + 90;
 
@@ -164,7 +164,6 @@ namespace Game.Physics
                     }
 
                     float newHitDistance = float.MaxValue;
-                    float2 newHitPoint = float2.zero;
                     bool hit = false;
 
                     switch (data.type)
@@ -172,31 +171,31 @@ namespace Game.Physics
                         case ColliderType.Box:
                             hit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
                                 data.center, data.rotationRad, data.size, out newHitDistance,
-                                out newHitPoint);
+                                out _);
                             break;
 
                         case ColliderType.Circle:
                             hit = RayIntersectsCircle(rayOrigin, rayDirection, rayDistance, data.center,
-                                data.radius, out newHitDistance, out newHitPoint);
+                                data.radius, out newHitDistance, out _);
                             break;
 
                         case ColliderType.Capsule:
                             hit = RayIntersectsCapsule(rayOrigin, rayDirection, rayDistance, data.capsuleAOrBoundsPos,
-                                data.capsuleBOrBoundsSize, data.capsuleRadius, out newHitDistance, out newHitPoint);
+                                data.capsuleBOrBoundsSize, data.capsuleRadius, out newHitDistance, out _);
                             break;
 
                         case ColliderType.Polygon:
                         case ColliderType.Edge:
                         case ColliderType.Composite:
                             bool boundsHit = RayIntersectsBox(rayOrigin, rayDirection, rayDistance,
-                                data.capsuleAOrBoundsPos, 0, data.capsuleBOrBoundsSize, out newHitDistance,
-                                out newHitPoint);
+                                data.capsuleAOrBoundsPos, 0, data.capsuleBOrBoundsSize, out _,
+                                out _);
 
                             if (!boundsHit)
                                 break;
 
                                 hit = RayIntersectsPolygon(vertexArray, data.vertexStartIndex, data.vertexCount, data.isClosed,
-                                rayOrigin, rayDirection, rayDistance, out newHitDistance, out newHitPoint);
+                                rayOrigin, rayDirection, rayDistance, out newHitDistance, out _);
                             break;
                     }
 
@@ -256,13 +255,12 @@ namespace Game.Physics
             float2 relativeOrigin = new float2(rayOrigin.x, rayOrigin.y) - boxCenter;
             float cos = math.cos(-boxRotation);
             float sin = math.sin(-boxRotation);
-            float2 localOrigin = new float2(relativeOrigin.x * cos - relativeOrigin.y * sin,
-                                           relativeOrigin.x * sin + relativeOrigin.y * cos);
-            float2 localDir = new float2(rayDir.x * cos - rayDir.y * sin,
-                                        rayDir.x * sin + rayDir.y * cos);
+            float2 localOrigin = new(relativeOrigin.x * cos - relativeOrigin.y * sin, 
+                relativeOrigin.x * sin + relativeOrigin.y * cos);
+            float2 localDir = new (rayDir.x * cos - rayDir.y * sin, rayDir.x * sin + rayDir.y * cos);
 
             float2 extents = boxSize * 0.5f;
-            float2 invDir = new float2(1f / localDir.x, 1f / localDir.y);
+            float2 invDir = new(1f / localDir.x, 1f / localDir.y);
             float2 tMin = (-extents - localOrigin) * invDir;
             float2 tMax = (extents - localOrigin) * invDir;
             float2 t1 = math.min(tMin, tMax);

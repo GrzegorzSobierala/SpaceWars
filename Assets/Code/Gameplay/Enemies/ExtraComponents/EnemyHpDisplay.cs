@@ -22,6 +22,11 @@ namespace Game.Room.Enemy
             UpdateText(_enemy.CurrentHp);
         }
 
+        void LateUpdate()
+        {
+            UpdateRotationToCamera();
+        }
+
         private void OnDestroy()
         {
             Unsubscribe();
@@ -30,6 +35,14 @@ namespace Game.Room.Enemy
         private void Init()
         {
             _textMesh = GetComponent<TextMeshPro>();
+        }
+
+        private void UpdateRotationToCamera()
+        {
+            float cameraRoll = Camera.main.transform.eulerAngles.z;
+
+            Vector3 currentRotation = transform.eulerAngles;
+            transform.eulerAngles = new Vector3(currentRotation.x, currentRotation.y, -cameraRoll);
         }
 
         private void Subscribe()

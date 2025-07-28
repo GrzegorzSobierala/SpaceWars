@@ -41,7 +41,6 @@ namespace Game.Player.Ship
         private ContactFilter2D _rayFilter;
         private float _distanceToEdge;
         private float _speedBoostValue = 1;
-        private Queue<float> _lastFixedFrames = new();
 
         public float MaxDistance => _maxDistance;
         public bool IsConnected => _joint.enabled;

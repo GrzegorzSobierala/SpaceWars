@@ -34,11 +34,17 @@ namespace Game.Room.Enemy
 
         public void Activate()
         {
+            if(!gameObject.activeSelf)
+                return;
+
             _textMesh.gameObject.SetActive(true);
         }
 
         public void Deactivate()
         {
+            if (!gameObject.activeSelf)
+                return;
+
             _textMesh.gameObject.SetActive(false);
         }
     }

@@ -8,5 +8,14 @@ namespace Game.Ui
         {
             go.SetActive(!go.activeSelf);
         }
+
+        public void ExitGame()
+        {
+            Application.Quit();
+
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#endif
+        }
     }
 }

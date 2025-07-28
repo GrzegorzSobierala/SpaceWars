@@ -10,7 +10,7 @@ namespace Game.Physics
         public event Action OnKnowWherePlayerIs;
 
         [Inject] private FieldOfViewEntitiesController _controller;
-        [Inject] private FieldOfViewSystem _system;
+        [Inject] private FieldOfViewSystem _fovSystem;
 
         [SerializeField] private float _fov = 90;
         [SerializeField] private int _rayCount = 2;
@@ -21,6 +21,8 @@ namespace Game.Physics
         private bool _wasStartCalled = false;
 
         public float ViewDistance => _viewDistance;
+
+        private FieldOfViewSystemFacade FovFacade => _fovSystem.Facade;
 
         private void Awake()
         {
@@ -76,22 +78,22 @@ namespace Game.Physics
 
         public void TriggerEnter2D(Collider2D collision)
         {
-            _system.DoWhenJobCompleted(() => _system.AddCollider(this, collision));
+            FovFacade.DoWhenJobCompleted(() => FovFacade.AddCollider(this, collision));
         }
 
         public void TriggerExit2D(Collider2D collision)
         {
-            _system.DoWhenJobCompleted(() => _system.RemoveCollider(this, collision));
+            FovFacade.DoWhenJobCompleted(() => FovFacade.RemoveCollider(this, collision));
         }
 
         public void EnableEntity()
         {
-            _system.DoWhenJobCompleted(() => _system.AddEntity(this));
+            FovFacade.DoWhenJobCompleted(() => FovFacade.AddEntity(this));
         }
 
         public void DisableEntity()
         {
-            _system.DoWhenJobCompleted(() => _system.RemoveEntity(this));
+            FovFacade.DoWhenJobCompleted(() => FovFacade.RemoveEntity(this));
         }
 
         public void OnPlayerFound()
@@ -112,7 +114,7 @@ namespace Game.Physics
                 return;
 
             //Need for ray count change
-            _system.OnEntityDataChange();
+            FovFacade.OnEntityDataChange();
         }
 
         #endregion

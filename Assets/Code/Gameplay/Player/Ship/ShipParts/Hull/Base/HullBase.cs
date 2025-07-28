@@ -7,8 +7,8 @@ namespace Game.Player.Ship
 {
     public abstract class HullBase : ShipPart, IHittable
     {
-        [Inject] VirtualCameraController _cameraController;
-        [Inject] Rigidbody2D _body;
+        [Inject] protected VirtualCameraController _cameraController;
+        [Inject] protected Rigidbody2D _body;
 
         [SerializeField] private float shakeMulti = 5f;
 

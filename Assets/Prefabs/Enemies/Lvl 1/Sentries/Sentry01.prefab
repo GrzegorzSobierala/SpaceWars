@@ -9996,6 +9996,8 @@ MonoBehaviour:
   OnDestroyEvent:
     m_PersistentCalls:
       m_Calls: []
+  _enableBasicOnDestroyEffect: 1
+  _basicOnDestroyEffectScale: 0.7
 --- !u!1 &1898803002955133665
 GameObject:
   m_ObjectHideFlags: 0
@@ -39536,7 +39538,7 @@ Transform:
   - {fileID: 3050069871056998269}
   - {fileID: 507402087204898762}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7805466174945927130
 MonoBehaviour:
@@ -49724,10 +49726,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4343659715963904913}
     m_Modifications:
-    - target: {fileID: 405864246989137584, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}
-      propertyPath: _speed
-      value: 300
-      objectReference: {fileID: 0}
     - target: {fileID: 405864246989137584, guid: 8ab583a2cdcc21e4493a7fbcb7cb6bda, type: 3}
       propertyPath: _particleSystem
       value: 
