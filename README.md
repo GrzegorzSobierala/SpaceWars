@@ -4,7 +4,7 @@
 
 
 - **Story Driven Action in the Bubbleverse**  
-  Embark on an epic narrative set in a universe of interconnected “bubbles” of space beyond their shimmering boundaries lies nothingness. Uncover the secrets that bind these worlds together and save civilization from collapse!  
+  Embark on an epic narrative set in a universe of interconnected “bubbles” of space beyond whose shimmering boundaries lies nothingness. Uncover the secrets that bind these worlds together and save civilization from collapse!  
   <img width="1905" height="797" alt="Story2" src="https://github.com/user-attachments/assets/6a4e9b26-33cd-4a85-9463-9b65e19fcf88" />
 
 
@@ -24,5 +24,5 @@
 
 
 - **Demo Mission**  
-  Your primary objective is to destroy the enemy’s Main Station. Sabotage a Supply Station to weaken defenses, intercept a critical Cargo Ship to sever supply lines, or launch a full‑frontal assault—choose your strategy.  
+  Your primary objective is to destroy the enemy’s Main Station. Sabotage a Supply Station to weaken defenses, intercept a critical Cargo Ship to sever supply lines, or launch a frontal assault. Choose your strategy.  
   <img width="1582" height="836" alt="Demo2" src="https://github.com/user-attachments/assets/c64cc978-c450-465a-8853-e95d2b2eaab6" />
