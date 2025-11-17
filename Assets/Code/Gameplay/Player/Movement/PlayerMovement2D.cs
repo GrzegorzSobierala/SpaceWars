@@ -79,7 +79,7 @@ namespace Game.Player.Ship
                 color.a = fogEffectStrenght;
                 effect.startColor = color;
 
-                if (_toggleFogEffectRot)
+                if (_toggleFogEffectRot && _body.velocity != Vector2.zero)
                 {
                     effect.transform.rotation = Quaternion.LookRotation(-_body.velocity, Vector3.back);
                 }

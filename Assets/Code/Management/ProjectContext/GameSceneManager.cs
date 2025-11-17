@@ -41,6 +41,16 @@ namespace Game.Management
             StartSwitchingScenes(new string[] { _data.HubScene }, new string[] {roomScene}, onEnd);
         }
 
+        public void LoadPlayerWithRoom(string roomScene, Action onEnd = null)
+        {
+            ///StartSwitchingScenes(new string[] { _data.HubScene }, new string[] { roomScene }, onEnd);
+
+            string[] unloadScenes = _data.RoomScenes.
+                Concat(new string[] { _data.MainMeneScene }).ToArray();
+            string[] loadScenes = new string[] { _data.PlayerScene, roomScene };
+            StartSwitchingScenes(unloadScenes, loadScenes, onEnd);
+        }
+
         public void ReloadCurrentRoom(Action onEnd = null)
         {
             string roomName = string.Empty;
